@@ -17,6 +17,13 @@ entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 /** Calendar events **/
 
 #[hdk_extern]
+pub fn who_am_i(_: ()) -> ExternResult<WrappedAgentPubKey> {
+    let agent_info = agent_info!()?;
+
+    Ok(WrappedAgentPubKey(agent_info.agent_initial_pubkey))    
+}
+
+#[hdk_extern]
 pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::create_profile(profile)
 }

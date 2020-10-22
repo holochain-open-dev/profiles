@@ -27,7 +27,7 @@ export function profilesResolvers(
       async profile(parent) {
         if (parent.profile) return parent.profile;
 
-        return callZome('get_agent_profile', { agent_address: parent.id });
+        return callZome('get_agent_profile', parent.id);
       },
     },
     Query: {
@@ -43,6 +43,11 @@ export function profilesResolvers(
       async me(_, __) {
         const profile = await callZome('get_my_profile', null);
 
+        if (!profile) {
+          const my_pub_key = await callZome('who_am_i', null);
+          return { id: my_pub_key };
+        }
+
         return {
           id: profile.agent_pub_key,
           profile: profile.profile,
@@ -54,7 +59,6 @@ export function profilesResolvers(
         const profile = await callZome('create_profile', {
           username,
         });
-        console.log(profile)
 
         return {
           id: profile.agent_pub_key,
