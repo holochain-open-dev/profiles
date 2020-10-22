@@ -9,7 +9,6 @@ export const simpleConfig = {
   bobbo: Config.dna("../profiles.dna.gz", null),
 };
 
-
 orchestrator.registerScenario(
   "create and get a calendar event",
   async (s, t) => {
@@ -18,29 +17,27 @@ orchestrator.registerScenario(
     });
     await conductor.spawn();
 
-    let calendarEventHash = await conductor.call(
+    let profileHash = await conductor.call(
       "alice",
       "profiles",
-      "create_calendar_event",
+      "create_profile",
       {
-        title: "Event 1",
-        start_time: [Math.floor(Date.now() / 1000), 0],
-        end_time: [Math.floor(Date.now() / 1000) + 1000, 0],
-        location: { Custom: "hiii" },
-        invitees: [],
+        username: "alice",
       }
     );
-    t.ok(calendarEventHash);
+    t.ok(profileHash);
 
     await sleep(10);
 
-    let calendarEvents = await conductor.call(
+    let profiles = await conductor.call(
       "bobbo",
       "profiles",
       "get_all_profiles",
       null
     );
-    t.equal(calendarEvents.length, 1);
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.username, 'alice');
   }
 );
 
