@@ -1,33 +1,4 @@
-# Reusable Module Template
-
-This repository is meant to be a scaffolding starting point to build reusable holochain modules (zome & UI module).
-
-This is what is has included:
-
-- UI and Zome Instructions to use the module in a bigger app
-- CircleCI automatic integration with building and testing
-- Zome
-  - Basic sample code 
-  - Integrated tests with tryorama
-  - Instructions to include the zome as a crate in any DNA
-- UI
-  - Reusable CustomElements with `lit-element`
-  - Automated demoing with `storybook`, also publishing to `gh-pages`
-  - Automated testing with `web-test-runner`
-  - Automated end-to-end testing with the holochain zome
-  - GraphQl common libraries and scaffold code
-  - See [open-wc](https://open-wc.org/) for all the available tools and documentation
-
-## How to scaffold a holochain reusable module
-
-1. Create a new repository from this template (you can use the `Use this template` button on the top of this page).
-2. Look for all the `TODO` keyword to see the places that need to be changed.
-3. [Add CircleCI integration](https://circleci.com/docs/enterprise/quick-start/) with the repository.
-4. Remove this section of this README.md until this next line.
-
----
-
-# TODO_RENAME_MODULE
+# Profiles Module
 
 > TODO: carefully change whatever needed in this README.
 
@@ -60,11 +31,11 @@ These are the things you need to know to decide if you can use this module in yo
 4. Add this zome as a dependency in the `Cargo.toml` file:
 ```toml
 [dependencies]
-todo_rename_zome = {git = "TODO_CHANGE_MODULE_URL", package = "todo_rename_zome"}
+profiles = {git = "TODO_CHANGE_MODULE_URL", package = "profiles"}
 ```
 5. Create a `src` folder besides the `Cargo.toml` with this content:
 ```rust
-extern crate todo_rename_zome;
+extern crate profiles;
 ```
 6. Add the zome into your `*.dna.workdir/dna.json` file.
 7. Compile the DNA with the usual `CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown`.
@@ -137,7 +108,7 @@ Take into account that at this point the elements already expect a holochain con
 This respository is structured in the following way:
 
 - `ui/`: UI library.
-- `zome/`: example DNA with the `todo_rename_zome` code.
+- `zome/`: example DNA with the `profiles` code.
 - Top level `Cargo.toml` is a virtual package necessary for other DNAs to include this zome by pointing to this git repository.
 
 Read the [UI developer setup](/ui/README.md) and the [Zome developer setup](/zome/README.md).

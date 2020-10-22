@@ -1,0 +1,16 @@
+[package]
+authors = ["guillem.cordoba@gmail.com"]
+edition = "2018"
+name = "profiles"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "profiles"
+
+[dependencies]
+derive_more = "0"
+serde = "1"
+
+hdk3 = {git = "https://github.com/holochain/holochain", branch = "develop", package = "hdk3"}
+hc-utils = {git = "https://github.com/holochain/hc-utils", branch = "develop", package = "hc_utils"}

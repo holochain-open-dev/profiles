@@ -5,8 +5,8 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 const orchestrator = new Orchestrator();
 
 export const simpleConfig = {
-  alice: Config.dna("../todo_rename_zome.dna.gz", null),
-  bobbo: Config.dna("../todo_rename_zome.dna.gz", null),
+  alice: Config.dna("../profiles.dna.gz", null),
+  bobbo: Config.dna("../profiles.dna.gz", null),
 };
 
 
@@ -20,7 +20,7 @@ orchestrator.registerScenario(
 
     let calendarEventHash = await conductor.call(
       "alice",
-      "todo_rename_zome",
+      "profiles",
       "create_calendar_event",
       {
         title: "Event 1",
@@ -36,8 +36,8 @@ orchestrator.registerScenario(
 
     let calendarEvents = await conductor.call(
       "bobbo",
-      "todo_rename_zome",
-      "get_all_todo_rename_zome",
+      "profiles",
+      "get_all_profiles",
       null
     );
     t.equal(calendarEvents.length, 1);

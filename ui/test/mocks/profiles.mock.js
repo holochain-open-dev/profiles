@@ -31,14 +31,14 @@ export class ProfilesMock {
     };
   }
 
+  get_agent_profile({ agent_address }) {
+    const agent = this.findAgent(agent_address);
+    return agent ? agent.username : undefined;
+  }
+  
   findAgent(agent_address) {
     return this.agents.find(
       user => hashToString(user.agent_id) === agent_address
     );
-  }
-
-  get_agent_profile({ agent_address }) {
-    const agent = this.findAgent(agent_address);
-    return agent ? agent.username : undefined;
   }
 }
