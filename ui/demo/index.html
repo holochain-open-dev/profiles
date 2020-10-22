@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TODO: change the element -->
+    <hod-calendar-event></hod-calendar-event>
+
+    <script type="module">
+      import { html, render } from 'lit-html';
+      import { CalendarEventsModule } from '../dist';
+      import { setupApolloClient } from '../test/mocks/setupApolloClient';
+
+      // TODO: change the module name
+      setupApolloClient().then(client =>
+        new CalendarEventsModule({ apolloClient: client }).install()
+      );
+    </script>
+  </body>
+</html>

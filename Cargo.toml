@@ -1,0 +1,10 @@
+[workspace]
+members = [
+  "zome/zomes/todo_rename_zome",
+]
+
+[profile.dev]
+opt-level = "z"
+
+[profile.release]
+opt-level = "z"
