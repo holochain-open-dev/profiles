@@ -17,7 +17,7 @@ entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 /** Calendar events **/
 
 #[hdk_extern]
-pub fn create_profile(profile: Profile) -> ExternResult<EntryHash> {
+pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::create_profile(profile)
 }
 

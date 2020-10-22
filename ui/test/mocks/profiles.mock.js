@@ -7,7 +7,7 @@ export class ProfilesMock {
 
   create_profile({ username }, provenance) {
     this.agents.push({
-      agent_id: provenance,
+      agent_pub_key: provenance,
       profile: { username },
     });
 
@@ -15,7 +15,7 @@ export class ProfilesMock {
   }
 
   get_all_profiles() {
-    return this.agents.map(a => ({ agent_id: hashToString(a.agent_id), ...a }));
+    return this.agents.map(a => ({ agent_pub_key: hashToString(a.agent_pub_key), ...a }));
   }
 
   get_my_profile(_, provenance) {
@@ -23,10 +23,10 @@ export class ProfilesMock {
 
     if (!agent)
       return {
-        agent_id: hashToString(provenance),
+        agent_pub_key: hashToString(provenance),
       };
     return {
-      agent_id: hashToString(agent.agent_id),
+      agent_pub_key: hashToString(agent.agent_pub_key),
       profile: agent ? agent.profile : undefined,
     };
   }
@@ -38,7 +38,7 @@ export class ProfilesMock {
   
   findAgent(agent_address) {
     return this.agents.find(
-      user => hashToString(user.agent_id) === agent_address
+      user => hashToString(user.agent_pub_key) === agent_address
     );
   }
 }

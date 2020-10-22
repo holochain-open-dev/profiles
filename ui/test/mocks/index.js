@@ -3,10 +3,7 @@ import { SchemaLink } from '@apollo/client/link/schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { AppWebsocket } from '@holochain/conductor-api';
 
-import {
-  profilesUsernameResolvers,
-  profilesUsernameTypeDefs,
-} from '../../dist';
+import { profilesResolvers, profilesTypeDefs } from '../../dist';
 import { AppWebsocketMock, DnaMock } from 'holochain-ui-test-utils';
 import { ProfilesMock } from './profiles.mock';
 
@@ -20,21 +17,21 @@ const rootTypeDef = gql`
   }
 `;
 
-export const allTypeDefs = [rootTypeDef, profilesUsernameTypeDefs];
+export const allTypeDefs = [rootTypeDef, profilesTypeDefs];
 
 const dnaMock = new DnaMock({
   profiles: new ProfilesMock(),
 });
 export async function getAppWebsocket() {
-  if (process.env.E2E) return AppWebsocket.connect('ws://localhost:8888');
+  if (true) return AppWebsocket.connect('ws://localhost:8888');
   else {
     return new AppWebsocketMock([dnaMock]);
   }
 }
 
 /**
- * If process.env.E2E is undefined, it will mock the backend
- * If process.env.E2E is defined, it will try to connect to holochain at ws://localhost:8888
+ * If process.env.CONDUCTOR_URL is undefined, it will mock the backend
+ * If process.env.CONDUCTOR_URL is defined, it will try to connect to holochain at ws://localhost:8888
  */
 export async function setupApolloClientMock() {
   const appWebsocket = await getAppWebsocket();
@@ -45,7 +42,7 @@ export async function setupApolloClientMock() {
 
   const executableSchema = makeExecutableSchema({
     typeDefs: allTypeDefs,
-    resolvers: [profilesUsernameResolvers(appWebsocket, cellId)],
+    resolvers: [profilesResolvers(appWebsocket, cellId)],
   });
 
   const schemaLink = new SchemaLink({ schema: executableSchema });

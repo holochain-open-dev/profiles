@@ -1,5 +1,5 @@
 {
-  "name": "todo-change-name-of-the-package",
+  "name": "@holochain-open-dev/profiles-module",
   "version": "0.0.1",
   "description": "TODO: change description",
   "author": "guillem.cordoba@gmail.com",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@apollo/client": "^3.2.0",
     "@graphql-tools/schema": "^6.2.3",
-    "@holochain/conductor-api": "guillemcordoba/holochain-conductor-api#build",
+    "@holochain/conductor-api": "github:guillemcordoba/holochain-conductor-api#build",
     "@material/mwc-button": "^0.19.1",
     "@material/mwc-circular-progress": "^0.19.1",
     "@material/mwc-textfield": "^0.19.1",

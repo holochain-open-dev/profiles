@@ -25,6 +25,7 @@ orchestrator.registerScenario(
         username: "alice",
       }
     );
+    console.log(profileHash)
     t.ok(profileHash);
 
     await sleep(10);
@@ -38,6 +39,15 @@ orchestrator.registerScenario(
     t.equal(profiles.length, 1);
     t.ok(profiles[0].agent_pub_key);
     t.equal(profiles[0].profile.username, 'alice');
+
+    let myProfile = await conductor.call(
+      "alice",
+      "profiles",
+      "get_my_profile",
+      null
+    );
+    t.ok(myProfile.agent_pub_key);
+    t.equal(myProfile.profile.username, 'alice');
   }
 );
 

@@ -6,7 +6,7 @@ function hashToString(hash: AgentPubKey) {
   return hash.hash_type.toString('hex') + hash.hash.toString('hex');
 }
 
-export function profilesUsernameResolvers(
+export function profilesResolvers(
   appWebsocket: AppWebsocket,
   cellId: CellId,
   zomeName = 'profiles'
@@ -34,8 +34,8 @@ export function profilesUsernameResolvers(
       async allAgents(_, __) {
         const allAgents = await callZome('get_all_profiles', null);
         return allAgents.map(
-          (agent: { agent_id: AgentPubKey; profile: Profile }) => ({
-            id: hashToString(agent.agent_id),
+          (agent: { agent_pub_key: AgentPubKey; profile: Profile }) => ({
+            id: agent.agent_pub_key,
             profile: agent.profile,
           })
         );
@@ -44,17 +44,20 @@ export function profilesUsernameResolvers(
         const profile = await callZome('get_my_profile', null);
 
         return {
-          id: profile.agent_id,
+          id: profile.agent_pub_key,
           profile: profile.profile,
         };
       },
     },
     Mutation: {
       async createProfile(_, { username }) {
-        const agent = await callZome('create_profile', { username });
+        const profile = await callZome('create_profile', {
+          username,
+        });
+        console.log(profile)
 
         return {
-          id: agent,
+          id: profile.agent_pub_key,
           profile: {
             username,
           },

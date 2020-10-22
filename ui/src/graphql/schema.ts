@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core';
 
-export const profilesUsernameTypeDefs = gql`
+export const profilesTypeDefs = gql`
   type Agent {
     id: ID!
 

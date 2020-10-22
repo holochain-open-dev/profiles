@@ -10,18 +10,18 @@ pub struct Profile {
     pub username: String,
 }
 
-pub fn create_profile(profile: Profile) -> ExternResult<EntryHash> {
+pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     let agent_info = agent_info!()?;
 
     create_entry!(profile.clone())?;
 
-    let profile_hash = hash_entry!(profile)?;
+    let profile_hash = hash_entry!(profile.clone())?;
 
     let path = all_profiles_path();
 
     path.ensure()?;
 
-    let wrapped_agent_pub_key = WrappedAgentPubKey(agent_info.agent_initial_pubkey);
+    let wrapped_agent_pub_key = WrappedAgentPubKey(agent_info.agent_initial_pubkey.clone());
 
     create_link!(
         path.hash()?,
@@ -29,7 +29,12 @@ pub fn create_profile(profile: Profile) -> ExternResult<EntryHash> {
         pub_key_to_tag(wrapped_agent_pub_key)?
     )?;
 
-    Ok(profile_hash)
+    let agent_profile = AgentProfile {
+        agent_pub_key: WrappedAgentPubKey(agent_info.agent_initial_pubkey),
+        profile
+    };
+
+    Ok(agent_profile)
 }
 
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
@@ -52,7 +57,7 @@ pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {
 pub fn get_agent_profile(agent_pub_key: WrappedAgentPubKey) -> ExternResult<Option<AgentProfile>> {
     let path = all_profiles_path();
 
-    let links = get_links!(path.hash()?, pub_key_to_tag(agent_pub_key)?)?;
+    let links = get_links!(path.hash()?, pub_key_to_tag(agent_pub_key.clone())?)?;
 
     let inner_links = links.into_inner();
 
@@ -62,7 +67,12 @@ pub fn get_agent_profile(agent_pub_key: WrappedAgentPubKey) -> ExternResult<Opti
 
     let link = inner_links[0].clone();
 
-    let agent_profile = utils::try_get_and_convert(link.target)?;
+    let profile: Profile = utils::try_get_and_convert(link.target)?;
+
+    let agent_profile = AgentProfile {
+        agent_pub_key,
+        profile
+    };
 
     Ok(Some(agent_profile))
 }

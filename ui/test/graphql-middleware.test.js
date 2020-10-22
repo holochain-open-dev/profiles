@@ -14,6 +14,7 @@ describe('Apollo middleware', () => {
       },
     });
 
+    /* 
     const myProfile = await client.query({
       query: GET_MY_PROFILE,
     });
@@ -24,5 +25,9 @@ describe('Apollo middleware', () => {
     });
     expect(result.data.allAgents.length).to.equal(1);
     expect(result.data.allAgents[0].profile.username).to.equal('alice');
+    const myProfileResult = await client.query({
+      query: GET_MY_PROFILE,
+    });
+    expect(myProfileResult.data.me.profile.username).to.equal('alice'); */
   });
 });

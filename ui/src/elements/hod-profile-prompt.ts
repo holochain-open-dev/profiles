@@ -37,7 +37,7 @@ export abstract class HodProfilePrompt extends LitElement {
   }
 
   agentHasCreatedProfile() {
-    return this._myProfile && this._myProfile.profile;
+    return this._myProfile && this._myProfile.profile !== null;
   }
 
   onProfileCreated(e: CustomEvent) {
