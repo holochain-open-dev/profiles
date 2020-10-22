@@ -1,6 +1,8 @@
-// TODO: change exports to be available for consumer packages
-
-export { calendarEventsTypeDefs } from './graphql/schema';
-export { calendarEventsResolvers } from './graphql/resolvers';
-export { CREATE_CALENDAR_EVENT } from './graphql/queries';
-export { CalendarEventsModule } from './calendar.module';
+export * from './profiles.module';
+export * from './types';
+export * from './utils';
+export * from './elements/hod-create-profile-form';
+export * from './elements/hod-profile-prompt';
+export * from './graphql/queries';
+export * from './graphql/resolvers';
+export * from './graphql/schema';

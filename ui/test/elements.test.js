@@ -1,40 +1,20 @@
 import { html, fixture, expect } from '@open-wc/testing';
+import { setupApolloClientMock } from './mocks';
+import { setupApolloClientElement, HodCreateProfileForm } from '../dist';
 
-import { CalendarEventsModule } from '../dist';
-import { setupApolloClient } from './mocks/setupApolloClient.js';
+describe('HodCreateProfileForm', () => {
+  it('set username has a placeholder', async () => {
+    const client = await setupApolloClientMock();
 
-// TODO: actually write useful tests for your element
-describe('HodCalendarEvent', () => {
-  before(async () => {
-    const client = await setupApolloClient();
-    new CalendarEventsModule({ apolloClient: client }).install();
-  });
+    customElements.define(
+      'hod-create-profile-form',
+      setupApolloClientElement(HodCreateProfileForm, client)
+    );
 
-  it('has a default title "Hey there" and counter 5', async () => {
-    const el = await fixture(html` <hod-calendar-event></hod-calendar-event> `);
+    const el = await fixture(
+      html` <hod-create-profile-form></hod-create-profile-form> `
+    );
 
-    expect(el.title).to.equal('Hey there');
-    expect(el._counter).to.equal(5);
-  });
-
-  it('increases the counter on button click', async () => {
-    const el = await fixture(html` <hod-calendar-event></hod-calendar-event> `);
-    el.shadowRoot.querySelector('button').click();
-
-    expect(el._counter).to.equal(6);
-  });
-
-  it('can override the title via attribute', async () => {
-    const el = await fixture(html`
-      <hod-calendar-event title="attribute title"></hod-calendar-event>
-    `);
-
-    expect(el.title).to.equal('attribute title');
-  });
-
-  it('passes the a11y audit', async () => {
-    const el = await fixture(html` <hod-calendar-event></hod-calendar-event> `);
-
-    await expect(el).shadowDom.to.be.accessible();
+    expect(el.shadowRoot.innerHTML).to.include('CREATE PROFILE');
   });
 });

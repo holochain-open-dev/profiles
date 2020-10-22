@@ -1,67 +1,65 @@
+import { AppWebsocket, CellId, AgentPubKey } from '@holochain/conductor-api';
 import { Resolvers } from '@apollo/client/core';
-import { AppWebsocket, CellId } from '@holochain/conductor-api';
+import { Profile } from '../types';
 
-function secondsToTimestamp(secs: number) {
-  return [secs, 0];
-}
-
-function hashToString(hash: { hash: Buffer; hash_type: Buffer }) {
+function hashToString(hash: AgentPubKey) {
   return hash.hash_type.toString('hex') + hash.hash.toString('hex');
 }
 
-// TODO: define your own resolvers
-
-export const calendarEventsResolvers = (
+export function profilesUsernameResolvers(
   appWebsocket: AppWebsocket,
   cellId: CellId,
-  zomeName = 'todo_rename_zome'
-): Resolvers => ({
-  Query: {
-    async allCalendarEvents() {
-      const events = await appWebsocket.callZome({
-        cap: null as any,
-        cell_id: cellId,
-        zome_name: zomeName,
-        fn_name: 'get_all_calendar_events',
-        payload: null,
-        provenance: cellId[1],
-      });
+  zomeName = 'profiles'
+): Resolvers {
+  function callZome(fn_name: string, payload: any) {
+    return appWebsocket.callZome({
+      cap: null as any,
+      cell_id: cellId,
+      zome_name: zomeName,
+      fn_name: fn_name,
+      payload: payload,
+      provenance: cellId[1],
+    });
+  }
 
-      return events.map((event: any) => ({
-        id: hashToString(event[0]),
-        ...event[1],
-      }));
-    },
-  },
-  Mutation: {
-    async createCalendarEvent(
-      _,
-      { title, startTime, endTime, location, invitees }
-    ) {
-      const eventId = await appWebsocket.callZome({
-        cap: null as any,
-        cell_id: cellId,
-        zome_name: zomeName,
-        fn_name: 'create_calendar_event',
-        payload: {
-          title,
-          start_time: secondsToTimestamp(startTime),
-          end_time: secondsToTimestamp(endTime),
-          location,
-          invitees,
-        },
-        provenance: cellId[1],
-      });
+  return {
+    Agent: {
+      async profile(parent) {
+        if (parent.profile) return parent.profile;
 
-      return {
-        id: hashToString(eventId),
-        createdBy: hashToString(cellId[1]),
-        title,
-        startTime,
-        endTime,
-        invitees,
-        location,
-      };
+        return callZome('get_agent_profile', { agent_address: parent.id });
+      },
     },
-  },
-});
+    Query: {
+      async allAgents(_, __) {
+        const allAgents = await callZome('get_all_profiles', null);
+        return allAgents.map(
+          (agent: { agent_id: AgentPubKey; profile: Profile }) => ({
+            id: hashToString(agent.agent_id),
+            profile: agent.profile,
+          })
+        );
+      },
+      async me(_, __) {
+        const profile = await callZome('get_my_profile', null);
+
+        return {
+          id: profile.agent_id,
+          profile: profile.profile,
+        };
+      },
+    },
+    Mutation: {
+      async createProfile(_, { username }) {
+        const agent = await callZome('create_profile', { username });
+
+        return {
+          id: agent,
+          profile: {
+            username,
+          },
+        };
+      },
+    },
+  };
+}

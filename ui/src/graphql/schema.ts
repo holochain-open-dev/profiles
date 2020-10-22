@@ -1,31 +1,22 @@
 import { gql } from '@apollo/client/core';
 
-// TODO: define your own schema
-
-export const calendarEventsTypeDefs = gql`
-  scalar Date
-
-  type CalendarEvent {
+export const profilesUsernameTypeDefs = gql`
+  type Agent {
     id: ID!
-    title: String!
-    startTime: Date!
-    endTime: Date!
-    createdBy: ID!
-    location: String
-    invitees: [ID!]!
+
+    profile: Profile
   }
 
   extend type Query {
-    allCalendarEvents: [CalendarEvent!]!
+    allAgents: [Agent!]!
+    me: Agent!
   }
 
   extend type Mutation {
-    createCalendarEvent(
-      title: String!
-      startTime: Date!
-      endTime: Date!
-      location: String
-      invitees: [ID!]!
-    ): CalendarEvent!
+    createProfile(username: String!): Agent!
+  }
+
+  type Profile {
+    username: String!
   }
 `;

@@ -3,9 +3,12 @@ import { SchemaLink } from '@apollo/client/link/schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { AppWebsocket } from '@holochain/conductor-api';
 
-import { calendarEventsTypeDefs, calendarEventsResolvers } from '../../dist';
+import {
+  profilesUsernameResolvers,
+  profilesUsernameTypeDefs,
+} from '../../dist';
 import { AppWebsocketMock, DnaMock } from 'holochain-ui-test-utils';
-import { CalendarEventsMock } from './calendar-events.mock';
+import { ProfilesMock } from './profiles.mock';
 
 const rootTypeDef = gql`
   type Query {
@@ -17,23 +20,23 @@ const rootTypeDef = gql`
   }
 `;
 
-// TODO: add your own typeDefs to rootTypeDef
-const allTypeDefs = [rootTypeDef, calendarEventsTypeDefs];
+export const allTypeDefs = [rootTypeDef, profilesUsernameTypeDefs];
 
-const dnaMock = new DnaMock({ todo_rename_zome: new CalendarEventsMock() });
-async function getAppWebsocket() {
-  if (process.env.CONDUCTOR_URL)
-    return AppWebsocket.connect(process.env.CONDUCTOR_URL);
+const dnaMock = new DnaMock({
+  profiles: new ProfilesMock(),
+});
+export async function getAppWebsocket() {
+  if (process.env.E2E) return AppWebsocket.connect('ws://localhost:8888');
   else {
     return new AppWebsocketMock([dnaMock]);
   }
 }
 
 /**
- * If process.env.CONDUCTOR_URL is undefined, it will mock the backend
- * If process.env.CONDUCTOR_URL is defined, it will try to connect to holochain at that URL
+ * If process.env.E2E is undefined, it will mock the backend
+ * If process.env.E2E is defined, it will try to connect to holochain at ws://localhost:8888
  */
-export async function setupApolloClient() {
+export async function setupApolloClientMock() {
   const appWebsocket = await getAppWebsocket();
 
   const appInfo = await appWebsocket.appInfo({ app_id: 'test-app' });
@@ -42,7 +45,7 @@ export async function setupApolloClient() {
 
   const executableSchema = makeExecutableSchema({
     typeDefs: allTypeDefs,
-    resolvers: [calendarEventsResolvers(appWebsocket, cellId)],
+    resolvers: [profilesUsernameResolvers(appWebsocket, cellId)],
   });
 
   const schemaLink = new SchemaLink({ schema: executableSchema });

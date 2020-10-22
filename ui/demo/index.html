@@ -10,17 +10,16 @@
   </head>
   <body>
     <!-- TODO: change the element -->
-    <hod-calendar-event></hod-calendar-event>
+    <hod-profile-prompt></hod-profile-prompt>
 
     <script type="module">
       import { html, render } from 'lit-html';
-      import { CalendarEventsModule } from '../dist';
-      import { setupApolloClient } from '../test/mocks/setupApolloClient';
+      import { ProfilesModule } from '../dist';
+      import { setupApolloClientMock } from '../test/mocks';
 
-      // TODO: change the module name
-      setupApolloClient().then(client =>
-        new CalendarEventsModule({ apolloClient: client }).install()
-      );
+      setupApolloClientMock().then(client => {
+        new ProfilesModule({ apolloClient: client }).install();
+      });
     </script>
   </body>
 </html>

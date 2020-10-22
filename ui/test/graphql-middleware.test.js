@@ -1,40 +1,28 @@
-import { gql } from '@apollo/client/core';
 import { expect } from '@open-wc/testing';
+import { GET_ALL_AGENTS, CREATE_PROFILE, GET_MY_PROFILE } from '../dist';
 
-import { setupApolloClient } from './mocks/setupApolloClient';
-import { CREATE_CALENDAR_EVENT } from '../dist';
+import { setupApolloClientMock } from './mocks';
 
-// TODO: change mutations and tests to adapt to your graphql queries
 describe('Apollo middleware', () => {
-  it('create a calendar event and retrieve it', async () => {
-    const client = await setupApolloClient();
+  it('set a username and retrieve all users', async () => {
+    const client = await setupApolloClientMock();
 
-    const createCalendarEvent = await client.mutate({
-      mutation: CREATE_CALENDAR_EVENT,
+    const createProfileResult = await client.mutate({
+      mutation: CREATE_PROFILE,
       variables: {
-        title: 'Event 1',
-        startTime: Math.floor(Date.now() / 1000),
-        endTime: Math.floor(Date.now() / 1000) + 10,
-        location: null,
-        invitees: [],
+        username: 'alice',
       },
     });
 
-    const result = await client.query({
-      query: gql`
-        {
-          allCalendarEvents {
-            id
-            title
-          }
-        }
-      `,
+    const myProfile = await client.query({
+      query: GET_MY_PROFILE,
     });
+    expect(myProfile.data.me.profile.username).to.equal('alice');
 
-    expect(result.data.allCalendarEvents.length).to.equal(1);
-    expect(result.data.allCalendarEvents[0].id).to.equal(
-      createCalendarEvent.data.createCalendarEvent.id
-    );
-    expect(result.data.allCalendarEvents[0].title).to.equal('Event 1');
+    const result = await client.query({
+      query: GET_ALL_AGENTS,
+    });
+    expect(result.data.allAgents.length).to.equal(1);
+    expect(result.data.allAgents[0].profile.username).to.equal('alice');
   });
 });

@@ -1,29 +1,37 @@
 import { gql } from '@apollo/client/core';
 
-// TODO: create your own queries
-
-export const CREATE_CALENDAR_EVENT = gql`
-  mutation CreateCalendarEvent(
-    $title: String!
-    $startTime: Date!
-    $endTime: Date!
-    $location: String
-    $invitees: [ID!]!
-  ) {
-    createCalendarEvent(
-      title: $title
-      startTime: $startTime
-      endTime: $endTime
-      location: $location
-      invitees: $invitees
-    ) {
+export const CREATE_PROFILE = gql`
+  mutation CreateProfile($username: String!) {
+    createProfile(username: $username) {
       id
-      title
-      createdBy
-      startTime
-      endTime
-      location
-      invitees
+
+      profile {
+        username
+      }
+    }
+  }
+`;
+
+export const GET_ALL_AGENTS = gql`
+  query GetAllAgents {
+    allAgents {
+      id 
+
+      profile {
+        username
+      }
+    }
+  }
+`;
+
+export const GET_MY_PROFILE = gql`
+  query GetMyProfile {
+    me {
+      id
+      
+      profile {
+        username
+      }
     }
   }
 `;
