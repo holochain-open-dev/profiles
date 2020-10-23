@@ -32,6 +32,7 @@ jobs:
       - name: test-holochain
         run: |
           cd $GITHUB_WORKSPACE/zome/tests
+          npm install
           npm test
           
       - name: build-ui
