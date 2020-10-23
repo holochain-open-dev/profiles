@@ -45,5 +45,6 @@ jobs:
       - name: test-ui
         run: |
           cd $GITHUB_WORKSPACE/ui
+          npm i -g @holochain/holochain-run-dna
           npm test
           npm run e2e

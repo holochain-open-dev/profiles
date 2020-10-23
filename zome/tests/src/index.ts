@@ -25,7 +25,6 @@ orchestrator.registerScenario(
         username: "alice",
       }
     );
-    console.log(profileHash)
     t.ok(profileHash);
 
     await sleep(10);
