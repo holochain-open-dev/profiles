@@ -23,7 +23,8 @@ const dnaMock = new DnaMock({
   profiles: new ProfilesMock(),
 });
 export async function getAppWebsocket() {
-  if (true) return AppWebsocket.connect('ws://localhost:8888');
+  if (process.env.CONDUCTOR_URL)
+    return AppWebsocket.connect(process.env.CONDUCTOR_URL);
   else {
     return new AppWebsocketMock([dnaMock]);
   }
