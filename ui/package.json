@@ -16,6 +16,7 @@
     "test-debug": "tsc && DEBUG=true web-test-runner --coverage",
     "test-watch": "web-test-runner --watch",
     "e2e": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k -s first \"npm:test\" \"npm:start-holochain\"",
+    "e2e-debug": "DEBUG=true npm run e2e",
     "analyze": "wca analyze src --format json --outFile custom-elements.json",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
