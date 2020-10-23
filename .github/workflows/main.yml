@@ -44,6 +44,6 @@ jobs:
           
       - name: test-ui
         run: |
-          cd $GITHUB_WORKSPACE/zome/tests
+          cd $GITHUB_WORKSPACE/ui
           npm test
           npm run e2e
