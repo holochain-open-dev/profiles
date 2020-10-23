@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: guillemcordoba/rsm
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: build-holochain
+        run: |
+          cd $GITHUB_WORKSPACE/zome
+          CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
+          dna-util -c profiles.dna.workdir/
+          
+      - name: test-holochain
+        run: |
+          cd $GITHUB_WORKSPACE/zome/tests
+          npm test
+          
+      - name: build-ui
+        run: |
+          cd $GITHUB_WORKSPACE/ui
+          npm install
+          npm run lint
+          npm run build
+          
+      - name: test-ui
+        run: |
+          cd $GITHUB_WORKSPACE/zome/tests
+          npm test
+          npm run e2e
