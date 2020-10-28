@@ -19,11 +19,6 @@
           "description": "Minimum length that the username needs to have",
           "type": "number",
           "default": "3"
-        },
-        {
-          "name": "styles",
-          "type": "CSSResult",
-          "default": "\"sharedStyles\""
         }
       ],
       "events": [
@@ -35,14 +30,7 @@
     },
     {
       "name": "hod-profile-prompt",
-      "path": "./src/elements/hod-profile-prompt.ts",
-      "properties": [
-        {
-          "name": "styles",
-          "type": "CSSResult[]",
-          "default": "[\"sharedStyles\",null]"
-        }
-      ]
+      "path": "./src/elements/hod-profile-prompt.ts"
     }
   ]
 }
