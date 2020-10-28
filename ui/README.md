@@ -1,6 +1,6 @@
 # UI Developer Setup
 
-UI module for the `calendar-events-zome`.
+UI module for the `profiles` zome.
 
 ## Requirements
 
@@ -120,6 +120,6 @@ Now, a built version of this module will be at the root of the `ui-build` branch
 
 ```json
   "dependencies": {
-    "@holochain-open-dev/TODO_RENAME_MODULE": "holochain-open-dev/TODO_RENAME_MODULE#ui-build",
+    "@holochain-open-dev/profiles": "holochain-open-dev/profiles-module#ui-build",
   }
 ```

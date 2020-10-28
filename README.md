@@ -1,21 +1,22 @@
 # Profiles Module
 
-> TODO: carefully change whatever needed in this README.
-
-Small zome to create and see calendar events, in holochain RSM.
+Small zome to manage the profiles in your DNA, in RSM.
 
 This module is designed to be included in other DNAs, assuming as little as possible from those. It is packaged as a holochain zome, and an npm package that offers native Web Components that can be used across browsers and frameworks.
 
+> Notice that this zome still stores all profiles in the DNA in which the zome is included. Integration and bridging with personas & profiles will be done in the future, maintaining as much as possible the current API.
+
 ## Documentation
 
-See our [`storybook`](https://holochain-open-dev.github.io/calendar-events-zome).
+See our [`storybook`](https://holochain-open-dev.github.io/profiles-module).
 
 ## Assumptions
 
 These are the things you need to know to decide if you can use this module in your happ:
 
-- Zome:
-  - Optional dependency with the [resource-bookings-zome](https://github/holochain-open-dev/resource-bookings-zome).
+- Profiles:
+  - Your profile at least contains a username field.
+  - You can search for all the users starting with the first 3 letters of their username.
 - UI module:
   - `ApolloClient` as the state-management and data-fetching engine.
   - The resolvers are declared in the frontend using [`makeExecutableSchema`](https://www.npmjs.com/package/@graphql-tools/schema).
@@ -25,13 +26,13 @@ These are the things you need to know to decide if you can use this module in yo
 
 ### Including the zome in your DNA
 
-1. Create a new folder in the `zomes` of the consuming DNA, with the name you want to give to this zome in your DNA.
+1. Create a new `profiles` folder in the `zomes` of the consuming DNA.
 2. Add a new `Cargo.toml` in that folder. In its content, paste the `Cargo.toml` content from any zome.
-3. Change the `name` properties of the `Cargo.toml` file to the name you want to give to this zome in your DNA.
+3. Change the `name` properties of the `Cargo.toml` file to `profiles`.
 4. Add this zome as a dependency in the `Cargo.toml` file:
 ```toml
 [dependencies]
-profiles = {git = "TODO_CHANGE_MODULE_URL", package = "profiles"}
+profiles = {git = "https://github.com/holochain-open-dev/profiles-module", package = "profiles"}
 ```
 5. Create a `src` folder besides the `Cargo.toml` with this content:
 ```rust
@@ -42,31 +43,27 @@ extern crate profiles;
 
 ### Using the UI module
 
-1. Install the module with `npm install @holochain-open-dev/calendar-events`.
-
-OR
-
-Add it in your `package.json` with a reference to `holochain-open-dev/TODO_RENAME_MODULE_REPOSITORY#ui-build`
+1. Install the module with `npm install git://github.com/holochain-open-dev/profiles-module.git#ui-build`.
 
 2. Add the GraphQl schema and resolvers to your `ApolloClient` setup:
 
 ```js
 import { AppWebsocket } from "@holochain/conductor-api";
 import {
-  calendarEventsTypeDefs,
-  calendarEventsResolvers,
-} from "@holochain-open-dev/calendar-events";
+  profilesTypeDefs,
+  profilesResolvers,
+} from "@holochain-open-dev/profiles";
 
 export async function setupClient(url) {
-  const appWebsocket = await AppWebsocket.connect(String(url));
+  const appWebsocket = await AppWebsocket.connect(url);
 
   const appInfo = await appWebsocket.appInfo({ app_id: "test-app" });
 
   const cellId = appInfo.cell_data[0][0];
 
   const executableSchema = makeExecutableSchema({
-    typeDefs: [rootTypeDef, calendarEventsTypeDefs],
-    resolvers: [calendarEventsResolvers(appWebsocket, cellId)],
+    typeDefs: [rootTypeDef, profilesTypeDefs],
+    resolvers: [profilesResolvers(appWebsocket, cellId)],
   });
 
   const schemaLink = new SchemaLink({ schema: executableSchema });
@@ -82,13 +79,13 @@ export async function setupClient(url) {
 3. In the root file of your application, install the module:
 
 ```js
-import { CalendarEventsModule } from "@holochain-open-dev/calendar-events";
+import { ProfilesModule } from "@holochain-open-dev/profiles";
 async function initApp() {
   const client = await setupClient(`ws://localhost:8888`);
 
-  const calendarEventsModule = new CalendarEventsModule(client);
+  const profilesModule = new ProfilesModule(client);
 
-  await calendarEventsModule.install();
+  await profilesModule.install();
 }
 ```
 
@@ -97,7 +94,9 @@ async function initApp() {
 ```html
 ...
 <body>
-  <hod-cal-full-calendar></hod-cal-full-calendar>
+  <hod-profiles-prompt>
+    <span>Here we should put the content of our application</span>
+  </hod-profiles-prompt>
 </body>
 ```
 
