@@ -29,15 +29,24 @@ orchestrator.registerScenario(
 
     await sleep(10);
 
-    let profiles = await conductor.call(
-      "bobbo",
-      "profiles",
-      "get_all_profiles",
-      null
-    );
-    t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
-    t.equal(profiles[0].profile.username, 'alice');
+    try {
+      profileHash = await conductor.call(
+        "bobbo",
+        "profiles",
+        "create_profile",
+        {
+          username: "alice",
+        }
+      );
+      t.ok(false);
+    } catch (e) {}
+
+    profileHash = await conductor.call("bobbo", "profiles", "create_profile", {
+      username: "bobbo",
+    });
+    t.ok(profileHash);
+
+    await sleep(10);
 
     let myProfile = await conductor.call(
       "alice",
@@ -46,7 +55,36 @@ orchestrator.registerScenario(
       null
     );
     t.ok(myProfile.agent_pub_key);
-    t.equal(myProfile.profile.username, 'alice');
+    t.equal(myProfile.profile.username, "alice");
+
+    let profiles = await conductor.call(
+      "bobbo",
+      "profiles",
+      "search_profiles",
+      { username_prefix: "sdf" }
+    );
+    t.equal(profiles.length, 0);
+
+    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
+      username_prefix: "ali",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.username, "alice");
+
+    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
+      username_prefix: "alice",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.username, "alice");
+
+    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
+      username_prefix: "bob",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.username, "bobbo");
   }
 );
 

@@ -9,7 +9,11 @@ mod utils;
 use profile::{AgentProfile, Profile};
 
 pub fn error<T>(reason: &str) -> ExternResult<T> {
-    Err(HdkError::Wasm(WasmError::Zome(String::from(reason))))
+    Err(err(reason))
+}
+
+pub fn err(reason: &str) -> HdkError {
+    HdkError::Wasm(WasmError::Zome(String::from(reason)))
 }
 
 entry_defs![Path::entry_def(), profile::Profile::entry_def()];
@@ -20,7 +24,7 @@ entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 pub fn who_am_i(_: ()) -> ExternResult<WrappedAgentPubKey> {
     let agent_info = agent_info!()?;
 
-    Ok(WrappedAgentPubKey(agent_info.agent_initial_pubkey))    
+    Ok(WrappedAgentPubKey(agent_info.agent_initial_pubkey))
 }
 
 #[hdk_extern]
@@ -29,12 +33,18 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 }
 
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
-pub struct GetAllProfilesOutput(Vec<AgentProfile>);
+pub struct SearchProfilesInput {
+    username_prefix: String,
+}
+#[derive(Clone, Serialize, Deserialize, SerializedBytes)]
+pub struct SearchProfilesOutput(Vec<AgentProfile>);
 #[hdk_extern]
-pub fn get_all_profiles(_: ()) -> ExternResult<GetAllProfilesOutput> {
-    let agent_profiles = profile::get_all_profiles()?;
+pub fn search_profiles(
+    search_profiles_input: SearchProfilesInput,
+) -> ExternResult<SearchProfilesOutput> {
+    let agent_profiles = profile::search_profiles(search_profiles_input.username_prefix)?;
 
-    Ok(GetAllProfilesOutput(agent_profiles))
+    Ok(SearchProfilesOutput(agent_profiles))
 }
 
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
