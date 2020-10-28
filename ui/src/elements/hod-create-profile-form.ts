@@ -63,7 +63,9 @@ export abstract class HodCreateProfileForm extends LitElement {
       await this._apolloClient.mutate({
         mutation: CREATE_PROFILE,
         variables: {
-          username,
+          profile: {
+            username,
+          },
         },
       });
 

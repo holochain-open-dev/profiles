@@ -13,6 +13,7 @@ import { SEARCH_PROFILES } from '../graphql/queries';
 
 /**
  * @element hod-search-agent
+ * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
 export abstract class HodSearchAgent extends LitElement {
   /** Public attributes */

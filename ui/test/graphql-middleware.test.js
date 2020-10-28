@@ -10,7 +10,9 @@ describe('Apollo middleware', () => {
     const createProfileResult = await client.mutate({
       mutation: CREATE_PROFILE,
       variables: {
-        username: 'alice',
+        profile: {
+          username: 'alice',
+        },
       },
     });
 
@@ -22,19 +24,18 @@ describe('Apollo middleware', () => {
     let result = await client.query({
       query: SEARCH_PROFILES,
       variables: {
-        usernamePrefix: 'were'
-      }
+        usernamePrefix: 'were',
+      },
     });
     expect(result.data.searchProfiles.length).to.equal(0);
 
     result = await client.query({
       query: SEARCH_PROFILES,
       variables: {
-        usernamePrefix: 'ali'
-      }
+        usernamePrefix: 'ali',
+      },
     });
     expect(result.data.searchProfiles.length).to.equal(1);
     expect(result.data.searchProfiles[0].profile.username).to.equal('alice');
-
   });
 });

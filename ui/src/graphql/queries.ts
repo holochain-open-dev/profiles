@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client/core';
 
 export const CREATE_PROFILE = gql`
-  mutation CreateProfile($username: String!) {
-    createProfile(username: $username) {
+  mutation CreateProfile($profile: ProfileInput!) {
+    createProfile(profile: $profile) {
       id
 
       profile {

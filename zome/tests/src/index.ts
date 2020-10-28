@@ -23,6 +23,9 @@ orchestrator.registerScenario(
       "create_profile",
       {
         username: "alice",
+        fields: {
+          avatar: "aliceavatar",
+        },
       }
     );
     t.ok(profileHash);
@@ -36,6 +39,9 @@ orchestrator.registerScenario(
         "create_profile",
         {
           username: "alice",
+          fields: {
+            avatar: "avatar",
+          },
         }
       );
       t.ok(false);
@@ -43,6 +49,9 @@ orchestrator.registerScenario(
 
     profileHash = await conductor.call("bobbo", "profiles", "create_profile", {
       username: "bobbo",
+      fields: {
+        avatar: "bobboavatar",
+      },
     });
     t.ok(profileHash);
 
@@ -78,6 +87,7 @@ orchestrator.registerScenario(
     t.equal(profiles.length, 1);
     t.ok(profiles[0].agent_pub_key);
     t.equal(profiles[0].profile.username, "alice");
+    t.equal(profiles[0].profile.fields.avatar, "aliceavatar");
 
     profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
       username_prefix: "alice",
@@ -92,6 +102,7 @@ orchestrator.registerScenario(
     t.equal(profiles.length, 1);
     t.ok(profiles[0].agent_pub_key);
     t.equal(profiles[0].profile.username, "bobbo");
+    t.equal(profiles[0].profile.fields.avatar, "bobboavatar");
   }
 );
 

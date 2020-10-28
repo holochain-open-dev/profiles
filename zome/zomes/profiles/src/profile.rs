@@ -2,12 +2,14 @@ use crate::utils;
 use hc_utils::WrappedAgentPubKey;
 use hdk3::prelude::link::Link;
 use hdk3::prelude::*;
+use std::collections::BTreeMap;
 use std::convert::{TryFrom, TryInto};
 
 #[hdk_entry(id = "profile", visibility = "public")]
 #[derive(Clone)]
 pub struct Profile {
     pub username: String,
+    pub fields: BTreeMap<String, String>,
 }
 
 // Used as a return type of all functions

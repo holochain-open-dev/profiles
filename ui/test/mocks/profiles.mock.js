@@ -8,7 +8,7 @@ export class ProfilesMock {
   create_profile({ username }, provenance) {
     const agent = {
       agent_pub_key: hashToString(provenance),
-      profile: { username },
+      profile: { username, fields: {} },
     };
     this.agents.push(agent);
 

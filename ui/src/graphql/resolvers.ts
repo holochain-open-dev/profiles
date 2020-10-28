@@ -6,6 +6,32 @@ function hashToString(hash: AgentPubKey) {
   return hash.hash_type.toString('hex') + hash.hash.toString('hex');
 }
 
+interface ProfileBackendForm {
+  username: string;
+  fields: any;
+}
+
+function backendFormToProfile(p: ProfileBackendForm): Profile & any {
+  return {
+    username: p.username,
+    ...p.fields,
+  };
+}
+
+function profileToBackendForm(profile: Profile & any): ProfileBackendForm {
+  const fields = Object.keys(profile).filter(key => key !== 'username');
+
+  const fieldsObject = fields.reduce(
+    (acc, next) => ({ ...acc, [next]: profile[next] }),
+    {}
+  );
+
+  return {
+    username: profile.username,
+    fields: fieldsObject,
+  };
+}
+
 export function profilesResolvers(
   appWebsocket: AppWebsocket,
   cellId: CellId,
@@ -36,9 +62,12 @@ export function profilesResolvers(
           username_prefix: usernamePrefix,
         });
         return allAgents.map(
-          (agent: { agent_pub_key: AgentPubKey; profile: Profile }) => ({
+          (agent: {
+            agent_pub_key: AgentPubKey;
+            profile: ProfileBackendForm;
+          }) => ({
             id: agent.agent_pub_key,
-            profile: agent.profile,
+            profile: backendFormToProfile(agent.profile),
           })
         );
       },
@@ -52,21 +81,20 @@ export function profilesResolvers(
 
         return {
           id: profile.agent_pub_key,
-          profile: profile.profile,
+          profile: backendFormToProfile(profile.profile),
         };
       },
     },
     Mutation: {
-      async createProfile(_, { username }) {
-        const profile = await callZome('create_profile', {
-          username,
-        });
+      async createProfile(_, { profile }) {
+        const profileResult = await callZome(
+          'create_profile',
+          profileToBackendForm(profile)
+        );
 
         return {
-          id: profile.agent_pub_key,
-          profile: {
-            username,
-          },
+          id: profileResult.agent_pub_key,
+          profile: profileResult.profile,
         };
       },
     },
