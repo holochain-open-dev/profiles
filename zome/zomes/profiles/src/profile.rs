@@ -54,6 +54,10 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 }
 
 pub fn search_profiles(username_prefix: String) -> ExternResult<Vec<AgentProfile>> {
+    if username_prefix.len() < 3 {
+        return crate::error("Cannot search with a prefix less than 3 characters");
+    }
+
     let prefix_path = prefix_path(username_prefix);
 
     let links = get_links!(prefix_path.hash()?)?;

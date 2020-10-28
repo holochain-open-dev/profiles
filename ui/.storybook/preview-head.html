@@ -3,7 +3,11 @@
     font-family: 'Roboto', sans-serif;
   }
 
-  html, body, #root, #root-inner, #root > div {
+  html,
+  body,
+  #root,
+  #root-inner,
+  #root > div {
     width: 100%;
     height: 100%;
     margin: 0;
@@ -13,7 +17,7 @@
   import { ProfilesModule } from './dist';
   import { setupApolloClientMock } from './test/mocks';
 
-  setupApolloClientMock().then(client =>
-    new ProfilesModule({ apolloClient: client }).install()
-  );
+  setupApolloClientMock().then(client => {
+    new ProfilesModule({ apolloClient: client }).install();
+  });
 </script>

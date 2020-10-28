@@ -11,7 +11,5 @@ import { html } from 'lit-html';
 import { profilesTypeDefs } from '../dist';
 import { print } from 'graphql/language/printer';
 
-console.log(print(profilesTypeDefs));
-
 export const Schema = () => html`<pre>${print(profilesTypeDefs)}</pre>`;
 ```

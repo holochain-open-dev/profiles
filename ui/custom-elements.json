@@ -31,6 +31,15 @@
     {
       "name": "hod-profile-prompt",
       "path": "./src/elements/hod-profile-prompt.ts"
+    },
+    {
+      "name": "hod-search-agent",
+      "path": "./src/elements/hod-search-agent.ts",
+      "events": [
+        {
+          "name": "agent-selected"
+        }
+      ]
     }
   ]
 }

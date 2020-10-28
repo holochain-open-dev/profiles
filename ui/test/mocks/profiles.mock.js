@@ -15,11 +15,13 @@ export class ProfilesMock {
     return agent;
   }
 
-  get_all_profiles() {
-    return this.agents.map(a => ({
-      agent_pub_key: a.agent_pub_key,
-      ...a,
-    }));
+  search_profiles(usernamePrefix) {
+    return this.agents
+      .filter(a => a.profile.username.startsWith(usernamePrefix.slice(0, 3)))
+      .map(a => ({
+        agent_pub_key: a.agent_pub_key,
+        ...a,
+      }));
   }
 
   get_my_profile(_, provenance) {
