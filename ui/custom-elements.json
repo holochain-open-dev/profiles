@@ -2,39 +2,45 @@
   "version": "experimental",
   "tags": [
     {
-      "name": "hod-calendar-event",
-      "path": "./src/index.ts",
+      "name": "hod-create-profile-form",
+      "path": "./src/elements/hod-create-profile-form.ts",
       "attributes": [
         {
-          "name": "title",
-          "description": "This is a description of a property with an attribute with exactly the same name: \"color\".",
-          "type": "\"red\"|\"green\"|\"blue\"",
-          "default": "\"Hey there\""
-        },
-        {
-          "name": "counter",
+          "name": "min-length",
+          "description": "Minimum length that the username needs to have",
           "type": "number",
-          "default": "5"
+          "default": "3"
         }
       ],
       "properties": [
         {
+          "name": "minLength",
+          "attribute": "min-length",
+          "description": "Minimum length that the username needs to have",
+          "type": "number",
+          "default": "3"
+        },
+        {
           "name": "styles",
           "type": "CSSResult",
-          "default": "\"css`\\n    :host {\\n      display: block;\\n      padding: 25px;\\n      color: var(--hod-calendar-event-text-color, #000);\\n    }\\n  `\""
-        },
+          "default": "\"sharedStyles\""
+        }
+      ],
+      "events": [
         {
-          "name": "title",
-          "attribute": "title",
-          "description": "This is a description of a property with an attribute with exactly the same name: \"color\".",
-          "type": "\"red\"|\"green\"|\"blue\"",
-          "default": "\"Hey there\""
-        },
+          "name": "profile-created",
+          "description": "after the profile has been created"
+        }
+      ]
+    },
+    {
+      "name": "hod-profile-prompt",
+      "path": "./src/elements/hod-profile-prompt.ts",
+      "properties": [
         {
-          "name": "counter",
-          "attribute": "counter",
-          "type": "number",
-          "default": "5"
+          "name": "styles",
+          "type": "CSSResult[]",
+          "default": "[\"sharedStyles\",null]"
         }
       ]
     }

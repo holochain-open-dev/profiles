@@ -1,4 +1,4 @@
-import { randomHash, hashToString } from 'holochain-ui-test-utils';
+import { hashToString } from 'holochain-ui-test-utils';
 
 export class ProfilesMock {
   constructor() {
@@ -27,7 +27,7 @@ export class ProfilesMock {
 
     if (!agent)
       return {
-        agent_pub_key: provenance,
+        agent_pub_key: hashToString(provenance),
       };
     return {
       agent_pub_key: agent.agent_pub_key,

@@ -3,7 +3,7 @@ import { setupApolloClientMock } from './mocks';
 import { setupApolloClientElement, HodCreateProfileForm } from '../dist';
 
 describe('HodCreateProfileForm', () => {
-  it('set username has a placeholder', async () => {
+  it('create profile has a placeholder', async () => {
     const client = await setupApolloClientMock();
 
     customElements.define(

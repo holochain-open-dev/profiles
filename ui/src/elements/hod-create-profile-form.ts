@@ -8,6 +8,10 @@ import '@material/mwc-button';
 import { CREATE_PROFILE } from '../graphql/queries';
 import { sharedStyles } from '../sharedStyles';
 
+/**
+ * @element hod-create-profile-form
+ * @fires profile-created - after the profile has been created
+ */
 export abstract class HodCreateProfileForm extends LitElement {
   /** Public attributes */
 
@@ -49,7 +53,9 @@ export abstract class HodCreateProfileForm extends LitElement {
     };
   }
 
-  static styles = sharedStyles;
+  static get styles() {
+    return sharedStyles;
+  }
 
   async createProfile() {
     const username = this._usernameField.value;
@@ -84,6 +90,7 @@ export abstract class HodCreateProfileForm extends LitElement {
         <mwc-textfield
           id="username-field"
           outlined
+          label="Username"
           @input=${() => this._usernameField.reportValidity()}
         ></mwc-textfield>
         <mwc-button

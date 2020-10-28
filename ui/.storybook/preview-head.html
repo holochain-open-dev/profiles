@@ -6,6 +6,14 @@
   html, body, #root, #root-inner, #root > div {
     width: 100%;
     height: 100%;
-    display: flex;
+    margin: 0;
   }
 </style>
+<script type="module">
+  import { ProfilesModule } from './dist';
+  import { setupApolloClientMock } from './test/mocks';
+
+  setupApolloClientMock().then(client =>
+    new ProfilesModule({ apolloClient: client }).install()
+  );
+</script>

@@ -8,6 +8,9 @@ import { GET_MY_PROFILE } from '../graphql/queries';
 import { Agent } from '../types';
 import { sharedStyles } from '../sharedStyles';
 
+/**
+ * @element hod-profile-prompt
+ */
 export abstract class HodProfilePrompt extends LitElement {
   /** Public attributes */
 
@@ -19,14 +22,16 @@ export abstract class HodProfilePrompt extends LitElement {
   @property({ type: Object })
   _myProfile: Agent | undefined = undefined;
 
-  static styles = [
-    sharedStyles,
-    css`
-      :host {
-        display: contents;
-      }
-    `,
-  ];
+  static get styles() {
+    return [
+      sharedStyles,
+      css`
+        :host {
+          display: flex;
+        }
+      `,
+    ];
+  }
 
   async firstUpdated() {
     const result = await this._apolloClient.query({
@@ -50,7 +55,7 @@ export abstract class HodProfilePrompt extends LitElement {
   renderPrompt() {
     return html` <div
       class="column"
-      style="align-items: center; justify-content: center"
+      style="align-items: center; justify-content: center; flex: 1;"
     >
       ${this._myProfile
         ? html`<hod-create-profile-form
@@ -62,7 +67,9 @@ export abstract class HodProfilePrompt extends LitElement {
 
   render() {
     return html`
-      ${this.agentHasCreatedProfile() ? html`<slot></slot>` : this.renderPrompt()}
+      ${this.agentHasCreatedProfile()
+        ? html`<slot></slot>`
+        : this.renderPrompt()}
     `;
   }
 }

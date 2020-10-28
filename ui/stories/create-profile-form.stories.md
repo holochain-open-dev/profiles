@@ -1,12 +1,6 @@
 ```js script
 import { html } from '@open-wc/demoing-storybook';
 import { withKnobs, withWebComponentsKnobs } from '@open-wc/demoing-storybook';
-import { ProfilesModule } from '../dist';
-import { setupApolloClientMock } from '../test/mocks';
-
-setupApolloClientMock().then(client =>
-  new ProfilesModule({ apolloClient: client }).install()
-);
 
 export default {
   title: 'HodCreateProfileForm',
@@ -44,7 +38,7 @@ After having installed the `ProfilesModule`, just add the element to your html:
 </body>
 ```
 
-### Variants
+### Default
 
 ```js preview-story
 export const Default = () =>
@@ -54,6 +48,8 @@ export const Default = () =>
     </div>
   `;
 ```
+
+### Minimum length = 5
 
 ```js preview-story
 export const MinimumLength = () => {
