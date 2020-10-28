@@ -8,6 +8,7 @@ import { sharedStyles } from '../sharedStyles';
 import { SEARCH_PROFILES } from '../graphql/queries';
 /**
  * @element hod-search-agent
+ * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
 export class HodSearchAgent extends LitElement {
     constructor() {

@@ -1,6 +1,20 @@
 function hashToString(hash) {
     return hash.hash_type.toString('hex') + hash.hash.toString('hex');
 }
+function backendFormToProfile(p) {
+    return {
+        username: p.username,
+        ...p.fields,
+    };
+}
+function profileToBackendForm(profile) {
+    const fields = Object.keys(profile).filter(key => key !== 'username');
+    const fieldsObject = fields.reduce((acc, next) => ({ ...acc, [next]: profile[next] }), {});
+    return {
+        username: profile.username,
+        fields: fieldsObject,
+    };
+}
 export function profilesResolvers(appWebsocket, cellId, zomeName = 'profiles') {
     function callZome(fn_name, payload) {
         return appWebsocket.callZome({
@@ -27,7 +41,7 @@ export function profilesResolvers(appWebsocket, cellId, zomeName = 'profiles') {
                 });
                 return allAgents.map((agent) => ({
                     id: agent.agent_pub_key,
-                    profile: agent.profile,
+                    profile: backendFormToProfile(agent.profile),
                 }));
             },
             async me(_, __) {
@@ -38,20 +52,16 @@ export function profilesResolvers(appWebsocket, cellId, zomeName = 'profiles') {
                 }
                 return {
                     id: profile.agent_pub_key,
-                    profile: profile.profile,
+                    profile: backendFormToProfile(profile.profile),
                 };
             },
         },
         Mutation: {
-            async createProfile(_, { username }) {
-                const profile = await callZome('create_profile', {
-                    username,
-                });
+            async createProfile(_, { profile }) {
+                const profileResult = await callZome('create_profile', profileToBackendForm(profile));
                 return {
-                    id: profile.agent_pub_key,
-                    profile: {
-                        username,
-                    },
+                    id: profileResult.agent_pub_key,
+                    profile: profileResult.profile,
                 };
             },
         },

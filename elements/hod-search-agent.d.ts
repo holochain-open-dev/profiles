@@ -8,6 +8,7 @@ import '@material/mwc-button';
 import { Agent } from '../types';
 /**
  * @element hod-search-agent
+ * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
 export declare abstract class HodSearchAgent extends LitElement {
     /** Public attributes */

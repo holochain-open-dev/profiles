@@ -11,12 +11,16 @@ export const profilesTypeDefs = gql `
     me: Agent!
   }
 
-  extend type Mutation {
-    createProfile(username: String!): Agent!
-  }
-
   type Profile {
     username: String!
+  }
+
+  input ProfileInput {
+    username: String!
+  }
+
+  extend type Mutation {
+    createProfile(profile: ProfileInput!): Agent!
   }
 `;
 //# sourceMappingURL=schema.js.map
