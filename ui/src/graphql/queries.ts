@@ -12,9 +12,9 @@ export const CREATE_PROFILE = gql`
   }
 `;
 
-export const GET_ALL_AGENTS = gql`
-  query GetAllAgents {
-    allAgents {
+export const SEARCH_PROFILES = gql`
+  query SearchProfiles($usernamePrefix: String!) {
+    searchProfiles(usernamePrefix: $usernamePrefix) {
       id 
 
       profile {

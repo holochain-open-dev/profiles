@@ -31,8 +31,10 @@ export function profilesResolvers(
       },
     },
     Query: {
-      async allAgents(_, __) {
-        const allAgents = await callZome('get_all_profiles', null);
+      async searchProfiles(_, { usernamePrefix }) {
+        const allAgents = await callZome('search_profiles', {
+          username_prefix: usernamePrefix,
+        });
         return allAgents.map(
           (agent: { agent_pub_key: AgentPubKey; profile: Profile }) => ({
             id: agent.agent_pub_key,

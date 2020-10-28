@@ -8,7 +8,7 @@ export const profilesTypeDefs = gql`
   }
 
   extend type Query {
-    allAgents: [Agent!]!
+    searchProfiles(usernamePrefix: String!): [Agent!]!
     me: Agent!
   }
 

@@ -27,7 +27,7 @@ orchestrator.registerScenario(
     );
     t.ok(profileHash);
 
-    await sleep(10);
+    await sleep(100);
 
     try {
       profileHash = await conductor.call(
@@ -64,6 +64,13 @@ orchestrator.registerScenario(
       { username_prefix: "sdf" }
     );
     t.equal(profiles.length, 0);
+
+    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
+      username_prefix: "alic",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.username, "alice");
 
     profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
       username_prefix: "ali",

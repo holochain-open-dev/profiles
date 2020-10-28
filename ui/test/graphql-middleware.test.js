@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { GET_ALL_AGENTS, CREATE_PROFILE, GET_MY_PROFILE } from '../dist';
+import { SEARCH_PROFILES, CREATE_PROFILE, GET_MY_PROFILE } from '../dist';
 
 import { setupApolloClientMock } from './mocks';
 
@@ -14,20 +14,27 @@ describe('Apollo middleware', () => {
       },
     });
 
-    /* 
     const myProfile = await client.query({
       query: GET_MY_PROFILE,
     });
     expect(myProfile.data.me.profile.username).to.equal('alice');
 
-    const result = await client.query({
-      query: GET_ALL_AGENTS,
+    let result = await client.query({
+      query: SEARCH_PROFILES,
+      variables: {
+        usernamePrefix: 'were'
+      }
     });
-    expect(result.data.allAgents.length).to.equal(1);
-    expect(result.data.allAgents[0].profile.username).to.equal('alice');
-    const myProfileResult = await client.query({
-      query: GET_MY_PROFILE,
+    expect(result.data.searchProfiles.length).to.equal(0);
+
+    result = await client.query({
+      query: SEARCH_PROFILES,
+      variables: {
+        usernamePrefix: 'ali'
+      }
     });
-    expect(myProfileResult.data.me.profile.username).to.equal('alice'); */
+    expect(result.data.searchProfiles.length).to.equal(1);
+    expect(result.data.searchProfiles[0].profile.username).to.equal('alice');
+
   });
 });
