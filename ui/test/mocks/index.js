@@ -1,7 +1,7 @@
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { SchemaLink } from '@apollo/client/link/schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { AppWebsocket } from '@holochain/conductor-api';
+import ConductorApi from '@holochain/conductor-api';
 
 import { profilesResolvers, profilesTypeDefs } from '../../dist';
 import { AppWebsocketMock, DnaMock } from 'holochain-ui-test-utils';
@@ -24,7 +24,7 @@ const dnaMock = new DnaMock({
 });
 export async function getAppWebsocket() {
   if (process.env.CONDUCTOR_URL)
-    return AppWebsocket.connect(process.env.CONDUCTOR_URL);
+    return ConductorApi.AppWebsocket.connect(process.env.CONDUCTOR_URL);
   else {
     return new AppWebsocketMock([dnaMock]);
   }
