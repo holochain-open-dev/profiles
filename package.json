@@ -29,7 +29,7 @@
   "dependencies": {
     "@apollo/client": "^3.2.0",
     "@graphql-tools/schema": "^6.2.3",
-    "@holochain/conductor-api": "github:guillemcordoba/holochain-conductor-api#build",
+    "@holochain/conductor-api": "0.0.1-dev.10",
     "@material/mwc-button": "^0.19.1",
     "@material/mwc-circular-progress": "^0.19.1",
     "@material/mwc-textfield": "^0.19.1",
@@ -52,7 +52,6 @@
     "@web/dev-server-rollup": "^0.2.9",
     "@web/test-runner": "^0.7.41",
     "@web/test-runner-puppeteer": "^0.6.4",
-    "buffer": "^5.6.0",
     "concurrently": "^5.1.0",
     "deepmerge": "^3.2.0",
     "es-dev-server": "^1.23.0",
