@@ -37,7 +37,8 @@
       "path": "./src/elements/hod-search-agent.ts",
       "events": [
         {
-          "name": "agent-selected"
+          "name": "agent-selected",
+          "description": "Fired when the user selects some agent. `event.detail.agent` will contain the agent selected"
         }
       ]
     }
