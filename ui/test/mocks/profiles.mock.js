@@ -15,9 +15,9 @@ export class ProfilesMock {
     return agent;
   }
 
-  search_profiles(usernamePrefix) {
+  search_profiles({ username_prefix }) {
     return this.agents
-      .filter(a => a.profile.username.startsWith(usernamePrefix.slice(0, 3)))
+      .filter(a => a.profile.username.startsWith(username_prefix.slice(0, 3)))
       .map(a => ({
         agent_pub_key: a.agent_pub_key,
         ...a,
