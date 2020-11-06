@@ -87,7 +87,7 @@ import { ProfilesModule } from "@holochain-open-dev/profiles";
 async function initApp() {
   const client = await setupClient(`ws://localhost:8888`);
 
-  const profilesModule = new ProfilesModule(client);
+  const profilesModule = new ProfilesModule({ apolloClient: client });
 
   await profilesModule.install();
 }
