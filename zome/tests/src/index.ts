@@ -17,6 +17,14 @@ orchestrator.registerScenario(
     });
     await conductor.spawn();
 
+    let myProfile = await conductor.call(
+      "alice",
+      "profiles",
+      "get_my_profile",
+      null
+    );
+    t.notOk(myProfile);
+
     let profileHash = await conductor.call(
       "alice",
       "profiles",
@@ -57,7 +65,7 @@ orchestrator.registerScenario(
 
     await sleep(10);
 
-    let myProfile = await conductor.call(
+    myProfile = await conductor.call(
       "alice",
       "profiles",
       "get_my_profile",
