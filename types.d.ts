@@ -4,4 +4,5 @@ export interface Agent {
 }
 export interface Profile {
     username: string;
+    avatar: string;
 }

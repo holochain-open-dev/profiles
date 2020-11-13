@@ -1,1 +1,1 @@
-{"version":3,"file":"types.js","sourceRoot":"","sources":["../src/types.ts"],"names":[],"mappings":"","sourcesContent":["export interface Agent {\n  id: string;\n  profile: Profile;\n}\n\nexport interface Profile {\n  username: string;\n}\n"]}
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../src/types.ts"],"names":[],"mappings":"","sourcesContent":["export interface Agent {\n  id: string;\n  profile: Profile;\n}\n\nexport interface Profile {\n  username: string;\n  avatar: string;\n}\n"]}

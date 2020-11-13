@@ -3,6 +3,8 @@ import { LitElement, html, query, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import '@material/mwc-textfield';
 import '@material/mwc-button';
+import '@material/mwc-icon-button';
+import '@spectrum-web-components/avatar/sp-avatar.js';
 import { CREATE_PROFILE } from '../graphql/queries';
 import { sharedStyles } from '../sharedStyles';
 /**
@@ -19,6 +21,7 @@ export class HodCreateProfileForm extends LitElement {
          */
         this.minLength = 3;
         this._existingUsernames = {};
+        this._avatar = undefined;
     }
     firstUpdated() {
         this._usernameField.validityTransform = (newValue) => {
@@ -49,6 +52,7 @@ export class HodCreateProfileForm extends LitElement {
                 variables: {
                     profile: {
                         username,
+                        avatar: this._avatar,
                     },
                 },
             });
@@ -56,6 +60,7 @@ export class HodCreateProfileForm extends LitElement {
                 detail: {
                     profile: {
                         username,
+                        avatar: this._avatar,
                     },
                 },
                 bubbles: true,
@@ -67,15 +72,69 @@ export class HodCreateProfileForm extends LitElement {
             this._usernameField.reportValidity();
         }
     }
+    cropPlusExport(img, cropX, cropY, cropWidth, cropHeight) {
+        // create a temporary canvas sized to the cropped size
+        const canvas1 = document.createElement('canvas');
+        const ctx1 = canvas1.getContext('2d');
+        canvas1.width = cropWidth;
+        canvas1.height = cropHeight;
+        // use the extended from of drawImage to draw the
+        // cropped area to the temp canvas
+        ctx1 === null || ctx1 === void 0 ? void 0 : ctx1.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+        // return the .toDataURL of the temp canvas
+        return canvas1.toDataURL();
+    }
+    onAvatarUploaded() {
+        if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                var _a;
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    this._avatar = this.cropPlusExport(img, 0, 0, 100, 100);
+                };
+                img.src = (_a = e.target) === null || _a === void 0 ? void 0 : _a.result;
+            };
+            reader.readAsDataURL(this._avatarFilePicker.files[0]);
+        }
+    }
     render() {
         return html `
+      <input
+        type="file"
+        id="avatar-file-picker"
+        style="display: none;"
+        @change=${this.onAvatarUploaded}
+      />
+
       <div class="column">
-        <mwc-textfield
-          id="username-field"
-          outlined
-          label="Username"
-          @input=${() => this._usernameField.reportValidity()}
-        ></mwc-textfield>
+        <div class="row center-content">
+          ${this._avatar
+            ? html `
+                <sp-avatar
+                  label="Avatar"
+                  src="${this._avatar}"
+                  style="margin-bottom: 19px;"
+                ></sp-avatar>
+              `
+            : html `
+                <mwc-icon-button
+                  label="Add avatar"
+                  icon="add"
+                  @click=${() => this._avatarFilePicker.click()}
+                >
+                </mwc-icon-button>
+              `}
+
+          <mwc-textfield
+            id="username-field"
+            outlined
+            label="Username"
+            @input=${() => this._usernameField.reportValidity()}
+            style="margin-left: 8px;"
+          ></mwc-textfield>
+        </div>
         <mwc-button
           id="create-profile-button"
           raised
@@ -98,4 +157,10 @@ __decorate([
 __decorate([
     query('#username-field')
 ], HodCreateProfileForm.prototype, "_usernameField", void 0);
+__decorate([
+    query('#avatar-file-picker')
+], HodCreateProfileForm.prototype, "_avatarFilePicker", void 0);
+__decorate([
+    property({ type: String })
+], HodCreateProfileForm.prototype, "_avatar", void 0);
 //# sourceMappingURL=hod-create-profile-form.js.map
