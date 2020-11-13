@@ -93,7 +93,22 @@ async function initApp() {
 }
 ```
 
-4. Once you have installed the module, all the elements you see in our storybook will become available for you to use in your HTML, like this:
+4. If you haven't yet, add the icons and font for material elements in your `<head>`:
+
+```html
+<head>
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
+    rel="stylesheet"
+  />
+</head>
+```
+
+5. Once you have installed the module, all the elements you see in our storybook will become available for you to use in your HTML, like this:
 
 ```html
 ...
