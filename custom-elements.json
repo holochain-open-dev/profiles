@@ -35,6 +35,36 @@
     {
       "name": "hod-search-agent",
       "path": "./src/elements/hod-search-agent.ts",
+      "attributes": [
+        {
+          "name": "clear-on-select",
+          "description": "Whether to clear the field when an agent is selected",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "field-label",
+          "description": "Label for the agent searching field",
+          "type": "string",
+          "default": "\"Search agent\""
+        }
+      ],
+      "properties": [
+        {
+          "name": "clearOnSelect",
+          "attribute": "clear-on-select",
+          "description": "Whether to clear the field when an agent is selected",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "fieldLabel",
+          "attribute": "field-label",
+          "description": "Label for the agent searching field",
+          "type": "string",
+          "default": "\"Search agent\""
+        }
+      ],
       "events": [
         {
           "name": "agent-selected",
