@@ -5,6 +5,9 @@ import { ApolloClient } from '@apollo/client/core';
 import type { TextField } from '@material/mwc-textfield';
 import '@material/mwc-textfield';
 import '@material/mwc-button';
+import '@material/mwc-icon-button';
+import '@spectrum-web-components/avatar/sp-avatar.js';
+
 import { CREATE_PROFILE } from '../graphql/queries';
 import { sharedStyles } from '../sharedStyles';
 
@@ -30,7 +33,13 @@ export abstract class HodCreateProfileForm extends LitElement {
   @query('#username-field')
   _usernameField!: TextField;
 
+  @query('#avatar-file-picker')
+  _avatarFilePicker!: HTMLInputElement;
+
   _existingUsernames: { [key: string]: boolean } = {};
+
+  @property({ type: String })
+  _avatar: string | undefined = undefined;
 
   firstUpdated() {
     this._usernameField.validityTransform = (newValue: string) => {
@@ -65,6 +74,7 @@ export abstract class HodCreateProfileForm extends LitElement {
         variables: {
           profile: {
             username,
+            avatar: this._avatar,
           },
         },
       });
@@ -74,6 +84,7 @@ export abstract class HodCreateProfileForm extends LitElement {
           detail: {
             profile: {
               username,
+              avatar: this._avatar,
             },
           },
           bubbles: true,
@@ -86,15 +97,86 @@ export abstract class HodCreateProfileForm extends LitElement {
     }
   }
 
+  cropPlusExport(
+    img: HTMLImageElement,
+    cropX: number,
+    cropY: number,
+    cropWidth: number,
+    cropHeight: number
+  ) {
+    // create a temporary canvas sized to the cropped size
+    var canvas1 = document.createElement('canvas');
+    var ctx1 = canvas1.getContext('2d');
+    canvas1.width = cropWidth;
+    canvas1.height = cropHeight;
+    // use the extended from of drawImage to draw the
+    // cropped area to the temp canvas
+    ctx1?.drawImage(
+      img,
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
+      0,
+      0,
+      cropWidth,
+      cropHeight
+    );
+    // return the .toDataURL of the temp canvas
+    return canvas1.toDataURL();
+  }
+
+  onAvatarUploaded() {
+    if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          this._avatar = this.cropPlusExport(img, 0, 0, 100, 100);
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(this._avatarFilePicker.files[0]);
+    }
+  }
+
   render() {
     return html`
+      <input
+        type="file"
+        id="avatar-file-picker"
+        style="display: none;"
+        @change=${this.onAvatarUploaded}
+      />
+
       <div class="column">
-        <mwc-textfield
-          id="username-field"
-          outlined
-          label="Username"
-          @input=${() => this._usernameField.reportValidity()}
-        ></mwc-textfield>
+        <div class="row center-content">
+          ${this._avatar
+            ? html`
+                <sp-avatar
+                  label="Avatar"
+                  src="${this._avatar}"
+                  style="margin-bottom: 19px;"
+                ></sp-avatar>
+              `
+            : html`
+                <mwc-icon-button
+                  label="Add avatar"
+                  icon="add"
+                  @click=${() => this._avatarFilePicker.click()}
+                >
+                </mwc-icon-button>
+              `}
+
+          <mwc-textfield
+            id="username-field"
+            outlined
+            label="Username"
+            @input=${() => this._usernameField.reportValidity()}
+            style="margin-left: 8px;"
+          ></mwc-textfield>
+        </div>
         <mwc-button
           id="create-profile-button"
           raised

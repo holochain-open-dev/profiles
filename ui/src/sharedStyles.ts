@@ -15,4 +15,14 @@ export const sharedStyles = css`
   .big-margin {
     margin-top: 23px;
   }
+
+  .center-content {
+    align-items: center;
+    justify-content: center;
+  }
+
+  sp-avatar {
+    --spectrum-avatar-small-height: 48px;
+    --spectrum-avatar-small-width: 48px;
+  }
 `;

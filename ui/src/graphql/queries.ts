@@ -7,6 +7,7 @@ export const CREATE_PROFILE = gql`
 
       profile {
         username
+        avatar
       }
     }
   }
@@ -19,6 +20,7 @@ export const SEARCH_PROFILES = gql`
 
       profile {
         username
+        avatar
       }
     }
   }
@@ -31,6 +33,7 @@ export const GET_MY_PROFILE = gql`
       
       profile {
         username
+        avatar
       }
     }
   }

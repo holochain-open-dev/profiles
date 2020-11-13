@@ -14,10 +14,14 @@ export const profilesTypeDefs = gql`
 
   type Profile {
     username: String!
+
+    avatar: String
   }
 
   input ProfileInput {
     username: String!
+
+    avatar: String
   }
 
   extend type Mutation {
