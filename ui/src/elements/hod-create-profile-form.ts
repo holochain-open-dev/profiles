@@ -105,8 +105,8 @@ export abstract class HodCreateProfileForm extends LitElement {
     cropHeight: number
   ) {
     // create a temporary canvas sized to the cropped size
-    var canvas1 = document.createElement('canvas');
-    var ctx1 = canvas1.getContext('2d');
+    const canvas1 = document.createElement('canvas');
+    const ctx1 = canvas1.getContext('2d');
     canvas1.width = cropWidth;
     canvas1.height = cropHeight;
     // use the extended from of drawImage to draw the

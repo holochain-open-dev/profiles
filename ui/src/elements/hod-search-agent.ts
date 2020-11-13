@@ -35,7 +35,7 @@ export abstract class HodSearchAgent extends LitElement {
    * @attr field-label
    */
   @property({ type: String, attribute: 'field-label' })
-  fieldLabel: string = 'Search agent';
+  fieldLabel = 'Search agent';
 
   /** Dependencies */
   abstract get _apolloClient(): ApolloClient<any>;
