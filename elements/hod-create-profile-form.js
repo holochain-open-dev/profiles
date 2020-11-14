@@ -72,6 +72,7 @@ export class HodCreateProfileForm extends LitElement {
             this._usernameField.reportValidity();
         }
     }
+    // Crop the image and return a base64 bytes string of its content
     cropPlusExport(img, cropX, cropY, cropWidth, cropHeight) {
         // create a temporary canvas sized to the cropped size
         const canvas1 = document.createElement('canvas');
