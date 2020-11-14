@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client/core';
 
 export const profilesTypeDefs = gql`
+  interface HolochainEntry {
+    id: ID!
+  }
+
   type Agent {
     id: ID!
 

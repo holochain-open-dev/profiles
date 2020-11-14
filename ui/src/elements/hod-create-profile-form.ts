@@ -97,6 +97,7 @@ export abstract class HodCreateProfileForm extends LitElement {
     }
   }
 
+  // Crop the image and return a base64 bytes string of its content
   cropPlusExport(
     img: HTMLImageElement,
     cropX: number,
