@@ -53,7 +53,8 @@ export function profilesResolvers(
       async profile(parent) {
         if (parent.profile) return parent.profile;
 
-        return callZome('get_agent_profile', parent.id);
+        const agentProfile = await callZome('get_agent_profile', parent.id);
+        return backendFormToProfile(agentProfile.profile)
       },
     },
     Query: {
