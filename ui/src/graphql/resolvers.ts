@@ -54,7 +54,7 @@ export function profilesResolvers(
         if (parent.profile) return parent.profile;
 
         const agentProfile = await callZome('get_agent_profile', parent.id);
-        return agentProfile.profile
+        return agentProfile
           ? backendFormToProfile(agentProfile.profile)
           : undefined;
       },
