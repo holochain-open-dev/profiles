@@ -22,7 +22,7 @@ entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 
 #[hdk_extern]
 pub fn who_am_i(_: ()) -> ExternResult<WrappedAgentPubKey> {
-    let agent_info = agent_info!()?;
+    let agent_info = agent_info()?;
 
     Ok(WrappedAgentPubKey(agent_info.agent_initial_pubkey))
 }
@@ -58,7 +58,7 @@ pub fn get_agent_profile(agent_pub_key: WrappedAgentPubKey) -> ExternResult<GetA
 
 #[hdk_extern]
 pub fn get_my_profile(_: ()) -> ExternResult<GetAgentProfileOutput> {
-    let agent_info = agent_info!()?;
+    let agent_info = agent_info()?;
 
     let agent_profile =
         profile::get_agent_profile(WrappedAgentPubKey(agent_info.agent_initial_pubkey))?;

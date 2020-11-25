@@ -1,117 +1,130 @@
-import { Orchestrator, Config } from "@holochain/tryorama";
+import { Orchestrator, Config, InstallAgentsHapps, TransportConfigType } from "@holochain/tryorama";
+import path from "path";
+
+const network = {
+  transport_pool: [{
+    type: TransportConfigType.Quic,
+  }],
+  bootstrap_service: "https://bootstrap.holo.host"
+}
+const conductorConfig = Config.gen({network});
+
+// Construct proper paths for your DNAs
+const profilesDna = path.join(__dirname, "../../profiles.dna.gz");
+
+// create an InstallAgentsHapps array with your DNAs to tell tryorama what
+// to install into the conductor.
+const installation: InstallAgentsHapps = [
+  // agent 0
+  [
+    // happ 0
+    [profilesDna],
+  ],
+];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
 
 const orchestrator = new Orchestrator();
 
-export const simpleConfig = {
-  alice: Config.dna("../profiles.dna.gz", null),
-  bobbo: Config.dna("../profiles.dna.gz", null),
-};
+orchestrator.registerScenario("create a profile and get it", async (s, t) => {
+  const [alice, bob] = await s.players([conductorConfig, conductorConfig]);
 
-orchestrator.registerScenario(
-  "create and get a calendar event",
-  async (s, t) => {
-    const { conductor } = await s.players({
-      conductor: Config.gen(simpleConfig),
-    });
-    await conductor.spawn();
+  // install your happs into the coductors and destructuring the returned happ data using the same
+  // array structure as you created in your installation array.
+  const [[alice_profiles]] = await alice.installAgentsHapps(installation);
+  const [[bob_profiles]] = await bob.installAgentsHapps(installation);
 
-    let myProfile = await conductor.call(
-      "alice",
-      "profiles",
-      "get_my_profile",
-      null
-    );
-    t.notOk(myProfile);
+  let myProfile = await alice_profiles.cells[0].call(
+    "profiles",
+    "get_my_profile",
+    null
+  );
+  t.notOk(myProfile);
 
-    let profileHash = await conductor.call(
-      "alice",
+  let profileHash = await alice_profiles.cells[0].call(
+    "profiles",
+    "create_profile",
+    {
+      username: "alice",
+      fields: {
+        avatar: "aliceavatar",
+      },
+    }
+  );
+  t.ok(profileHash);
+
+  await sleep(500);
+
+  try {
+    profileHash = await bob_profiles.cells[0].call(
       "profiles",
       "create_profile",
       {
         username: "alice",
         fields: {
-          avatar: "aliceavatar",
+          avatar: "avatar",
         },
       }
     );
-    t.ok(profileHash);
+    t.ok(false);
+  } catch (e) {}
 
-    await sleep(100);
+  profileHash = await bob_profiles.cells[0].call("profiles", "create_profile", {
+    username: "bobbo",
+    fields: {
+      avatar: "bobboavatar",
+    },
+  });
+  t.ok(profileHash);
 
-    try {
-      profileHash = await conductor.call(
-        "bobbo",
-        "profiles",
-        "create_profile",
-        {
-          username: "alice",
-          fields: {
-            avatar: "avatar",
-          },
-        }
-      );
-      t.ok(false);
-    } catch (e) {}
+  await sleep(10);
 
-    profileHash = await conductor.call("bobbo", "profiles", "create_profile", {
-      username: "bobbo",
-      fields: {
-        avatar: "bobboavatar",
-      },
-    });
-    t.ok(profileHash);
+  myProfile = await alice_profiles.cells[0].call(
+    "profiles",
+    "get_my_profile",
+    null
+  );
+  t.ok(myProfile.agent_pub_key);
+  t.equal(myProfile.profile.username, "alice");
 
-    await sleep(10);
+  let profiles = await bob_profiles.cells[0].call(
+    "profiles",
+    "search_profiles",
+    {
+      username_prefix: "sdf",
+    }
+  );
+  t.equal(profiles.length, 0);
 
-    myProfile = await conductor.call(
-      "alice",
-      "profiles",
-      "get_my_profile",
-      null
-    );
-    t.ok(myProfile.agent_pub_key);
-    t.equal(myProfile.profile.username, "alice");
+  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    username_prefix: "alic",
+  });
+  t.equal(profiles.length, 1);
+  t.ok(profiles[0].agent_pub_key);
+  t.equal(profiles[0].profile.username, "alice");
 
-    let profiles = await conductor.call(
-      "bobbo",
-      "profiles",
-      "search_profiles",
-      { username_prefix: "sdf" }
-    );
-    t.equal(profiles.length, 0);
+  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    username_prefix: "ali",
+  });
+  t.equal(profiles.length, 1);
+  t.ok(profiles[0].agent_pub_key);
+  t.equal(profiles[0].profile.username, "alice");
+  t.equal(profiles[0].profile.fields.avatar, "aliceavatar");
 
-    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
-      username_prefix: "alic",
-    });
-    t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
-    t.equal(profiles[0].profile.username, "alice");
+  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    username_prefix: "alice",
+  });
+  t.equal(profiles.length, 1);
+  t.ok(profiles[0].agent_pub_key);
+  t.equal(profiles[0].profile.username, "alice");
 
-    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
-      username_prefix: "ali",
-    });
-    t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
-    t.equal(profiles[0].profile.username, "alice");
-    t.equal(profiles[0].profile.fields.avatar, "aliceavatar");
-
-    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
-      username_prefix: "alice",
-    });
-    t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
-    t.equal(profiles[0].profile.username, "alice");
-
-    profiles = await conductor.call("bobbo", "profiles", "search_profiles", {
-      username_prefix: "bob",
-    });
-    t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
-    t.equal(profiles[0].profile.username, "bobbo");
-    t.equal(profiles[0].profile.fields.avatar, "bobboavatar");
-  }
-);
+  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    username_prefix: "bob",
+  });
+  t.equal(profiles.length, 1);
+  t.ok(profiles[0].agent_pub_key);
+  t.equal(profiles[0].profile.username, "bobbo");
+  t.equal(profiles[0].profile.fields.avatar, "bobboavatar");
+});
 
 orchestrator.run();

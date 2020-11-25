@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@holochain/tryorama": "holochain/tryorama#rsm",
+    "@holochain/tryorama": "holochain/tryorama#bump-for-conductor-api-dev12",
     "@types/lodash": "^4.14.158",
     "@types/node": "^14.0.14",
     "lodash": "^4.17.19",

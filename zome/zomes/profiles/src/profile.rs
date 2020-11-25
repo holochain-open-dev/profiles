@@ -24,11 +24,11 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
         return crate::error("Username already exists");
     }
 
-    let agent_info = agent_info!()?;
+    let agent_info = agent_info()?;
 
-    create_entry!(profile.clone())?;
+    create_entry(&profile.clone())?;
 
-    let profile_hash = hash_entry!(profile.clone())?;
+    let profile_hash = hash_entry(&profile.clone())?;
 
     let path = prefix_path(profile.username.clone());
 
@@ -36,15 +36,15 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
     let agent_address: AnyDhtHash = agent_info.agent_initial_pubkey.clone().into();
 
-    create_link!(
+    create_link(
         path.hash()?,
         profile_hash.clone(),
-        link_tag(profile.username.as_str().clone())?
+        link_tag(profile.username.as_str().clone())?,
     )?;
-    create_link!(
+    create_link(
         agent_address.into(),
         profile_hash.clone(),
-        link_tag("profile")?
+        link_tag("profile")?,
     )?;
 
     let agent_profile = AgentProfile {
@@ -62,7 +62,7 @@ pub fn search_profiles(username_prefix: String) -> ExternResult<Vec<AgentProfile
 
     let prefix_path = prefix_path(username_prefix);
 
-    let links = get_links!(prefix_path.hash()?)?;
+    let links = get_links(prefix_path.hash()?, None)?;
 
     links
         .into_inner()
@@ -78,7 +78,7 @@ pub fn get_agent_profile(
 
     let agent_address: AnyDhtHash = agent_pub_key.into();
 
-    let links = get_links!(agent_address.into(), link_tag("profile")?)?;
+    let links = get_links(agent_address.into(), Some(link_tag("profile")?))?;
 
     let inner_links = links.into_inner();
 
@@ -103,7 +103,7 @@ pub fn get_agent_profile(
 fn username_exists(username: String) -> ExternResult<bool> {
     let path = prefix_path(username.clone());
 
-    let links = get_links!(path.hash()?, link_tag(username.as_str())?)?;
+    let links = get_links(path.hash()?, Some(link_tag(username.as_str())?))?;
 
     match links.into_inner().len() {
         0 => Ok(false),
@@ -120,7 +120,7 @@ fn prefix_path(username: String) -> Path {
 fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     let profile_hash = link.target;
 
-    let element = get!(profile_hash)?.ok_or(crate::err("could not get profile"))?;
+    let element = get(profile_hash, GetOptions)?.ok_or(crate::err("could not get profile"))?;
 
     let author = element.header().author().clone();
 
