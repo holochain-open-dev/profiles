@@ -2,10 +2,6 @@ import { AppWebsocket, CellId, AgentPubKey } from '@holochain/conductor-api';
 import { Resolvers } from '@apollo/client/core';
 import { Profile } from '../types';
 
-function hashToString(hash: AgentPubKey) {
-  return hash.hash_type.toString('hex') + hash.hash.toString('hex');
-}
-
 interface ProfileBackendForm {
   username: string;
   fields: any;
