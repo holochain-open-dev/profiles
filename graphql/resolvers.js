@@ -1,6 +1,3 @@
-function hashToString(hash) {
-    return hash.hash_type.toString('hex') + hash.hash.toString('hex');
-}
 function backendFormToProfile(p) {
     return {
         username: p.username,
