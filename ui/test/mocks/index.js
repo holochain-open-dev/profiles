@@ -37,7 +37,7 @@ export async function getAppWebsocket() {
 export async function setupApolloClientMock() {
   const appWebsocket = await getAppWebsocket();
 
-  const appInfo = await appWebsocket.appInfo({ app_id: 'test-app' });
+  const appInfo = await appWebsocket.appInfo({ installed_app_id: 'test-app' });
 
   const cellId = appInfo.cell_data[0][0];
 
