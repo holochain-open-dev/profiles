@@ -68,6 +68,7 @@ export class HodCreateProfileForm extends LitElement {
             }));
         }
         catch (e) {
+            console.log(e);
             this._existingUsernames[username] = true;
             this._usernameField.reportValidity();
         }

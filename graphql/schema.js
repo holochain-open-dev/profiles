@@ -1,18 +1,11 @@
 import { gql } from '@apollo/client/core';
 export const profilesTypeDefs = gql `
-  interface HolochainEntry {
-    id: ID!
-  }
-
-  type Agent {
-    id: ID!
-
+  extend type Agent {
     profile: Profile
   }
 
   extend type Query {
-    searchProfiles(usernamePrefix: String!): [Agent!]!
-    me: Agent!
+    profilesSearch(usernamePrefix: String!): [Agent!]!
   }
 
   type Profile {
@@ -21,14 +14,14 @@ export const profilesTypeDefs = gql `
     avatar: String
   }
 
-  input ProfileInput {
+  input ProfileParams {
     username: String!
 
     avatar: String
   }
 
   extend type Mutation {
-    createProfile(profile: ProfileInput!): Agent!
+    createProfile(profile: ProfileParams!): Agent!
   }
 `;
 //# sourceMappingURL=schema.js.map

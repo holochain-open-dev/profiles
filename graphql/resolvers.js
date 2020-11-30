@@ -35,7 +35,7 @@ export function profilesResolvers(appWebsocket, cellId, zomeName = 'profiles') {
             },
         },
         Query: {
-            async searchProfiles(_, { usernamePrefix }) {
+            async profilesSearch(_, { usernamePrefix }) {
                 const allAgents = await callZome('search_profiles', {
                     username_prefix: usernamePrefix,
                 });
@@ -43,17 +43,6 @@ export function profilesResolvers(appWebsocket, cellId, zomeName = 'profiles') {
                     id: agent.agent_pub_key,
                     profile: backendFormToProfile(agent.profile),
                 }));
-            },
-            async me(_, __) {
-                const profile = await callZome('get_my_profile', null);
-                if (!profile) {
-                    const my_pub_key = await callZome('who_am_i', null);
-                    return { id: my_pub_key };
-                }
-                return {
-                    id: profile.agent_pub_key,
-                    profile: backendFormToProfile(profile.profile),
-                };
             },
         },
         Mutation: {

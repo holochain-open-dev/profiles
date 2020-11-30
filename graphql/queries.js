@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client/core';
 export const CREATE_PROFILE = gql `
-  mutation CreateProfile($profile: ProfileInput!) {
+  mutation CreateProfile($profile: ProfileParams!) {
     createProfile(profile: $profile) {
       id
 
@@ -13,7 +13,7 @@ export const CREATE_PROFILE = gql `
 `;
 export const SEARCH_PROFILES = gql `
   query SearchProfiles($usernamePrefix: String!) {
-    searchProfiles(usernamePrefix: $usernamePrefix) {
+    profilesSearch(usernamePrefix: $usernamePrefix) {
       id 
 
       profile {

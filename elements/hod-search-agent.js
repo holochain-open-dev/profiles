@@ -44,7 +44,7 @@ export class HodSearchAgent extends LitElement {
             query: SEARCH_PROFILES,
             variables: { usernamePrefix },
         });
-        this._searchedAgents = result.data.searchProfiles;
+        this._searchedAgents = result.data.profilesSearch;
         return this._searchedAgents;
     }
     firstUpdated() {
