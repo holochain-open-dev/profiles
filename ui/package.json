@@ -30,6 +30,7 @@
     "@apollo/client": "^3.2.0",
     "@graphql-tools/schema": "^6.2.3",
     "@holochain/conductor-api": "0.0.1-dev.13",
+    "@holochain-open-dev/common": "git://github.com/holochain-open-dev/common.git#ui-build",
     "@material/mwc-button": "^0.19.1",
     "@material/mwc-circular-progress": "^0.19.1",
     "@material/mwc-icon-button": "^0.19.1",

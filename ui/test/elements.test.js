@@ -1,6 +1,7 @@
 import { html, fixture, expect } from '@open-wc/testing';
 import { setupApolloClientMock } from './mocks';
-import { setupApolloClientElement, HodCreateProfileForm } from '../dist';
+import { HodCreateProfileForm } from '../dist';
+import { setupApolloClientElement } from '@holochain-open-dev/common';
 
 describe('HodCreateProfileForm', () => {
   it('create profile has a placeholder', async () => {

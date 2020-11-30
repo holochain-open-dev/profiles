@@ -23,11 +23,15 @@
 
     <script type="module">
       import { html, render } from 'lit-html';
-      import { ProfilesModule } from '../dist';
+      import { setupProfileElements } from '../dist';
       import { setupApolloClientMock } from '../test/mocks';
 
       setupApolloClientMock().then(client => {
-        new ProfilesModule({ apolloClient: client }).install();
+        const elements = setupProfileElements({ apolloClient: client });
+
+        for (const [key, value] of Object.entries(elements)) {
+          customElements.define(key, value);
+        }
       });
     </script>
   </body>

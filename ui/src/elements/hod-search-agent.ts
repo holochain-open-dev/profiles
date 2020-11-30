@@ -69,7 +69,7 @@ export abstract class HodSearchAgent extends LitElement {
       variables: { usernamePrefix },
     });
 
-    this._searchedAgents = result.data.searchProfiles;
+    this._searchedAgents = result.data.profilesSearch;
 
     return this._searchedAgents;
   }

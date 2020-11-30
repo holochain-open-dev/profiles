@@ -6,6 +6,7 @@ import ConductorApi from '@holochain/conductor-api';
 import { profilesResolvers, profilesTypeDefs } from '../../dist';
 import { AppWebsocketMock, DnaMock } from 'holochain-ui-test-utils';
 import { ProfilesMock } from './profiles.mock';
+import { commonResolvers, commonTypeDefs } from '@holochain-open-dev/common';
 
 const rootTypeDef = gql`
   type Query {
@@ -17,7 +18,7 @@ const rootTypeDef = gql`
   }
 `;
 
-export const allTypeDefs = [rootTypeDef, profilesTypeDefs];
+export const allTypeDefs = [rootTypeDef, commonTypeDefs, profilesTypeDefs];
 
 const dnaMock = new DnaMock({
   profiles: new ProfilesMock(),
@@ -43,7 +44,10 @@ export async function setupApolloClientMock() {
 
   const executableSchema = makeExecutableSchema({
     typeDefs: allTypeDefs,
-    resolvers: [profilesResolvers(appWebsocket, cellId)],
+    resolvers: [
+      commonResolvers(appWebsocket, 'test-app'),
+      profilesResolvers(appWebsocket, cellId),
+    ],
   });
 
   const schemaLink = new SchemaLink({ schema: executableSchema });

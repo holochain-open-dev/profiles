@@ -18,7 +18,7 @@ pub fn err(reason: &str) -> HdkError {
 
 entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 
-/** Calendar events **/
+/** Profiles **/
 
 #[hdk_extern]
 pub fn who_am_i(_: ()) -> ExternResult<WrappedAgentPubKey> {
