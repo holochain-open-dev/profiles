@@ -57,11 +57,10 @@ export function profilesResolvers(
     },
     Query: {
       async profilesSearch(_, { usernamePrefix }) {
-        const start = Date.now();
         const allAgents = await callZome('search_profiles', {
           username_prefix: usernamePrefix,
         });
-        console.log(Date.now() - start);
+
         return allAgents.map(
           (agent: {
             agent_pub_key: AgentPubKey;
