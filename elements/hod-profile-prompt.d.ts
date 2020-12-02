@@ -3,7 +3,7 @@ import { ApolloClient } from '@apollo/client/core';
 import '@material/mwc-textfield';
 import '@material/mwc-circular-progress';
 import '@material/mwc-button';
-import { Agent } from '../types';
+import { HolochainAgentWithProfile } from '../types';
 /**
  * @element hod-profile-prompt
  */
@@ -12,7 +12,7 @@ export declare abstract class HodProfilePrompt extends LitElement {
     /** Dependencies */
     abstract get _apolloClient(): ApolloClient<any>;
     /** Private properties */
-    _myProfile: Agent | undefined;
+    _myProfile: HolochainAgentWithProfile | undefined;
     static get styles(): import("lit-element").CSSResult[];
     firstUpdated(): Promise<void>;
     agentHasCreatedProfile(): boolean | undefined;

@@ -6,7 +6,7 @@ import '@material/mwc-textfield';
 import '@material/mwc-circular-progress';
 import '@material/mwc-button';
 import '@spectrum-web-components/avatar/sp-avatar.js';
-import { Agent } from '../types';
+import { HolochainAgentWithProfile } from '../types';
 import { TextFieldBase } from '@material/mwc-textfield/mwc-textfield-base';
 /**
  * @element hod-search-agent
@@ -27,12 +27,12 @@ export declare abstract class HodSearchAgent extends LitElement {
     /** Dependencies */
     abstract get _apolloClient(): ApolloClient<any>;
     /** Private properties */
-    _searchedAgents: Array<Agent>;
+    _searchedAgents: Array<HolochainAgentWithProfile>;
     _lastSearchedPrefix: string | undefined;
     _comboBox: ComboBoxElement;
     _textField: TextFieldBase;
     static get styles(): import("lit-element").CSSResult[];
-    searchAgents(usernamePrefix: string): Promise<Array<Agent>>;
+    searchAgents(usernamePrefix: string): Promise<Array<HolochainAgentWithProfile>>;
     firstUpdated(): void;
     onUsernameSelected(e: CustomEvent): void;
     render(): import("lit-element").TemplateResult;
