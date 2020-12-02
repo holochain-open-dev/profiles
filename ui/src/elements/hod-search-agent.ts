@@ -11,7 +11,7 @@ import '@material/mwc-circular-progress';
 import '@material/mwc-button';
 import '@spectrum-web-components/avatar/sp-avatar.js';
 
-import { Agent, Profile } from '../types';
+import { HolochainAgentWithProfile, Profile } from '../types';
 import { sharedStyles } from '../sharedStyles';
 import { SEARCH_PROFILES } from '../graphql/queries';
 import { TextFieldBase } from '@material/mwc-textfield/mwc-textfield-base';
@@ -42,7 +42,7 @@ export abstract class HodSearchAgent extends LitElement {
 
   /** Private properties */
 
-  _searchedAgents: Array<Agent> = [];
+  _searchedAgents: Array<HolochainAgentWithProfile> = [];
 
   _lastSearchedPrefix: string | undefined = undefined;
 
@@ -63,7 +63,7 @@ export abstract class HodSearchAgent extends LitElement {
     ];
   }
 
-  async searchAgents(usernamePrefix: string): Promise<Array<Agent>> {
+  async searchAgents(usernamePrefix: string): Promise<Array<HolochainAgentWithProfile>> {
     const result = await this._apolloClient.query({
       query: SEARCH_PROFILES,
       variables: { usernamePrefix },

@@ -5,7 +5,7 @@ import '@material/mwc-textfield';
 import '@material/mwc-circular-progress';
 import '@material/mwc-button';
 import { GET_MY_PROFILE } from '../graphql/queries';
-import { Agent } from '../types';
+import { HolochainAgentWithProfile } from '../types';
 import { sharedStyles } from '../sharedStyles';
 
 /**
@@ -20,7 +20,7 @@ export abstract class HodProfilePrompt extends LitElement {
   /** Private properties */
 
   @property({ type: Object })
-  _myProfile: Agent | undefined = undefined;
+  _myProfile: HolochainAgentWithProfile | undefined = undefined;
 
   static get styles() {
     return [
