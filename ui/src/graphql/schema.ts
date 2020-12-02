@@ -1,12 +1,12 @@
 import { gql } from '@apollo/client/core';
 
 export const profilesTypeDefs = gql`
-  extend type Agent {
+  extend type HolochainAgent {
     profile: Profile
   }
 
   extend type Query {
-    profilesSearch(usernamePrefix: String!): [Agent!]!
+    profilesSearch(usernamePrefix: String!): [HolochainAgent!]!
   }
 
   type Profile {
@@ -22,6 +22,6 @@ export const profilesTypeDefs = gql`
   }
 
   extend type Mutation {
-    createProfile(profile: ProfileParams!): Agent!
+    createProfile(profile: ProfileParams!): HolochainAgent!
   }
 `;

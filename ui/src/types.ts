@@ -1,5 +1,6 @@
-export interface Agent {
-  id: string;
+import type { HolochainAgent } from '@holochain-open-dev/common';
+
+export interface HolochainAgentWithProfile extends HolochainAgent {
   profile: Profile;
 }
 

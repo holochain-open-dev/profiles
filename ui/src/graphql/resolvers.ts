@@ -45,7 +45,7 @@ export function profilesResolvers(
   }
 
   return {
-    Agent: {
+    HolochainAgent: {
       async profile(parent) {
         if (parent.profile) return parent.profile;
 
