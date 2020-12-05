@@ -82,7 +82,7 @@ dependencies = [
 [[package]]
 name = "fixt"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=5ad38e7#5ad38e724b2f55d6163480d45b1dc694bb3e6451"
+source = "git+https://github.com/holochain/holochain?rev=cac00d4#cac00d43de940a8b290aeea60688f51bfcb979ed"
 dependencies = [
  "holochain_serialized_bytes",
  "lazy_static",
@@ -115,7 +115,7 @@ checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 [[package]]
 name = "hc_utils"
 version = "0.1.0"
-source = "git+https://github.com/holochain/hc-utils?branch=develop#7f65e8f941b9c003133b265d06f3334a9cd60d54"
+source = "git+https://github.com/holochain/hc-utils?rev=7f65e8f941b9c003133b265d06f3334a9cd60d54#7f65e8f941b9c003133b265d06f3334a9cd60d54"
 dependencies = [
  "hdk3",
  "holo_hash",
@@ -126,7 +126,7 @@ dependencies = [
 [[package]]
 name = "hdk3"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=5ad38e7#5ad38e724b2f55d6163480d45b1dc694bb3e6451"
+source = "git+https://github.com/holochain/holochain?rev=cac00d4#cac00d43de940a8b290aeea60688f51bfcb979ed"
 dependencies = [
  "hdk3_derive",
  "holo_hash",
@@ -141,7 +141,7 @@ dependencies = [
 [[package]]
 name = "hdk3_derive"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=5ad38e7#5ad38e724b2f55d6163480d45b1dc694bb3e6451"
+source = "git+https://github.com/holochain/holochain?rev=cac00d4#cac00d43de940a8b290aeea60688f51bfcb979ed"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -162,7 +162,7 @@ dependencies = [
 [[package]]
 name = "holo_hash"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=5ad38e7#5ad38e724b2f55d6163480d45b1dc694bb3e6451"
+source = "git+https://github.com/holochain/holochain?rev=cac00d4#cac00d43de940a8b290aeea60688f51bfcb979ed"
 dependencies = [
  "base64",
  "blake2b_simd",
@@ -223,11 +223,12 @@ dependencies = [
 [[package]]
 name = "holochain_zome_types"
 version = "0.0.1"
-source = "git+https://github.com/holochain/holochain?rev=5ad38e7#5ad38e724b2f55d6163480d45b1dc694bb3e6451"
+source = "git+https://github.com/holochain/holochain?rev=cac00d4#cac00d43de940a8b290aeea60688f51bfcb979ed"
 dependencies = [
  "fixt",
  "holo_hash",
  "holochain_serialized_bytes",
+ "paste",
  "serde",
  "serde_bytes",
  "strum",
