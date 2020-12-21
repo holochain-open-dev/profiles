@@ -1,8 +1,11 @@
-import type { HolochainAgent } from '@holochain-open-dev/common';
-export interface HolochainAgentWithProfile extends HolochainAgent {
-    profile: Profile;
-}
+export declare type Dictionary<T> = {
+    [key: string]: T;
+};
 export interface Profile {
-    username: string;
-    avatar: string;
+    nickname: string;
+    fields: Dictionary<string>;
+}
+export interface AgentProfile {
+    agent_pub_key: string;
+    profile: Profile;
 }

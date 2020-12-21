@@ -1,25 +1,21 @@
-import { LitElement } from 'lit-element';
-import { ApolloClient } from '@apollo/client/core';
-import type { TextField } from '@material/mwc-textfield';
-import '@material/mwc-textfield';
-import '@material/mwc-button';
-import '@material/mwc-icon-button';
-import '@spectrum-web-components/avatar/sp-avatar.js';
+import { TextField } from 'scoped-material-components/mwc-textfield';
+import { Button } from 'scoped-material-components/mwc-button';
+import { IconButton } from 'scoped-material-components/mwc-icon-button';
+import { Avatar } from '@spectrum-web-components/avatar';
+import { BaseElement } from './base-element';
 /**
  * @element hod-create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export declare abstract class HodCreateProfileForm extends LitElement {
+export declare class HodCreateProfileForm extends BaseElement {
     /** Public attributes */
     /**
-     * Minimum length that the username needs to have
+     * Minimum length that the nickname needs to have
      * @attr min-length
      */
     minLength: number;
-    /** Dependencies */
-    abstract get _apolloClient(): ApolloClient<any>;
     /** Private properties */
-    _usernameField: TextField;
+    _nicknameField: TextField;
     _avatarFilePicker: HTMLInputElement;
     _existingUsernames: {
         [key: string]: boolean;
@@ -31,4 +27,10 @@ export declare abstract class HodCreateProfileForm extends LitElement {
     cropPlusExport(img: HTMLImageElement, cropX: number, cropY: number, cropWidth: number, cropHeight: number): string;
     onAvatarUploaded(): void;
     render(): import("lit-element").TemplateResult;
+    static get scopedElements(): {
+        'mwc-textfield': typeof TextField;
+        'mwc-button': typeof Button;
+        'mwc-icon-button': typeof IconButton;
+        'sp-avatar': typeof Avatar;
+    };
 }
