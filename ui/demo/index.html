@@ -17,22 +17,35 @@
     />
   </head>
   <body>
-    <hod-profile-prompt>
-      <hod-search-agent></hod-search-agent>
-    </hod-profile-prompt>
+    <membrane-context-provider id="provider">
+      <hod-profile-prompt>
+        <hod-search-agent></hod-search-agent>
+      </hod-profile-prompt>
+    </membrane-context-provider>
 
     <script type="module">
       import { html, render } from 'lit-html';
-      import { setupProfileElements } from '../dist';
-      import { setupApolloClientMock } from '../test/mocks';
+      import { HodProfilePrompt, HodSearchAgent } from '../dist';
+      import { MembraneContextProvider } from '@holochain-open-dev/membrane-context';
+      import ConductorApi from '@holochain/conductor-api';
 
-      setupApolloClientMock().then(client => {
-        const elements = setupProfileElements({ apolloClient: client });
+      (async function () {
+        const appWebsocket = await ConductorApi.AppWebsocket.connect('ws://localhost:8888');
+        const appInfo = await appWebsocket.appInfo({ installed_app_id: 'test-app' });
 
-        for (const [key, value] of Object.entries(elements)) {
-          customElements.define(key, value);
-        }
-      });
+        const cellId = appInfo.cell_data[0][0];
+
+        customElements.define(
+          'membrane-context-provider',
+          MembraneContextProvider
+        );
+        customElements.define('hod-profile-prompt', HodProfilePrompt);
+        customElements.define('hod-search-agent', HodSearchAgent);
+
+        const context = document.getElementById('provider');
+        context.appWebsocket = appWebsocket;
+        context.cellId = cellId;
+      })();
     </script>
   </body>
 </html>

@@ -1,4 +1,3 @@
-import { AgentPubKey } from '@holochain/conductor-api';
 
 export type Dictionary<T> = { [key: string]: T };
 

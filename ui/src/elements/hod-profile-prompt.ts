@@ -1,9 +1,4 @@
-import {
-  css,
-  html,
-  property,
-  PropertyValues,
-} from 'lit-element';
+import { css, html, property, PropertyValues } from 'lit-element';
 
 import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
@@ -11,6 +6,7 @@ import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from '../sharedStyles';
 import { AgentProfile } from '../types';
 import { BaseElement } from './base-element';
+import { HodCreateProfileForm } from './hod-create-profile-form';
 
 /**
  * @element hod-profile-prompt
@@ -22,6 +18,9 @@ export class HodProfilePrompt extends BaseElement {
 
   @property({ type: Object })
   _myProfile: AgentProfile | undefined = undefined;
+
+  @property({ type: Boolean })
+  _loading = true;
 
   static get styles() {
     return [
@@ -36,17 +35,18 @@ export class HodProfilePrompt extends BaseElement {
 
   updated(changedValues: PropertyValues) {
     super.updated(changedValues);
-    if (changedValues.has('membraneContext') && this.membraneContext) {
+    if (
+      changedValues.has('membraneContext') &&
+      this.membraneContext.appWebsocket
+    ) {
       this.loadMyProfile();
     }
   }
 
   async loadMyProfile() {
+    this._loading = true;
     this._myProfile = await this._profilesService.getMyProfile();
-  }
-
-  agentHasCreatedProfile() {
-    return this._myProfile && this._myProfile.profile !== null;
+    this._loading = false;
   }
 
   onProfileCreated(e: CustomEvent) {
@@ -61,17 +61,17 @@ export class HodProfilePrompt extends BaseElement {
       class="column"
       style="align-items: center; justify-content: center; flex: 1;"
     >
-      ${this._myProfile
-        ? html`<hod-create-profile-form
+      ${this._loading
+        ? html`<mwc-circular-progress></mwc-circular-progress>`
+        : html`<hod-create-profile-form
             @profile-created=${this.onProfileCreated}
-          ></hod-create-profile-form>`
-        : html`<mwc-circular-progress></mwc-circular-progress>`}
+          ></hod-create-profile-form>`}
     </div>`;
   }
 
   render() {
     return html`
-      ${this.agentHasCreatedProfile()
+      ${!this._loading && this._myProfile
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;
@@ -82,6 +82,7 @@ export class HodProfilePrompt extends BaseElement {
       'mwc-textfield': TextField,
       'mwc-button': Button,
       'mwc-circular-progress': CircularProgress,
+      'hod-create-profile-form': HodCreateProfileForm,
     };
   }
 }

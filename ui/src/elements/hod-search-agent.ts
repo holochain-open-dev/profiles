@@ -1,26 +1,22 @@
-import { LitElement, css, html, query, property } from 'lit-element';
-import { ApolloClient } from '@apollo/client/core';
+import { css, html, query, property } from 'lit-element';
 
-import '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
+import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
 import type {
   ComboBoxElement,
   ComboBoxItemModel,
 } from '@vaadin/vaadin-combo-box';
 import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Button } from 'scoped-material-components/mwc-button';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { Avatar } from '@spectrum-web-components/avatar';
 
 import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from '../sharedStyles';
-import { TextFieldBase } from '@material/mwc-textfield/mwc-textfield-base';
 import { BaseElement } from './base-element';
 
 /**
  * @element hod-search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export abstract class HodSearchAgent extends BaseElement {
+export class HodSearchAgent extends BaseElement {
   /** Public attributes */
 
   /**
@@ -37,9 +33,6 @@ export abstract class HodSearchAgent extends BaseElement {
   @property({ type: String, attribute: 'field-label' })
   fieldLabel = 'Search agent';
 
-  /** Dependencies */
-  abstract get _apolloClient(): ApolloClient<any>;
-
   /** Private properties */
 
   _searchedAgents: Array<AgentProfile> = [];
@@ -50,7 +43,7 @@ export abstract class HodSearchAgent extends BaseElement {
   _comboBox!: ComboBoxElement;
 
   @query('#textfield')
-  _textField!: TextFieldBase;
+  _textField!: TextField;
 
   static get styles() {
     return [
@@ -81,6 +74,7 @@ export abstract class HodSearchAgent extends BaseElement {
 
       if (nicknamePrefix !== this._lastSearchedPrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
+        console.log('asdf')
         agents = await this.searchAgents(params.filter);
       }
 
@@ -154,5 +148,13 @@ export abstract class HodSearchAgent extends BaseElement {
         </mwc-textfield>
       </vaadin-combo-box-light>
     `;
+  }
+
+  static get scopedElements() {
+    return {
+      'sp-avatar': Avatar,
+      'mwc-textfield': TextField,
+      'vaadin-combo-box-light': ComboBoxLightElement,
+    };
   }
 }
