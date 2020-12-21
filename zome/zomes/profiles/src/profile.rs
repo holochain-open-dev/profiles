@@ -8,7 +8,7 @@ use std::convert::{TryFrom, TryInto};
 #[hdk_entry(id = "profile", visibility = "public")]
 #[derive(Clone)]
 pub struct Profile {
-    pub username: String,
+    pub nickname: String,
     pub fields: BTreeMap<String, String>,
 }
 
@@ -20,7 +20,7 @@ pub struct AgentProfile {
 }
 
 pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
-    if username_exists(profile.username.clone())? {
+    if nickname_exists(profile.nickname.clone())? {
         return crate::error("Username already exists");
     }
 
@@ -30,7 +30,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
     let profile_hash = hash_entry(&profile.clone())?;
 
-    let path = prefix_path(profile.username.clone());
+    let path = prefix_path(profile.nickname.clone());
 
     path.ensure()?;
 
@@ -39,7 +39,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     create_link(
         path.hash()?,
         profile_hash.clone(),
-        link_tag(profile.username.as_str().clone())?,
+        link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
@@ -55,12 +55,12 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     Ok(agent_profile)
 }
 
-pub fn search_profiles(username_prefix: String) -> ExternResult<Vec<AgentProfile>> {
-    if username_prefix.len() < 3 {
+pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
+    if nickname_prefix.len() < 3 {
         return crate::error("Cannot search with a prefix less than 3 characters");
     }
 
-    let prefix_path = prefix_path(username_prefix);
+    let prefix_path = prefix_path(nickname_prefix);
 
     let links = get_links(prefix_path.hash()?, None)?;
 
@@ -100,10 +100,10 @@ pub fn get_agent_profile(
 
 /** Private helpers */
 
-fn username_exists(username: String) -> ExternResult<bool> {
-    let path = prefix_path(username.clone());
+fn nickname_exists(nickname: String) -> ExternResult<bool> {
+    let path = prefix_path(nickname.clone());
 
-    let links = get_links(path.hash()?, Some(link_tag(username.as_str())?))?;
+    let links = get_links(path.hash()?, Some(link_tag(nickname.as_str())?))?;
 
     match links.into_inner().len() {
         0 => Ok(false),
@@ -111,8 +111,8 @@ fn username_exists(username: String) -> ExternResult<bool> {
     }
 }
 
-fn prefix_path(username: String) -> Path {
-    let (prefix, _) = username.as_str().split_at(3);
+fn prefix_path(nickname: String) -> Path {
+    let (prefix, _) = nickname.as_str().split_at(3);
 
     Path::from(format!("all_profiles.{}", prefix))
 }
@@ -120,7 +120,7 @@ fn prefix_path(username: String) -> Path {
 fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     let profile_hash = link.target;
 
-    let element = get(profile_hash, GetOptions)?.ok_or(crate::err("could not get profile"))?;
+    let element = get(profile_hash, GetOptions::default())?.ok_or(crate::err("could not get profile"))?;
 
     let author = element.header().author().clone();
 

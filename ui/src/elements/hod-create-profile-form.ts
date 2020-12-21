@@ -1,37 +1,32 @@
-import { LitElement, css, html, query, property } from 'lit-element';
+import { html, query, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
-import { ApolloClient } from '@apollo/client/core';
 
-import type { TextField } from '@material/mwc-textfield';
-import '@material/mwc-textfield';
-import '@material/mwc-button';
-import '@material/mwc-icon-button';
-import '@spectrum-web-components/avatar/sp-avatar.js';
+import { TextField } from 'scoped-material-components/mwc-textfield';
+import { Button } from 'scoped-material-components/mwc-button';
+import { IconButton } from 'scoped-material-components/mwc-icon-button';
+import { Avatar } from '@spectrum-web-components/avatar';
 
-import { CREATE_PROFILE } from '../graphql/queries';
 import { sharedStyles } from '../sharedStyles';
+import { BaseElement } from './base-element';
 
 /**
  * @element hod-create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export abstract class HodCreateProfileForm extends LitElement {
+export class HodCreateProfileForm extends BaseElement {
   /** Public attributes */
 
   /**
-   * Minimum length that the username needs to have
+   * Minimum length that the nickname needs to have
    * @attr min-length
    */
   @property({ type: Number, attribute: 'min-length' })
   minLength = 3;
 
-  /** Dependencies */
-  abstract get _apolloClient(): ApolloClient<any>;
-
   /** Private properties */
 
-  @query('#username-field')
-  _usernameField!: TextField;
+  @query('#nickname-field')
+  _nicknameField!: TextField;
 
   @query('#avatar-file-picker')
   _avatarFilePicker!: HTMLInputElement;
@@ -42,17 +37,17 @@ export abstract class HodCreateProfileForm extends LitElement {
   _avatar: string | undefined = undefined;
 
   firstUpdated() {
-    this._usernameField.validityTransform = (newValue: string) => {
+    this._nicknameField.validityTransform = (newValue: string) => {
       this.requestUpdate();
       if (newValue.length < this.minLength) {
-        this._usernameField.setCustomValidity(
+        this._nicknameField.setCustomValidity(
           `Username is too shot, min. ${this.minLength} characters`
         );
         return {
           valid: false,
         };
       } else if (this._existingUsernames[newValue]) {
-        this._usernameField.setCustomValidity('This username already exists');
+        this._nicknameField.setCustomValidity('This nickname already exists');
         return { valid: false };
       }
 
@@ -67,24 +62,22 @@ export abstract class HodCreateProfileForm extends LitElement {
   }
 
   async createProfile() {
-    const username = this._usernameField.value;
+    const nickname = this._nicknameField.value;
+
     try {
-      await this._apolloClient.mutate({
-        mutation: CREATE_PROFILE,
-        variables: {
-          profile: {
-            username,
-            avatar: this._avatar,
-          },
-        },
+      await this._profilesService.createProfile({
+        nickname,
+        fields: { avatar: this._avatar as string },
       });
 
       this.dispatchEvent(
         new CustomEvent('profile-created', {
           detail: {
             profile: {
-              username,
-              avatar: this._avatar,
+              nickname,
+              fiels: {
+                avatar: this._avatar,
+              },
             },
           },
           bubbles: true,
@@ -92,9 +85,9 @@ export abstract class HodCreateProfileForm extends LitElement {
         })
       );
     } catch (e) {
-      console.log(e)
-      this._existingUsernames[username] = true;
-      this._usernameField.reportValidity();
+      console.log(e);
+      this._existingUsernames[nickname] = true;
+      this._nicknameField.reportValidity();
     }
   }
 
@@ -172,10 +165,10 @@ export abstract class HodCreateProfileForm extends LitElement {
               `}
 
           <mwc-textfield
-            id="username-field"
+            id="nickname-field"
             outlined
             label="Username"
-            @input=${() => this._usernameField.reportValidity()}
+            @input=${() => this._nicknameField.reportValidity()}
             style="margin-left: 8px;"
           ></mwc-textfield>
         </div>
@@ -183,15 +176,24 @@ export abstract class HodCreateProfileForm extends LitElement {
           id="create-profile-button"
           raised
           class=${classMap({
-            'small-margin': !!this._usernameField,
-            'big-margin': !this._usernameField,
+            'small-margin': !!this._nicknameField,
+            'big-margin': !this._nicknameField,
           })}
-          .disabled=${!this._usernameField ||
-          !this._usernameField.validity.valid}
+          .disabled=${!this._nicknameField ||
+          !this._nicknameField.validity.valid}
           label="CREATE PROFILE"
           @click=${() => this.createProfile()}
         ></mwc-button>
       </div>
     `;
+  }
+
+  static get scopedElements() {
+    return {
+      'mwc-textfield': TextField,
+      'mwc-button': Button,
+      'mwc-icon-button': IconButton,
+      'sp-avatar': Avatar,
+    };
   }
 }

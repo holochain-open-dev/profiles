@@ -1,13 +1,20 @@
-import { Orchestrator, Config, InstallAgentsHapps, TransportConfigType } from "@holochain/tryorama";
+import {
+  Orchestrator,
+  Config,
+  InstallAgentsHapps,
+  TransportConfigType,
+} from "@holochain/tryorama";
 import path from "path";
 
 const network = {
-  transport_pool: [{
-    type: TransportConfigType.Quic,
-  }],
-  bootstrap_service: "https://bootstrap.holo.host"
-}
-const conductorConfig = Config.gen({network});
+  transport_pool: [
+    {
+      type: TransportConfigType.Quic,
+    },
+  ],
+  bootstrap_service: "https://bootstrap.holo.host",
+};
+const conductorConfig = Config.gen({ network });
 
 // Construct proper paths for your DNAs
 const profilesDna = path.join(__dirname, "../../profiles.dna.gz");
@@ -22,7 +29,8 @@ const installation: InstallAgentsHapps = [
   ],
 ];
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(() => resolve(), ms));
+const sleep = (ms) =>
+  new Promise((resolve) => setTimeout(() => resolve(null), ms));
 
 const orchestrator = new Orchestrator();
 

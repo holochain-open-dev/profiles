@@ -1,26 +1,27 @@
-import { LitElement, css, html, query, property } from 'lit-element';
-import { ApolloClient } from '@apollo/client/core';
+import {
+  css,
+  html,
+  property,
+  PropertyValues,
+} from 'lit-element';
 
-import '@material/mwc-textfield';
-import '@material/mwc-circular-progress';
-import '@material/mwc-button';
-import { GET_MY_PROFILE } from '../graphql/queries';
-import { HolochainAgentWithProfile } from '../types';
+import { Button } from 'scoped-material-components/mwc-button';
+import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from '../sharedStyles';
+import { AgentProfile } from '../types';
+import { BaseElement } from './base-element';
 
 /**
  * @element hod-profile-prompt
  */
-export abstract class HodProfilePrompt extends LitElement {
+export class HodProfilePrompt extends BaseElement {
   /** Public attributes */
-
-  /** Dependencies */
-  abstract get _apolloClient(): ApolloClient<any>;
 
   /** Private properties */
 
   @property({ type: Object })
-  _myProfile: HolochainAgentWithProfile | undefined = undefined;
+  _myProfile: AgentProfile | undefined = undefined;
 
   static get styles() {
     return [
@@ -33,12 +34,15 @@ export abstract class HodProfilePrompt extends LitElement {
     ];
   }
 
-  async firstUpdated() {
-    const result = await this._apolloClient.query({
-      query: GET_MY_PROFILE,
-    });
+  updated(changedValues: PropertyValues) {
+    super.updated(changedValues);
+    if (changedValues.has('membraneContext') && this.membraneContext) {
+      this.loadMyProfile();
+    }
+  }
 
-    this._myProfile = result.data.me;
+  async loadMyProfile() {
+    this._myProfile = await this._profilesService.getMyProfile();
   }
 
   agentHasCreatedProfile() {
@@ -47,7 +51,7 @@ export abstract class HodProfilePrompt extends LitElement {
 
   onProfileCreated(e: CustomEvent) {
     this._myProfile = {
-      id: this._myProfile?.id as string,
+      agent_pub_key: this._myProfile?.agent_pub_key as string,
       profile: e.detail.profile,
     };
   }
@@ -71,5 +75,13 @@ export abstract class HodProfilePrompt extends LitElement {
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;
+  }
+
+  static get scopedElements() {
+    return {
+      'mwc-textfield': TextField,
+      'mwc-button': Button,
+      'mwc-circular-progress': CircularProgress,
+    };
   }
 }

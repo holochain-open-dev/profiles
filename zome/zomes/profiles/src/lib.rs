@@ -34,7 +34,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
 pub struct SearchProfilesInput {
-    username_prefix: String,
+    nickname_prefix: String,
 }
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
 pub struct SearchProfilesOutput(Vec<AgentProfile>);
@@ -42,7 +42,7 @@ pub struct SearchProfilesOutput(Vec<AgentProfile>);
 pub fn search_profiles(
     search_profiles_input: SearchProfilesInput,
 ) -> ExternResult<SearchProfilesOutput> {
-    let agent_profiles = profile::search_profiles(search_profiles_input.username_prefix)?;
+    let agent_profiles = profile::search_profiles(search_profiles_input.nickname_prefix)?;
 
     Ok(SearchProfilesOutput(agent_profiles))
 }

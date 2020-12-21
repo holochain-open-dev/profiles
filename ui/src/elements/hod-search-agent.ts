@@ -6,21 +6,21 @@ import type {
   ComboBoxElement,
   ComboBoxItemModel,
 } from '@vaadin/vaadin-combo-box';
-import '@material/mwc-textfield';
-import '@material/mwc-circular-progress';
-import '@material/mwc-button';
-import '@spectrum-web-components/avatar/sp-avatar.js';
+import { TextField } from 'scoped-material-components/mwc-textfield';
+import { Button } from 'scoped-material-components/mwc-button';
+import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { Avatar } from '@spectrum-web-components/avatar';
 
-import { HolochainAgentWithProfile, Profile } from '../types';
+import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from '../sharedStyles';
-import { SEARCH_PROFILES } from '../graphql/queries';
 import { TextFieldBase } from '@material/mwc-textfield/mwc-textfield-base';
+import { BaseElement } from './base-element';
 
 /**
  * @element hod-search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export abstract class HodSearchAgent extends LitElement {
+export abstract class HodSearchAgent extends BaseElement {
   /** Public attributes */
 
   /**
@@ -42,7 +42,7 @@ export abstract class HodSearchAgent extends LitElement {
 
   /** Private properties */
 
-  _searchedAgents: Array<HolochainAgentWithProfile> = [];
+  _searchedAgents: Array<AgentProfile> = [];
 
   _lastSearchedPrefix: string | undefined = undefined;
 
@@ -63,35 +63,32 @@ export abstract class HodSearchAgent extends LitElement {
     ];
   }
 
-  async searchAgents(usernamePrefix: string): Promise<Array<HolochainAgentWithProfile>> {
-    const result = await this._apolloClient.query({
-      query: SEARCH_PROFILES,
-      variables: { usernamePrefix },
-    });
-
-    this._searchedAgents = result.data.profilesSearch;
+  async searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>> {
+    this._searchedAgents = await this._profilesService.searchProfiles(
+      nicknamePrefix
+    );
 
     return this._searchedAgents;
   }
 
   firstUpdated() {
     this._comboBox.dataProvider = async (params, callback) => {
-      const usernamePrefix = params.filter;
+      const nicknamePrefix = params.filter;
 
-      if (usernamePrefix.length < 3) return callback([], 0);
+      if (nicknamePrefix.length < 3) return callback([], 0);
 
       let agents = this._searchedAgents;
 
-      if (usernamePrefix !== this._lastSearchedPrefix) {
-        this._lastSearchedPrefix = usernamePrefix;
+      if (nicknamePrefix !== this._lastSearchedPrefix) {
+        this._lastSearchedPrefix = nicknamePrefix;
         agents = await this.searchAgents(params.filter);
       }
 
-      const usernames = agents
-        .map(agent => agent.profile.username)
-        .filter(username => username.startsWith(usernamePrefix));
+      const nicknames = agents
+        .map(agent => agent.profile.nickname)
+        .filter(nickname => nickname.startsWith(nicknamePrefix));
 
-      callback(usernames, usernames.length);
+      callback(nicknames, nicknames.length);
     };
 
     this._comboBox.renderer = (
@@ -100,7 +97,7 @@ export abstract class HodSearchAgent extends LitElement {
       model: ComboBoxItemModel
     ) => {
       const profile: Profile = this._searchedAgents.find(
-        agent => agent.profile.username === model.item
+        agent => agent.profile.nickname === model.item
       )?.profile as Profile;
       root.innerHTML = `
       <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
@@ -109,21 +106,21 @@ export abstract class HodSearchAgent extends LitElement {
           --spectrum-avatar-small-height: 20px;
           --spectrum-avatar-small-width: 20px;
           margin-right: 8px;" 
-          src="${profile.avatar}"
+          src="${profile.fields.avatar}"
         ></sp-avatar>
-        <span>${profile.username}</span>
+        <span>${profile.nickname}</span>
       </div>`;
     };
   }
 
   onUsernameSelected(e: CustomEvent) {
-    const username = e.detail.value;
+    const nickname = e.detail.value;
 
     const agent = this._searchedAgents.find(
-      agent => agent.profile.username === username
+      agent => agent.profile.nickname === nickname
     );
 
-    // If username matches agent, user has selected it
+    // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(
         new CustomEvent('agent-selected', {
@@ -145,7 +142,7 @@ export abstract class HodSearchAgent extends LitElement {
       <vaadin-combo-box-light
         id="combo-box"
         @value-changed=${this.onUsernameSelected}
-        item-label-path="username"
+        item-label-path="nickname"
       >
         <mwc-textfield
           id="textfield"

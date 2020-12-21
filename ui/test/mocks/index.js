@@ -20,6 +20,10 @@ const rootTypeDef = gql`
 
 export const allTypeDefs = [rootTypeDef, commonTypeDefs, profilesTypeDefs];
 
+/**
+ * If process.env.CONDUCTOR_URL is undefined, it will mock the backend
+ * If process.env.CONDUCTOR_URL is defined, it will try to connect to holochain at that url
+ */
 const dnaMock = new DnaMock({
   profiles: new ProfilesMock(),
 });
@@ -29,33 +33,4 @@ export async function getAppWebsocket() {
   else {
     return new AppWebsocketMock([dnaMock]);
   }
-}
-
-/**
- * If process.env.CONDUCTOR_URL is undefined, it will mock the backend
- * If process.env.CONDUCTOR_URL is defined, it will try to connect to holochain at ws://localhost:8888
- */
-export async function setupApolloClientMock() {
-  const appWebsocket = await getAppWebsocket();
-
-  const appInfo = await appWebsocket.appInfo({ installed_app_id: 'test-app' });
-
-  const cellId = appInfo.cell_data[0][0];
-
-  const executableSchema = makeExecutableSchema({
-    typeDefs: allTypeDefs,
-    resolvers: [
-      commonResolvers(appWebsocket, 'test-app'),
-      profilesResolvers(appWebsocket, cellId),
-    ],
-  });
-
-  const schemaLink = new SchemaLink({ schema: executableSchema });
-
-  return new ApolloClient({
-    typeDefs: allTypeDefs,
-
-    cache: new InMemoryCache(),
-    link: schemaLink,
-  });
 }
