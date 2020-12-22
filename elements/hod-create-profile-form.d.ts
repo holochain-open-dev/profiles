@@ -1,7 +1,6 @@
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
 import { IconButton } from 'scoped-material-components/mwc-icon-button';
-import { Avatar } from '@spectrum-web-components/avatar';
 import { BaseElement } from './base-element';
 /**
  * @element hod-create-profile-form
@@ -31,6 +30,6 @@ export declare class HodCreateProfileForm extends BaseElement {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;
         'mwc-icon-button': typeof IconButton;
-        'sp-avatar': typeof Avatar;
+        'ui5-avatar': any;
     };
 }

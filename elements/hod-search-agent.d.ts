@@ -1,7 +1,6 @@
 import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
 import type { ComboBoxElement } from '@vaadin/vaadin-combo-box';
 import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Avatar } from '@spectrum-web-components/avatar';
 import { AgentProfile } from '../types';
 import { BaseElement } from './base-element';
 /**
@@ -31,7 +30,7 @@ export declare class HodSearchAgent extends BaseElement {
     onUsernameSelected(e: CustomEvent): void;
     render(): import("lit-element").TemplateResult;
     static get scopedElements(): {
-        'sp-avatar': typeof Avatar;
+        'ui5-avatar': any;
         'mwc-textfield': typeof TextField;
         'vaadin-combo-box-light': typeof ComboBoxLightElement;
     };
