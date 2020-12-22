@@ -1,11 +1,9 @@
 import { css, html, query, property } from 'lit-element';
 
-import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
-import type {
-  ComboBoxElement,
-  ComboBoxItemModel,
-} from '@vaadin/vaadin-combo-box';
 import { TextField } from 'scoped-material-components/mwc-textfield';
+import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
+import { List } from 'scoped-material-components/mwc-list';
+import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { AgentProfile, Profile } from '../types';
@@ -35,15 +33,24 @@ export class HodSearchAgent extends BaseElement {
 
   /** Private properties */
 
+  @property({ type: Array })
   _searchedAgents: Array<AgentProfile> = [];
+
+  get _filteredAgents(): Array<AgentProfile> {
+    return this._searchedAgents.filter(agent =>
+      agent.profile.nickname.startsWith(this._currentFilter as string)
+    );
+  }
+
+  @property({ type: String })
+  _currentFilter: string | undefined = undefined;
 
   _lastSearchedPrefix: string | undefined = undefined;
 
-  @query('#combo-box')
-  _comboBox!: ComboBoxElement;
-
   @query('#textfield')
   _textField!: TextField;
+  @query('#overlay')
+  _overlay!: MenuSurface;
 
   static get styles() {
     return [
@@ -52,11 +59,19 @@ export class HodSearchAgent extends BaseElement {
         :host {
           display: flex;
         }
+        #list {
+          margin-top: 16px;
+          margin-left: 16px;
+        }
       `,
     ];
   }
+  firstUpdated() {
+    this.addEventListener('blur', () => this._overlay.close());
+  }
 
   async searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>> {
+    this._lastSearchedPrefix = nicknamePrefix;
     this._searchedAgents = await this._profilesService.searchProfiles(
       nicknamePrefix
     );
@@ -64,54 +79,21 @@ export class HodSearchAgent extends BaseElement {
     return this._searchedAgents;
   }
 
-  firstUpdated() {
-    this._comboBox.dataProvider = async (params, callback) => {
-      const nicknamePrefix = params.filter;
+  onFilterChange() {
+    if (this._textField.value.length < 3) return;
 
-      if (nicknamePrefix.length < 3) return callback([], 0);
+    this._overlay.show();
 
-      let agents = this._searchedAgents;
+    this._currentFilter = this._textField.value;
 
-      if (nicknamePrefix !== this._lastSearchedPrefix) {
-        this._lastSearchedPrefix = nicknamePrefix;
-        console.log('asdf');
-        agents = await this.searchAgents(params.filter);
-      }
-
-      const nicknames = agents
-        .map(agent => agent.profile.nickname)
-        .filter(nickname => nickname.startsWith(nicknamePrefix));
-
-      callback(nicknames, nicknames.length);
-    };
-
-    this._comboBox.renderer = (
-      root: HTMLElement,
-      comboBox: ComboBoxElement,
-      model: ComboBoxItemModel
-    ) => {
-      const profile: Profile = this._searchedAgents.find(
-        agent => agent.profile.nickname === model.item
-      )?.profile as Profile;
-      root.innerHTML = `
-      <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
-        <ui5-avatar 
-          image="${profile.fields.avatar}"
-          size="XS"
-        ></ui5-avatar>
-        <span
-          style="margin-left: 8px;" 
-        >${profile.nickname}</span>
-      </div>`;
-    };
+    const filterPrefix = this._currentFilter.slice(0, 3);
+    if (filterPrefix !== this._lastSearchedPrefix) {
+      this.searchAgents(filterPrefix);
+    }
   }
 
   onUsernameSelected(e: CustomEvent) {
-    const nickname = e.detail.value;
-
-    const agent = this._searchedAgents.find(
-      agent => agent.profile.nickname === nickname
-    );
+    const agent = this._searchedAgents[e.detail.index];
 
     // If nickname matches agent, user has selected it
     if (agent) {
@@ -125,27 +107,55 @@ export class HodSearchAgent extends BaseElement {
 
       // If the consumer says so, clear the field
       if (this.clearOnSelect) {
-        this._comboBox._clear();
+        this._textField.value = '';
+      } else {
+        this._textField.value = agent.profile.nickname;
       }
+      this._overlay.close();
     }
   }
 
   render() {
     return html`
-      <vaadin-combo-box-light
-        id="combo-box"
-        @value-changed=${this.onUsernameSelected}
-        item-label-path="nickname"
-      >
+      <div style="position: relative">
         <mwc-textfield
           id="textfield"
           class="input"
           .label=${this.fieldLabel}
           placeholder="At least 3 chars..."
           outlined
+          @input=${() => this.onFilterChange()}
+          @focus=${() => this._currentFilter && this._overlay.show()}
         >
         </mwc-textfield>
-      </vaadin-combo-box-light>
+        <mwc-menu-surface absolute id="overlay" x="4" y="28">
+          ${this._filteredAgents.length > 0
+            ? this._filteredAgents.map(
+                agent => html`
+                  <mwc-list
+                    @selected=${(e: CustomEvent) => this.onUsernameSelected(e)}
+                    activatable
+                    style="min-width: 80px;"
+                  >
+                    <mwc-list-item
+                      graphic="avatar"
+                      .value=${agent.agent_pub_key}
+                    >
+                      <ui5-avatar
+                        slot="graphic"
+                        image="${agent.profile.fields.avatar}"
+                        size="XS"
+                      ></ui5-avatar>
+                      <span style="margin-left: 8px;"
+                        >${agent.profile.nickname}</span
+                      >
+                    </mwc-list-item>
+                  </mwc-list>
+                `
+              )
+            : html`<mwc-list-item>No agents match the filter</mwc-list-item>`}
+        </mwc-menu-surface>
+      </div>
     `;
   }
 
@@ -153,7 +163,9 @@ export class HodSearchAgent extends BaseElement {
     return {
       'ui5-avatar': Avatar,
       'mwc-textfield': TextField,
-      'vaadin-combo-box-light': ComboBoxLightElement,
+      'mwc-menu-surface': MenuSurface,
+      'mwc-list': List,
+      'mwc-list-item': ListItem,
     };
   }
 }
