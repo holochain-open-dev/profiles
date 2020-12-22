@@ -4,7 +4,7 @@ import { classMap } from 'lit-html/directives/class-map';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
 import { IconButton } from 'scoped-material-components/mwc-icon-button';
-import { Avatar } from '@spectrum-web-components/avatar';
+import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { sharedStyles } from '../sharedStyles';
 import { BaseElement } from './base-element';
@@ -149,11 +149,11 @@ export class HodCreateProfileForm extends BaseElement {
         <div class="row center-content">
           ${this._avatar
             ? html`
-                <sp-avatar
+                <ui5-avatar
                   label="Avatar"
-                  src="${this._avatar}"
+                  image="${this._avatar}"
                   style="margin-bottom: 19px;"
-                ></sp-avatar>
+                ></ui5-avatar>
               `
             : html`
                 <mwc-icon-button
@@ -193,7 +193,7 @@ export class HodCreateProfileForm extends BaseElement {
       'mwc-textfield': TextField,
       'mwc-button': Button,
       'mwc-icon-button': IconButton,
-      'sp-avatar': Avatar,
+      'ui5-avatar': Avatar,
     };
   }
 }

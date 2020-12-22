@@ -6,7 +6,7 @@ import type {
   ComboBoxItemModel,
 } from '@vaadin/vaadin-combo-box';
 import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Avatar } from '@spectrum-web-components/avatar';
+import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from '../sharedStyles';
@@ -74,7 +74,7 @@ export class HodSearchAgent extends BaseElement {
 
       if (nicknamePrefix !== this._lastSearchedPrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        console.log('asdf')
+        console.log('asdf');
         agents = await this.searchAgents(params.filter);
       }
 
@@ -95,14 +95,13 @@ export class HodSearchAgent extends BaseElement {
       )?.profile as Profile;
       root.innerHTML = `
       <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
-        <sp-avatar 
-          style="
-          --spectrum-avatar-small-height: 20px;
-          --spectrum-avatar-small-width: 20px;
-          margin-right: 8px;" 
-          src="${profile.fields.avatar}"
-        ></sp-avatar>
-        <span>${profile.nickname}</span>
+        <ui5-avatar 
+          image="${profile.fields.avatar}"
+          size="XS"
+        ></ui5-avatar>
+        <span
+          style="margin-left: 8px;" 
+        >${profile.nickname}</span>
       </div>`;
     };
   }
@@ -152,7 +151,7 @@ export class HodSearchAgent extends BaseElement {
 
   static get scopedElements() {
     return {
-      'sp-avatar': Avatar,
+      'ui5-avatar': Avatar,
       'mwc-textfield': TextField,
       'vaadin-combo-box-light': ComboBoxLightElement,
     };
