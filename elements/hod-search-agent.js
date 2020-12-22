@@ -1,7 +1,9 @@
 import { __decorate } from "tslib";
 import { css, html, query, property } from 'lit-element';
-import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
 import { TextField } from 'scoped-material-components/mwc-textfield';
+import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
+import { List } from 'scoped-material-components/mwc-list';
+import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from '../sharedStyles';
 import { BaseElement } from './base-element';
@@ -25,7 +27,11 @@ export class HodSearchAgent extends BaseElement {
         this.fieldLabel = 'Search agent';
         /** Private properties */
         this._searchedAgents = [];
+        this._currentFilter = undefined;
         this._lastSearchedPrefix = undefined;
+    }
+    get _filteredAgents() {
+        return this._searchedAgents.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
     }
     static get styles() {
         return [
@@ -34,47 +40,33 @@ export class HodSearchAgent extends BaseElement {
         :host {
           display: flex;
         }
+        #list {
+          margin-top: 16px;
+          margin-left: 16px;
+        }
       `,
         ];
     }
+    firstUpdated() {
+        this.addEventListener('blur', () => this._overlay.close());
+    }
     async searchAgents(nicknamePrefix) {
+        this._lastSearchedPrefix = nicknamePrefix;
         this._searchedAgents = await this._profilesService.searchProfiles(nicknamePrefix);
         return this._searchedAgents;
     }
-    firstUpdated() {
-        this._comboBox.dataProvider = async (params, callback) => {
-            const nicknamePrefix = params.filter;
-            if (nicknamePrefix.length < 3)
-                return callback([], 0);
-            let agents = this._searchedAgents;
-            if (nicknamePrefix !== this._lastSearchedPrefix) {
-                this._lastSearchedPrefix = nicknamePrefix;
-                console.log('asdf');
-                agents = await this.searchAgents(params.filter);
-            }
-            const nicknames = agents
-                .map(agent => agent.profile.nickname)
-                .filter(nickname => nickname.startsWith(nicknamePrefix));
-            callback(nicknames, nicknames.length);
-        };
-        this._comboBox.renderer = (root, comboBox, model) => {
-            var _a;
-            const profile = (_a = this._searchedAgents.find(agent => agent.profile.nickname === model.item)) === null || _a === void 0 ? void 0 : _a.profile;
-            root.innerHTML = `
-      <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start;">
-        <ui5-avatar 
-          image="${profile.fields.avatar}"
-          size="XS"
-        ></ui5-avatar>
-        <span
-          style="margin-left: 8px;" 
-        >${profile.nickname}</span>
-      </div>`;
-        };
+    onFilterChange() {
+        if (this._textField.value.length < 3)
+            return;
+        this._overlay.show();
+        this._currentFilter = this._textField.value;
+        const filterPrefix = this._currentFilter.slice(0, 3);
+        if (filterPrefix !== this._lastSearchedPrefix) {
+            this.searchAgents(filterPrefix);
+        }
     }
     onUsernameSelected(e) {
-        const nickname = e.detail.value;
-        const agent = this._searchedAgents.find(agent => agent.profile.nickname === nickname);
+        const agent = this._searchedAgents[e.detail.index];
         // If nickname matches agent, user has selected it
         if (agent) {
             this.dispatchEvent(new CustomEvent('agent-selected', {
@@ -84,33 +76,62 @@ export class HodSearchAgent extends BaseElement {
             }));
             // If the consumer says so, clear the field
             if (this.clearOnSelect) {
-                this._comboBox._clear();
+                this._textField.value = '';
             }
+            else {
+                this._textField.value = agent.profile.nickname;
+            }
+            this._overlay.close();
         }
     }
     render() {
         return html `
-      <vaadin-combo-box-light
-        id="combo-box"
-        @value-changed=${this.onUsernameSelected}
-        item-label-path="nickname"
-      >
+      <div style="position: relative">
         <mwc-textfield
           id="textfield"
           class="input"
           .label=${this.fieldLabel}
           placeholder="At least 3 chars..."
           outlined
+          @input=${() => this.onFilterChange()}
+          @focus=${() => this._currentFilter && this._overlay.show()}
         >
         </mwc-textfield>
-      </vaadin-combo-box-light>
+        <mwc-menu-surface absolute id="overlay" x="4" y="28">
+          ${this._filteredAgents.length > 0
+            ? this._filteredAgents.map(agent => html `
+                  <mwc-list
+                    @selected=${(e) => this.onUsernameSelected(e)}
+                    activatable
+                    style="min-width: 80px;"
+                  >
+                    <mwc-list-item
+                      graphic="avatar"
+                      .value=${agent.agent_pub_key}
+                    >
+                      <ui5-avatar
+                        slot="graphic"
+                        image="${agent.profile.fields.avatar}"
+                        size="XS"
+                      ></ui5-avatar>
+                      <span style="margin-left: 8px;"
+                        >${agent.profile.nickname}</span
+                      >
+                    </mwc-list-item>
+                  </mwc-list>
+                `)
+            : html `<mwc-list-item>No agents match the filter</mwc-list-item>`}
+        </mwc-menu-surface>
+      </div>
     `;
     }
     static get scopedElements() {
         return {
             'ui5-avatar': Avatar,
             'mwc-textfield': TextField,
-            'vaadin-combo-box-light': ComboBoxLightElement,
+            'mwc-menu-surface': MenuSurface,
+            'mwc-list': List,
+            'mwc-list-item': ListItem,
         };
     }
 }
@@ -121,9 +142,15 @@ __decorate([
     property({ type: String, attribute: 'field-label' })
 ], HodSearchAgent.prototype, "fieldLabel", void 0);
 __decorate([
-    query('#combo-box')
-], HodSearchAgent.prototype, "_comboBox", void 0);
+    property({ type: Array })
+], HodSearchAgent.prototype, "_searchedAgents", void 0);
+__decorate([
+    property({ type: String })
+], HodSearchAgent.prototype, "_currentFilter", void 0);
 __decorate([
     query('#textfield')
 ], HodSearchAgent.prototype, "_textField", void 0);
+__decorate([
+    query('#overlay')
+], HodSearchAgent.prototype, "_overlay", void 0);
 //# sourceMappingURL=hod-search-agent.js.map

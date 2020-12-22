@@ -1,6 +1,7 @@
-import { ComboBoxLightElement } from '@vaadin/vaadin-combo-box/vaadin-combo-box-light';
-import type { ComboBoxElement } from '@vaadin/vaadin-combo-box';
 import { TextField } from 'scoped-material-components/mwc-textfield';
+import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
+import { List } from 'scoped-material-components/mwc-list';
+import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { AgentProfile } from '../types';
 import { BaseElement } from './base-element';
 /**
@@ -21,17 +22,22 @@ export declare class HodSearchAgent extends BaseElement {
     fieldLabel: string;
     /** Private properties */
     _searchedAgents: Array<AgentProfile>;
+    get _filteredAgents(): Array<AgentProfile>;
+    _currentFilter: string | undefined;
     _lastSearchedPrefix: string | undefined;
-    _comboBox: ComboBoxElement;
     _textField: TextField;
+    _overlay: MenuSurface;
     static get styles(): import("lit-element").CSSResult[];
-    searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>>;
     firstUpdated(): void;
+    searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>>;
+    onFilterChange(): void;
     onUsernameSelected(e: CustomEvent): void;
     render(): import("lit-element").TemplateResult;
     static get scopedElements(): {
         'ui5-avatar': any;
         'mwc-textfield': typeof TextField;
-        'vaadin-combo-box-light': typeof ComboBoxLightElement;
+        'mwc-menu-surface': typeof MenuSurface;
+        'mwc-list': typeof List;
+        'mwc-list-item': typeof ListItem;
     };
 }
