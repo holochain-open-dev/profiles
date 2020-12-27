@@ -5,7 +5,7 @@
   "zomes": {
     "profiles": {
       "wasm_path": "../target/wasm32-unknown-unknown/release/profiles.wasm",
-      "ui_path": "../../ui/dist/index.js"
+      "ui_path": "../../ui/bundle/bundle.js"
     }
   }
 }

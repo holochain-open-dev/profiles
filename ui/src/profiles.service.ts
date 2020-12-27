@@ -22,6 +22,10 @@ export class ProfilesService {
     });
   }
 
+  async getAllProfiles(): Promise<Array<AgentProfile>> {
+    return this.callZome('get_all_profiles', null);
+  }
+
   async createProfile(profile: Profile): Promise<AgentProfile> {
     const profileResult = await this.callZome('create_profile', profile);
 

@@ -62,13 +62,24 @@ pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile
 
     let prefix_path = prefix_path(nickname_prefix);
 
-    let links = get_links(prefix_path.hash()?, None)?;
+    get_agent_profiles_for_path(prefix_path.hash()?)
+}
 
-    links
+pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {
+    let path = Path::from("all_profiles");
+
+    let children = path.children()?;
+
+    let agent_profiles: Vec<AgentProfile> = children
         .into_inner()
         .into_iter()
-        .map(get_agent_profile_from_link)
-        .collect()
+        .map(|link| get_agent_profiles_for_path(link.target))
+        .collect::<ExternResult<Vec<Vec<AgentProfile>>>>()?
+        .into_iter()
+        .flatten()
+        .collect();
+
+    Ok(agent_profiles)
 }
 
 pub fn get_agent_profile(
@@ -117,10 +128,21 @@ fn prefix_path(nickname: String) -> Path {
     Path::from(format!("all_profiles.{}", prefix))
 }
 
+fn get_agent_profiles_for_path(path_hash: EntryHash) -> ExternResult<Vec<AgentProfile>> {
+    let links = get_links(path_hash, None)?;
+
+    links
+        .into_inner()
+        .into_iter()
+        .map(get_agent_profile_from_link)
+        .collect()
+}
+
 fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     let profile_hash = link.target;
 
-    let element = get(profile_hash, GetOptions::default())?.ok_or(crate::err("could not get profile"))?;
+    let element =
+        get(profile_hash, GetOptions::default())?.ok_or(crate::err("could not get profile"))?;
 
     let author = element.header().author().clone();
 

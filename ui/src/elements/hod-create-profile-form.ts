@@ -8,6 +8,7 @@ import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { sharedStyles } from '../sharedStyles';
 import { BaseElement } from './base-element';
+import { Dictionary } from '../types';
 
 /**
  * @element hod-create-profile-form
@@ -65,9 +66,13 @@ export class HodCreateProfileForm extends BaseElement {
     const nickname = this._nicknameField.value;
 
     try {
+      const fields: Dictionary<string> = {};
+      if (this._avatar) {
+        fields['avatar'] = this._avatar;
+      }
       await this._profilesService.createProfile({
         nickname,
-        fields: { avatar: this._avatar as string },
+        fields,
       });
 
       this.dispatchEvent(
@@ -75,9 +80,7 @@ export class HodCreateProfileForm extends BaseElement {
           detail: {
             profile: {
               nickname,
-              fiels: {
-                avatar: this._avatar,
-              },
+              fields,
             },
           },
           bubbles: true,

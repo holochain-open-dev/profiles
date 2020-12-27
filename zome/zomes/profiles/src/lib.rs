@@ -37,14 +37,14 @@ pub struct SearchProfilesInput {
     nickname_prefix: String,
 }
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
-pub struct SearchProfilesOutput(Vec<AgentProfile>);
+pub struct GetProfilesOutput(Vec<AgentProfile>);
 #[hdk_extern]
 pub fn search_profiles(
     search_profiles_input: SearchProfilesInput,
-) -> ExternResult<SearchProfilesOutput> {
+) -> ExternResult<GetProfilesOutput> {
     let agent_profiles = profile::search_profiles(search_profiles_input.nickname_prefix)?;
 
-    Ok(SearchProfilesOutput(agent_profiles))
+    Ok(GetProfilesOutput(agent_profiles))
 }
 
 #[derive(Clone, Serialize, Deserialize, SerializedBytes)]
@@ -64,4 +64,11 @@ pub fn get_my_profile(_: ()) -> ExternResult<GetAgentProfileOutput> {
         profile::get_agent_profile(WrappedAgentPubKey(agent_info.agent_initial_pubkey))?;
 
     Ok(GetAgentProfileOutput(agent_profile))
+}
+
+#[hdk_extern]
+pub fn get_all_profiles(_: ()) -> ExternResult<GetProfilesOutput> {
+    let agent_profiles = profile::get_all_profiles()?;
+
+    Ok(GetProfilesOutput(agent_profiles))
 }

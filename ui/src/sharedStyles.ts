@@ -16,13 +16,13 @@ export const sharedStyles = css`
     margin-top: 23px;
   }
 
+  .fill {
+    flex: 1;
+    height: 100%;
+  }
+
   .center-content {
     align-items: center;
     justify-content: center;
-  }
-
-  sp-avatar {
-    --spectrum-avatar-small-height: 48px;
-    --spectrum-avatar-small-width: 48px;
   }
 `;
