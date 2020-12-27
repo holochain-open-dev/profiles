@@ -15,6 +15,9 @@ export class ProfilesService {
             nickname_prefix: nicknamePrefix,
         });
     }
+    async getAllProfiles() {
+        return this.callZome('get_all_profiles', null);
+    }
     async createProfile(profile) {
         const profileResult = await this.callZome('create_profile', profile);
         return {

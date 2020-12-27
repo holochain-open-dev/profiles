@@ -47,17 +47,19 @@ export class HodCreateProfileForm extends BaseElement {
     async createProfile() {
         const nickname = this._nicknameField.value;
         try {
+            const fields = {};
+            if (this._avatar) {
+                fields['avatar'] = this._avatar;
+            }
             await this._profilesService.createProfile({
                 nickname,
-                fields: { avatar: this._avatar },
+                fields,
             });
             this.dispatchEvent(new CustomEvent('profile-created', {
                 detail: {
                     profile: {
                         nickname,
-                        fiels: {
-                            avatar: this._avatar,
-                        },
+                        fields,
                     },
                 },
                 bubbles: true,

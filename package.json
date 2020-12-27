@@ -11,6 +11,7 @@
     "start-ui": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names tsc,dev-server \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
     "start-holochain": "RUST_LOG=warn holochain-run-dna ../zome/profiles.dna.gz",
     "build": "rimraf dist && tsc",
+    "build-bundle": "rimraf bundle && rollup -c rollup-bundle.config.js",
     "build-watch": "tsc --watch",
     "test": "npm run build && web-test-runner --coverage",
     "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
@@ -27,6 +28,7 @@
     "publish-to-branch": "npm run lint && npm run build && cp package.json dist && gh-pages -d dist -b ui-build"
   },
   "dependencies": {
+    "@compository/lib": "git+https://github.com/compository/lib.git#build",
     "@holochain-open-dev/common": "git://github.com/holochain-open-dev/common.git#ui-build",
     "@holochain-open-dev/membrane-context": "^0.1.0",
     "@holochain/conductor-api": "0.0.1-dev.14",
@@ -65,6 +67,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
     "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-terser": "^7.0.2",
     "tslib": "^1.11.0",
     "typescript": "~3.9.0",
     "web-component-analyzer": "^1.1.6"

@@ -8,6 +8,7 @@ export declare class ProfilesService {
     getMyProfile(): Promise<AgentProfile>;
     getAgentProfile(agentPubKey: string): Promise<AgentProfile>;
     searchProfiles(nicknamePrefix: string): Promise<Array<AgentProfile>>;
+    getAllProfiles(): Promise<Array<AgentProfile>>;
     createProfile(profile: Profile): Promise<AgentProfile>;
     private callZome;
 }
