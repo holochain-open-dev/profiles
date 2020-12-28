@@ -63,7 +63,7 @@ export class HodListProfiles extends BaseElement {
             <mwc-list-item graphic="avatar" .value=${agent.agent_pub_key}>
               <ui5-avatar
                 slot="graphic"
-                image="${agent.profile.fields.avatar}"
+                .image=${agent.profile.fields.avatar}
                 initials=${this.initials(agent.profile.nickname)}
                 size="XS"
               ></ui5-avatar>
