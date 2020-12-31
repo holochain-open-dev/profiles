@@ -57,9 +57,9 @@ export class HodListProfiles extends BaseElement {
       >`;
 
     return html`
-      ${this._allProfiles.map(
-        agent => html`
-          <mwc-list style="min-width: 80px;">
+      <mwc-list style="min-width: 80px;">
+        ${this._allProfiles.map(
+          agent => html`
             <mwc-list-item graphic="avatar" .value=${agent.agent_pub_key}>
               <ui5-avatar
                 slot="graphic"
@@ -69,9 +69,9 @@ export class HodListProfiles extends BaseElement {
               ></ui5-avatar>
               <span style="margin-left: 8px;">${agent.profile.nickname}</span>
             </mwc-list-item>
-          </mwc-list>
-        `
-      )}
+          `
+        )}
+      </mwc-list>
     `;
   }
 
