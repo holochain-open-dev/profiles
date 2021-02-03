@@ -7,14 +7,14 @@ import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { AgentProfile, Profile } from '../types';
-import { sharedStyles } from '../sharedStyles';
-import { BaseElement } from './base-element';
+import { sharedStyles } from './utils/shared-styles';
+import { BaseElement } from './utils/base-element';
 
 /**
- * @element hod-search-agent
+ * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class HodSearchAgent extends BaseElement {
+export abstract class SearchAgent extends BaseElement {
   /** Public attributes */
 
   /**
@@ -25,6 +25,13 @@ export class HodSearchAgent extends BaseElement {
   clearOnSelect = false;
 
   /**
+   * Whether to include my own agent as a possible agent to select
+   * @attr include-myself
+   */
+  @property({ type: Boolean, attribute: 'include-myself' })
+  includeMyself = false;
+
+  /**
    * Label for the agent searching field
    * @attr field-label
    */
@@ -33,13 +40,17 @@ export class HodSearchAgent extends BaseElement {
 
   /** Private properties */
 
-  @property({ type: Array })
-  _searchedAgents: Array<AgentProfile> = [];
-
   get _filteredAgents(): Array<AgentProfile> {
-    return this._searchedAgents.filter(agent =>
+    let filtered = this.profilesStore.knownProfiles.filter(agent =>
       agent.profile.nickname.startsWith(this._currentFilter as string)
     );
+    if (this.includeMyself) {
+      filtered = filtered.filter(
+        agent => this.profilesStore.myAgentPubKey !== agent.agent_pub_key
+      );
+    }
+
+    return filtered;
   }
 
   @property({ type: String })
@@ -70,13 +81,9 @@ export class HodSearchAgent extends BaseElement {
     this.addEventListener('blur', () => this._overlay.close());
   }
 
-  async searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>> {
+  async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    this._searchedAgents = await this._profilesService.searchProfiles(
-      nicknamePrefix
-    );
-
-    return this._searchedAgents;
+    await this.profilesStore.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {
@@ -92,9 +99,7 @@ export class HodSearchAgent extends BaseElement {
     }
   }
 
-  onUsernameSelected(e: CustomEvent) {
-    const agent = this._searchedAgents[e.detail.index];
-
+  onUsernameSelected(agent: AgentProfile) {
     // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(
@@ -133,7 +138,10 @@ export class HodSearchAgent extends BaseElement {
             ? this._filteredAgents.map(
                 agent => html`
                   <mwc-list
-                    @selected=${(e: CustomEvent) => this.onUsernameSelected(e)}
+                    @selected=${(e: CustomEvent) =>
+                      this.onUsernameSelected(
+                        this._filteredAgents[e.detail.index]
+                      )}
                     activatable
                     style="min-width: 80px;"
                   >
@@ -159,7 +167,7 @@ export class HodSearchAgent extends BaseElement {
     `;
   }
 
-  static get scopedElements() {
+  getScopedElements() {
     return {
       'ui5-avatar': Avatar,
       'mwc-textfield': TextField,

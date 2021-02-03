@@ -1,10 +1,9 @@
-import { Lenses } from '@compository/lib';
 import { AppWebsocket, CellId } from '@holochain/conductor-api';
 import { MembraneContextProvider } from '@holochain-open-dev/membrane-context';
 import { Constructor } from 'lit-element';
 //@ts-ignore
 import { createUniqueTag } from '@open-wc/scoped-elements/src/createUniqueTag';
-import { HodListProfiles } from './elements/hod-list-profiles';
+import { HodListProfiles } from './elements/list-profiles';
 
 function renderUnique(
   tag: string,
@@ -45,23 +44,23 @@ function renderUnique(
   );
 }
 
-const renderers: Lenses = {
-  standalone: [
-    {
-      name: 'List Profiles',
-      render(root: ShadowRoot, appWebsocket: AppWebsocket, cellId: CellId) {
-        renderUnique(
-          'list-profiles',
-          HodListProfiles,
-          root,
-          appWebsocket,
-          cellId
-        );
+export default function lenses(appWebsocket: AppWebsocket, cellId: CellId) {
+  return {
+    standalone: [
+      {
+        name: 'List Profiles',
+        render(root: ShadowRoot) {
+          renderUnique(
+            'list-profiles',
+            HodListProfiles,
+            root,
+            appWebsocket,
+            cellId
+          );
+        },
       },
-    },
-  ],
-  entryLenses: {},
-  attachmentsLenses: [],
-};
-
-export default renderers;
+    ],
+    entryLenses: {},
+    attachmentsLenses: [],
+  };
+}

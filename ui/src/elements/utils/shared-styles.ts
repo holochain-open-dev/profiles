@@ -21,6 +21,10 @@ export const sharedStyles = css`
     height: 100%;
   }
 
+  .title {
+    font-size: 18px;
+  }
+
   .center-content {
     align-items: center;
     justify-content: center;

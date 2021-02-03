@@ -17,34 +17,36 @@
     />
   </head>
   <body>
-    <membrane-context-provider id="provider">
-      <hod-profile-prompt>
-        <hod-search-agent></hod-search-agent>
-      </hod-profile-prompt>
-    </membrane-context-provider>
+    <profile-prompt>
+      <search-agent></search-agent>
+    </profile-prompt>
 
     <script type="module">
       import { html, render } from 'lit-html';
-      import { HodProfilePrompt, HodSearchAgent } from '../dist';
-      import { MembraneContextProvider } from '@holochain-open-dev/membrane-context';
+      import {
+        ProfilePrompt,
+        SearchAgent,
+        ProfilesService,
+        ProfilesStore,
+        connect,
+      } from '../dist';
       import ConductorApi from '@holochain/conductor-api';
 
       (async function () {
-        const appWebsocket = await ConductorApi.AppWebsocket.connect('ws://localhost:8888');
-        const appInfo = await appWebsocket.appInfo({ installed_app_id: 'test-app' });
+        const appWebsocket = await ConductorApi.AppWebsocket.connect(
+          'ws://localhost:8888'
+        );
+        const appInfo = await appWebsocket.appInfo({
+          installed_app_id: 'test-app',
+        });
 
         const cellId = appInfo.cell_data[0][0];
 
-        customElements.define(
-          'membrane-context-provider',
-          MembraneContextProvider
-        );
-        customElements.define('hod-profile-prompt', HodProfilePrompt);
-        customElements.define('hod-search-agent', HodSearchAgent);
+        const service = new ProfilesService(appWebsocket, cellId);
+        const store = new ProfilesStore(service);
 
-        const context = document.getElementById('provider');
-        context.appWebsocket = appWebsocket;
-        context.cellId = cellId;
+        customElements.define('profile-prompt', connect(ProfilePrompt, store));
+        customElements.define('search-agent', connect(SearchAgent, store));
       })();
     </script>
   </body>
