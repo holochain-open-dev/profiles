@@ -156,20 +156,6 @@ fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     Ok(agent_profile)
 }
 
-fn pub_key_to_tag(agent_pub_key: WrappedAgentPubKey) -> ExternResult<LinkTag> {
-    let sb: SerializedBytes = agent_pub_key.try_into()?;
-
-    Ok(LinkTag(sb.bytes().clone()))
-}
-
-fn tag_to_pub_key(tag: LinkTag) -> ExternResult<WrappedAgentPubKey> {
-    let sb = SerializedBytes::from(UnsafeBytes::from(tag.0));
-
-    let pub_key = WrappedAgentPubKey::try_from(sb)?;
-
-    Ok(pub_key)
-}
-
 #[derive(Serialize, Deserialize, SerializedBytes)]
 struct StringLinkTag(String);
 pub fn link_tag(tag: &str) -> ExternResult<LinkTag> {

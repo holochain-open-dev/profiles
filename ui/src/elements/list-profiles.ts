@@ -13,7 +13,7 @@ export abstract class ListProfiles extends BaseElement {
   /** Private properties */
 
   @property({ type: Boolean })
-  _loading: boolean = true;
+  _loading = true;
 
   static get styles() {
     return [
