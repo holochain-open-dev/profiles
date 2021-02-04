@@ -13,7 +13,7 @@ pub struct Profile {
 }
 
 // Used as a return type of all functions
-#[derive(Clone, Serialize, Deserialize, SerializedBytes)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct AgentProfile {
     pub agent_pub_key: WrappedAgentPubKey,
     pub profile: Profile,
@@ -156,7 +156,7 @@ fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     Ok(agent_profile)
 }
 
-#[derive(Serialize, Deserialize, SerializedBytes)]
+#[derive(Serialize, Deserialize, Debug, SerializedBytes)]
 struct StringLinkTag(String);
 pub fn link_tag(tag: &str) -> ExternResult<LinkTag> {
     let sb: SerializedBytes = StringLinkTag(tag.into()).try_into()?;

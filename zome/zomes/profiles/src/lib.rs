@@ -32,11 +32,11 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::create_profile(profile)
 }
 
-#[derive(Clone, Serialize, Deserialize, SerializedBytes)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchProfilesInput {
     nickname_prefix: String,
 }
-#[derive(Clone, Serialize, Deserialize, SerializedBytes)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct GetProfilesOutput(Vec<AgentProfile>);
 #[hdk_extern]
 pub fn search_profiles(
@@ -47,7 +47,7 @@ pub fn search_profiles(
     Ok(GetProfilesOutput(agent_profiles))
 }
 
-#[derive(Clone, Serialize, Deserialize, SerializedBytes)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct GetAgentProfileOutput(Option<AgentProfile>);
 #[hdk_extern]
 pub fn get_agent_profile(agent_pub_key: WrappedAgentPubKey) -> ExternResult<GetAgentProfileOutput> {
