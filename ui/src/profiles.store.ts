@@ -14,7 +14,7 @@ export class ProfilesStore {
   @observable
   public profiles: Dictionary<Profile> = {};
 
-  private constructor(protected profilesService: ProfilesService) {
+  constructor(protected profilesService: ProfilesService) {
     makeObservable(this);
   }
 

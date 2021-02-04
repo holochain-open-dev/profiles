@@ -12,8 +12,8 @@ pub fn error<T>(reason: &str) -> ExternResult<T> {
     Err(err(reason))
 }
 
-pub fn err(reason: &str) -> HdkError {
-    HdkError::Wasm(WasmError::Zome(String::from(reason)))
+pub fn err(reason: &str) -> WasmError {
+    WasmError::Zome(String::from(reason))
 }
 
 entry_defs![Path::entry_def(), profile::Profile::entry_def()];
