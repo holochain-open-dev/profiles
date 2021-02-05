@@ -26,7 +26,7 @@ export class ProfilePrompt extends BaseElement {
       `,
         ];
     }
-    async loadMyProfile() {
+    async firstUpdated() {
         await this.profilesStore.fetchMyProfile();
         this._loading = false;
     }

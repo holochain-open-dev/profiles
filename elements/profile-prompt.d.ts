@@ -10,7 +10,7 @@ export declare abstract class ProfilePrompt extends BaseElement {
     /** Private properties */
     _loading: boolean;
     static get styles(): import("lit-element").CSSResult[];
-    loadMyProfile(): Promise<void>;
+    firstUpdated(): Promise<void>;
     renderPrompt(): import("lit-element").TemplateResult;
     render(): import("lit-element").TemplateResult;
     getScopedElements(): {
