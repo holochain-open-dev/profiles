@@ -7,6 +7,9 @@ export class ProfilesStore {
         this.profiles = {};
         makeObservable(this);
     }
+    profileOf(agentPubKey) {
+        return this.profiles[agentPubKey];
+    }
     get myAgentPubKey() {
         return serializeHash(this.profilesService.cellId[1]);
     }
@@ -25,6 +28,12 @@ export class ProfilesStore {
             for (const agentProfile of allProfiles) {
                 this.profiles[agentProfile.agent_pub_key] = agentProfile.profile;
             }
+        });
+    }
+    async fetchAgentProfile(agentPubKey) {
+        const profile = await this.profilesService.getAgentProfile(agentPubKey);
+        runInAction(() => {
+            this.profiles[agentPubKey] = profile.profile;
         });
     }
     async fetchMyProfile() {
@@ -60,6 +69,9 @@ __decorate([
 __decorate([
     action
 ], ProfilesStore.prototype, "fetchAllProfiles", null);
+__decorate([
+    action
+], ProfilesStore.prototype, "fetchAgentProfile", null);
 __decorate([
     action
 ], ProfilesStore.prototype, "fetchMyProfile", null);
