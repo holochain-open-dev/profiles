@@ -21,7 +21,7 @@ export abstract class BaseElement extends ScopedElementsMixin(
   }
 }
 
-export function connect<T extends typeof BaseElement>(
+export function connectProfiles<T extends typeof BaseElement>(
   baseClass: T,
   store: ProfilesStore
 ): Constructor<HTMLElement> {

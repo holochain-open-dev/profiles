@@ -4,7 +4,7 @@ import { Constructor } from 'lit-element';
 //@ts-ignore
 import { createUniqueTag } from '@open-wc/scoped-elements/src/createUniqueTag';
 import { ListProfiles } from './elements/list-profiles';
-import { connect } from './elements/utils/base-element';
+import { connectProfiles } from './elements/utils/base-element';
 import { ProfilesService } from './profiles.service';
 import { ProfilesStore } from './profiles.store';
 
@@ -38,7 +38,7 @@ export default function lenses(appWebsocket: AppWebsocket, cellId: CellId) {
       {
         name: 'List Profiles',
         render(root: ShadowRoot) {
-          renderUnique('list-profiles', connect(ListProfiles, store), root);
+          renderUnique('list-profiles', connectProfiles(ListProfiles, store), root);
         },
       },
     ],

@@ -18,6 +18,10 @@ export class ProfilesStore {
     makeObservable(this);
   }
 
+  profileOf(agentPubKey: string): Profile {
+    return this.profiles[agentPubKey];
+  }
+
   get myAgentPubKey() {
     return serializeHash(this.profilesService.cellId[1]);
   }
@@ -47,12 +51,25 @@ export class ProfilesStore {
   }
 
   @action
+  public async fetchAgentProfile(agentPubKey: string) {
+    const profile = await this.profilesService.getAgentProfile(agentPubKey);
+
+    if (profile) {
+      runInAction(() => {
+        this.profiles[agentPubKey] = profile.profile;
+      });
+    }
+  }
+
+  @action
   public async fetchMyProfile() {
     const myProfile = await this.profilesService.getMyProfile();
 
-    runInAction(() => {
-      this.profiles[this.myAgentPubKey] = myProfile.profile;
-    });
+    if (myProfile) {
+      runInAction(() => {
+        this.profiles[this.myAgentPubKey] = myProfile.profile;
+      });
+    }
   }
 
   @action

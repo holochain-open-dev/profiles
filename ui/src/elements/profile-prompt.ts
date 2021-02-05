@@ -4,7 +4,7 @@ import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement, connect } from './utils/base-element';
+import { BaseElement, connectProfiles } from './utils/base-element';
 import { CreateProfileForm } from './create-profile-form';
 
 /**
@@ -29,7 +29,7 @@ export abstract class ProfilePrompt extends BaseElement {
     ];
   }
 
-  async loadMyProfile() {
+  async firstUpdated() {
     await this.profilesStore.fetchMyProfile();
     this._loading = false;
   }
@@ -40,7 +40,7 @@ export abstract class ProfilePrompt extends BaseElement {
       style="align-items: center; justify-content: center; flex: 1;"
     >
       ${this._loading
-        ? html`<mwc-circular-progress></mwc-circular-progress>`
+        ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>`
         : html`<create-profile-form></create-profile-form>`}
     </div>`;
   }
@@ -58,7 +58,7 @@ export abstract class ProfilePrompt extends BaseElement {
       'mwc-textfield': TextField,
       'mwc-button': Button,
       'mwc-circular-progress': CircularProgress,
-      'create-profile-form': connect(CreateProfileForm, this.profilesStore),
+      'create-profile-form': connectProfiles(CreateProfileForm, this.profilesStore),
     };
   }
 }
