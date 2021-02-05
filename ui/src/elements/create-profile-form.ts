@@ -8,16 +8,17 @@ import { Card } from 'scoped-material-components/mwc-card';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement } from './utils/base-element';
 import { Dictionary } from '../types';
 import { Icon } from 'scoped-material-components/mwc-icon';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
+import { StoreElement } from '@holochain-open-dev/common';
+import { ProfilesStore } from '../profiles.store';
 
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export abstract class CreateProfileForm extends BaseElement {
+export abstract class CreateProfileForm extends StoreElement<ProfilesStore> {
   /** Public attributes */
 
   /**
@@ -73,7 +74,7 @@ export abstract class CreateProfileForm extends BaseElement {
       if (this._avatar) {
         fields['avatar'] = this._avatar;
       }
-      await this.profilesStore.createProfile({
+      await this.store.createProfile({
         nickname,
         fields,
       });

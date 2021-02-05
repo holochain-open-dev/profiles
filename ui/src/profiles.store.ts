@@ -1,5 +1,4 @@
 import { Hashed, serializeHash } from '@holochain-open-dev/common';
-import { Dictionary } from '@holochain-open-dev/common/core-types';
 import {
   observable,
   makeObservable,
@@ -8,7 +7,7 @@ import {
   computed,
 } from 'mobx';
 import { ProfilesService } from './profiles.service';
-import { AgentProfile, Profile } from './types';
+import { AgentProfile, Dictionary, Profile } from './types';
 
 export class ProfilesStore {
   @observable

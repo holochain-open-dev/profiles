@@ -4,12 +4,12 @@ import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 
-import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement } from './utils/base-element';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { StoreElement } from '@holochain-open-dev/common';
+import { ProfilesStore } from '../profiles.store';
 
-export abstract class ListProfiles extends BaseElement {
+export abstract class ListProfiles extends StoreElement<ProfilesStore> {
   /** Private properties */
 
   @property({ type: Boolean })
@@ -27,7 +27,7 @@ export abstract class ListProfiles extends BaseElement {
   }
 
   async firstUpdated() {
-    await this.profilesStore.fetchAllProfiles();
+    await this.store.fetchAllProfiles();
     this._loading = false;
   }
 
@@ -43,7 +43,7 @@ export abstract class ListProfiles extends BaseElement {
       return html`<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-    const allProfiles = this.profilesStore.profiles;
+    const allProfiles = this.store.profiles;
 
     if (Object.keys(allProfiles).length === 0)
       return html`<mwc-list-item

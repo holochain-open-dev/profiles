@@ -1,12 +1,11 @@
 import { AppWebsocket, CellId } from '@holochain/conductor-api';
-import { MembraneContextProvider } from '@holochain-open-dev/membrane-context';
 import { Constructor } from 'lit-element';
 //@ts-ignore
 import { createUniqueTag } from '@open-wc/scoped-elements/src/createUniqueTag';
 import { ListProfiles } from './elements/list-profiles';
-import { connectProfiles } from './elements/utils/base-element';
 import { ProfilesService } from './profiles.service';
 import { ProfilesStore } from './profiles.store';
+import { connectStore } from '@holochain-open-dev/common';
 
 function renderUnique(
   tag: string,
@@ -38,7 +37,7 @@ export default function lenses(appWebsocket: AppWebsocket, cellId: CellId) {
       {
         name: 'List Profiles',
         render(root: ShadowRoot) {
-          renderUnique('list-profiles', connectProfiles(ListProfiles, store), root);
+          renderUnique('list-profiles', connectStore(ListProfiles, store), root);
         },
       },
     ],
