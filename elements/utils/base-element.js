@@ -12,7 +12,7 @@ export class BaseElement extends ScopedElementsMixin(MobxReactionUpdate(LitEleme
         return {};
     }
 }
-export function connect(baseClass, store) {
+export function connectProfiles(baseClass, store) {
     return class extends baseClass {
         get profilesStore() {
             return store;

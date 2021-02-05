@@ -4,7 +4,7 @@ import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement, connect } from './utils/base-element';
+import { BaseElement, connectProfiles } from './utils/base-element';
 import { CreateProfileForm } from './create-profile-form';
 /**
  * @element profile-prompt
@@ -52,7 +52,7 @@ export class ProfilePrompt extends BaseElement {
             'mwc-textfield': TextField,
             'mwc-button': Button,
             'mwc-circular-progress': CircularProgress,
-            'create-profile-form': connect(CreateProfileForm, this.profilesStore),
+            'create-profile-form': connectProfiles(CreateProfileForm, this.profilesStore),
         };
     }
 }

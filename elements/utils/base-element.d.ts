@@ -7,5 +7,5 @@ export declare abstract class BaseElement extends BaseElement_base {
     abstract get profilesStore(): ProfilesStore;
     getScopedElements(): Dictionary<Constructor<HTMLElement>>;
 }
-export declare function connect<T extends typeof BaseElement>(baseClass: T, store: ProfilesStore): Constructor<HTMLElement>;
+export declare function connectProfiles<T extends typeof BaseElement>(baseClass: T, store: ProfilesStore): Constructor<HTMLElement>;
 export {};
