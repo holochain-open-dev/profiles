@@ -1,7 +1,9 @@
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
-import { IconButton } from 'scoped-material-components/mwc-icon-button';
+import { Card } from 'scoped-material-components/mwc-card';
 import { BaseElement } from './utils/base-element';
+import { Icon } from 'scoped-material-components/mwc-icon';
+import { Ripple } from 'scoped-material-components/mwc-ripple';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
@@ -29,7 +31,9 @@ export declare abstract class CreateProfileForm extends BaseElement {
     getScopedElements(): {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;
-        'mwc-icon-button': typeof IconButton;
+        'mwc-icon': typeof Icon;
+        'mwc-card': typeof Card;
+        'mwc-ripple': typeof Ripple;
         'ui5-avatar': any;
     };
 }

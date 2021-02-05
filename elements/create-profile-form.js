@@ -3,10 +3,12 @@ import { html, query, property } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
-import { IconButton } from 'scoped-material-components/mwc-icon-button';
+import { Card } from 'scoped-material-components/mwc-card';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
 import { BaseElement } from './utils/base-element';
+import { Icon } from 'scoped-material-components/mwc-icon';
+import { Ripple } from 'scoped-material-components/mwc-ripple';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
@@ -107,55 +109,62 @@ export class CreateProfileForm extends BaseElement {
         style="display: none;"
         @change=${this.onAvatarUploaded}
       />
-
-      <div class="column">
-        <span class="title" style="margin-bottom: 8px;">Create Profile</span>
-        <div class="row center-content">
-          ${this._avatar
+      <mwc-card style="width: auto">
+        <div class="column" style="margin: 16px;">
+          <span class="title" style="margin-bottom: 24px;">Create Profile</span>
+          <div class="row center-content">
+            ${this._avatar
             ? html `
-                <ui5-avatar
-                  label="Avatar"
-                  image="${this._avatar}"
-                  style="margin-bottom: 19px;"
-                ></ui5-avatar>
-              `
+                  <ui5-avatar
+                    label="Avatar"
+                    image="${this._avatar}"
+                    style="margin-bottom: 19px;"
+                  ></ui5-avatar>
+                `
             : html `
-                <mwc-icon-button
-                  label="Add avatar"
-                  icon="add"
-                  @click=${() => this._avatarFilePicker.click()}
-                >
-                </mwc-icon-button>
-              `}
+                  <div
+                    @click=${() => this._avatarFilePicker.click()}
+                    style="width: 100px; height: 80px; margin-right: 8px; border-radius: 4px; position: relative; background-color: #d3d3d373; cursor: pointer;"
+                    class="column center-content"
+                  >
+                    <mwc-ripple></mwc-ripple>
 
-          <mwc-textfield
-            id="nickname-field"
-            outlined
-            label="Username"
-            @input=${() => this._nicknameField.reportValidity()}
-            style="margin-left: 8px;"
-          ></mwc-textfield>
-        </div>
-        <mwc-button
-          id="create-profile-button"
-          raised
-          class=${classMap({
+                    <mwc-icon style="margin-bottom: 8px;">add</mwc-icon>
+                    <span>Avatar</span>
+                  </div>
+                `}
+
+            <mwc-textfield
+              id="nickname-field"
+              outlined
+              label="Nickname"
+              @input=${() => this._nicknameField.reportValidity()}
+              style="margin-left: 8px;"
+            ></mwc-textfield>
+          </div>
+          <mwc-button
+            id="create-profile-button"
+            raised
+            class=${classMap({
             'small-margin': !!this._nicknameField,
             'big-margin': !this._nicknameField,
         })}
-          .disabled=${!this._nicknameField ||
+            .disabled=${!this._nicknameField ||
             !this._nicknameField.validity.valid}
-          label="CREATE PROFILE"
-          @click=${() => this.createProfile()}
-        ></mwc-button>
-      </div>
+            label="CREATE PROFILE"
+            @click=${() => this.createProfile()}
+          ></mwc-button>
+        </div>
+      </mwc-card>
     `;
     }
     getScopedElements() {
         return {
             'mwc-textfield': TextField,
             'mwc-button': Button,
-            'mwc-icon-button': IconButton,
+            'mwc-icon': Icon,
+            'mwc-card': Card,
+            'mwc-ripple': Ripple,
             'ui5-avatar': Avatar,
         };
     }

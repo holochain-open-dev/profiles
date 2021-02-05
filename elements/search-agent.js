@@ -36,7 +36,7 @@ export class SearchAgent extends BaseElement {
     /** Private properties */
     get _filteredAgents() {
         let filtered = this.profilesStore.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
-        if (this.includeMyself) {
+        if (!this.includeMyself) {
             filtered = filtered.filter(agent => this.profilesStore.myAgentPubKey !== agent.agent_pub_key);
         }
         return filtered;
