@@ -32,15 +32,19 @@ export class ProfilesStore {
     }
     async fetchAgentProfile(agentPubKey) {
         const profile = await this.profilesService.getAgentProfile(agentPubKey);
-        runInAction(() => {
-            this.profiles[agentPubKey] = profile.profile;
-        });
+        if (profile) {
+            runInAction(() => {
+                this.profiles[agentPubKey] = profile.profile;
+            });
+        }
     }
     async fetchMyProfile() {
         const myProfile = await this.profilesService.getMyProfile();
-        runInAction(() => {
-            this.profiles[this.myAgentPubKey] = myProfile.profile;
-        });
+        if (myProfile) {
+            runInAction(() => {
+                this.profiles[this.myAgentPubKey] = myProfile.profile;
+            });
+        }
     }
     async searchProfiles(nicknamePrefix) {
         const searchedProfiles = await this.profilesService.searchProfiles(nicknamePrefix);
