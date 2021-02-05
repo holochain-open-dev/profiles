@@ -28,14 +28,15 @@
     "publish-to-branch": "npm run lint && npm run build && cp package.json dist && gh-pages -d dist -b ui-build"
   },
   "dependencies": {
+    "@adobe/lit-mobx": "^1.0.1",
     "@compository/lib": "git+https://github.com/compository/lib.git#build",
     "@holochain-open-dev/common": "git://github.com/holochain-open-dev/common.git#ui-build",
-    "@holochain-open-dev/membrane-context": "^0.1.0",
     "@holochain/conductor-api": "0.0.1-dev.14",
-    "@open-wc/scoped-elements": "^1.3.2",
+    "@open-wc/scoped-elements": "^1.3.3",
     "@ui5/webcomponents": "^1.0.0-rc.11",
     "lit-element": "^2.4.0",
     "lit-html": "^1.3.0",
+    "mobx": "^6.1.4",
     "scoped-material-components": "git+https://github.com/guillemcordoba/scoped-material-components.git#build"
   },
   "devDependencies": {

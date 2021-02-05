@@ -5,13 +5,13 @@ import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { sharedStyles } from '../sharedStyles';
-import { BaseElement } from './base-element';
+import { sharedStyles } from './utils/shared-styles';
+import { BaseElement } from './utils/base-element';
 /**
- * @element hod-search-agent
+ * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class HodSearchAgent extends BaseElement {
+export class SearchAgent extends BaseElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -21,17 +21,25 @@ export class HodSearchAgent extends BaseElement {
          */
         this.clearOnSelect = false;
         /**
+         * Whether to include my own agent as a possible agent to select
+         * @attr include-myself
+         */
+        this.includeMyself = false;
+        /**
          * Label for the agent searching field
          * @attr field-label
          */
         this.fieldLabel = 'Search agent';
-        /** Private properties */
-        this._searchedAgents = [];
         this._currentFilter = undefined;
         this._lastSearchedPrefix = undefined;
     }
+    /** Private properties */
     get _filteredAgents() {
-        return this._searchedAgents.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
+        let filtered = this.profilesStore.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
+        if (this.includeMyself) {
+            filtered = filtered.filter(agent => this.profilesStore.myAgentPubKey !== agent.agent_pub_key);
+        }
+        return filtered;
     }
     static get styles() {
         return [
@@ -52,8 +60,7 @@ export class HodSearchAgent extends BaseElement {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        this._searchedAgents = await this._profilesService.searchProfiles(nicknamePrefix);
-        return this._searchedAgents;
+        await this.profilesStore.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)
@@ -65,8 +72,7 @@ export class HodSearchAgent extends BaseElement {
             this.searchAgents(filterPrefix);
         }
     }
-    onUsernameSelected(e) {
-        const agent = this._searchedAgents[e.detail.index];
+    onUsernameSelected(agent) {
         // If nickname matches agent, user has selected it
         if (agent) {
             this.dispatchEvent(new CustomEvent('agent-selected', {
@@ -101,7 +107,7 @@ export class HodSearchAgent extends BaseElement {
           ${this._filteredAgents.length > 0
             ? this._filteredAgents.map(agent => html `
                   <mwc-list
-                    @selected=${(e) => this.onUsernameSelected(e)}
+                    @selected=${(e) => this.onUsernameSelected(this._filteredAgents[e.detail.index])}
                     activatable
                     style="min-width: 80px;"
                   >
@@ -125,7 +131,7 @@ export class HodSearchAgent extends BaseElement {
       </div>
     `;
     }
-    static get scopedElements() {
+    getScopedElements() {
         return {
             'ui5-avatar': Avatar,
             'mwc-textfield': TextField,
@@ -137,20 +143,20 @@ export class HodSearchAgent extends BaseElement {
 }
 __decorate([
     property({ type: Boolean, attribute: 'clear-on-select' })
-], HodSearchAgent.prototype, "clearOnSelect", void 0);
+], SearchAgent.prototype, "clearOnSelect", void 0);
+__decorate([
+    property({ type: Boolean, attribute: 'include-myself' })
+], SearchAgent.prototype, "includeMyself", void 0);
 __decorate([
     property({ type: String, attribute: 'field-label' })
-], HodSearchAgent.prototype, "fieldLabel", void 0);
-__decorate([
-    property({ type: Array })
-], HodSearchAgent.prototype, "_searchedAgents", void 0);
+], SearchAgent.prototype, "fieldLabel", void 0);
 __decorate([
     property({ type: String })
-], HodSearchAgent.prototype, "_currentFilter", void 0);
+], SearchAgent.prototype, "_currentFilter", void 0);
 __decorate([
     query('#textfield')
-], HodSearchAgent.prototype, "_textField", void 0);
+], SearchAgent.prototype, "_textField", void 0);
 __decorate([
     query('#overlay')
-], HodSearchAgent.prototype, "_overlay", void 0);
-//# sourceMappingURL=hod-search-agent.js.map
+], SearchAgent.prototype, "_overlay", void 0);
+//# sourceMappingURL=search-agent.js.map

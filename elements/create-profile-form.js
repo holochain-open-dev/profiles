@@ -5,13 +5,13 @@ import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
 import { IconButton } from 'scoped-material-components/mwc-icon-button';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { sharedStyles } from '../sharedStyles';
-import { BaseElement } from './base-element';
+import { sharedStyles } from './utils/shared-styles';
+import { BaseElement } from './utils/base-element';
 /**
- * @element hod-create-profile-form
+ * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class HodCreateProfileForm extends BaseElement {
+export class CreateProfileForm extends BaseElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -51,7 +51,7 @@ export class HodCreateProfileForm extends BaseElement {
             if (this._avatar) {
                 fields['avatar'] = this._avatar;
             }
-            await this._profilesService.createProfile({
+            await this.profilesStore.createProfile({
                 nickname,
                 fields,
             });
@@ -67,7 +67,6 @@ export class HodCreateProfileForm extends BaseElement {
             }));
         }
         catch (e) {
-            console.log(e);
             this._existingUsernames[nickname] = true;
             this._nicknameField.reportValidity();
         }
@@ -110,6 +109,7 @@ export class HodCreateProfileForm extends BaseElement {
       />
 
       <div class="column">
+        <span class="title" style="margin-bottom: 8px;">Create Profile</span>
         <div class="row center-content">
           ${this._avatar
             ? html `
@@ -151,7 +151,7 @@ export class HodCreateProfileForm extends BaseElement {
       </div>
     `;
     }
-    static get scopedElements() {
+    getScopedElements() {
         return {
             'mwc-textfield': TextField,
             'mwc-button': Button,
@@ -162,14 +162,14 @@ export class HodCreateProfileForm extends BaseElement {
 }
 __decorate([
     property({ type: Number, attribute: 'min-length' })
-], HodCreateProfileForm.prototype, "minLength", void 0);
+], CreateProfileForm.prototype, "minLength", void 0);
 __decorate([
     query('#nickname-field')
-], HodCreateProfileForm.prototype, "_nicknameField", void 0);
+], CreateProfileForm.prototype, "_nicknameField", void 0);
 __decorate([
     query('#avatar-file-picker')
-], HodCreateProfileForm.prototype, "_avatarFilePicker", void 0);
+], CreateProfileForm.prototype, "_avatarFilePicker", void 0);
 __decorate([
     property({ type: String })
-], HodCreateProfileForm.prototype, "_avatar", void 0);
-//# sourceMappingURL=hod-create-profile-form.js.map
+], CreateProfileForm.prototype, "_avatar", void 0);
+//# sourceMappingURL=create-profile-form.js.map

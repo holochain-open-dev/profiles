@@ -1,3 +1,9 @@
-import { Lenses } from '@compository/lib';
-declare const renderers: Lenses;
-export default renderers;
+import { AppWebsocket, CellId } from '@holochain/conductor-api';
+export default function lenses(appWebsocket: AppWebsocket, cellId: CellId): {
+    standalone: {
+        name: string;
+        render(root: ShadowRoot): void;
+    }[];
+    entryLenses: {};
+    attachmentsLenses: never[];
+};

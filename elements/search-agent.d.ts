@@ -3,12 +3,12 @@ import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { AgentProfile } from '../types';
-import { BaseElement } from './base-element';
+import { BaseElement } from './utils/base-element';
 /**
- * @element hod-search-agent
+ * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export declare class HodSearchAgent extends BaseElement {
+export declare abstract class SearchAgent extends BaseElement {
     /** Public attributes */
     /**
      * Whether to clear the field when an agent is selected
@@ -16,12 +16,16 @@ export declare class HodSearchAgent extends BaseElement {
      */
     clearOnSelect: boolean;
     /**
+     * Whether to include my own agent as a possible agent to select
+     * @attr include-myself
+     */
+    includeMyself: boolean;
+    /**
      * Label for the agent searching field
      * @attr field-label
      */
     fieldLabel: string;
     /** Private properties */
-    _searchedAgents: Array<AgentProfile>;
     get _filteredAgents(): Array<AgentProfile>;
     _currentFilter: string | undefined;
     _lastSearchedPrefix: string | undefined;
@@ -29,11 +33,11 @@ export declare class HodSearchAgent extends BaseElement {
     _overlay: MenuSurface;
     static get styles(): import("lit-element").CSSResult[];
     firstUpdated(): void;
-    searchAgents(nicknamePrefix: string): Promise<Array<AgentProfile>>;
+    searchAgents(nicknamePrefix: string): Promise<void>;
     onFilterChange(): void;
-    onUsernameSelected(e: CustomEvent): void;
+    onUsernameSelected(agent: AgentProfile): void;
     render(): import("lit-element").TemplateResult;
-    static get scopedElements(): {
+    getScopedElements(): {
         'ui5-avatar': any;
         'mwc-textfield': typeof TextField;
         'mwc-menu-surface': typeof MenuSurface;
