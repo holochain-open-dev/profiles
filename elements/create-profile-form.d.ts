@@ -1,14 +1,15 @@
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
 import { Card } from 'scoped-material-components/mwc-card';
-import { BaseElement } from './utils/base-element';
 import { Icon } from 'scoped-material-components/mwc-icon';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
+import { StoreElement } from '@holochain-open-dev/common';
+import { ProfilesStore } from '../profiles.store';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export declare abstract class CreateProfileForm extends BaseElement {
+export declare abstract class CreateProfileForm extends StoreElement<ProfilesStore> {
     /** Public attributes */
     /**
      * Minimum length that the nickname needs to have

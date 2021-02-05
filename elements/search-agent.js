@@ -5,13 +5,13 @@ import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
+import { StoreElement } from '@holochain-open-dev/common';
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement } from './utils/base-element';
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class SearchAgent extends BaseElement {
+export class SearchAgent extends StoreElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -35,9 +35,9 @@ export class SearchAgent extends BaseElement {
     }
     /** Private properties */
     get _filteredAgents() {
-        let filtered = this.profilesStore.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
+        let filtered = this.store.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
         if (!this.includeMyself) {
-            filtered = filtered.filter(agent => this.profilesStore.myAgentPubKey !== agent.agent_pub_key);
+            filtered = filtered.filter(agent => this.store.myAgentPubKey !== agent.agent_pub_key);
         }
         return filtered;
     }
@@ -60,7 +60,7 @@ export class SearchAgent extends BaseElement {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        await this.profilesStore.searchProfiles(nicknamePrefix);
+        await this.store.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)

@@ -4,12 +4,12 @@ import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
-import { BaseElement, connectProfiles } from './utils/base-element';
 import { CreateProfileForm } from './create-profile-form';
+import { connectStore, StoreElement } from '@holochain-open-dev/common';
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends BaseElement {
+export class ProfilePrompt extends StoreElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -27,7 +27,7 @@ export class ProfilePrompt extends BaseElement {
         ];
     }
     async firstUpdated() {
-        await this.profilesStore.fetchMyProfile();
+        await this.store.fetchMyProfile();
         this._loading = false;
     }
     renderPrompt() {
@@ -42,7 +42,7 @@ export class ProfilePrompt extends BaseElement {
     }
     render() {
         return html `
-      ${!this._loading && this.profilesStore.myProfile
+      ${!this._loading && this.store.myProfile
             ? html `<slot></slot>`
             : this.renderPrompt()}
     `;
@@ -52,7 +52,7 @@ export class ProfilePrompt extends BaseElement {
             'mwc-textfield': TextField,
             'mwc-button': Button,
             'mwc-circular-progress': CircularProgress,
-            'create-profile-form': connectProfiles(CreateProfileForm, this.profilesStore),
+            'create-profile-form': connectStore(CreateProfileForm, this.store),
         };
     }
 }

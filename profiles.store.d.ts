@@ -1,6 +1,5 @@
-import { Dictionary } from '@holochain-open-dev/common/core-types';
 import { ProfilesService } from './profiles.service';
-import { AgentProfile, Profile } from './types';
+import { AgentProfile, Dictionary, Profile } from './types';
 export declare class ProfilesStore {
     protected profilesService: ProfilesService;
     profiles: Dictionary<Profile>;

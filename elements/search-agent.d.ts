@@ -2,13 +2,14 @@ import { TextField } from 'scoped-material-components/mwc-textfield';
 import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
+import { StoreElement } from '@holochain-open-dev/common';
 import { AgentProfile } from '../types';
-import { BaseElement } from './utils/base-element';
+import { ProfilesStore } from '../profiles.store';
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export declare abstract class SearchAgent extends BaseElement {
+export declare abstract class SearchAgent extends StoreElement<ProfilesStore> {
     /** Public attributes */
     /**
      * Whether to clear the field when an agent is selected

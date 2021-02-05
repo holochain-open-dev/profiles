@@ -1,8 +1,9 @@
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { BaseElement } from './utils/base-element';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-export declare abstract class ListProfiles extends BaseElement {
+import { StoreElement } from '@holochain-open-dev/common';
+import { ProfilesStore } from '../profiles.store';
+export declare abstract class ListProfiles extends StoreElement<ProfilesStore> {
     /** Private properties */
     _loading: boolean;
     static get styles(): import("lit-element").CSSResult[];
