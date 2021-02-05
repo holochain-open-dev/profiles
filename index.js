@@ -5,4 +5,5 @@ export * from './elements/profile-prompt';
 export * from './elements/list-profiles';
 export * from './elements/utils/base-element';
 export * from './profiles.service';
+export * from './profiles.store';
 //# sourceMappingURL=index.js.map
