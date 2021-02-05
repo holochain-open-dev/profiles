@@ -36,7 +36,7 @@ export class ProfilePrompt extends BaseElement {
       style="align-items: center; justify-content: center; flex: 1;"
     >
       ${this._loading
-            ? html `<mwc-circular-progress></mwc-circular-progress>`
+            ? html `<mwc-circular-progress indeterminate></mwc-circular-progress>`
             : html `<create-profile-form></create-profile-form>`}
     </div>`;
     }
