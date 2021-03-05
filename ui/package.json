@@ -31,6 +31,7 @@
     "@adobe/lit-mobx": "^1.0.1",
     "@compository/lib": "git+https://github.com/compository/lib.git#build",
     "@holochain-open-dev/common": "git+https://github.com/holochain-open-dev/common.git#ui-build",
+    "@holochain-open-dev/core-types": "git+https://github.com/holochain-open-dev/core-types.git#build",
     "@holochain/conductor-api": "0.0.1-dev.16",
     "@open-wc/scoped-elements": "^1.3.3",
     "@ui5/webcomponents": "^1.0.0-rc.11",

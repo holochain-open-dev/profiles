@@ -1,12 +1,12 @@
-import { css, html, query, property, PropertyValues } from 'lit-element';
+import { css, html, property } from 'lit-element';
 
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
+import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
+import { StoreElement } from '@holochain-open-dev/common';
 
 import { sharedStyles } from './utils/shared-styles';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import { StoreElement } from '@holochain-open-dev/common';
 import { ProfilesStore } from '../profiles.store';
 
 export abstract class ListProfiles extends StoreElement<ProfilesStore> {

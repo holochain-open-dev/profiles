@@ -1,4 +1,4 @@
-import { Hashed, serializeHash } from '@holochain-open-dev/common';
+import { serializeHash } from '@holochain-open-dev/core-types';
 import {
   observable,
   makeObservable,
