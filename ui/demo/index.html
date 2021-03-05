@@ -29,9 +29,9 @@
         SearchAgent,
         ProfilesService,
         ProfilesStore,
-        connectProfiles,
       } from '../dist';
       import ConductorApi from '@holochain/conductor-api';
+      import { connectStore } from '@holochain-open-dev/common';
 
       (async function () {
         const appWebsocket = await ConductorApi.AppWebsocket.connect(
@@ -46,8 +46,14 @@
         const service = new ProfilesService(appWebsocket, cellId);
         const store = new ProfilesStore(service);
 
-        customElements.define('profile-prompt', connectProfiles(ProfilePrompt, store));
-        customElements.define('search-agent', connectProfiles(SearchAgent, store));
+        customElements.define(
+          'profile-prompt',
+          connectStore(ProfilePrompt, store)
+        );
+        customElements.define(
+          'search-agent',
+          connectStore(SearchAgent, store)
+        );
       })();
     </script>
   </body>
