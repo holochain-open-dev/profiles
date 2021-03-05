@@ -1,7 +1,7 @@
 use crate::utils;
 use hc_utils::WrappedAgentPubKey;
-use hdk3::prelude::link::Link;
-use hdk3::prelude::*;
+use hdk::prelude::link::Link;
+use hdk::prelude::*;
 use std::collections::BTreeMap;
 use std::convert::{TryFrom, TryInto};
 
