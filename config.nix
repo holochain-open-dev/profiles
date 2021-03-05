@@ -4,7 +4,7 @@
 
  # configure holonix itself
  holonix = {
-
+  
   # true = use a github repository as the holonix base (recommended)
   # false = use a local copy of holonix (useful for debugging)
   use-github = true;
@@ -21,7 +21,7 @@
    #       the sha here changes (the sha is the cache key for downloads)
    # note: to get a new sha, get nix to try and download a bad sha
    #       it will complain and tell you the right sha
-   sha256 = "0a4bsab0r95kqgq4979l4l52kk1lii4qh2m81ln3vsmhjlnrcclz";
+   sha256 = "1v5n7vkgb1j6k5nzrdlby5fi1a34g165vksp7dv8w5q4wb6h72m1";
 
    # the github owner of the holonix repo
    owner = "holochain";
@@ -38,61 +38,72 @@
 
  };
 
- # configure the release process
  release = {
-  hook = {
-   # sanity checks before deploying
-   # to stop the release
-   # exit 1
-   preflight = ''
-hn-release-hook-preflight-manual
-'';
-
-   # bump versions in the repo
-   version = ''
-hn-release-hook-version-readme
-'';
-
-   # publish artifacts to the world
-   publish = ''
-echo "All finished!!!"
-'';
+  commit = "________________________________________";
+  version = {
+   current = "_._._";
+   previous = "_._._";
   };
 
-  # the commit hash that the release process should target
-  # this will always be behind what ends up being deployed
-  # the release process needs to add some commits for changelog etc.
-  commit = "aedce9179c265cb1d4bbea51d509e1d9cf0b101d";
-
-  # the semver for prev and current releases
-  # the previous version will be scanned/bumped by release scripts
-  # the current version is what the release scripts bump *to*
-  version = {
-   current = "0.0.85";
-   previous = "0.0.84";
+  hook = {
+   preflight = ''
+echo "<your preflight script here>"
+   '';
+   version = ''
+echo "<your versioning script here>"
+   '';
+   publish = ''
+echo "<your publishing script here>"
+   '';
   };
 
   github = {
-   # markdown to inject into github releases
-   # there is some basic string substitution {{ xxx }}
-   # - {{ changelog }} will inject the changelog as at the target commit
+   owner = "<your github owner here>";
+   repo = "<your repo name here>";
    template = ''
-{{ changelog }}
-# Installation
-Use Holonix to work with this repository.
-See:
-- https://github.com/holochain/holonix
-- https://nixos.org/
-'';
-
-   # owner of the github repository that release are deployed to
-   owner = "holochain";
-
-   # repository name on github that release are deployed to
-   repo = "holonix";
-
-   # canonical local upstream name as per `git remote -v`
-   upstream = "origin";
+   {{ changelog }}
+   <your release template markdown here>
+   '';
   };
+ };
+
+ holo-nixpkgs = rec {
+  use-github = true;
+
+  github = rec {
+   # can be any github ref
+   # branch, tag, commit, etc.
+   ref = "95bbba1f4618216814fdbda1d0077beda8b58942";
+
+   # the sha of what is downloaded from the above ref
+   # note: even if you change the above ref it will not be redownloaded until
+   #       the sha here changes (the sha is the cache key for downloads)
+   # note: to get a new sha, get nix to try and download a bad sha
+   #       it will complain and tell you the right sha
+   sha256 = "1nrp4466dvk8crz1xsal77ycsbd4hr6a6ah1al9n9j2kjz5a5w7v";
+
+   # the github owner of the holonix repo
+   owner = "Holo-Host";
+
+   # the name of the holonix repo
+   repo = "holo-nixpkgs";
+
+  };
+
+  # configuration for when use-github = false
+  local = {
+   # the path to the local holonix copy
+   path = ../holo-nixpkgs;
+  };
+
+  importFn = _: import (
+     if use-github
+     then builtins.fetchTarball (with github; {
+        url = "https://github.com/${owner}/${repo}/archive/${ref}.tar.gz";
+        inherit sha256; }
+       )
+     else local.path
+    ) {}
+    ;
  };
 }

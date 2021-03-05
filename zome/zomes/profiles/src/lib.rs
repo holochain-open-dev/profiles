@@ -1,7 +1,7 @@
 extern crate hc_utils;
 
 use hc_utils::WrappedAgentPubKey;
-use hdk3::prelude::*;
+use hdk::prelude::*;
 
 mod profile;
 mod utils;
@@ -13,7 +13,7 @@ pub fn error<T>(reason: &str) -> ExternResult<T> {
 }
 
 pub fn err(reason: &str) -> WasmError {
-    WasmError::Zome(String::from(reason))
+    WasmError::Guest(String::from(reason))
 }
 
 entry_defs![Path::entry_def(), profile::Profile::entry_def()];
@@ -36,15 +36,13 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 pub struct SearchProfilesInput {
     nickname_prefix: String,
 }
-#[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct GetProfilesOutput(Vec<AgentProfile>);
 #[hdk_extern]
 pub fn search_profiles(
     search_profiles_input: SearchProfilesInput,
-) -> ExternResult<GetProfilesOutput> {
+) -> ExternResult<Vec<AgentProfile>> {
     let agent_profiles = profile::search_profiles(search_profiles_input.nickname_prefix)?;
 
-    Ok(GetProfilesOutput(agent_profiles))
+    Ok(agent_profiles)
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
@@ -67,8 +65,8 @@ pub fn get_my_profile(_: ()) -> ExternResult<GetAgentProfileOutput> {
 }
 
 #[hdk_extern]
-pub fn get_all_profiles(_: ()) -> ExternResult<GetProfilesOutput> {
+pub fn get_all_profiles(_: ()) -> ExternResult<Vec<AgentProfile>> {
     let agent_profiles = profile::get_all_profiles()?;
 
-    Ok(GetProfilesOutput(agent_profiles))
+    Ok(agent_profiles)
 }
