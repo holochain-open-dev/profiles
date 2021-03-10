@@ -2,16 +2,15 @@
 
 UI module for the `profiles` zome.
 
-## Requirements
+All the instructions here assume you are running them inside the nix-shell at the root of the repository. For more info, see the [developer setup](/dev-setup.md).
 
-- Having run through [holochain RSM installation](https://github.com/holochain/holochain-dna-build-tutorial).
-- Having [holochain-run-dna](https://www.npmjs.com/package/@holochain-open-dev/holochain-run-dna) installed.
+## Setup
 
-## Local Demo with `@web/dev-server`
+```bash
+npm install
+```
 
-First, [build the holochain dna](/zomes/README.md).
-
-Run this from inside the `nix-shell` in which you have the `holochain` binary install.
+## Running
 
 ```bash
 npm start
