@@ -66,7 +66,7 @@ async function setupProfiles() {
     installed_app_id: "test-app",
   });
 
-  const cellId = appInfo.cell_data[0][0];
+  const cellId = appInfo.cell_data[0].cell_id;
 
   const profilesService = new ProfilesService(appWebsocket, cellId);
   const profilesStore = new ProfilesStore(profilesService);
