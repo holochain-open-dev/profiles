@@ -20,10 +20,6 @@ pub struct AgentProfile {
 }
 
 pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
-    if nickname_exists(profile.nickname.clone())? {
-        return crate::error("Username already exists");
-    }
-
     let agent_info = agent_info()?;
 
     create_entry(&profile.clone())?;
@@ -57,7 +53,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
     if nickname_prefix.len() < 3 {
-        return crate::error("Cannot search with a prefix less than 3 characters");
+        return Err(crate::err("Cannot search with a prefix less than 3 characters"));
     }
 
     let prefix_path = prefix_path(nickname_prefix);
@@ -110,17 +106,6 @@ pub fn get_agent_profile(
 }
 
 /** Private helpers */
-
-fn nickname_exists(nickname: String) -> ExternResult<bool> {
-    let path = prefix_path(nickname.clone());
-
-    let links = get_links(path.hash()?, Some(link_tag(nickname.as_str())?))?;
-
-    match links.into_inner().len() {
-        0 => Ok(false),
-        _ => Ok(true),
-    }
-}
 
 fn prefix_path(nickname: String) -> Path {
     let (prefix, _) = nickname.as_str().split_at(3);
