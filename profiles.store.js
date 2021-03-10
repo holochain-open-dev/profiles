@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { serializeHash } from '@holochain-open-dev/common';
+import { serializeHash } from '@holochain-open-dev/core-types';
 import { observable, makeObservable, action, runInAction, computed, } from 'mobx';
 export class ProfilesStore {
     constructor(profilesService) {

@@ -2,10 +2,10 @@ import { __decorate } from "tslib";
 import { css, html, property } from 'lit-element';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
-import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { sharedStyles } from './utils/shared-styles';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { StoreElement } from '@holochain-open-dev/common';
+import { sharedStyles } from './utils/shared-styles';
 export class ListProfiles extends StoreElement {
     constructor() {
         /** Private properties */
