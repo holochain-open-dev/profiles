@@ -8,19 +8,15 @@ This module is designed to be included in other DNAs, assuming as little as poss
 
 ## Documentation
 
-See our [`storybook`](https://holochain-open-dev.github.io/profiles-module).
+See our [`storybook`](https://holochain-open-dev.github.io/profiles).
 
 ## Assumptions
 
 These are the things you need to know to decide if you can use this module in your happ:
 
 - Profiles:
-  - Your profile at least contains a username field.
-  - You can search for all the users starting with the first 3 letters of their username.
-- UI module:
-  - `ApolloClient` as the state-management and data-fetching engine.
-  - The resolvers are declared in the frontend using [`makeExecutableSchema`](https://www.npmjs.com/package/@graphql-tools/schema).
-  - No framework or library assumed.
+  - Your profile at least contains a `nickname` field.
+  - You can search for all the users starting with the first 3 letters of their `nickname`.
 
 ## Installation and usage
 
