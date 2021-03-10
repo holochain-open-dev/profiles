@@ -41,11 +41,11 @@
           installed_app_id: 'test-app',
         });
 
-        const cellId = appInfo.cell_data[0][0];
+        const cellId = appInfo.cell_data[0].cell_id;
 
         const service = new ProfilesService(appWebsocket, cellId);
         const store = new ProfilesStore(service);
-
+await service.getMyProfile()
         customElements.define(
           'profile-prompt',
           connectStore(ProfilePrompt, store)

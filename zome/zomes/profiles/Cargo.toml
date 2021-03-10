@@ -12,5 +12,5 @@ name = "profiles"
 derive_more = "0"
 serde = "1"
 
-hdk = "0"
+hdk = "0.0.100"
 hc_utils = "0"
