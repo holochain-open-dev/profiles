@@ -8,12 +8,12 @@ import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
 import { Icon } from 'scoped-material-components/mwc-icon';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { StoreElement } from '@holochain-open-dev/common';
+import { DepsElement } from '@holochain-open-dev/common';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends StoreElement {
+export class CreateProfileForm extends DepsElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -53,7 +53,7 @@ export class CreateProfileForm extends StoreElement {
             if (this._avatar) {
                 fields['avatar'] = this._avatar;
             }
-            await this.store.createProfile({
+            await this.deps.createProfile({
                 nickname,
                 fields,
             });

@@ -5,11 +5,11 @@ import { CircularProgress } from 'scoped-material-components/mwc-circular-progre
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { connectStore, StoreElement } from '@holochain-open-dev/common';
+import { connectDeps, DepsElement } from '@holochain-open-dev/common';
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends StoreElement {
+export class ProfilePrompt extends DepsElement {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -27,7 +27,7 @@ export class ProfilePrompt extends StoreElement {
         ];
     }
     async firstUpdated() {
-        await this.store.fetchMyProfile();
+        await this.deps.fetchMyProfile();
         this._loading = false;
     }
     renderPrompt() {
@@ -42,7 +42,7 @@ export class ProfilePrompt extends StoreElement {
     }
     render() {
         return html `
-      ${!this._loading && this.store.myProfile
+      ${!this._loading && this.deps.myProfile
             ? html `<slot></slot>`
             : this.renderPrompt()}
     `;
@@ -52,7 +52,7 @@ export class ProfilePrompt extends StoreElement {
             'mwc-textfield': TextField,
             'mwc-button': Button,
             'mwc-circular-progress': CircularProgress,
-            'create-profile-form': connectStore(CreateProfileForm, this.store),
+            'create-profile-form': connectDeps(CreateProfileForm, this.deps),
         };
     }
 }

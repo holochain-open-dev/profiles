@@ -4,9 +4,9 @@ import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { StoreElement } from '@holochain-open-dev/common';
+import { DepsElement } from '@holochain-open-dev/common';
 import { sharedStyles } from './utils/shared-styles';
-export class ListProfiles extends StoreElement {
+export class ListProfiles extends DepsElement {
     constructor() {
         /** Private properties */
         super(...arguments);
@@ -23,7 +23,7 @@ export class ListProfiles extends StoreElement {
         ];
     }
     async firstUpdated() {
-        await this.store.fetchAllProfiles();
+        await this.deps.fetchAllProfiles();
         this._loading = false;
     }
     initials(nickname) {
@@ -37,7 +37,7 @@ export class ListProfiles extends StoreElement {
             return html `<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-        const allProfiles = this.store.profiles;
+        const allProfiles = this.deps.profiles;
         if (Object.keys(allProfiles).length === 0)
             return html `<mwc-list-item
         >There are no created profiles yet</mwc-list-item

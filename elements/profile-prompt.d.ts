@@ -1,12 +1,12 @@
 import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
-import { StoreElement } from '@holochain-open-dev/common';
+import { DepsElement } from '@holochain-open-dev/common';
 import { ProfilesStore } from '../profiles.store';
 /**
  * @element profile-prompt
  */
-export declare abstract class ProfilePrompt extends StoreElement<ProfilesStore> {
+export declare abstract class ProfilePrompt extends DepsElement<ProfilesStore> {
     /** Public attributes */
     /** Private properties */
     _loading: boolean;
