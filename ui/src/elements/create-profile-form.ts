@@ -1,4 +1,4 @@
-import { html, query, property } from 'lit-element';
+import { html, query, property, Constructor, LitElement } from 'lit-element';
 import { classMap } from 'lit-html/directives/class-map';
 
 import { TextField } from 'scoped-material-components/mwc-textfield';
@@ -11,14 +11,17 @@ import { sharedStyles } from './utils/shared-styles';
 import { Dictionary } from '../types';
 import { Icon } from 'scoped-material-components/mwc-icon';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { StoreElement } from '@holochain-open-dev/common';
+import { BaseElement, DepsElement } from '@holochain-open-dev/common';
 import { ProfilesStore } from '../profiles.store';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export abstract class CreateProfileForm extends StoreElement<ProfilesStore> {
+export abstract class CreateProfileForm
+  extends MobxReactionUpdate(BaseElement)
+  implements DepsElement<ProfilesStore> {
   /** Public attributes */
 
   /**
@@ -40,6 +43,8 @@ export abstract class CreateProfileForm extends StoreElement<ProfilesStore> {
 
   @property({ type: String })
   _avatar: string | undefined = undefined;
+
+  abstract get _deps(): ProfilesStore;
 
   firstUpdated() {
     this._nicknameField.validityTransform = (newValue: string) => {
@@ -74,7 +79,7 @@ export abstract class CreateProfileForm extends StoreElement<ProfilesStore> {
       if (this._avatar) {
         fields['avatar'] = this._avatar;
       }
-      await this.store.createProfile({
+      await this._deps.createProfile({
         nickname,
         fields,
       });

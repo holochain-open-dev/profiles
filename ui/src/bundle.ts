@@ -5,7 +5,7 @@ import { createUniqueTag } from '@open-wc/scoped-elements/src/createUniqueTag';
 import { ListProfiles } from './elements/list-profiles';
 import { ProfilesService } from './profiles.service';
 import { ProfilesStore } from './profiles.store';
-import { connectStore } from '@holochain-open-dev/common';
+import { connectDeps } from '@holochain-open-dev/common';
 
 function renderUnique(
   tag: string,
@@ -37,7 +37,7 @@ export default function lenses(appWebsocket: AppWebsocket, cellId: CellId) {
       {
         name: 'List Profiles',
         render(root: ShadowRoot) {
-          renderUnique('list-profiles', connectStore(ListProfiles, store), root);
+          renderUnique('list-profiles', connectDeps(ListProfiles, store), root);
         },
       },
     ],

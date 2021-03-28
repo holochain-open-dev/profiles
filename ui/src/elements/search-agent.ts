@@ -5,17 +5,20 @@ import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { StoreElement } from '@holochain-open-dev/common';
+import { BaseElement, DepsElement } from '@holochain-open-dev/common';
 
 import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export abstract class SearchAgent extends StoreElement<ProfilesStore> {
+export abstract class SearchAgent
+  extends MobxReactionUpdate(BaseElement)
+  implements DepsElement<ProfilesStore> {
   /** Public attributes */
 
   /**
@@ -42,12 +45,12 @@ export abstract class SearchAgent extends StoreElement<ProfilesStore> {
   /** Private properties */
 
   get _filteredAgents(): Array<AgentProfile> {
-    let filtered = this.store.knownProfiles.filter(agent =>
+    let filtered = this._deps.knownProfiles.filter(agent =>
       agent.profile.nickname.startsWith(this._currentFilter as string)
     );
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this.store.myAgentPubKey !== agent.agent_pub_key
+        agent => this._deps.myAgentPubKey !== agent.agent_pub_key
       );
     }
 
@@ -63,6 +66,8 @@ export abstract class SearchAgent extends StoreElement<ProfilesStore> {
   _textField!: TextField;
   @query('#overlay')
   _overlay!: MenuSurface;
+
+  abstract get _deps(): ProfilesStore;
 
   static get styles() {
     return [
@@ -84,7 +89,7 @@ export abstract class SearchAgent extends StoreElement<ProfilesStore> {
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this.store.searchProfiles(nicknamePrefix);
+    await this._deps.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {
@@ -123,9 +128,10 @@ export abstract class SearchAgent extends StoreElement<ProfilesStore> {
 
   render() {
     return html`
-      <div style="position: relative">
+      <div style="position: relative; flex: 1; display: flex;">
         <mwc-textfield
           id="textfield"
+          style="flex: 1;"
           class="input"
           .label=${this.fieldLabel}
           placeholder="At least 3 chars..."

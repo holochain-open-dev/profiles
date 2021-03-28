@@ -5,13 +5,20 @@ import { CircularProgress } from 'scoped-material-components/mwc-circular-progre
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { connectStore, StoreElement } from '@holochain-open-dev/common';
+import {
+  BaseElement,
+  connectDeps,
+  DepsElement,
+} from '@holochain-open-dev/common';
 import { ProfilesStore } from '../profiles.store';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
 /**
  * @element profile-prompt
  */
-export abstract class ProfilePrompt extends StoreElement<ProfilesStore> {
+export abstract class ProfilePrompt
+  extends MobxReactionUpdate(BaseElement)
+  implements DepsElement<ProfilesStore> {
   /** Public attributes */
 
   /** Private properties */
@@ -30,8 +37,10 @@ export abstract class ProfilePrompt extends StoreElement<ProfilesStore> {
     ];
   }
 
+  abstract get _deps(): ProfilesStore;
+
   async firstUpdated() {
-    await this.store.fetchMyProfile();
+    await this.deps.fetchMyProfile();
     this._loading = false;
   }
 
@@ -48,7 +57,7 @@ export abstract class ProfilePrompt extends StoreElement<ProfilesStore> {
 
   render() {
     return html`
-      ${!this._loading && this.store.myProfile
+      ${!this._loading && this._deps.myProfile
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;
@@ -59,7 +68,7 @@ export abstract class ProfilePrompt extends StoreElement<ProfilesStore> {
       'mwc-textfield': TextField,
       'mwc-button': Button,
       'mwc-circular-progress': CircularProgress,
-      'create-profile-form': connectStore(CreateProfileForm, this.store),
+      'create-profile-form': connectDeps(CreateProfileForm, this._deps),
     };
   }
 }

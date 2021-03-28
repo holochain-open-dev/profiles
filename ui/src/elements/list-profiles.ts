@@ -4,12 +4,15 @@ import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { StoreElement } from '@holochain-open-dev/common';
+import { BaseElement, DepsElement } from '@holochain-open-dev/common';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
-export abstract class ListProfiles extends StoreElement<ProfilesStore> {
+export abstract class ListProfiles
+  extends MobxReactionUpdate(BaseElement)
+  implements DepsElement<ProfilesStore> {
   /** Private properties */
 
   @property({ type: Boolean })
@@ -26,8 +29,10 @@ export abstract class ListProfiles extends StoreElement<ProfilesStore> {
     ];
   }
 
+  abstract get _deps(): ProfilesStore;
+
   async firstUpdated() {
-    await this.store.fetchAllProfiles();
+    await this._deps.fetchAllProfiles();
     this._loading = false;
   }
 
@@ -43,7 +48,7 @@ export abstract class ListProfiles extends StoreElement<ProfilesStore> {
       return html`<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-    const allProfiles = this.store.profiles;
+    const allProfiles = this._deps.profiles;
 
     if (Object.keys(allProfiles).length === 0)
       return html`<mwc-list-item

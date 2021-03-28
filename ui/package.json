@@ -38,7 +38,7 @@
     "lit-element": "^2.4.0",
     "lit-html": "^1.3.0",
     "mobx": "^6.1.4",
-    "scoped-material-components": "0.1.2"
+    "scoped-material-components": "^0.1.5"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.0.0",
