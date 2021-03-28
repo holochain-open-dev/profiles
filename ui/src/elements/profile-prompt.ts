@@ -40,7 +40,7 @@ export abstract class ProfilePrompt
   abstract get _deps(): ProfilesStore;
 
   async firstUpdated() {
-    await this.deps.fetchMyProfile();
+    await this._deps.fetchMyProfile();
     this._loading = false;
   }
 
