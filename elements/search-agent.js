@@ -92,9 +92,10 @@ export class SearchAgent extends DepsElement {
     }
     render() {
         return html `
-      <div style="position: relative">
+      <div style="position: relative; flex: 1; display: flex;">
         <mwc-textfield
           id="textfield"
+          style="flex: 1;"
           class="input"
           .label=${this.fieldLabel}
           placeholder="At least 3 chars..."
