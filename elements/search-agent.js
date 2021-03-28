@@ -5,13 +5,14 @@ import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { DepsElement } from '@holochain-open-dev/common';
+import { BaseElement } from '@holochain-open-dev/common';
 import { sharedStyles } from './utils/shared-styles';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class SearchAgent extends DepsElement {
+export class SearchAgent extends MobxReactionUpdate(BaseElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -35,9 +36,9 @@ export class SearchAgent extends DepsElement {
     }
     /** Private properties */
     get _filteredAgents() {
-        let filtered = this.deps.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
+        let filtered = this._deps.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
         if (!this.includeMyself) {
-            filtered = filtered.filter(agent => this.deps.myAgentPubKey !== agent.agent_pub_key);
+            filtered = filtered.filter(agent => this._deps.myAgentPubKey !== agent.agent_pub_key);
         }
         return filtered;
     }
@@ -60,7 +61,7 @@ export class SearchAgent extends DepsElement {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        await this.deps.searchProfiles(nicknamePrefix);
+        await this._deps.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)

@@ -2,14 +2,15 @@ import { TextField } from 'scoped-material-components/mwc-textfield';
 import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { DepsElement } from '@holochain-open-dev/common';
+import { BaseElement, DepsElement } from '@holochain-open-dev/common';
 import { AgentProfile } from '../types';
 import { ProfilesStore } from '../profiles.store';
+declare const SearchAgent_base: typeof BaseElement;
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export declare abstract class SearchAgent extends DepsElement<ProfilesStore> {
+export declare abstract class SearchAgent extends SearchAgent_base implements DepsElement<ProfilesStore> {
     /** Public attributes */
     /**
      * Whether to clear the field when an agent is selected
@@ -32,6 +33,7 @@ export declare abstract class SearchAgent extends DepsElement<ProfilesStore> {
     _lastSearchedPrefix: string | undefined;
     _textField: TextField;
     _overlay: MenuSurface;
+    abstract get _deps(): ProfilesStore;
     static get styles(): import("lit-element").CSSResult[];
     firstUpdated(): void;
     searchAgents(nicknamePrefix: string): Promise<void>;
@@ -46,3 +48,4 @@ export declare abstract class SearchAgent extends DepsElement<ProfilesStore> {
         'mwc-list-item': typeof ListItem;
     };
 }
+export {};

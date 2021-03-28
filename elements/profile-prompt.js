@@ -5,11 +5,12 @@ import { CircularProgress } from 'scoped-material-components/mwc-circular-progre
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { connectDeps, DepsElement } from '@holochain-open-dev/common';
+import { BaseElement, connectDeps, } from '@holochain-open-dev/common';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends DepsElement {
+export class ProfilePrompt extends MobxReactionUpdate(BaseElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -27,7 +28,7 @@ export class ProfilePrompt extends DepsElement {
         ];
     }
     async firstUpdated() {
-        await this.deps.fetchMyProfile();
+        await this._deps.fetchMyProfile();
         this._loading = false;
     }
     renderPrompt() {
@@ -42,7 +43,7 @@ export class ProfilePrompt extends DepsElement {
     }
     render() {
         return html `
-      ${!this._loading && this.deps.myProfile
+      ${!this._loading && this._deps.myProfile
             ? html `<slot></slot>`
             : this.renderPrompt()}
     `;
@@ -52,7 +53,7 @@ export class ProfilePrompt extends DepsElement {
             'mwc-textfield': TextField,
             'mwc-button': Button,
             'mwc-circular-progress': CircularProgress,
-            'create-profile-form': connectDeps(CreateProfileForm, this.deps),
+            'create-profile-form': connectDeps(CreateProfileForm, this._deps),
         };
     }
 }

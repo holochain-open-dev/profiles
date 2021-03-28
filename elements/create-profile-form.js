@@ -8,12 +8,13 @@ import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
 import { Icon } from 'scoped-material-components/mwc-icon';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { DepsElement } from '@holochain-open-dev/common';
+import { BaseElement } from '@holochain-open-dev/common';
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends DepsElement {
+export class CreateProfileForm extends MobxReactionUpdate(BaseElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -53,7 +54,7 @@ export class CreateProfileForm extends DepsElement {
             if (this._avatar) {
                 fields['avatar'] = this._avatar;
             }
-            await this.deps.createProfile({
+            await this._deps.createProfile({
                 nickname,
                 fields,
             });

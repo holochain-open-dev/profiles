@@ -4,9 +4,10 @@ import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { DepsElement } from '@holochain-open-dev/common';
+import { BaseElement } from '@holochain-open-dev/common';
 import { sharedStyles } from './utils/shared-styles';
-export class ListProfiles extends DepsElement {
+import { MobxReactionUpdate } from '@adobe/lit-mobx';
+export class ListProfiles extends MobxReactionUpdate(BaseElement) {
     constructor() {
         /** Private properties */
         super(...arguments);
@@ -23,7 +24,7 @@ export class ListProfiles extends DepsElement {
         ];
     }
     async firstUpdated() {
-        await this.deps.fetchAllProfiles();
+        await this._deps.fetchAllProfiles();
         this._loading = false;
     }
     initials(nickname) {
@@ -37,7 +38,7 @@ export class ListProfiles extends DepsElement {
             return html `<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-        const allProfiles = this.deps.profiles;
+        const allProfiles = this._deps.profiles;
         if (Object.keys(allProfiles).length === 0)
             return html `<mwc-list-item
         >There are no created profiles yet</mwc-list-item
