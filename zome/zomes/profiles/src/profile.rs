@@ -1,5 +1,5 @@
 use crate::utils;
-use hc_utils::WrappedAgentPubKey;
+use holo_hash::AgentPubKeyB64;
 use hdk::prelude::link::Link;
 use hdk::prelude::*;
 use std::collections::BTreeMap;
@@ -15,7 +15,7 @@ pub struct Profile {
 // Used as a return type of all functions
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct AgentProfile {
-    pub agent_pub_key: WrappedAgentPubKey,
+    pub agent_pub_key: AgentPubKeyB64,
     pub profile: Profile,
 }
 
@@ -44,7 +44,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     )?;
 
     let agent_profile = AgentProfile {
-        agent_pub_key: WrappedAgentPubKey(agent_info.agent_initial_pubkey),
+        agent_pub_key: AgentPubKeyB64::from(agent_info.agent_initial_pubkey),
         profile,
     };
 
@@ -79,9 +79,9 @@ pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {
 }
 
 pub fn get_agent_profile(
-    wrapped_agent_pub_key: WrappedAgentPubKey,
+    wrapped_agent_pub_key: AgentPubKeyB64,
 ) -> ExternResult<Option<AgentProfile>> {
-    let agent_pub_key = wrapped_agent_pub_key.0.clone();
+    let agent_pub_key = AgentPubKey::from(wrapped_agent_pub_key.clone());
 
     let agent_address: AnyDhtHash = agent_pub_key.into();
 
@@ -134,7 +134,7 @@ fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
     let profile: Profile = utils::try_from_element(element)?;
 
     let agent_profile = AgentProfile {
-        agent_pub_key: WrappedAgentPubKey(author),
+        agent_pub_key: AgentPubKeyB64::from(author),
         profile,
     };
 

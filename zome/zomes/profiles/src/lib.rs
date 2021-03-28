@@ -1,6 +1,4 @@
-extern crate hc_utils;
-
-use hc_utils::WrappedAgentPubKey;
+use holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
 mod profile;
@@ -35,7 +33,7 @@ pub fn search_profiles(
 }
 
 #[hdk_extern]
-pub fn get_agent_profile(agent_pub_key: WrappedAgentPubKey) -> ExternResult<Option<AgentProfile>> {
+pub fn get_agent_profile(agent_pub_key: AgentPubKeyB64) -> ExternResult<Option<AgentProfile>> {
     let agent_profile = profile::get_agent_profile(agent_pub_key)?;
 
     Ok(agent_profile)
@@ -46,7 +44,7 @@ pub fn get_my_profile(_: ()) -> ExternResult<Option<AgentProfile>> {
     let agent_info = agent_info()?;
 
     let agent_profile =
-        profile::get_agent_profile(WrappedAgentPubKey(agent_info.agent_initial_pubkey))?;
+        profile::get_agent_profile(AgentPubKeyB64::from(agent_info.agent_initial_pubkey))?;
 
     Ok(agent_profile)
 }

@@ -142,17 +142,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d7afe4a420e3fe79967a00898cc1f4db7c8a49a9333a29f8a4bd76a253d5cd04"
 
 [[package]]
-name = "hc_utils"
-version = "0.2.0"
-source = "git+https://github.com/holochain/hc-utils?branch=develop#f4b38f37568cc60a2d853ec1ee39c88812f5df5b"
-dependencies = [
- "hdk",
- "holo_hash",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "hdk"
 version = "0.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -415,8 +404,8 @@ name = "profiles"
 version = "0.0.1"
 dependencies = [
  "derive_more",
- "hc_utils",
  "hdk",
+ "holo_hash",
  "serde",
 ]
 
