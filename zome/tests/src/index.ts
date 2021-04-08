@@ -3,6 +3,7 @@ import {
   Config,
   InstallAgentsHapps,
   TransportConfigType,
+  NetworkType,
 } from "@holochain/tryorama";
 import path from "path";
 
@@ -13,6 +14,7 @@ const network = {
     },
   ],
   bootstrap_service: "https://bootstrap.holo.host",
+  network_type: NetworkType.QuicBootstrap
 };
 const conductorConfig = Config.gen({ network });
 
