@@ -15,8 +15,6 @@ jobs:
   # This workflow contains a single job called "build"
   build-and-test:
     runs-on: ubuntu-latest
-    # The type of runner that the job will run on
-    container: ubuntu:latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
