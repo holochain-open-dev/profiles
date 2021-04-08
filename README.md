@@ -38,7 +38,7 @@ profiles = {git = "https://github.com/holochain-open-dev/profiles", package = "p
 extern crate profiles;
 ```
 
-6. Add the zome into your `*.dna.workdir/dna.yaml` file.
+6. Add the zome into your `dna.yaml` file.
 7. Compile the DNA with the usual `CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown`.
 
 ### Using the UI module
@@ -49,7 +49,7 @@ extern crate profiles;
 2. Import and create the mobx store for profiles and for this module, and define the custom elements you need in your app:
 
 ```js
-import { connectStore } from "@holochain-open-dev/common";
+import { connectDeps } from "@holochain-open-dev/common";
 import {
   ProfilePrompt,
   ProfilesStore,
@@ -73,7 +73,7 @@ async function setupProfiles() {
 
   customElements.define(
     "profile-prompt",
-    connectStore(ProfilePrompt, profilesStore)
+    connectDeps(ProfilePrompt, profilesStore)
   );
 }
 ```
@@ -91,35 +91,6 @@ Take into account that at this point the elements already expect a holochain con
 
 You can see a full working example [here](/ui/demo/index.html).
 
-## Extending the profile for your app
-
-> WARNING! This might change in the future
-
-To add new fields to the profile for your app, change the setup of your ApolloClient and add a new GraphQl schema to your type definitions:
-
-```js
-import {
-  profilesTypeDefs,
-} from "@holochain-open-dev/profiles";
-
-const profileExtensionTypeDefs = gql`
-  extend type Profile {
-    avatar: String!
-    name: String!
-  }
-
-  extend type ProfileInput {
-    avatar: String!
-    name: String!
-  }
-`;
-
-const allTypeDefs = [rootTypeDef, profilesTypeDefs, profileExtensionTypeDefs];
-
-...
-```
-
-If you do this, the `<hod-create-profile-form>` will not work (will work in the future to adapt to your profile).
 
 ## Developer setup
 

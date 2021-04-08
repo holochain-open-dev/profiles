@@ -9,11 +9,12 @@ All the instructions here assume you are running them inside the nix-shell at th
 ## Building
 
 ```bash
-CARGO_TARGET=target cargo build --release --target wasm32-unknown-unknown
-hc dna pack profiles.dna.workdir
+CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
+hc dna pack workdir/dna
+hc app pack workdir/happ
 ```
 
-This should create a `profiles.dna.workdir/profiles-test.dna` file.
+This should create a `workdir/happ/profiles-test.happ` file.
 
 ## Testing
 
@@ -30,9 +31,7 @@ npm test
 After having built the DNA:
 
 ```bash
-hc s call register-dna --path zome/profiles.dna.workdir/profiles-test.dna
-hc s call install-app <RESULT_HASH_OF_PREVIOUS_COMMAND>
-hc s run
+hc s generate workdir/happ/profiles-test.happ --run=8888
 ```
 
 Now `holochain` will be listening at port `8888`;

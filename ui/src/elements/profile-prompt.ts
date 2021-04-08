@@ -26,17 +26,6 @@ export abstract class ProfilePrompt
   @property({ type: Boolean })
   _loading = true;
 
-  static get styles() {
-    return [
-      sharedStyles,
-      css`
-        :host {
-          display: flex;
-        }
-      `,
-    ];
-  }
-
   abstract get _deps(): ProfilesStore;
 
   async firstUpdated() {
@@ -70,5 +59,16 @@ export abstract class ProfilePrompt
       'mwc-circular-progress': CircularProgress,
       'create-profile-form': connectDeps(CreateProfileForm, this._deps),
     };
+  }
+
+  static get styles() {
+    return [
+      sharedStyles,
+      css`
+        :host {
+          display: flex;
+        }
+      `,
+    ];
   }
 }

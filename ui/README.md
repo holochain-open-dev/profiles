@@ -119,6 +119,6 @@ Now, a built version of this module will be at the root of the `ui-build` branch
 
 ```json
   "dependencies": {
-    "@holochain-open-dev/profiles": "holochain-open-dev/profiles-module#ui-build",
+    "@holochain-open-dev/profiles": "https://github.com/holochain-open-dev/profiles#ui-build",
   }
 ```

@@ -16,35 +16,37 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     # The type of runner that the job will run on
-    container: guillemcordoba/rsm:latest
+    container: ubuntu:latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: cachix/install-nix-action@v12
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
 
       - name: build-holochain
         run: |
-          cd $GITHUB_WORKSPACE/zome
-          CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
-          dna-util -c profiles.dna.workdir/
+          cd $GITHUB_WORKSPACE
+          nix-shell . --run "cd zome && CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown"
+          nix-shell . --run "cd zome && hc dna pack workdir/dna"
+          nix-shell . --run "cd zome && hc app pack workdir/happ"
           
       - name: test-holochain
         run: |
-          cd $GITHUB_WORKSPACE/zome/tests
-          npm install
-          npm test
+          cd $GITHUB_WORKSPACE
+          nix-shell . --run "cd zome/tests && npm install"
+          nix-shell . --run "cd zome/tests && npm test"      
+          
           
       - name: build-ui
         run: |
-          cd $GITHUB_WORKSPACE/ui
-          npm install
-          npm run lint
-          npm run build
+          cd $GITHUB_WORKSPACE
+          nix-shell . --run "cd ui && npm install"
+          nix-shell . --run "cd ui && npm run lint"
+          nix-shell . --run "cd ui && npm run build"
           
-      - name: test-ui
-        run: |
-          cd $GITHUB_WORKSPACE/ui
-          npm i -g @holochain-open-dev/holochain-run-dna
-          npm test
-          npm run e2e
