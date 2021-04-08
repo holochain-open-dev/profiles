@@ -7,24 +7,19 @@ import {
 } from "@holochain/tryorama";
 import path from "path";
 
-const network = {
-  transport_pool: [
-    {
-      type: TransportConfigType.Quic,
-    },
-  ],
-  bootstrap_service: "https://bootstrap.holo.host",
-  network_type: NetworkType.QuicBootstrap
-};
-const conductorConfig = Config.gen({ network });
+const conductorConfig = Config.gen();
 
 // Construct proper paths for your DNAs
-const profilesDna = path.join(__dirname, "../../profiles.dna.gz");
+const profilesDna = path.join(__dirname, "../../workdir/dna/profiles-test.dna");
 
 // create an InstallAgentsHapps array with your DNAs to tell tryorama what
 // to install into the conductor.
 const installation: InstallAgentsHapps = [
   // agent 0
+  [
+    // happ 0
+    [profilesDna],
+  ],
   [
     // happ 0
     [profilesDna],
@@ -37,12 +32,11 @@ const sleep = (ms) =>
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario("create a profile and get it", async (s, t) => {
-  const [alice, bob] = await s.players([conductorConfig, conductorConfig]);
+  const [alice, bob] = await s.players([conductorConfig]);
 
   // install your happs into the coductors and destructuring the returned happ data using the same
   // array structure as you created in your installation array.
-  const [[alice_profiles]] = await alice.installAgentsHapps(installation);
-  const [[bob_profiles]] = await bob.installAgentsHapps(installation);
+  const [[alice_profiles], [bob_profiles]] = await alice.installAgentsHapps(installation);
 
   let myProfile = await alice_profiles.cells[0].call(
     "profiles",
@@ -65,20 +59,6 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
 
   await sleep(500);
 
-  try {
-    profileHash = await bob_profiles.cells[0].call(
-      "profiles",
-      "create_profile",
-      {
-        nickname: "alice",
-        fields: {
-          avatar: "avatar",
-        },
-      }
-    );
-    t.ok(false);
-  } catch (e) {}
-
   profileHash = await bob_profiles.cells[0].call("profiles", "create_profile", {
     nickname: "bobbo",
     fields: {
@@ -87,7 +67,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   });
   t.ok(profileHash);
 
-  await sleep(10);
+  await sleep(5000);
 
   myProfile = await alice_profiles.cells[0].call(
     "profiles",
@@ -96,6 +76,13 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   );
   t.ok(myProfile.agent_pub_key);
   t.equal(myProfile.profile.nickname, "alice");
+
+  let allprofiles = await bob_profiles.cells[0].call(
+    "profiles",
+    "get_all_profiles",
+    null
+  );
+  t.equal(allprofiles.length, 2);
 
   let profiles = await bob_profiles.cells[0].call(
     "profiles",
