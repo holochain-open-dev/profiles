@@ -17,16 +17,6 @@ export class ProfilePrompt extends MobxReactionUpdate(BaseElement) {
         /** Private properties */
         this._loading = true;
     }
-    static get styles() {
-        return [
-            sharedStyles,
-            css `
-        :host {
-          display: flex;
-        }
-      `,
-        ];
-    }
     async firstUpdated() {
         await this._deps.fetchMyProfile();
         this._loading = false;
@@ -55,6 +45,16 @@ export class ProfilePrompt extends MobxReactionUpdate(BaseElement) {
             'mwc-circular-progress': CircularProgress,
             'create-profile-form': connectDeps(CreateProfileForm, this._deps),
         };
+    }
+    static get styles() {
+        return [
+            sharedStyles,
+            css `
+        :host {
+          display: flex;
+        }
+      `,
+        ];
     }
 }
 __decorate([

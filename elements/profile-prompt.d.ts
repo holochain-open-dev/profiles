@@ -11,7 +11,6 @@ export declare abstract class ProfilePrompt extends ProfilePrompt_base implement
     /** Public attributes */
     /** Private properties */
     _loading: boolean;
-    static get styles(): import("lit-element").CSSResult[];
     abstract get _deps(): ProfilesStore;
     firstUpdated(): Promise<void>;
     renderPrompt(): import("lit-element").TemplateResult;
@@ -22,5 +21,6 @@ export declare abstract class ProfilePrompt extends ProfilePrompt_base implement
         'mwc-circular-progress': typeof CircularProgress;
         'create-profile-form': import("lit-element").Constructor<HTMLElement>;
     };
+    static get styles(): import("lit-element").CSSResult[];
 }
 export {};

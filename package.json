@@ -9,7 +9,7 @@
   "scripts": {
     "start": "concurrently --kill-others \"npm:start-ui\" \"npm:start-holochain\"",
     "start-ui": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names tsc,dev-server \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
-    "start-holochain": "cd .. && RUST_LOG=warn hc sandbox run",
+    "start-holochain": "RUST_LOG=warn hc s generate ../zome/workdir/happ/profiles-test.happ --run=8888",
     "build": "rimraf dist && tsc",
     "build-bundle": "rimraf bundle && rollup -c rollup-bundle.config.js",
     "build-watch": "tsc --watch",
