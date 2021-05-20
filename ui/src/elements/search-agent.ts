@@ -119,6 +119,7 @@ export abstract class SearchAgent
       // If the consumer says so, clear the field
       if (this.clearOnSelect) {
         this._textField.value = '';
+        this._currentFilter = undefined;
       } else {
         this._textField.value = agent.profile.nickname;
       }
