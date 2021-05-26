@@ -1,0 +1,38 @@
+<div
+	class="ui5-select-root"
+	dir="{{effectiveDir}}"
+	id="{{_id}}-select"
+	@click="{{_onclick}}"
+>
+	<div class="ui5-select-label-root"
+		data-sap-focus-ref
+		tabindex="{{tabIndex}}"
+		role="combobox"
+		aria-haspopup="listbox"
+		aria-label="{{ariaLabelText}}"
+		aria-describedby="{{valueStateTextId}}"
+		aria-disabled="{{isDisabled}}"
+		aria-required="{{required}}"
+		aria-expanded="{{_isPickerOpen}}"
+		@keydown="{{_onkeydown}}"
+		@keyup="{{_onkeyup}}"
+		@focusin="{{_onfocusin}}"
+		@focusout="{{_onfocusout}}"
+	>
+		{{_text}}
+	</div>
+
+	<span id="{{_id}}-selectionText" class="ui5-hidden-text" aria-live="polite" role="status"></span>
+
+	<ui5-icon
+		name="slim-arrow-down"
+		input-icon
+		?pressed="{{_iconPressed}}"
+		dir="{{effectiveDir}}"
+	></ui5-icon>
+
+	{{#if hasValueState}}
+		<span id="{{_id}}-valueStateDesc" class="ui5-hidden-text">{{valueStateText}}</span>
+	{{/if}}
+	<slot name="formSupport"></slot>
+</div>

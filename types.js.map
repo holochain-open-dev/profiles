@@ -1,1 +1,0 @@
-{"version":3,"file":"types.js","sourceRoot":"","sources":["../src/types.ts"],"names":[],"mappings":"","sourcesContent":["\nexport type Dictionary<T> = { [key: string]: T };\n\nexport interface Profile {\n  nickname: string;\n  fields: Dictionary<string>;\n}\n\nexport interface AgentProfile {\n  agent_pub_key: string;\n  profile: Profile;\n}\n"]}

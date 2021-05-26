@@ -1,0 +1,29 @@
+<div
+	class="ui5-mp-root"
+	role="grid"
+	aria-readonly="false"
+	aria-multiselectable="false"
+	@keydown={{_onkeydown}}
+	@keyup={{_onkeyup}}
+	@click={{_selectMonth}}
+	@focusin={{_onfocusin}}
+>
+	{{#each _months}}
+		<div class="ui5-mp-quarter">
+
+			{{#each this}}
+				<div
+					data-sap-timestamp={{this.timestamp}}
+					tabindex={{this._tabIndex}}
+					?data-sap-focus-ref="{{this.focusRef}}"
+					class="{{this.classes}}"
+					role="gridcell"
+					aria-selected="{{this.ariaSelected}}"
+				>
+					{{this.name}}
+				</div>
+			{{/each}}
+
+		</div>
+	{{/each}}
+</div>

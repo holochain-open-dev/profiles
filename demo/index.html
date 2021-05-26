@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        background: #fafafa;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <context-provider id="provider">
+      <profile-prompt>
+        <search-agent include-myself clear-on-select></search-agent>
+      </profile-prompt>
+    </context-provider>
+
+    <script type="module">
+      import { html, render } from 'lit-html';
+      import {
+        ProfilePrompt,
+        SearchAgent,
+        ProfilesService,
+        ProfilesStore,
+        PROFILES_STORE_CONTEXT,
+      } from '../dist';
+      import ConductorApi from '@holochain/conductor-api';
+      import { ContextProviderElement } from '@holochain-open-dev/context';
+
+      (async function () {
+        const appWebsocket = await ConductorApi.AppWebsocket.connect(
+          'ws://localhost:8888'
+        );
+        const appInfo = await appWebsocket.appInfo({
+          installed_app_id: 'test-app',
+        });
+
+        const cellId = appInfo.cell_data[0].cell_id;
+
+        const service = new ProfilesService(appWebsocket, cellId);
+        const store = new ProfilesStore(service);
+        await service.getMyProfile();
+
+        customElements.define('context-provider', ContextProviderElement);
+
+        const provider = document.getElementById('provider');
+        provider.name = PROFILES_STORE_CONTEXT;
+        provider.value = store;
+
+        customElements.define('profile-prompt', ProfilePrompt);
+        customElements.define('search-agent', SearchAgent);
+      })();
+    </script>
+  </body>
+</html>

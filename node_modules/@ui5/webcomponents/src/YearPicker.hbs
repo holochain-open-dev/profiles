@@ -1,0 +1,27 @@
+<div
+	class="ui5-yp-root"
+	role="grid"
+	aria-readonly="false"
+	aria-multiselectable="false"
+	@keydown={{_onkeydown}}
+	@keyup={{_onkeyup}}
+	@click={{_selectYear}}
+	@focusin={{_onfocusin}}
+>
+	{{#each _years}}
+		<div class="ui5-yp-interval-container">
+			{{#each this}}
+				<div
+					data-sap-timestamp="{{this.timestamp}}"
+					tabindex="{{this._tabIndex}}"
+					?data-sap-focus-ref="{{this.focusRef}}"
+					class="{{this.classes}}"
+					role="gridcell"
+					aria-selected="{{this.ariaSelected}}"
+				>
+						{{this.year}}
+				</div>
+			{{/each}}
+		</div>
+	{{/each}}
+</div>

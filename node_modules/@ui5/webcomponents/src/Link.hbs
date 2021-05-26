@@ -1,0 +1,18 @@
+<a
+	class="ui5-link-root"
+	role="link"
+	href="{{parsedRef}}"
+	target="{{target}}"
+	rel="{{_rel}}"
+	tabindex="{{tabIndex}}"
+	?disabled="{{disabled}}"
+	aria-label="{{ariaLabelText}}"
+	@focusin={{_onfocusin}}
+	@click={{_onclick}}
+	@keydown={{_onkeydown}}
+	@keyup={{_onkeyup}}>
+	<slot></slot>
+	{{#if hasLinkType}}
+		<span class="ui5-hidden-text">{{linkTypeText}}</span>
+	{{/if}}
+</a>
