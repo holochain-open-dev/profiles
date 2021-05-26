@@ -1,27 +1,26 @@
-import { html, query, property, Constructor, LitElement } from 'lit-element';
-import { classMap } from 'lit-html/directives/class-map';
+import { html } from 'lit';
+import { query, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { requestContext } from '@holochain-open-dev/context';
+import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
-import { IconButton } from 'scoped-material-components/mwc-icon-button';
 import { Card } from 'scoped-material-components/mwc-card';
+import { Ripple } from 'scoped-material-components/mwc-ripple';
+import { Icon } from 'scoped-material-components/mwc-icon';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 
 import { sharedStyles } from './utils/shared-styles';
-import { Dictionary } from '../types';
-import { Icon } from 'scoped-material-components/mwc-icon';
-import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { BaseElement, DepsElement } from '@holochain-open-dev/common';
+import { Dictionary, PROFILES_STORE_CONTEXT } from '../types';
 import { ProfilesStore } from '../profiles.store';
-import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export abstract class CreateProfileForm
-  extends MobxReactionUpdate(BaseElement)
-  implements DepsElement<ProfilesStore> {
+export class CreateProfileForm extends ScopedRegistryHost(MobxLitElement) {
   /** Public attributes */
 
   /**
@@ -41,10 +40,11 @@ export abstract class CreateProfileForm
 
   _existingUsernames: { [key: string]: boolean } = {};
 
-  @property({ type: String })
+  @state()
   _avatar: string | undefined = undefined;
 
-  abstract get _deps(): ProfilesStore;
+  @requestContext(PROFILES_STORE_CONTEXT)
+  _store!: ProfilesStore;
 
   firstUpdated() {
     this._nicknameField.validityTransform = (newValue: string) => {
@@ -79,7 +79,7 @@ export abstract class CreateProfileForm
       if (this._avatar) {
         fields['avatar'] = this._avatar;
       }
-      await this._deps.createProfile({
+      await this._store.createProfile({
         nickname,
         fields,
       });
@@ -205,14 +205,12 @@ export abstract class CreateProfileForm
     `;
   }
 
-  getScopedElements() {
-    return {
-      'mwc-textfield': TextField,
-      'mwc-button': Button,
-      'mwc-icon': Icon,
-      'mwc-card': Card,
-      'mwc-ripple': Ripple,
-      'ui5-avatar': Avatar,
-    };
-  }
+  static elementDefinitions = {
+    'mwc-textfield': TextField,
+    'mwc-button': Button,
+    'mwc-icon': Icon,
+    'mwc-card': Card,
+    'mwc-ripple': Ripple,
+    'ui5-avatar': Avatar,
+  };
 }

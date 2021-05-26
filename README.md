@@ -29,7 +29,7 @@ These are the things you need to know to decide if you can use this module in yo
 
 ```toml
 [dependencies]
-profiles = {git = "https://github.com/holochain-open-dev/profiles", package = "profiles"}
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", package = "hc_zome_profiles"}
 ```
 
 5. Create a `src` folder besides the `Cargo.toml` with this content:
@@ -43,13 +43,12 @@ extern crate profiles;
 
 ### Using the UI module
 
-1. Install the module with `npm install git://github.com/holochain-open-dev/profiles.git#ui-build`.
-
+1. Install the module with `npm install "https://github.com/holochain-open-dev/profiles#ui-build"`.
 
 2. Import and create the mobx store for profiles and for this module, and define the custom elements you need in your app:
 
 ```js
-import { connectDeps } from "@holochain-open-dev/common";
+import { ContextProviderElement } from "@holochain-open-dev/context";
 import {
   ProfilePrompt,
   ProfilesStore,
@@ -71,10 +70,12 @@ async function setupProfiles() {
   const profilesService = new ProfilesService(appWebsocket, cellId);
   const profilesStore = new ProfilesStore(profilesService);
 
-  customElements.define(
-    "profile-prompt",
-    connectDeps(ProfilePrompt, profilesStore)
-  );
+  customElements.define("context-provider", ContextProviderElement);
+
+  const provider = document.getElementById("provider");
+  provider.name = PROFILES_STORE_CONTEXT;
+  provider.value = profilesStore;
+  customElements.define("profile-prompt", ProfilePrompt);
 }
 ```
 
@@ -83,14 +84,15 @@ async function setupProfiles() {
 ```html
 ...
 <body>
-  <profile-prompt style="height: 400px; width: 500px"></profile-prompt>
+  <context-provider id="provider">
+    <profile-prompt style="height: 400px; width: 500px"></profile-prompt>
+  </context-provider>
 </body>
 ```
 
 Take into account that at this point the elements already expect a holochain conductor running at `ws://localhost:8888`.
 
 You can see a full working example [here](/ui/demo/index.html).
-
 
 ## Developer setup
 

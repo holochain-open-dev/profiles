@@ -1,24 +1,24 @@
-import { css, html, query, property } from 'lit-element';
+import { css, html } from 'lit';
+import { property, state, query } from 'lit/decorators.js';
 
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { BaseElement, DepsElement } from '@holochain-open-dev/common';
+import { requestContext } from '@holochain-open-dev/context';
+import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { AgentProfile, Profile } from '../types';
+import { AgentProfile, PROFILES_STORE_CONTEXT } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
-import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export abstract class SearchAgent
-  extends MobxReactionUpdate(BaseElement)
-  implements DepsElement<ProfilesStore> {
+export class SearchAgent extends ScopedRegistryHost(MobxLitElement) {
   /** Public attributes */
 
   /**
@@ -45,19 +45,19 @@ export abstract class SearchAgent
   /** Private properties */
 
   get _filteredAgents(): Array<AgentProfile> {
-    let filtered = this._deps.knownProfiles.filter(agent =>
+    let filtered = this._store.knownProfiles.filter(agent =>
       agent.profile.nickname.startsWith(this._currentFilter as string)
     );
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this._deps.myAgentPubKey !== agent.agent_pub_key
+        agent => this._store.myAgentPubKey !== agent.agent_pub_key
       );
     }
 
     return filtered;
   }
 
-  @property({ type: String })
+  @state()
   _currentFilter: string | undefined = undefined;
 
   _lastSearchedPrefix: string | undefined = undefined;
@@ -67,29 +67,16 @@ export abstract class SearchAgent
   @query('#overlay')
   _overlay!: MenuSurface;
 
-  abstract get _deps(): ProfilesStore;
+  @requestContext(PROFILES_STORE_CONTEXT)
+  _store!: ProfilesStore;
 
-  static get styles() {
-    return [
-      sharedStyles,
-      css`
-        :host {
-          display: flex;
-        }
-        #list {
-          margin-top: 16px;
-          margin-left: 16px;
-        }
-      `,
-    ];
-  }
   firstUpdated() {
     this.addEventListener('blur', () => this._overlay.close());
   }
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this._deps.searchProfiles(nicknamePrefix);
+    await this._store.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {
@@ -175,13 +162,26 @@ export abstract class SearchAgent
     `;
   }
 
-  getScopedElements() {
-    return {
-      'ui5-avatar': Avatar,
-      'mwc-textfield': TextField,
-      'mwc-menu-surface': MenuSurface,
-      'mwc-list': List,
-      'mwc-list-item': ListItem,
-    };
+  static get styles() {
+    return [
+      sharedStyles,
+      css`
+        :host {
+          display: flex;
+        }
+        #list {
+          margin-top: 16px;
+          margin-left: 16px;
+        }
+      `,
+    ];
   }
+
+  static elementDefinitions = {
+    'ui5-avatar': Avatar,
+    'mwc-textfield': TextField,
+    'mwc-menu-surface': MenuSurface,
+    'mwc-list': List,
+    'mwc-list-item': ListItem,
+  };
 }

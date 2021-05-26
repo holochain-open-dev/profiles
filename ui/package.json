@@ -4,8 +4,8 @@
   "description": "TODO: change description",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
-  "main": "index.js",
-  "module": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "scripts": {
     "start": "concurrently --kill-others \"npm:start-ui\" \"npm:start-holochain\"",
     "start-ui": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names tsc,dev-server \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
@@ -25,20 +25,20 @@
     "build-storybook": "npm run analyze && build-storybook",
     "publish-storybook": "npm run lint && npm run analyze && npm run build && npm run build-storybook && gh-pages -b gh-pages -d storybook-static",
     "publish-npm": "npm run lint && npm run build && cp ../README.md dist/  && cp ../LICENSE dist/ && cp package.json dist/ && cd dist/ && npm publish --access public && rimraf dist/",
-    "publish-to-branch": "npm run lint && npm run build && cp package.json dist && gh-pages -d dist -b ui-build"
+    "publish-to-branch": "npm run lint && npm run build && gh-pages -d ./ -b ui-build"
   },
   "dependencies": {
-    "@adobe/lit-mobx": "^1.0.1",
+    "@adobe/lit-mobx": "^2.0.0-rc.4",
     "@compository/lib": "git+https://github.com/compository/lib.git#build",
-    "@holochain-open-dev/common": "git+https://github.com/holochain-open-dev/common.git#ui-build",
+    "@holochain-open-dev/context": "git+https://github.com/holochain-open-dev/context.git#ui-build",
     "@holochain-open-dev/core-types": "git+https://github.com/holochain-open-dev/core-types.git#build",
-    "@holochain/conductor-api": "^0.0.1",
-    "@open-wc/scoped-elements": "^1.3.3",
+    "@holochain/conductor-api": "^0.0.4",
+    "@lit-labs/scoped-registry-mixin": "^1.0.0-rc.1",
     "@ui5/webcomponents": "^1.0.0-rc.11",
-    "lit-element": "^2.4.0",
-    "lit-html": "^1.3.0",
-    "mobx": "^6.1.4",
-    "scoped-material-components": "^0.1.5"
+    "@webcomponents/scoped-custom-element-registry": "0.0.1",
+    "lit": "^2.0.0-rc.2",
+    "mobx": "^6.3.2",
+    "scoped-material-components": "^0.1.6"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.0.0",
@@ -57,8 +57,6 @@
     "@web/test-runner-puppeteer": "^0.8.0",
     "concurrently": "^5.1.0",
     "deepmerge": "^3.2.0",
-    "es-dev-server": "^1.23.0",
-    "es-dev-server-rollup": "0.0.8",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.11.0",
     "gh-pages": "^3.1.0",
@@ -68,9 +66,10 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
     "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-terser": "^7.0.2",
     "tslib": "^1.11.0",
-    "typescript": "~3.9.0",
+    "typescript": "^4.2.4",
     "web-component-analyzer": "^1.1.6"
   },
   "eslintConfig": {

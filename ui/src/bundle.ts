@@ -5,8 +5,9 @@ import { createUniqueTag } from '@open-wc/scoped-elements/src/createUniqueTag';
 import { ListProfiles } from './elements/list-profiles';
 import { ProfilesService } from './profiles.service';
 import { ProfilesStore } from './profiles.store';
-import { connectDeps } from '@holochain-open-dev/common';
+import { ContextProviderElement } from '@holochain-open-dev/context';
 
+// TODO: FIX THIS
 function renderUnique(
   tag: string,
   baseClass: Constructor<HTMLElement>,
@@ -37,7 +38,7 @@ export default function lenses(appWebsocket: AppWebsocket, cellId: CellId) {
       {
         name: 'List Profiles',
         render(root: ShadowRoot) {
-          renderUnique('list-profiles', connectDeps(ListProfiles, store), root);
+          renderUnique('list-profiles', ListProfiles, root);
         },
       },
     ],

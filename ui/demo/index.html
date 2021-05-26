@@ -18,9 +18,11 @@
     />
   </head>
   <body>
-    <profile-prompt>
-      <search-agent include-myself clear-on-select></search-agent>
-    </profile-prompt>
+    <context-provider id="provider">
+      <profile-prompt>
+        <search-agent include-myself clear-on-select></search-agent>
+      </profile-prompt>
+    </context-provider>
 
     <script type="module">
       import { html, render } from 'lit-html';
@@ -29,9 +31,10 @@
         SearchAgent,
         ProfilesService,
         ProfilesStore,
+        PROFILES_STORE_CONTEXT,
       } from '../dist';
       import ConductorApi from '@holochain/conductor-api';
-      import { connectDeps } from '@holochain-open-dev/common';
+      import { ContextProviderElement } from '@holochain-open-dev/context';
 
       (async function () {
         const appWebsocket = await ConductorApi.AppWebsocket.connect(
@@ -46,11 +49,15 @@
         const service = new ProfilesService(appWebsocket, cellId);
         const store = new ProfilesStore(service);
         await service.getMyProfile();
-        customElements.define(
-          'profile-prompt',
-          connectDeps(ProfilePrompt, store)
-        );
-        customElements.define('search-agent', connectDeps(SearchAgent, store));
+
+        customElements.define('context-provider', ContextProviderElement);
+
+        const provider = document.getElementById('provider');
+        provider.name = PROFILES_STORE_CONTEXT;
+        provider.value = store;
+
+        customElements.define('profile-prompt', ProfilePrompt);
+        customElements.define('search-agent', SearchAgent);
       })();
     </script>
   </body>

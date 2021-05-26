@@ -1,24 +1,22 @@
-import { css, html, property, PropertyValues } from 'lit-element';
+import { css, html } from 'lit';
+import { property } from 'lit/decorators.js';
 
 import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { requestContext } from '@holochain-open-dev/context';
+
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import {
-  BaseElement,
-  connectDeps,
-  DepsElement,
-} from '@holochain-open-dev/common';
 import { ProfilesStore } from '../profiles.store';
-import { MobxReactionUpdate } from '@adobe/lit-mobx';
+import { PROFILES_STORE_CONTEXT } from '../types';
 
 /**
  * @element profile-prompt
  */
-export abstract class ProfilePrompt
-  extends MobxReactionUpdate(BaseElement)
-  implements DepsElement<ProfilesStore> {
+export class ProfilePrompt extends ScopedRegistryHost(MobxLitElement) {
   /** Public attributes */
 
   /** Private properties */
@@ -26,10 +24,11 @@ export abstract class ProfilePrompt
   @property({ type: Boolean })
   _loading = true;
 
-  abstract get _deps(): ProfilesStore;
+  @requestContext(PROFILES_STORE_CONTEXT)
+  _store!: ProfilesStore;
 
   async firstUpdated() {
-    await this._deps.fetchMyProfile();
+    await this._store.fetchMyProfile();
     this._loading = false;
   }
 
@@ -46,20 +45,18 @@ export abstract class ProfilePrompt
 
   render() {
     return html`
-      ${!this._loading && this._deps.myProfile
+      ${!this._loading && this._store.myProfile
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;
   }
 
-  getScopedElements() {
-    return {
-      'mwc-textfield': TextField,
-      'mwc-button': Button,
-      'mwc-circular-progress': CircularProgress,
-      'create-profile-form': connectDeps(CreateProfileForm, this._deps),
-    };
-  }
+  static elementDefinitions = {
+    'mwc-textfield': TextField,
+    'mwc-button': Button,
+    'mwc-circular-progress': CircularProgress,
+    'create-profile-form': CreateProfileForm,
+  };
 
   static get styles() {
     return [

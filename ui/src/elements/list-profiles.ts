@@ -1,38 +1,28 @@
-import { css, html, property } from 'lit-element';
+import { css, html } from 'lit';
+import { property, state } from 'lit/decorators.js';
 
+import { MobxLitElement } from '@adobe/lit-mobx';
+import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { requestContext } from '@holochain-open-dev/context';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
-import { BaseElement, DepsElement } from '@holochain-open-dev/common';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
-import { MobxReactionUpdate } from '@adobe/lit-mobx';
 
-export abstract class ListProfiles
-  extends MobxReactionUpdate(BaseElement)
-  implements DepsElement<ProfilesStore> {
+export class ListProfiles extends ScopedRegistryHost(MobxLitElement) {
   /** Private properties */
 
-  @property({ type: Boolean })
+  @state()
   _loading = true;
 
-  static get styles() {
-    return [
-      sharedStyles,
-      css`
-        :host {
-          display: flex;
-        }
-      `,
-    ];
-  }
-
-  abstract get _deps(): ProfilesStore;
+  @requestContext('hc_zome_profiles/store')
+  _store!: ProfilesStore;
 
   async firstUpdated() {
-    await this._deps.fetchAllProfiles();
+    await this._store.fetchAllProfiles();
     this._loading = false;
   }
 
@@ -48,7 +38,7 @@ export abstract class ListProfiles
       return html`<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-    const allProfiles = this._deps.profiles;
+    const allProfiles = this._store.profiles;
 
     if (Object.keys(allProfiles).length === 0)
       return html`<mwc-list-item
@@ -74,12 +64,19 @@ export abstract class ListProfiles
     `;
   }
 
-  static get scopedElements() {
-    return {
-      'ui5-avatar': Avatar,
-      'mwc-circular-progress': CircularProgress,
-      'mwc-list': List,
-      'mwc-list-item': ListItem,
-    };
-  }
+  static styles = [
+    sharedStyles,
+    css`
+      :host {
+        display: flex;
+      }
+    `,
+  ];
+
+  static elementDefinitions = {
+    'ui5-avatar': Avatar,
+    'mwc-circular-progress': CircularProgress,
+    'mwc-list': List,
+    'mwc-list-item': ListItem,
+  };
 }
