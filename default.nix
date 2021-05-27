@@ -8,13 +8,14 @@ let
     holochainVersionId = "custom";
     
     holochainVersion = { 
-     rev = "db248066989484297c15626684afd9c5c66d0071";
-     sha256 = "1xpxk7w16q20053bsgpwjh3vaqpxjaj2ys9r9mpkbiwvvxqadjfr";
-     cargoSha256 = "0kfk8x1yyn2mbi8r4nswi6dwj2fydwandgz9iab7hzrz7p36gyq8";
+     rev = "363af6d8af8d18e4616f6aa56ad4d1f0fabaafb7";
+     sha256 = "0ssjhang6zljs0zrph998zj7582rf0vdb45p855awa7fmzpd4kfa";
+     cargoSha256 = "15g0ndb64hcfqyqn5pb01vnipg4gxlm0p543z2vr407dgrwfwvhw";
      bins = {
        holochain = "holochain";
        hc = "hc";
      };
     };
+    holochainOtherDepsNames = ["lair-keystore"];
   };
 in holonix.main
