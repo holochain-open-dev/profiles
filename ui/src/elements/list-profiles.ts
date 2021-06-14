@@ -2,7 +2,7 @@ import { css, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { requestContext } from '@holochain-open-dev/context';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
@@ -12,7 +12,7 @@ import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
 
-export class ListProfiles extends ScopedRegistryHost(MobxLitElement) {
+export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
   /** Private properties */
 
   @state()
@@ -73,10 +73,12 @@ export class ListProfiles extends ScopedRegistryHost(MobxLitElement) {
     `,
   ];
 
-  static elementDefinitions = {
-    'ui5-avatar': Avatar,
-    'mwc-circular-progress': CircularProgress,
-    'mwc-list': List,
-    'mwc-list-item': ListItem,
-  };
+  static get scopedElements() {
+    return {
+      'ui5-avatar': Avatar,
+      'mwc-circular-progress': CircularProgress,
+      'mwc-list': List,
+      'mwc-list-item': ListItem,
+    };
+  }
 }

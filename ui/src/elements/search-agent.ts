@@ -7,7 +7,7 @@ import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { requestContext } from '@holochain-open-dev/context';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { AgentProfile, PROFILES_STORE_CONTEXT } from '../types';
@@ -18,7 +18,7 @@ import { ProfilesStore } from '../profiles.store';
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class SearchAgent extends ScopedRegistryHost(MobxLitElement) {
+export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
   /** Public attributes */
 
   /**
@@ -177,11 +177,13 @@ export class SearchAgent extends ScopedRegistryHost(MobxLitElement) {
     ];
   }
 
-  static elementDefinitions = {
-    'ui5-avatar': Avatar,
-    'mwc-textfield': TextField,
-    'mwc-menu-surface': MenuSurface,
-    'mwc-list': List,
-    'mwc-list-item': ListItem,
-  };
+  static get scopedElements() {
+    return {
+      'ui5-avatar': Avatar,
+      'mwc-textfield': TextField,
+      'mwc-menu-surface': MenuSurface,
+      'mwc-list': List,
+      'mwc-list-item': ListItem,
+    };
+  }
 }

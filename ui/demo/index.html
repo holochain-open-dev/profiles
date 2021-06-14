@@ -34,6 +34,7 @@
       } from '../dist';
       import ConductorApi from '@holochain/conductor-api';
       import { ContextProviderElement } from '@holochain-open-dev/context';
+      import { HolochainClient } from '@holochain-open-dev/cell-client';
 
       (async function () {
         const appWebsocket = await ConductorApi.AppWebsocket.connect(
@@ -43,9 +44,10 @@
           installed_app_id: 'test-app',
         });
 
-        const cellId = appInfo.cell_data[0].cell_id;
+        const cellData = appInfo.cell_data[0];
+        const cellClient = new HolochainClient(appWebsocket, cellData);
 
-        const service = new ProfilesService(appWebsocket, cellId);
+        const service = new ProfilesService(cellClient);
         const store = new ProfilesStore(service);
         await service.getMyProfile();
 
