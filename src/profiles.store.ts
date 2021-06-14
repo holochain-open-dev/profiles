@@ -22,7 +22,7 @@ export class ProfilesStore {
   }
 
   get myAgentPubKey() {
-    return serializeHash(this.profilesService.cellId[1]);
+    return serializeHash(this.profilesService.cellClient.cellId[1]);
   }
 
   @computed

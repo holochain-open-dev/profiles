@@ -1,12 +1,8 @@
-import { AppWebsocket, CellId } from '@holochain/conductor-api';
+import { CellClient } from '@holochain-open-dev/cell-client';
 import { AgentProfile, Profile } from './types';
 
 export class ProfilesService {
-  constructor(
-    public appWebsocket: AppWebsocket,
-    public cellId: CellId,
-    public zomeName = 'profiles'
-  ) {}
+  constructor(public cellClient: CellClient, public zomeName = 'profiles') {}
 
   async getMyProfile(): Promise<AgentProfile> {
     return this.callZome('get_my_profile', null);
@@ -36,13 +32,6 @@ export class ProfilesService {
   }
 
   private callZome(fn_name: string, payload: any) {
-    return this.appWebsocket.callZome({
-      cap: null as any,
-      cell_id: this.cellId,
-      zome_name: this.zomeName,
-      fn_name: fn_name,
-      payload: payload,
-      provenance: this.cellId[1],
-    });
+    return this.cellClient.callZome(this.zomeName, fn_name, payload);
   }
 }

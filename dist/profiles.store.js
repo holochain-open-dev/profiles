@@ -11,7 +11,7 @@ export class ProfilesStore {
         return this.profiles[agentPubKey];
     }
     get myAgentPubKey() {
-        return serializeHash(this.profilesService.cellId[1]);
+        return serializeHash(this.profilesService.cellClient.cellId[1]);
     }
     get myProfile() {
         return this.profiles[this.myAgentPubKey];

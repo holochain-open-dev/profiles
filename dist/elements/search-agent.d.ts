@@ -5,7 +5,7 @@ import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { AgentProfile } from '../types';
 import { ProfilesStore } from '../profiles.store';
-declare const SearchAgent_base: typeof MobxLitElement;
+declare const SearchAgent_base: typeof MobxLitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
@@ -40,7 +40,7 @@ export declare class SearchAgent extends SearchAgent_base {
     onUsernameSelected(agent: AgentProfile): void;
     render(): import("lit-html").TemplateResult<1>;
     static get styles(): import("lit").CSSResultGroup[];
-    static elementDefinitions: {
+    static get scopedElements(): {
         'ui5-avatar': any;
         'mwc-textfield': typeof TextField;
         'mwc-menu-surface': typeof MenuSurface;

@@ -2,14 +2,14 @@ import { __decorate } from "tslib";
 import { css, html } from 'lit';
 import { state } from 'lit/decorators.js';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { requestContext } from '@holochain-open-dev/context';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
-export class ListProfiles extends ScopedRegistryHost(MobxLitElement) {
+export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
     constructor() {
         /** Private properties */
         super(...arguments);
@@ -51,6 +51,14 @@ export class ListProfiles extends ScopedRegistryHost(MobxLitElement) {
       </mwc-list>
     `;
     }
+    static get scopedElements() {
+        return {
+            'ui5-avatar': Avatar,
+            'mwc-circular-progress': CircularProgress,
+            'mwc-list': List,
+            'mwc-list-item': ListItem,
+        };
+    }
 }
 ListProfiles.styles = [
     sharedStyles,
@@ -60,12 +68,6 @@ ListProfiles.styles = [
       }
     `,
 ];
-ListProfiles.elementDefinitions = {
-    'ui5-avatar': Avatar,
-    'mwc-circular-progress': CircularProgress,
-    'mwc-list': List,
-    'mwc-list-item': ListItem,
-};
 __decorate([
     state()
 ], ListProfiles.prototype, "_loading", void 0);

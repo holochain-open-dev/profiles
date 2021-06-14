@@ -1,7 +1,6 @@
 export class ProfilesService {
-    constructor(appWebsocket, cellId, zomeName = 'profiles') {
-        this.appWebsocket = appWebsocket;
-        this.cellId = cellId;
+    constructor(cellClient, zomeName = 'profiles') {
+        this.cellClient = cellClient;
         this.zomeName = zomeName;
     }
     async getMyProfile() {
@@ -26,14 +25,7 @@ export class ProfilesService {
         };
     }
     callZome(fn_name, payload) {
-        return this.appWebsocket.callZome({
-            cap: null,
-            cell_id: this.cellId,
-            zome_name: this.zomeName,
-            fn_name: fn_name,
-            payload: payload,
-            provenance: this.cellId[1],
-        });
+        return this.cellClient.callZome(this.zomeName, fn_name, payload);
     }
 }
 //# sourceMappingURL=profiles.service.js.map

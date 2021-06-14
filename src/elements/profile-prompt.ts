@@ -5,7 +5,7 @@ import { Button } from 'scoped-material-components/mwc-button';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { MobxLitElement } from '@adobe/lit-mobx';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { requestContext } from '@holochain-open-dev/context';
 
 import { sharedStyles } from './utils/shared-styles';
@@ -16,7 +16,7 @@ import { PROFILES_STORE_CONTEXT } from '../types';
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends ScopedRegistryHost(MobxLitElement) {
+export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
   /** Public attributes */
 
   /** Private properties */
@@ -51,12 +51,14 @@ export class ProfilePrompt extends ScopedRegistryHost(MobxLitElement) {
     `;
   }
 
-  static elementDefinitions = {
-    'mwc-textfield': TextField,
-    'mwc-button': Button,
-    'mwc-circular-progress': CircularProgress,
-    'create-profile-form': CreateProfileForm,
-  };
+  static get scopedElements() {
+    return {
+      'mwc-textfield': TextField,
+      'mwc-button': Button,
+      'mwc-circular-progress': CircularProgress,
+      'create-profile-form': CreateProfileForm,
+    };
+  }
 
   static get styles() {
     return [

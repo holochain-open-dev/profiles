@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { query, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { requestContext } from '@holochain-open-dev/context';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
 import { TextField } from 'scoped-material-components/mwc-textfield';
@@ -20,7 +20,7 @@ import { ProfilesStore } from '../profiles.store';
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends ScopedRegistryHost(MobxLitElement) {
+export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
   /** Public attributes */
 
   /**
@@ -205,12 +205,14 @@ export class CreateProfileForm extends ScopedRegistryHost(MobxLitElement) {
     `;
   }
 
-  static elementDefinitions = {
-    'mwc-textfield': TextField,
-    'mwc-button': Button,
-    'mwc-icon': Icon,
-    'mwc-card': Card,
-    'mwc-ripple': Ripple,
-    'ui5-avatar': Avatar,
-  };
+  static get scopedElements() {
+    return {
+      'mwc-textfield': TextField,
+      'mwc-button': Button,
+      'mwc-icon': Icon,
+      'mwc-card': Card,
+      'mwc-ripple': Ripple,
+      'ui5-avatar': Avatar,
+    };
+  }
 }

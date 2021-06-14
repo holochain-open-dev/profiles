@@ -7,5 +7,6 @@ export declare type HeaderHashB64 = HoloHashB64;
 export declare type DhtOpHashB64 = HoloHashB64;
 export declare type DnaHashB64 = HoloHashB64;
 export declare type AgentPubKeyB64 = HoloHashB64;
+export declare type AnyDhtHashB64 = HoloHashB64;
 export declare type Signature = Uint8Array;
 export declare type CellId = [DnaHashB64, AgentPubKeyB64];

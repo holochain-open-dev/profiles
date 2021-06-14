@@ -3,7 +3,7 @@ import { html } from 'lit';
 import { query, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { requestContext } from '@holochain-open-dev/context';
-import { ScopedRegistryHost } from '@lit-labs/scoped-registry-mixin';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { TextField } from 'scoped-material-components/mwc-textfield';
 import { Button } from 'scoped-material-components/mwc-button';
@@ -17,7 +17,7 @@ import { PROFILES_STORE_CONTEXT } from '../types';
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends ScopedRegistryHost(MobxLitElement) {
+export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -162,15 +162,17 @@ export class CreateProfileForm extends ScopedRegistryHost(MobxLitElement) {
       </mwc-card>
     `;
     }
+    static get scopedElements() {
+        return {
+            'mwc-textfield': TextField,
+            'mwc-button': Button,
+            'mwc-icon': Icon,
+            'mwc-card': Card,
+            'mwc-ripple': Ripple,
+            'ui5-avatar': Avatar,
+        };
+    }
 }
-CreateProfileForm.elementDefinitions = {
-    'mwc-textfield': TextField,
-    'mwc-button': Button,
-    'mwc-icon': Icon,
-    'mwc-card': Card,
-    'mwc-ripple': Ripple,
-    'ui5-avatar': Avatar,
-};
 __decorate([
     property({ type: Number, attribute: 'min-length' })
 ], CreateProfileForm.prototype, "minLength", void 0);
