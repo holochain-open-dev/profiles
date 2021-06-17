@@ -21,6 +21,7 @@
     <context-provider id="provider">
       <profile-prompt>
         <search-agent include-myself clear-on-select></search-agent>
+        <list-profiles></list-profiles>
       </profile-prompt>
     </context-provider>
 
@@ -31,6 +32,7 @@
         ProfilesService,
         ProfilesStore,
         PROFILES_STORE_CONTEXT,
+        ListProfiles
       } from '../dist';
       import ConductorApi from '@holochain/conductor-api';
       import { ContextProviderElement } from '@holochain-open-dev/context';
@@ -59,6 +61,7 @@
 
         customElements.define('profile-prompt', ProfilePrompt);
         customElements.define('search-agent', SearchAgent);
+        customElements.define('list-profiles', ListProfiles);
       })();
     </script>
   </body>

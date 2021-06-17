@@ -21,3 +21,4 @@
 /bundle/
 /out-tsc/
 /storybook-static/
+.hc*
