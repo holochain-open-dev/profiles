@@ -28,11 +28,11 @@
   },
   "dependencies": {
     "@adobe/lit-mobx": "^2.0.0-rc.4",
+    "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
     "@holochain-open-dev/cell-client": "git+https://github.com/holochain-open-dev/cell-client.git#build",
     "@holochain-open-dev/context": "git+https://github.com/holochain-open-dev/context.git#ui-build",
     "@holochain-open-dev/core-types": "git+https://github.com/holochain-open-dev/core-types.git#build",
     "@open-wc/scoped-elements": "^2.0.0-next.4",
-    "@ui5/webcomponents": "^1.0.0-rc.11",
     "lit": "^2.0.0-rc.2",
     "mobx": "^6.3.2",
     "scoped-material-components": "^0.1.6"
@@ -56,7 +56,7 @@
     "deepmerge": "^3.2.0",
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.11.0",
-    "gh-pages": "^3.1.0",
+    "gh-pages": "~3.1.0",
     "husky": "^1.0.0",
     "lint-staged": "^10.0.0",
     "prettier": "^2.0.4",

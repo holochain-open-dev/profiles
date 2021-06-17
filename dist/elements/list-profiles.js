@@ -7,8 +7,8 @@ import { requestContext } from '@holochain-open-dev/context';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
+import { HoloIdenticon } from './holo-identicon';
 export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
     constructor() {
         /** Private properties */
@@ -38,13 +38,15 @@ export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
         return html `
       <mwc-list style="min-width: 80px;">
         ${Object.entries(allProfiles).map(([agent_pub_key, profile]) => html `
-            <mwc-list-item graphic="avatar" .value=${agent_pub_key}>
-              <ui5-avatar
+            <mwc-list-item
+              graphic="avatar"
+              .value=${agent_pub_key}
+              style="--mdc-list-item-graphic-size: 32px;"
+            >
+              <holo-identicon
                 slot="graphic"
-                .image=${profile.fields.avatar}
-                initials=${this.initials(profile.nickname)}
-                size="XS"
-              ></ui5-avatar>
+                .hash=${agent_pub_key}
+              ></holo-identicon>
               <span style="margin-left: 8px;">${profile.nickname}</span>
             </mwc-list-item>
           `)}
@@ -53,7 +55,7 @@ export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
     }
     static get scopedElements() {
         return {
-            'ui5-avatar': Avatar,
+            'holo-identicon': HoloIdenticon,
             'mwc-circular-progress': CircularProgress,
             'mwc-list': List,
             'mwc-list-item': ListItem,

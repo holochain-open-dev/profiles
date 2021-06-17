@@ -5,7 +5,6 @@ import { TextField } from 'scoped-material-components/mwc-textfield';
 import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
 import { List } from 'scoped-material-components/mwc-list';
 import { ListItem } from 'scoped-material-components/mwc-list-item';
-import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { requestContext } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { MobxLitElement } from '@adobe/lit-mobx';
@@ -13,6 +12,7 @@ import { MobxLitElement } from '@adobe/lit-mobx';
 import { AgentProfile, PROFILES_STORE_CONTEXT } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
+import { HoloIdenticon } from './holo-identicon';
 
 /**
  * @element search-agent
@@ -143,12 +143,12 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
                     <mwc-list-item
                       graphic="avatar"
                       .value=${agent.agent_pub_key}
+                      style="--mdc-list-item-graphic-size: 32px;"
                     >
-                      <ui5-avatar
+                      <holo-identicon
                         slot="graphic"
-                        image="${agent.profile.fields.avatar}"
-                        size="XS"
-                      ></ui5-avatar>
+                        .hash=${agent.agent_pub_key}
+                      ></holo-identicon>
                       <span style="margin-left: 8px;"
                         >${agent.profile.nickname}</span
                       >
@@ -179,7 +179,7 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
 
   static get scopedElements() {
     return {
-      'ui5-avatar': Avatar,
+      'holo-identicon': HoloIdenticon,
       'mwc-textfield': TextField,
       'mwc-menu-surface': MenuSurface,
       'mwc-list': List,

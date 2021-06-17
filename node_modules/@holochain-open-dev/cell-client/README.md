@@ -50,6 +50,8 @@ async function setupHoloClient() {
 }
 ```
 
+See all documentation for the `WebSdkConnection` [here](https://github.com/holo-host/web-sdk).
+
 ## Usage
 
 ```ts

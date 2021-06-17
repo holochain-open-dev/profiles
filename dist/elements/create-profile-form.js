@@ -1,6 +1,6 @@
 import { __decorate } from "tslib";
 import { html } from 'lit';
-import { query, property, state } from 'lit/decorators.js';
+import { query, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { requestContext } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
@@ -10,7 +10,6 @@ import { Button } from 'scoped-material-components/mwc-button';
 import { Card } from 'scoped-material-components/mwc-card';
 import { Ripple } from 'scoped-material-components/mwc-ripple';
 import { Icon } from 'scoped-material-components/mwc-icon';
-import Avatar from '@ui5/webcomponents/dist/Avatar';
 import { sharedStyles } from './utils/shared-styles';
 import { PROFILES_STORE_CONTEXT } from '../types';
 /**
@@ -27,7 +26,6 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
          */
         this.minLength = 3;
         this._existingUsernames = {};
-        this._avatar = undefined;
     }
     firstUpdated() {
         this._nicknameField.validityTransform = (newValue) => {
@@ -54,9 +52,6 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
         const nickname = this._nicknameField.value;
         try {
             const fields = {};
-            if (this._avatar) {
-                fields['avatar'] = this._avatar;
-            }
             await this._store.createProfile({
                 nickname,
                 fields,
@@ -77,67 +72,12 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
             this._nicknameField.reportValidity();
         }
     }
-    // Crop the image and return a base64 bytes string of its content
-    cropPlusExport(img, cropX, cropY, cropWidth, cropHeight) {
-        // create a temporary canvas sized to the cropped size
-        const canvas1 = document.createElement('canvas');
-        const ctx1 = canvas1.getContext('2d');
-        canvas1.width = cropWidth;
-        canvas1.height = cropHeight;
-        // use the extended from of drawImage to draw the
-        // cropped area to the temp canvas
-        ctx1 === null || ctx1 === void 0 ? void 0 : ctx1.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-        // return the .toDataURL of the temp canvas
-        return canvas1.toDataURL();
-    }
-    onAvatarUploaded() {
-        if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                var _a;
-                const img = new Image();
-                img.crossOrigin = 'anonymous';
-                img.onload = () => {
-                    this._avatar = this.cropPlusExport(img, 0, 0, 100, 100);
-                };
-                img.src = (_a = e.target) === null || _a === void 0 ? void 0 : _a.result;
-            };
-            reader.readAsDataURL(this._avatarFilePicker.files[0]);
-        }
-    }
     render() {
         return html `
-      <input
-        type="file"
-        id="avatar-file-picker"
-        style="display: none;"
-        @change=${this.onAvatarUploaded}
-      />
       <mwc-card style="width: auto">
         <div class="column" style="margin: 16px;">
           <span class="title" style="margin-bottom: 24px;">Create Profile</span>
           <div class="row center-content">
-            ${this._avatar
-            ? html `
-                  <ui5-avatar
-                    label="Avatar"
-                    image="${this._avatar}"
-                    style="margin-bottom: 19px;"
-                  ></ui5-avatar>
-                `
-            : html `
-                  <div
-                    @click=${() => this._avatarFilePicker.click()}
-                    style="width: 100px; height: 80px; margin-right: 8px; border-radius: 4px; position: relative; background-color: #d3d3d373; cursor: pointer;"
-                    class="column center-content"
-                  >
-                    <mwc-ripple></mwc-ripple>
-
-                    <mwc-icon style="margin-bottom: 8px;">add</mwc-icon>
-                    <span>Avatar</span>
-                  </div>
-                `}
-
             <mwc-textfield
               id="nickname-field"
               outlined
@@ -169,7 +109,6 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
             'mwc-icon': Icon,
             'mwc-card': Card,
             'mwc-ripple': Ripple,
-            'ui5-avatar': Avatar,
         };
     }
 }
@@ -179,12 +118,6 @@ __decorate([
 __decorate([
     query('#nickname-field')
 ], CreateProfileForm.prototype, "_nicknameField", void 0);
-__decorate([
-    query('#avatar-file-picker')
-], CreateProfileForm.prototype, "_avatarFilePicker", void 0);
-__decorate([
-    state()
-], CreateProfileForm.prototype, "_avatar", void 0);
 __decorate([
     requestContext(PROFILES_STORE_CONTEXT)
 ], CreateProfileForm.prototype, "_store", void 0);

@@ -19,17 +19,13 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
     minLength: number;
     /** Private properties */
     _nicknameField: TextField;
-    _avatarFilePicker: HTMLInputElement;
     _existingUsernames: {
         [key: string]: boolean;
     };
-    _avatar: string | undefined;
     _store: ProfilesStore;
     firstUpdated(): void;
     static get styles(): import("lit").CSSResultGroup;
     createProfile(): Promise<void>;
-    cropPlusExport(img: HTMLImageElement, cropX: number, cropY: number, cropWidth: number, cropHeight: number): string;
-    onAvatarUploaded(): void;
     render(): import("lit-html").TemplateResult<1>;
     static get scopedElements(): {
         'mwc-textfield': typeof TextField;
@@ -37,7 +33,6 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
         'mwc-icon': typeof Icon;
         'mwc-card': typeof Card;
         'mwc-ripple': typeof Ripple;
-        'ui5-avatar': any;
     };
 }
 export {};

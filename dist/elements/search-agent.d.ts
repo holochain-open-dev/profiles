@@ -5,6 +5,7 @@ import { ListItem } from 'scoped-material-components/mwc-list-item';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { AgentProfile } from '../types';
 import { ProfilesStore } from '../profiles.store';
+import { HoloIdenticon } from './holo-identicon';
 declare const SearchAgent_base: typeof MobxLitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element search-agent
@@ -41,7 +42,7 @@ export declare class SearchAgent extends SearchAgent_base {
     render(): import("lit-html").TemplateResult<1>;
     static get styles(): import("lit").CSSResultGroup[];
     static get scopedElements(): {
-        'ui5-avatar': any;
+        'holo-identicon': typeof HoloIdenticon;
         'mwc-textfield': typeof TextField;
         'mwc-menu-surface': typeof MenuSurface;
         'mwc-list': typeof List;
