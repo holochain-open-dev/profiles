@@ -5,6 +5,7 @@ mod profile;
 mod utils;
 
 pub use profile::*;
+pub use utils::*;
 
 pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
