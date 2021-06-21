@@ -4,6 +4,8 @@ use hdk::prelude::*;
 mod profile;
 mod utils;
 
+pub use profile::*;
+
 use profile::{AgentProfile, Profile};
 
 pub fn err(reason: &str) -> WasmError {
