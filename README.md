@@ -29,13 +29,13 @@ These are the things you need to know to decide if you can use this module in yo
 
 ```toml
 [dependencies]
-hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", package = "hc_zome_profiles"}
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main" package = "hc_zome_profiles"}
 ```
 
 5. Create a `src` folder besides the `Cargo.toml` with this content:
 
 ```rust
-extern crate profiles;
+extern crate hc_zome_profiles;
 ```
 
 6. Add the zome into your `dna.yaml` file.
@@ -43,7 +43,11 @@ extern crate profiles;
 
 ### Using the UI module
 
-1. Install the module with `npm install "https://github.com/holochain-open-dev/profiles#ui-build"`.
+1. Install the module with:
+
+```bash 
+npm install "https://github.com/holochain-open-dev/profiles#ui-build"
+```
 
 2. Import and create the mobx store for profiles and for this module, and define the custom elements you need in your app:
 
@@ -66,9 +70,9 @@ async function setupProfiles() {
     installed_app_id: "test-app",
   });
 
-  const cellId = appInfo.cell_data[0].cell_id;
+  const cellData = appInfo.cell_data[0];
 
-  const cellClient = new HolochainClient(appWs, cellId);
+  const cellClient = new HolochainClient(appWs, cellData);
 
   const profilesService = new ProfilesService(cellClient);
   const profilesStore = new ProfilesStore(profilesService);
@@ -94,6 +98,8 @@ async function setupProfiles() {
 ```
 
 Take into account that at this point the elements already expect a holochain conductor running at `ws://localhost:8888`.
+
+If you are using React, you can include custom elements with [this package](https://www.npmjs.com/package/@lit-labs/react).
 
 You can see a full working example [here](/ui/demo/index.html).
 
