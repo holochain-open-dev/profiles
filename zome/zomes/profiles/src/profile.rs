@@ -1,13 +1,31 @@
 use crate::utils;
-use holo_hash::AgentPubKeyB64;
 use hdk::prelude::link::Link;
 use hdk::prelude::*;
+use holo_hash::AgentPubKeyB64;
 use std::collections::BTreeMap;
 use std::convert::{TryFrom, TryInto};
 
 #[hdk_entry(id = "profile", visibility = "public")]
 #[derive(Clone)]
 pub struct Profile {
+    pub agent_pub_key: AgentPubKey,
+    pub nickname: String,
+    pub fields: BTreeMap<String, String>,
+}
+
+impl From<ProfileInput> for Profile {
+    fn from(input: ProfileInput) -> Self {
+        Profile {
+            agent_pub_key: AgentPubKey::from(input.agent_pub_key),
+            nickname: input.nickname,
+            fields: input.fields,
+        }
+    }
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ProfileInput {
+    pub agent_pub_key: AgentPubKeyB64,
     pub nickname: String,
     pub fields: BTreeMap<String, String>,
 }
@@ -19,8 +37,9 @@ pub struct AgentProfile {
     pub profile: Profile,
 }
 
-pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
+pub fn create_profile(profile_input: ProfileInput) -> ExternResult<AgentProfile> {
     let agent_info = agent_info()?;
+    let profile = Profile::from(profile_input);
 
     create_entry(&profile.clone())?;
 
@@ -53,7 +72,9 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
     if nickname_prefix.len() < 3 {
-        return Err(crate::err("Cannot search with a prefix less than 3 characters"));
+        return Err(crate::err(
+            "Cannot search with a prefix less than 3 characters",
+        ));
     }
 
     let prefix_path = prefix_path(nickname_prefix);
