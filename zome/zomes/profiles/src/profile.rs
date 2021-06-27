@@ -13,19 +13,8 @@ pub struct Profile {
     pub fields: BTreeMap<String, String>,
 }
 
-impl From<ProfileInput> for Profile {
-    fn from(input: ProfileInput) -> Self {
-        Profile {
-            agent_pub_key: AgentPubKey::from(input.agent_pub_key),
-            nickname: input.nickname,
-            fields: input.fields,
-        }
-    }
-}
-
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct ProfileInput {
-    pub agent_pub_key: AgentPubKeyB64,
     pub nickname: String,
     pub fields: BTreeMap<String, String>,
 }
@@ -39,7 +28,11 @@ pub struct AgentProfile {
 
 pub fn create_profile(profile_input: ProfileInput) -> ExternResult<AgentProfile> {
     let agent_info = agent_info()?;
-    let profile = Profile::from(profile_input);
+    let profile = Profile {
+        agent_pub_key: agent_info.agent_initial_pubkey.clone(),
+        nickname: profile_input.nickname,
+        fields: profile_input.fields
+    };
 
     create_entry(&profile.clone())?;
 

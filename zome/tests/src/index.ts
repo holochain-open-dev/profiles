@@ -47,7 +47,6 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
     "profiles",
     "create_profile",
     {
-      agent_pub_key: alice_profiles.cells[0].cellId[1],
       nickname: "alice",
       fields: {
         avatar: "aliceavatar",
@@ -59,7 +58,6 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   await sleep(500);
 
   profileHash = await bob_profiles.cells[0].call("profiles", "create_profile", {
-    agent_pub_key: bob_profiles.cells[0].cellId[1],
     nickname: "bobbo",
     fields: {
       avatar: "bobboavatar",
