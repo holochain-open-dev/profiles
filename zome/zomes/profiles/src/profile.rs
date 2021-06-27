@@ -1,13 +1,20 @@
 use crate::utils;
-use holo_hash::AgentPubKeyB64;
 use hdk::prelude::link::Link;
 use hdk::prelude::*;
+use holo_hash::AgentPubKeyB64;
 use std::collections::BTreeMap;
 use std::convert::{TryFrom, TryInto};
 
 #[hdk_entry(id = "profile", visibility = "public")]
 #[derive(Clone)]
 pub struct Profile {
+    pub agent_pub_key: AgentPubKey,
+    pub nickname: String,
+    pub fields: BTreeMap<String, String>,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct ProfileInput {
     pub nickname: String,
     pub fields: BTreeMap<String, String>,
 }
@@ -19,8 +26,13 @@ pub struct AgentProfile {
     pub profile: Profile,
 }
 
-pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
+pub fn create_profile(profile_input: ProfileInput) -> ExternResult<AgentProfile> {
     let agent_info = agent_info()?;
+    let profile = Profile {
+        agent_pub_key: agent_info.agent_initial_pubkey.clone(),
+        nickname: profile_input.nickname,
+        fields: profile_input.fields
+    };
 
     create_entry(&profile.clone())?;
 
@@ -53,7 +65,9 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
     if nickname_prefix.len() < 3 {
-        return Err(crate::err("Cannot search with a prefix less than 3 characters"));
+        return Err(crate::err(
+            "Cannot search with a prefix less than 3 characters",
+        ));
     }
 
     let prefix_path = prefix_path(nickname_prefix);

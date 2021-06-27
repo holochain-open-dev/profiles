@@ -2,8 +2,6 @@ import {
   Orchestrator,
   Config,
   InstallAgentsHapps,
-  TransportConfigType,
-  NetworkType,
 } from "@holochain/tryorama";
 import path from "path";
 

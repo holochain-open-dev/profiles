@@ -1,11 +1,13 @@
-use holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
+use holo_hash::AgentPubKeyB64;
 
 mod profile;
 mod utils;
 
 pub use profile::*;
 pub use utils::*;
+
+use profile::AgentProfile;
 
 pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
@@ -16,8 +18,8 @@ entry_defs![Path::entry_def(), profile::Profile::entry_def()];
 /** Profiles **/
 
 #[hdk_extern]
-pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
-    profile::create_profile(profile)
+pub fn create_profile(profile_input: ProfileInput) -> ExternResult<AgentProfile> {
+    profile::create_profile(profile_input)
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
