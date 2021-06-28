@@ -7,8 +7,6 @@ mod utils;
 pub use profile::*;
 pub use utils::*;
 
-use profile::AgentProfile;
-
 pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
 }
