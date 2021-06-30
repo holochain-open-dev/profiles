@@ -24,6 +24,6 @@ export class HoloClient implements CellClient {
   }
 
   addSignalHandler(signalHandler: AppSignalCb) {
-    new Connection(this.connection.chaperone_url, signalHandler, this.branding);
+    new Connection(this.connection.chaperone_url.origin, signalHandler, this.branding);
   }
 }

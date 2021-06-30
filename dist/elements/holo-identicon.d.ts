@@ -6,6 +6,6 @@ export declare class HoloIdenticon extends LitElement {
     shape: 'square' | 'circle';
     _canvas: HTMLCanvasElement;
     updated(changedValues: PropertyValues): void;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static get styles(): import("lit").CSSResultGroup;
 }

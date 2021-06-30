@@ -26,7 +26,7 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
     firstUpdated(): void;
     static get styles(): import("lit").CSSResultGroup;
     createProfile(): Promise<void>;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;

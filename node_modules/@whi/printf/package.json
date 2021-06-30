@@ -1,0 +1,15 @@
+{
+  "name": "@whi/printf",
+  "version": "1.0.0",
+  "description": "Keep program output clearly separate from logging or console.log statements",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Brisebois",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "sprintf-js": "^1.1.2"
+  }
+}

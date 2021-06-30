@@ -1,0 +1,18 @@
+{
+  "name": "@whi/http_utils",
+  "version": "0.1.0",
+  "description": "HTTP utilities for use in tessting designed to simplify manangement with flexible controls",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matthew Brisebois <matthew@webheroes.ca>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mjbrisebois/node_http_utils/"
+  },
+  "dependencies": {
+    "@whi/stdlog": "^0.3.0"
+  }
+}

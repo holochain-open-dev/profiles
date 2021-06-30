@@ -11,7 +11,7 @@ export declare class ListProfiles extends ListProfiles_base {
     _store: ProfilesStore;
     firstUpdated(): Promise<void>;
     initials(nickname: string): string;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static styles: import("lit").CSSResultGroup[];
     static get scopedElements(): {
         'holo-identicon': typeof HoloIdenticon;
