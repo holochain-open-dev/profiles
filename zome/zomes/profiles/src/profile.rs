@@ -1,6 +1,5 @@
 use crate::utils;
-use holo_hash::AgentPubKeyB64;
-use hdk::prelude::link::Link;
+use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 use std::collections::BTreeMap;
 use std::convert::{TryFrom, TryInto};

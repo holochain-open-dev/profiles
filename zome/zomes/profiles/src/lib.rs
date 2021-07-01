@@ -1,4 +1,4 @@
-use holo_hash::AgentPubKeyB64;
+use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
 mod profile;
