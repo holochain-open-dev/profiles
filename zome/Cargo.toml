@@ -8,6 +8,3 @@ opt-level = "z"
 
 [profile.release]
 opt-level = "z"
-
-[patch.crates-io]
-hdk = {git = "https://github.com/holochain/holochain", rev = "09397e68bd3163d3768a085694a6cd451124cc34", package = "hdk"}
