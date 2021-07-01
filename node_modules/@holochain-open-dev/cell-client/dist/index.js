@@ -1,5 +1,4 @@
 import { Connection } from '@holo-host/web-sdk';
-export { Connection as WebSdkConnection } from '@holo-host/web-sdk';
 import * as ConductorApi from '@holochain/conductor-api';
 
 class HoloClient {
