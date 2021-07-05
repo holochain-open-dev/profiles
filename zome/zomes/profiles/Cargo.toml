@@ -12,4 +12,4 @@ name = "hc_zome_profiles"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.101"
+hdk = {git = "https://github.com/holochain/holochain", rev = "363af6d8af8d18e4616f6aa56ad4d1f0fabaafb7", package = "hdk", version = "0.0.101-alpha.0"}
