@@ -132,18 +132,12 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
           ${this._filteredAgents.length > 0
             ? this._filteredAgents.map(
                 agent => html`
-                  <mwc-list
-                    @selected=${(e: CustomEvent) =>
-                      this.onUsernameSelected(
-                        this._filteredAgents[e.detail.index]
-                      )}
-                    activatable
-                    style="min-width: 80px;"
-                  >
+                  <mwc-list style="min-width: 80px;">
                     <mwc-list-item
                       graphic="avatar"
                       .value=${agent.agent_pub_key}
                       style="--mdc-list-item-graphic-size: 32px;"
+                      @request-selected=${() => this.onUsernameSelected(agent)}
                     >
                       <holo-identicon
                         slot="graphic"
