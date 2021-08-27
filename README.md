@@ -41,6 +41,13 @@ extern crate hc_zome_profiles;
 6. Add the zome into your `dna.yaml` file.
 7. Compile the DNA with the usual `CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown`.
 
+### Versions
+
+Update the patch version in the `zome/Cargo.toml` to match the revision of holochain that you are using.
+
+Note: if there has been a breaking change in the hdk that your zome requires, you may need to update the holochain version that is specified in the default.nix file to be able to run the developer demo.
+
+
 ### Using the UI module
 
 1. Install the module with:
