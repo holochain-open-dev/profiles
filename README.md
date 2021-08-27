@@ -29,10 +29,10 @@ These are the things you need to know to decide if you can use this module in yo
 
 ```toml
 [dependencies]
-hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main" package = "hc_zome_profiles"}
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main", package = "hc_zome_profiles"}
 ```
 
-5. Create a `src` folder besides the `Cargo.toml` with this content:
+5. Create a `src` folder next to the `Cargo.toml`.  In that folder at a `lib.rs` file with this content:
 
 ```rust
 extern crate hc_zome_profiles;
@@ -45,7 +45,8 @@ extern crate hc_zome_profiles;
 
 1. Install the module with:
 
-```bash 
+```bash
+cd ui
 npm install "https://github.com/holochain-open-dev/profiles#ui-build"
 ```
 
