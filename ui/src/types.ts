@@ -11,5 +11,3 @@ export interface AgentProfile {
   agent_pub_key: AgentPubKeyB64;
   profile: Profile;
 }
-
-export const PROFILES_STORE_CONTEXT = 'hc_zome_profiles/store';

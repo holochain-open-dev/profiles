@@ -1,21 +1,40 @@
+# Example: Custom Holochain And Binaries
+# 
+# The following `shell.nix` file can be used in your project's root folder and activated with `nix-shell`.
+# It uses a custom revision and a custom set of binaries to be installed.
+
+{ 
+  holonixPath ?  builtins.fetchTarball { url = "https://github.com/holochain/holonix/archive/develop.tar.gz"; }
+}:
+
 let
-  holonixPath = builtins.fetchTarball {
-    url = "https://github.com/holochain/holonix/archive/3e94163765975f35f7d8ec509b33c3da52661bd1.tar.gz";
-    sha256 = "sha256:07sl281r29ygh54dxys1qpjvlvmnh7iv1ppf79fbki96dj9ip7d2";
-  };
   holonix = import (holonixPath) {
-    includeHolochainBinaries = true;
+    include = {
+        # making this explicit even though it's the default
+        holochainBinaries = true;
+    };
+
     holochainVersionId = "custom";
 
     holochainVersion = {
-     rev = "09397e68bd3163d3768a085694a6cd451124cc34";
-     sha256 = "sha256:0pxjnzf1qfns2smc0h1fkglc86kwyqzwsz908k374rdgh78sba6c";
-     cargoSha256 = "sha256:097qvqzpx9vmvz20ya0260mia4y49v66kj9dn1a7bs344w2drpj2";
-     bins = {
-       holochain = "holochain";
-       hc = "hc";
-     };
+      rev = "d003eb7a45f1d7125c4701332202761721793d68";
+      sha256 = "0qxadszm2a7807w49kfbj7cx6lr31qryxcyd2inyv7q5j7qbanf2";
+      cargoSha256 = "129wicin99kmxb2qwhll8f4q78gviyp73hrkm6klpkql6810y3jy";
+      bins = {
+        holochain = "holochain";
+        hc = "hc";
+      };
+
+      lairKeystoreHashes = {
+        sha256 = "0khg5w5fgdp1sg22vqyzsb2ri7znbxiwl7vr2zx6bwn744wy2cyv";
+        cargoSha256 = "1lm8vrxh7fw7gcir9lq85frfd0rdcca9p7883nikjfbn21ac4sn4";
+      };
     };
-    holochainOtherDepsNames = ["lair-keystore"];
   };
-in holonix.main
+  nixpkgs = holonix.pkgs;
+in nixpkgs.mkShell {
+  inputsFrom = [ holonix.main ];
+  buildInputs = with nixpkgs; [
+    nodejs-16_x
+  ];
+}

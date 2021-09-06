@@ -1,19 +1,22 @@
 import { html } from 'lit';
 import { query, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Button } from 'scoped-material-components/mwc-button';
-import { Card } from 'scoped-material-components/mwc-card';
-import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { Icon } from 'scoped-material-components/mwc-icon';
+import {
+  TextField,
+  Button,
+  Card,
+  Ripple,
+  Icon,
+} from '@scoped-elements/material-web';
 
 import { sharedStyles } from './utils/shared-styles';
-import { Dictionary, PROFILES_STORE_CONTEXT } from '../types';
+import { Dictionary } from '../types';
 import { ProfilesStore } from '../profiles.store';
+import { profilesStoreContext } from '../context';
 
 /**
  * @element create-profile-form
@@ -36,7 +39,7 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
 
   _existingUsernames: { [key: string]: boolean } = {};
 
-  @requestContext(PROFILES_STORE_CONTEXT)
+  @contextProvided({ context: profilesStoreContext })
   _store!: ProfilesStore;
 
   firstUpdated() {

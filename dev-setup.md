@@ -1,10 +1,6 @@
 # Developer Setup
 
-This respository is structured in the following way:
-
-- `ui/`: UI library.
-- `zome/`: example DNA with the `profiles` code.
-- Top level `Cargo.toml` is a virtual package necessary for other DNAs to include this zome by pointing to this git repository.
+> TLDR: run `npm install` and `npm start` inside the `nix-shell` for this repository.
 
 ## Requirements
 
@@ -16,7 +12,7 @@ This respository is structured in the following way:
 nix-shell .
 ```
 
-This will take a long time the first time you do it. To verify you have `holochain` and `hc` correctly installed: 
+This will take a long time the first time you do it. To verify you have `holochain` and `hc` correctly installed:
 
 ```bash
 holochain --version
@@ -25,7 +21,31 @@ holochain --version
 Should give something like:
 
 ```bash
-holochain 0.0.100
+holochain 0.0.104
 ```
 
-Read the [UI developer setup](/ui/README.md) and the [Zome developer setup](/zome/README.md). Run all the instructions there always from inside this nix-shell.
+## Install
+
+```bash
+npm install
+```
+
+## Running
+
+```bash
+npm start
+```
+
+## Building
+
+```bash
+npm run build:happ
+```
+
+This should create a `workdir/happ/profiles-test.happ` file.
+
+## Testing
+
+```bash
+npm test
+```

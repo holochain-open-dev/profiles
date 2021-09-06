@@ -1,10 +1,15 @@
-[workspace]
-members = [
-  "zomes/profiles",
-]
+[package]
+authors = ["guillem.cordoba@gmail.com"]
+edition = "2018"
+name = "hc_zome_profiles"
+version = "0.0.1"
 
-[profile.dev]
-opt-level = "z"
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "hc_zome_profiles"
 
-[profile.release]
-opt-level = "z"
+[dependencies]
+derive_more = "0"
+serde = "1"
+
+hdk = "0.0"

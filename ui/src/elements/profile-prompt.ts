@@ -1,17 +1,19 @@
-import { css, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { css, html, PropertyValues } from 'lit';
+import { property, state } from 'lit/decorators.js';
 
-import { Button } from 'scoped-material-components/mwc-button';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import { TextField } from 'scoped-material-components/mwc-textfield';
+import {
+  Button,
+  CircularProgress,
+  TextField,
+} from '@scoped-elements/material-web';
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
 import { ProfilesStore } from '../profiles.store';
-import { PROFILES_STORE_CONTEXT } from '../types';
+import { profilesStoreContext } from '../context';
 
 /**
  * @element profile-prompt
@@ -24,7 +26,7 @@ export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
   @property({ type: Boolean })
   _loading = true;
 
-  @requestContext(PROFILES_STORE_CONTEXT)
+  @contextProvided({ context: profilesStoreContext, multiple: true })
   _store!: ProfilesStore;
 
   async firstUpdated() {

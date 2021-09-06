@@ -3,14 +3,17 @@ import { property, state } from 'lit/decorators.js';
 
 import { MobxLitElement } from '@adobe/lit-mobx';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { contextProvided } from '@lit-labs/context';
+import {
+  CircularProgress,
+  ListItem,
+  List,
+} from '@scoped-elements/material-web';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles.store';
 import { HoloIdenticon } from './holo-identicon';
+import { profilesStoreContext } from '../context';
 
 export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
   /** Private properties */
@@ -18,7 +21,7 @@ export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
   @state()
   _loading = true;
 
-  @requestContext('hc_zome_profiles/store')
+  @contextProvided({ context: profilesStoreContext })
   _store!: ProfilesStore;
 
   async firstUpdated() {

@@ -52,7 +52,7 @@ npm install "https://github.com/holochain-open-dev/profiles#ui-build"
 2. Import and create the mobx store for profiles and for this module, and define the custom elements you need in your app:
 
 ```js
-import { ContextProviderElement } from "@holochain-open-dev/context";
+import { ContextProviderElement } from "@lit-labs/context";
 import {
   ProfilePrompt,
   ProfilesStore,
