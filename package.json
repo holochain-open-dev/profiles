@@ -7,11 +7,9 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "start": "concurrently --kill-others \"npm:start-ui\" \"npm:start-holochain\"",
-    "start-ui": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names tsc,dev-server \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
-    "start-holochain": "RUST_LOG=warn hc s generate ../zome/workdir/happ/profiles-test.happ --run=8888",
+    "start": "npm run build && CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
     "build": "rimraf dist && tsc",
-    "build-watch": "rimraf dist && tsc --watch",
+    "build-watch": "tsc --watch",
     "test": "npm run build && web-test-runner --coverage",
     "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
     "test-watch": "web-test-runner --watch",
@@ -27,15 +25,15 @@
     "publish-to-branch": "npm run lint && npm run build && gh-pages -d ./ -b ui-build"
   },
   "dependencies": {
-    "@adobe/lit-mobx": "^2.0.0-rc.4",
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
-    "@holochain-open-dev/cell-client": "git+https://github.com/holochain-open-dev/cell-client.git#build",
-    "@holochain-open-dev/context": "git+https://github.com/holochain-open-dev/context.git#ui-build",
-    "@holochain-open-dev/core-types": "git+https://github.com/holochain-open-dev/core-types.git#build",
+    "@holochain-open-dev/cell-client": "github:holochain-open-dev/cell-client#build",
+    "@holochain-open-dev/core-types": "0.1.1",
+    "@lit-labs/context": "github:holochain-open-dev/context#build",
     "@open-wc/scoped-elements": "^2.0.0-next.4",
+    "@scoped-elements/material-web": "github:scoped-elements/material-web#build",
     "lit": "^2.0.0-rc.2",
-    "mobx": "^6.3.2",
-    "scoped-material-components": "^0.1.6"
+    "lit-svelte-stores": "^0.0.7",
+    "svelte": "^3.42.4"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.0.0",

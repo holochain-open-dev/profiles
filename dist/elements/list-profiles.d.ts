@@ -1,18 +1,20 @@
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import { ProfilesStore } from '../profiles.store';
+import { LitElement } from 'lit';
+import { CircularProgress, ListItem, List } from '@scoped-elements/material-web';
+import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
-declare const ListProfiles_base: typeof MobxLitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
+import { Dictionary } from '@holochain-open-dev/core-types';
+import { Profile } from '../types';
+declare const ListProfiles_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 export declare class ListProfiles extends ListProfiles_base {
+    /** Dependencies */
+    _store: ProfilesStore;
     /** Private properties */
     _loading: boolean;
-    _store: ProfilesStore;
+    _allProfiles: Dictionary<Profile>;
     firstUpdated(): Promise<void>;
     initials(nickname: string): string;
     render(): import("lit").TemplateResult<1>;
-    static styles: import("lit").CSSResultGroup[];
+    static styles: import("lit").CSSResult[];
     static get scopedElements(): {
         'holo-identicon': typeof HoloIdenticon;
         'mwc-circular-progress': typeof CircularProgress;

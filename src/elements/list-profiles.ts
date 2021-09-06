@@ -1,25 +1,38 @@
-import { css, html } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { css, html, LitElement } from 'lit';
+import { state } from 'lit/decorators.js';
 
-import { MobxLitElement } from '@adobe/lit-mobx';
+import { StoreController, contextStore } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { contextProvided } from '@lit-labs/context';
+import {
+  CircularProgress,
+  ListItem,
+  List,
+} from '@scoped-elements/material-web';
 
 import { sharedStyles } from './utils/shared-styles';
-import { ProfilesStore } from '../profiles.store';
+import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
+import { profilesStoreContext } from '../context';
+import { Dictionary } from '@holochain-open-dev/core-types';
+import { Profile } from '../types';
 
-export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
+export class ListProfiles extends ScopedElementsMixin(LitElement) {
+  /** Dependencies */
+
+  @contextProvided({ context: profilesStoreContext })
+  _store!: ProfilesStore;
+
   /** Private properties */
 
   @state()
   _loading = true;
 
-  @requestContext('hc_zome_profiles/store')
-  _store!: ProfilesStore;
+  @contextStore({
+    context: profilesStoreContext,
+    selectStore: s => s.knownProfiles,
+  })
+  _allProfiles!: Dictionary<Profile>;
 
   async firstUpdated() {
     await this._store.fetchAllProfiles();
@@ -38,16 +51,15 @@ export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
       return html`<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-    const allProfiles = this._store.profiles;
 
-    if (Object.keys(allProfiles).length === 0)
+    if (Object.keys(this._allProfiles).length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
 
     return html`
       <mwc-list style="min-width: 80px;">
-        ${Object.entries(allProfiles).map(
+        ${Object.entries(this._allProfiles).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"

@@ -18,12 +18,6 @@ export default [
       : 'undefined',
   }),
   builtins(),
-  commonjs({
-    include: [
-      'node_modules/isomorphic-ws/**/*',
-      'node_modules/@msgpack/**/*',
-      'node_modules/@holochain/conductor-api/**/*',
-    ],
-  }),
-  globals()
+  commonjs({}),
+  globals(),
 ];

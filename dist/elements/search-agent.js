@@ -1,21 +1,18 @@
 import { __decorate } from "tslib";
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { requestContext } from '@holochain-open-dev/context';
+import { MenuSurface, List, ListItem, TextField, } from '@scoped-elements/material-web';
+import { contextProvided } from '@lit-labs/context';
+import { contextStore } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { PROFILES_STORE_CONTEXT } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { HoloIdenticon } from './holo-identicon';
+import { profilesStoreContext } from '../context';
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
+export class SearchAgent extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -37,11 +34,12 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
         this._currentFilter = undefined;
         this._lastSearchedPrefix = undefined;
     }
-    /** Private properties */
     get _filteredAgents() {
-        let filtered = this._store.knownProfiles.filter(agent => agent.profile.nickname.startsWith(this._currentFilter));
+        let filtered = Object.entries(this._knownProfiles)
+            .filter(([agentPubKey, profile]) => profile.nickname.startsWith(this._currentFilter))
+            .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
         if (!this.includeMyself) {
-            filtered = filtered.filter(agent => this._store.myAgentPubKey !== agent.agent_pub_key);
+            filtered = filtered.filter(agent => this._profilesStore.myAgentPubKey !== agent.agent_pub_key);
         }
         return filtered;
     }
@@ -50,7 +48,7 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        await this._store.searchProfiles(nicknamePrefix);
+        await this._profilesStore.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)
@@ -154,6 +152,15 @@ __decorate([
     property({ type: String, attribute: 'field-label' })
 ], SearchAgent.prototype, "fieldLabel", void 0);
 __decorate([
+    contextProvided({ context: profilesStoreContext })
+], SearchAgent.prototype, "_profilesStore", void 0);
+__decorate([
+    contextStore({
+        context: profilesStoreContext,
+        selectStore: s => s.knownProfiles,
+    })
+], SearchAgent.prototype, "_knownProfiles", void 0);
+__decorate([
     state()
 ], SearchAgent.prototype, "_currentFilter", void 0);
 __decorate([
@@ -162,7 +169,4 @@ __decorate([
 __decorate([
     query('#overlay')
 ], SearchAgent.prototype, "_overlay", void 0);
-__decorate([
-    requestContext(PROFILES_STORE_CONTEXT)
-], SearchAgent.prototype, "_store", void 0);
 //# sourceMappingURL=search-agent.js.map

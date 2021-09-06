@@ -1,11 +1,7 @@
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Button } from 'scoped-material-components/mwc-button';
-import { Card } from 'scoped-material-components/mwc-card';
-import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { Icon } from 'scoped-material-components/mwc-icon';
-import { ProfilesStore } from '../profiles.store';
-declare const CreateProfileForm_base: typeof MobxLitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
+import { LitElement } from 'lit';
+import { TextField, Button, Card, Ripple, Icon } from '@scoped-elements/material-web';
+import { ProfilesStore } from '../profiles-store';
+declare const CreateProfileForm_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
@@ -17,14 +13,15 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
      * @attr min-length
      */
     minLength: number;
+    /** Dependencies */
+    _store: ProfilesStore;
     /** Private properties */
     _nicknameField: TextField;
     _existingUsernames: {
         [key: string]: boolean;
     };
-    _store: ProfilesStore;
     firstUpdated(): void;
-    static get styles(): import("lit").CSSResultGroup;
+    static get styles(): import("lit").CSSResult;
     createProfile(): Promise<void>;
     render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {

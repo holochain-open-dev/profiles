@@ -1,25 +1,27 @@
-import { html } from 'lit';
+import { html, LitElement } from 'lit';
 import { query, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { MobxLitElement } from '@adobe/lit-mobx';
 
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Button } from 'scoped-material-components/mwc-button';
-import { Card } from 'scoped-material-components/mwc-card';
-import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { Icon } from 'scoped-material-components/mwc-icon';
+import {
+  TextField,
+  Button,
+  Card,
+  Ripple,
+  Icon,
+} from '@scoped-elements/material-web';
 
 import { sharedStyles } from './utils/shared-styles';
-import { Dictionary, PROFILES_STORE_CONTEXT } from '../types';
-import { ProfilesStore } from '../profiles.store';
+import { ProfilesStore } from '../profiles-store';
+import { profilesStoreContext } from '../context';
+import { Dictionary } from '@holochain-open-dev/core-types';
 
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
+export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
   /**
@@ -28,6 +30,11 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
    */
   @property({ type: Number, attribute: 'min-length' })
   minLength = 3;
+  
+  /** Dependencies */
+
+  @contextProvided({ context: profilesStoreContext })
+  _store!: ProfilesStore;
 
   /** Private properties */
 
@@ -35,9 +42,6 @@ export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
   _nicknameField!: TextField;
 
   _existingUsernames: { [key: string]: boolean } = {};
-
-  @requestContext(PROFILES_STORE_CONTEXT)
-  _store!: ProfilesStore;
 
   firstUpdated() {
     this._nicknameField.validityTransform = (newValue: string) => {

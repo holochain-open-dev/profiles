@@ -1,12 +1,10 @@
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { AgentProfile } from '../types';
-import { ProfilesStore } from '../profiles.store';
+import { LitElement } from 'lit';
+import { MenuSurface, List, ListItem, TextField } from '@scoped-elements/material-web';
+import { Dictionary } from '@holochain-open-dev/core-types';
+import { AgentProfile, Profile } from '../types';
+import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
-declare const SearchAgent_base: typeof MobxLitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
+declare const SearchAgent_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
@@ -28,19 +26,21 @@ export declare class SearchAgent extends SearchAgent_base {
      * @attr field-label
      */
     fieldLabel: string;
+    /** Dependencies */
+    _profilesStore: ProfilesStore;
     /** Private properties */
+    _knownProfiles: Dictionary<Profile>;
     get _filteredAgents(): Array<AgentProfile>;
     _currentFilter: string | undefined;
     _lastSearchedPrefix: string | undefined;
     _textField: TextField;
     _overlay: MenuSurface;
-    _store: ProfilesStore;
     firstUpdated(): void;
     searchAgents(nicknamePrefix: string): Promise<void>;
     onFilterChange(): void;
     onUsernameSelected(agent: AgentProfile): void;
     render(): import("lit").TemplateResult<1>;
-    static get styles(): import("lit").CSSResultGroup[];
+    static get styles(): import("lit").CSSResult[];
     static get scopedElements(): {
         'holo-identicon': typeof HoloIdenticon;
         'mwc-textfield': typeof TextField;

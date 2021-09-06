@@ -1,24 +1,28 @@
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { MenuSurface } from 'scoped-material-components/mwc-menu-surface';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { requestContext } from '@holochain-open-dev/context';
+import {
+  MenuSurface,
+  List,
+  ListItem,
+  TextField,
+} from '@scoped-elements/material-web';
+import { ContextConsumer, contextProvided } from '@lit-labs/context';
+import { StoreController, contextStore } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { MobxLitElement } from '@adobe/lit-mobx';
+import { Dictionary } from '@holochain-open-dev/core-types';
 
-import { AgentProfile, PROFILES_STORE_CONTEXT } from '../types';
+import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
-import { ProfilesStore } from '../profiles.store';
+import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
+import { profilesStoreContext } from '../context';
 
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
  */
-export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
+export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
   /**
@@ -42,15 +46,28 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
   @property({ type: String, attribute: 'field-label' })
   fieldLabel = 'Search agent';
 
+  /** Dependencies */
+
+  @contextProvided({ context: profilesStoreContext })
+  _profilesStore!: ProfilesStore;
+
   /** Private properties */
 
+  @contextStore({
+    context: profilesStoreContext,
+    selectStore: s => s.knownProfiles,
+  })
+  _knownProfiles!: Dictionary<Profile>;
+
   get _filteredAgents(): Array<AgentProfile> {
-    let filtered = this._store.knownProfiles.filter(agent =>
-      agent.profile.nickname.startsWith(this._currentFilter as string)
-    );
+    let filtered = Object.entries(this._knownProfiles)
+      .filter(([agentPubKey, profile]) =>
+        profile.nickname.startsWith(this._currentFilter as string)
+      )
+      .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this._store.myAgentPubKey !== agent.agent_pub_key
+        agent => this._profilesStore.myAgentPubKey !== agent.agent_pub_key
       );
     }
 
@@ -67,16 +84,13 @@ export class SearchAgent extends ScopedElementsMixin(MobxLitElement) {
   @query('#overlay')
   _overlay!: MenuSurface;
 
-  @requestContext(PROFILES_STORE_CONTEXT)
-  _store!: ProfilesStore;
-
   firstUpdated() {
     this.addEventListener('blur', () => this._overlay.close());
   }
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this._store.searchProfiles(nicknamePrefix);
+    await this._profilesStore.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {

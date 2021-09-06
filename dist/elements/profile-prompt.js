@@ -1,19 +1,17 @@
 import { __decorate } from "tslib";
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import { Button } from 'scoped-material-components/mwc-button';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { MobxLitElement } from '@adobe/lit-mobx';
+import { Button, CircularProgress, TextField, } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
+import { contextStore } from 'lit-svelte-stores';
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { PROFILES_STORE_CONTEXT } from '../types';
+import { profilesStoreContext } from '../context';
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
+export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -36,7 +34,7 @@ export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
     }
     render() {
         return html `
-      ${!this._loading && this._store.myProfile
+      ${!this._loading && this._myProfile
             ? html `<slot></slot>`
             : this.renderPrompt()}
     `;
@@ -61,9 +59,15 @@ export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
     }
 }
 __decorate([
+    contextProvided({ context: profilesStoreContext })
+], ProfilePrompt.prototype, "_store", void 0);
+__decorate([
     property({ type: Boolean })
 ], ProfilePrompt.prototype, "_loading", void 0);
 __decorate([
-    requestContext(PROFILES_STORE_CONTEXT)
-], ProfilePrompt.prototype, "_store", void 0);
+    contextStore({
+        context: profilesStoreContext,
+        selectStore: s => s.myProfile,
+    })
+], ProfilePrompt.prototype, "_myProfile", void 0);
 //# sourceMappingURL=profile-prompt.js.map

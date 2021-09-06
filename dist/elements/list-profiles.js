@@ -1,18 +1,18 @@
 import { __decorate } from "tslib";
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
-import { MobxLitElement } from '@adobe/lit-mobx';
+import { contextStore } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
-import { List } from 'scoped-material-components/mwc-list';
-import { ListItem } from 'scoped-material-components/mwc-list-item';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
+import { contextProvided } from '@lit-labs/context';
+import { CircularProgress, ListItem, List, } from '@scoped-elements/material-web';
 import { sharedStyles } from './utils/shared-styles';
 import { HoloIdenticon } from './holo-identicon';
-export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
+import { profilesStoreContext } from '../context';
+export class ListProfiles extends ScopedElementsMixin(LitElement) {
     constructor() {
-        /** Private properties */
+        /** Dependencies */
         super(...arguments);
+        /** Private properties */
         this._loading = true;
     }
     async firstUpdated() {
@@ -30,14 +30,13 @@ export class ListProfiles extends ScopedElementsMixin(MobxLitElement) {
             return html `<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-        const allProfiles = this._store.profiles;
-        if (Object.keys(allProfiles).length === 0)
+        if (Object.keys(this._allProfiles).length === 0)
             return html `<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
         return html `
       <mwc-list style="min-width: 80px;">
-        ${Object.entries(allProfiles).map(([agent_pub_key, profile]) => html `
+        ${Object.entries(this._allProfiles).map(([agent_pub_key, profile]) => html `
             <mwc-list-item
               graphic="avatar"
               .value=${agent_pub_key}
@@ -71,9 +70,15 @@ ListProfiles.styles = [
     `,
 ];
 __decorate([
+    contextProvided({ context: profilesStoreContext })
+], ListProfiles.prototype, "_store", void 0);
+__decorate([
     state()
 ], ListProfiles.prototype, "_loading", void 0);
 __decorate([
-    requestContext('hc_zome_profiles/store')
-], ListProfiles.prototype, "_store", void 0);
+    contextStore({
+        context: profilesStoreContext,
+        selectStore: s => s.knownProfiles,
+    })
+], ListProfiles.prototype, "_allProfiles", void 0);
 //# sourceMappingURL=list-profiles.js.map

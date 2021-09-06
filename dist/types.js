@@ -1,2 +1,2 @@
-export const PROFILES_STORE_CONTEXT = 'hc_zome_profiles/store';
+export {};
 //# sourceMappingURL=types.js.map

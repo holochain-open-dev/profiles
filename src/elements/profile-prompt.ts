@@ -1,31 +1,43 @@
-import { css, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { css, html, LitElement, PropertyValues } from 'lit';
+import { property, state } from 'lit/decorators.js';
 
-import { Button } from 'scoped-material-components/mwc-button';
-import { CircularProgress } from 'scoped-material-components/mwc-circular-progress';
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { MobxLitElement } from '@adobe/lit-mobx';
+import {
+  Button,
+  CircularProgress,
+  TextField,
+} from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
+import { contextStore } from 'lit-svelte-stores';
+import { Dictionary } from '@holochain-open-dev/core-types';
 
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { ProfilesStore } from '../profiles.store';
-import { PROFILES_STORE_CONTEXT } from '../types';
+import { ProfilesStore } from '../profiles-store';
+import { profilesStoreContext } from '../context';
+import { Profile } from '../types';
 
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
+export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
+
+  /** Dependencies */
+
+  @contextProvided({ context: profilesStoreContext })
+  _store!: ProfilesStore;
 
   /** Private properties */
 
   @property({ type: Boolean })
   _loading = true;
 
-  @requestContext(PROFILES_STORE_CONTEXT)
-  _store!: ProfilesStore;
+  @contextStore({
+    context: profilesStoreContext,
+    selectStore: s => s.myProfile,
+  })
+  _myProfile!: Profile;
 
   async firstUpdated() {
     await this._store.fetchMyProfile();
@@ -45,7 +57,7 @@ export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
 
   render() {
     return html`
-      ${!this._loading && this._store.myProfile
+      ${!this._loading && this._myProfile
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;

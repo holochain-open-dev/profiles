@@ -1,22 +1,17 @@
 import { __decorate } from "tslib";
-import { html } from 'lit';
+import { html, LitElement } from 'lit';
 import { query, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { requestContext } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { MobxLitElement } from '@adobe/lit-mobx';
-import { TextField } from 'scoped-material-components/mwc-textfield';
-import { Button } from 'scoped-material-components/mwc-button';
-import { Card } from 'scoped-material-components/mwc-card';
-import { Ripple } from 'scoped-material-components/mwc-ripple';
-import { Icon } from 'scoped-material-components/mwc-icon';
+import { TextField, Button, Card, Ripple, Icon, } from '@scoped-elements/material-web';
 import { sharedStyles } from './utils/shared-styles';
-import { PROFILES_STORE_CONTEXT } from '../types';
+import { profilesStoreContext } from '../context';
 /**
  * @element create-profile-form
  * @fires profile-created - after the profile has been created
  */
-export class CreateProfileForm extends ScopedElementsMixin(MobxLitElement) {
+export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
@@ -116,9 +111,9 @@ __decorate([
     property({ type: Number, attribute: 'min-length' })
 ], CreateProfileForm.prototype, "minLength", void 0);
 __decorate([
+    contextProvided({ context: profilesStoreContext })
+], CreateProfileForm.prototype, "_store", void 0);
+__decorate([
     query('#nickname-field')
 ], CreateProfileForm.prototype, "_nicknameField", void 0);
-__decorate([
-    requestContext(PROFILES_STORE_CONTEXT)
-], CreateProfileForm.prototype, "_store", void 0);
 //# sourceMappingURL=create-profile-form.js.map

@@ -1,7 +1,4 @@
-import { AgentPubKeyB64 } from "@holochain-open-dev/core-types";
-export declare type Dictionary<T> = {
-    [key: string]: T;
-};
+import { AgentPubKeyB64, Dictionary } from '@holochain-open-dev/core-types';
 export interface Profile {
     nickname: string;
     fields: Dictionary<string>;
@@ -10,4 +7,3 @@ export interface AgentProfile {
     agent_pub_key: AgentPubKeyB64;
     profile: Profile;
 }
-export declare const PROFILES_STORE_CONTEXT = "hc_zome_profiles/store";
