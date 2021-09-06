@@ -1,4 +1,4 @@
-import { css, html, PropertyValues } from 'lit';
+import { css, html, LitElement, PropertyValues } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import {
@@ -6,28 +6,38 @@ import {
   CircularProgress,
   TextField,
 } from '@scoped-elements/material-web';
-import { MobxLitElement } from '@adobe/lit-mobx';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
+import { contextStore } from 'lit-svelte-stores';
+import { Dictionary } from '@holochain-open-dev/core-types';
 
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
-import { ProfilesStore } from '../profiles.store';
+import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
+import { Profile } from '../types';
 
 /**
  * @element profile-prompt
  */
-export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
+export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
+
+  /** Dependencies */
+
+  @contextProvided({ context: profilesStoreContext })
+  _store!: ProfilesStore;
 
   /** Private properties */
 
   @property({ type: Boolean })
   _loading = true;
 
-  @contextProvided({ context: profilesStoreContext, multiple: true })
-  _store!: ProfilesStore;
+  @contextStore({
+    context: profilesStoreContext,
+    selectStore: s => s.myProfile,
+  })
+  _myProfile!: Profile;
 
   async firstUpdated() {
     await this._store.fetchMyProfile();
@@ -47,7 +57,7 @@ export class ProfilePrompt extends ScopedElementsMixin(MobxLitElement) {
 
   render() {
     return html`
-      ${!this._loading && this._store.myProfile
+      ${!this._loading && this._myProfile
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;

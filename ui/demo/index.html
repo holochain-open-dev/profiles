@@ -24,8 +24,7 @@
       import {
         ProfilePrompt,
         SearchAgent,
-        ProfilesService,
-        ProfilesStore,
+        createProfilesStore,
         profilesStoreContext,
         ListProfiles,
       } from '../dist';
@@ -55,11 +54,10 @@
           const cellData = appInfo.cell_data[0];
           const cellClient = new HolochainClient(appWebsocket, cellData);
 
-          const service = new ProfilesService(cellClient);
           new ContextProvider(
             this,
             profilesStoreContext,
-            new ProfilesStore(service)
+            createProfilesStore(cellClient)
           );
 
           this.loaded = true;

@@ -25,7 +25,6 @@
     "publish-to-branch": "npm run lint && npm run build && gh-pages -d ./ -b ui-build"
   },
   "dependencies": {
-    "@adobe/lit-mobx": "^2.0.0-rc.4",
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
     "@holochain-open-dev/cell-client": "github:holochain-open-dev/cell-client#build",
     "@holochain-open-dev/core-types": "0.1.1",
@@ -33,7 +32,8 @@
     "@open-wc/scoped-elements": "^2.0.0-next.4",
     "@scoped-elements/material-web": "github:scoped-elements/material-web#build",
     "lit": "^2.0.0-rc.2",
-    "mobx": "^6.3.2"
+    "lit-svelte-stores": "^0.0.7",
+    "svelte": "^3.42.4"
   },
   "devDependencies": {
     "@open-wc/demoing-storybook": "^2.0.0",
