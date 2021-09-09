@@ -12,4 +12,4 @@ name = "hc_zome_profiles"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0"
+hdk = "0.0.104"
