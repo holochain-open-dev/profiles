@@ -3,5 +3,6 @@ node_modules/
 dist/
 .cargo
 .hc*
+Cargo.lock
 *.dna
 *.happ
