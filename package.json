@@ -26,13 +26,13 @@
   },
   "dependencies": {
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
-    "@holochain-open-dev/cell-client": "github:holochain-open-dev/cell-client#build",
+    "@holochain-open-dev/cell-client": "0.0.4",
     "@holochain-open-dev/core-types": "0.1.1",
     "@lit-labs/context": "github:holochain-open-dev/context#build",
     "@open-wc/scoped-elements": "^2.0.0-next.4",
-    "@scoped-elements/material-web": "github:scoped-elements/material-web#build",
+    "@scoped-elements/material-web": "0.0.4",
     "lit": "^2.0.0-rc.2",
-    "lit-svelte-stores": "^0.0.7",
+    "lit-svelte-stores": "^0.0.10",
     "svelte": "^3.42.4"
   },
   "devDependencies": {
