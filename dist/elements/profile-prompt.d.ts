@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
 import { Button, CircularProgress, TextField } from '@scoped-elements/material-web';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { CreateProfileForm } from './create-profile-form';
 import { ProfilesStore } from '../profiles-store';
 import { Profile } from '../types';
@@ -13,7 +14,7 @@ export declare class ProfilePrompt extends ProfilePrompt_base {
     _store: ProfilesStore;
     /** Private properties */
     _loading: boolean;
-    _myProfile: Profile;
+    _myProfile: StoreSubscriber<Profile>;
     firstUpdated(): Promise<void>;
     renderPrompt(): import("lit").TemplateResult<1>;
     render(): import("lit").TemplateResult<1>;

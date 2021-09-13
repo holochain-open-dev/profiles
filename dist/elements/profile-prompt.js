@@ -4,7 +4,7 @@ import { property } from 'lit/decorators.js';
 import { Button, CircularProgress, TextField, } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
-import { contextStore } from 'lit-svelte-stores';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
 import { profilesStoreContext } from '../context';
@@ -17,6 +17,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
         super(...arguments);
         /** Private properties */
         this._loading = true;
+        this._myProfile = new StoreSubscriber(this, () => this._store.myProfile);
     }
     async firstUpdated() {
         await this._store.fetchMyProfile();
@@ -34,7 +35,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     }
     render() {
         return html `
-      ${!this._loading && this._myProfile
+      ${!this._loading && this._myProfile.value
             ? html `<slot></slot>`
             : this.renderPrompt()}
     `;
@@ -64,10 +65,4 @@ __decorate([
 __decorate([
     property({ type: Boolean })
 ], ProfilePrompt.prototype, "_loading", void 0);
-__decorate([
-    contextStore({
-        context: profilesStoreContext,
-        selectStore: s => s.myProfile,
-    })
-], ProfilePrompt.prototype, "_myProfile", void 0);
 //# sourceMappingURL=profile-prompt.js.map

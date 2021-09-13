@@ -7,10 +7,9 @@ import {
   ListItem,
   TextField,
 } from '@scoped-elements/material-web';
-import { ContextConsumer, contextProvided } from '@lit-labs/context';
-import { StoreController, contextStore } from 'lit-svelte-stores';
+import { contextProvided } from '@lit-labs/context';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { Dictionary } from '@holochain-open-dev/core-types';
 
 import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
@@ -51,16 +50,15 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   @contextProvided({ context: profilesStoreContext })
   _profilesStore!: ProfilesStore;
 
+  @contextProvided({ context: profilesStoreContext })
+  _store!: ProfilesStore;
+
   /** Private properties */
 
-  @contextStore({
-    context: profilesStoreContext,
-    selectStore: s => s.knownProfiles,
-  })
-  _knownProfiles!: Dictionary<Profile>;
+  _knownProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
 
   get _filteredAgents(): Array<AgentProfile> {
-    let filtered = Object.entries(this._knownProfiles)
+    let filtered = Object.entries(this._knownProfiles.value)
       .filter(([agentPubKey, profile]) =>
         profile.nickname.startsWith(this._currentFilter as string)
       )

@@ -11,8 +11,8 @@ import { writable, Writable, derived, Readable, get } from 'svelte/store';
 
 export class ProfilesStore {
   /** Private */
-  _service: ProfilesService;
-  _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
+  private _service: ProfilesService;
+  private _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
 
   /** Static info */
   public myAgentPubKey: AgentPubKeyB64;

@@ -1,14 +1,13 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import { AgentPubKeyB64, Dictionary } from '@holochain-open-dev/core-types';
-import { ProfilesService } from './profiles-service';
 import { AgentProfile, Profile } from './types';
-import { Writable, Readable } from 'svelte/store';
+import { Readable } from 'svelte/store';
 export declare class ProfilesStore {
     protected cellClient: CellClient;
     protected zomeName: string;
     /** Private */
-    _service: ProfilesService;
-    _knownProfilesStore: Writable<Dictionary<Profile>>;
+    private _service;
+    private _knownProfilesStore;
     /** Static info */
     myAgentPubKey: AgentPubKeyB64;
     /** Readable stores */

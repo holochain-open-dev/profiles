@@ -3,7 +3,7 @@ import { css, html, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { MenuSurface, List, ListItem, TextField, } from '@scoped-elements/material-web';
 import { contextProvided } from '@lit-labs/context';
-import { contextStore } from 'lit-svelte-stores';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { sharedStyles } from './utils/shared-styles';
 import { HoloIdenticon } from './holo-identicon';
@@ -31,11 +31,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
          * @attr field-label
          */
         this.fieldLabel = 'Search agent';
+        /** Private properties */
+        this._knownProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
         this._currentFilter = undefined;
         this._lastSearchedPrefix = undefined;
     }
     get _filteredAgents() {
-        let filtered = Object.entries(this._knownProfiles)
+        let filtered = Object.entries(this._knownProfiles.value)
             .filter(([agentPubKey, profile]) => profile.nickname.startsWith(this._currentFilter))
             .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
         if (!this.includeMyself) {
@@ -155,11 +157,8 @@ __decorate([
     contextProvided({ context: profilesStoreContext })
 ], SearchAgent.prototype, "_profilesStore", void 0);
 __decorate([
-    contextStore({
-        context: profilesStoreContext,
-        selectStore: s => s.knownProfiles,
-    })
-], SearchAgent.prototype, "_knownProfiles", void 0);
+    contextProvided({ context: profilesStoreContext })
+], SearchAgent.prototype, "_store", void 0);
 __decorate([
     state()
 ], SearchAgent.prototype, "_currentFilter", void 0);

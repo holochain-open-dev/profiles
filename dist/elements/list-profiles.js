@@ -1,7 +1,7 @@
 import { __decorate } from "tslib";
 import { css, html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
-import { contextStore } from 'lit-svelte-stores';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
 import { CircularProgress, ListItem, List, } from '@scoped-elements/material-web';
@@ -14,6 +14,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         super(...arguments);
         /** Private properties */
         this._loading = true;
+        this._allProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
     }
     async firstUpdated() {
         await this._store.fetchAllProfiles();
@@ -30,13 +31,13 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
             return html `<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
-        if (Object.keys(this._allProfiles).length === 0)
+        if (Object.keys(this._allProfiles.value).length === 0)
             return html `<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
         return html `
       <mwc-list style="min-width: 80px;">
-        ${Object.entries(this._allProfiles).map(([agent_pub_key, profile]) => html `
+        ${Object.entries(this._allProfiles.value).map(([agent_pub_key, profile]) => html `
             <mwc-list-item
               graphic="avatar"
               .value=${agent_pub_key}
@@ -75,10 +76,4 @@ __decorate([
 __decorate([
     state()
 ], ListProfiles.prototype, "_loading", void 0);
-__decorate([
-    contextStore({
-        context: profilesStoreContext,
-        selectStore: s => s.knownProfiles,
-    })
-], ListProfiles.prototype, "_allProfiles", void 0);
 //# sourceMappingURL=list-profiles.js.map

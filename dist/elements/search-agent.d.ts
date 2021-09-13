@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { MenuSurface, List, ListItem, TextField } from '@scoped-elements/material-web';
-import { Dictionary } from '@holochain-open-dev/core-types';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { AgentProfile, Profile } from '../types';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
@@ -28,8 +28,9 @@ export declare class SearchAgent extends SearchAgent_base {
     fieldLabel: string;
     /** Dependencies */
     _profilesStore: ProfilesStore;
+    _store: ProfilesStore;
     /** Private properties */
-    _knownProfiles: Dictionary<Profile>;
+    _knownProfiles: StoreSubscriber<import("@holochain-open-dev/core-types").Dictionary<Profile>>;
     get _filteredAgents(): Array<AgentProfile>;
     _currentFilter: string | undefined;
     _lastSearchedPrefix: string | undefined;
