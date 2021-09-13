@@ -9,130 +9,93 @@ import { ProfilesService } from './profiles-service';
 import { AgentProfile, Profile } from './types';
 import { writable, Writable, derived, Readable, get } from 'svelte/store';
 
-export interface ProfilesStore {
+export class ProfilesStore {
+  /** Private */
+  _service: ProfilesService;
+  _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
+
   /** Static info */
-  myAgentPubKey: AgentPubKeyB64;
+  public myAgentPubKey: AgentPubKeyB64;
 
   /** Readable stores */
-  knownProfiles: Readable<Dictionary<Profile>>;
-  myProfile: Readable<Profile>;
+  public knownProfiles: Readable<Dictionary<Profile>> = derived(
+    this._knownProfilesStore,
+    i => i
+  );
+  public myProfile: Readable<Profile> = derived(
+    this._knownProfilesStore,
+    profiles => profiles[this.myAgentPubKey]
+  );
+
+  profileOf(agentPubKey: AgentPubKeyB64): Readable<Profile> {
+    return derived(this._knownProfilesStore, profiles => profiles[agentPubKey]);
+  }
+
+  constructor(
+    protected cellClient: CellClient,
+    protected zomeName = 'profiles'
+  ) {
+    this._service = new ProfilesService(cellClient, zomeName);
+    this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
+  }
 
   /** Actions */
-  fetchAllProfiles: () => Promise<void>;
-  fetchAgentProfile: (agentPubKey: AgentPubKeyB64) => Promise<Profile>;
-  fetchMyProfile: () => Promise<void>;
-  searchProfiles: (nicknamePrefix: string) => Promise<AgentProfile[]>;
-  createProfile: (profile: Profile) => Promise<void>;
-}
+  async fetchAllProfiles(): Promise<void> {
+    const allProfiles = await this._service.getAllProfiles();
 
-const fetchAllProfiles =
-  (
-    service: ProfilesService,
-    knownProfilesStore: Writable<Dictionary<Profile>>
-  ) =>
-  async () => {
-    const allProfiles = await service.getAllProfiles();
-
-    knownProfilesStore.update(profiles => {
+    this._knownProfilesStore.update(profiles => {
       for (const profile of allProfiles) {
         profiles[profile.agent_pub_key] = profile.profile;
       }
       return profiles;
     });
-  };
+  }
 
-const fetchAgentProfile =
-  (
-    service: ProfilesService,
-    knownProfilesStore: Writable<Dictionary<Profile>>
-  ) =>
-  async (agentPubKey: string): Promise<Profile> => {
+  async fetchAgentProfile(agentPubKey: AgentPubKeyB64): Promise<Profile> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
-    const knownProfiles = get(knownProfilesStore);
+    const knownProfiles = get(this._knownProfilesStore);
 
     if (knownProfiles[agentPubKey]) return knownProfiles[agentPubKey];
 
-    const profile = await service.getAgentProfile(agentPubKey);
+    const profile = await this._service.getAgentProfile(agentPubKey);
 
-    knownProfilesStore.update(profiles => {
+    this._knownProfilesStore.update(profiles => {
       profiles[profile.agent_pub_key] = profile.profile;
       return profiles;
     });
     return profile.profile;
-  };
+  }
 
-const fetchMyProfile =
-  (
-    service: ProfilesService,
-    knownProfilesStore: Writable<Dictionary<Profile>>
-  ) =>
-  async () => {
-    const profile = await service.getMyProfile();
+  async fetchMyProfile(): Promise<void> {
+    const profile = await this._service.getMyProfile();
     if (profile) {
-      knownProfilesStore.update(profiles => {
+      this._knownProfilesStore.update(profiles => {
         profiles[profile.agent_pub_key] = profile.profile;
         return profiles;
       });
     }
-  };
+  }
 
-const searchProfiles =
-  (
-    service: ProfilesService,
-    knownProfilesStore: Writable<Dictionary<Profile>>
-  ) =>
-  async (nicknamePrefix: string): Promise<AgentProfile[]> => {
-    const searchedProfiles = await service.searchProfiles(nicknamePrefix);
+  async searchProfiles(nicknamePrefix: string): Promise<AgentProfile[]> {
+    const searchedProfiles = await this._service.searchProfiles(nicknamePrefix);
 
-    knownProfilesStore.update(profiles => {
+    this._knownProfilesStore.update(profiles => {
       for (const profile of searchedProfiles) {
         profiles[profile.agent_pub_key] = profile.profile;
       }
       return profiles;
     });
     return searchedProfiles;
-  };
+  }
 
-const createProfile =
-  (
-    service: ProfilesService,
-    knownProfilesStore: Writable<Dictionary<Profile>>,
-    myAgentPubKey: AgentPubKeyB64
-  ) =>
-  async (profile: Profile): Promise<void> => {
-    await service.createProfile(profile);
+  async createProfile(profile: Profile): Promise<void> {
+    await this._service.createProfile(profile);
 
-    knownProfilesStore.update(profiles => {
-      profiles[myAgentPubKey] = profile;
+    this._knownProfilesStore.update(profiles => {
+      profiles[this.myAgentPubKey] = profile;
       return profiles;
     });
-  };
-
-export function createProfilesStore(
-  cellClient: CellClient,
-  zomeName = 'profiles'
-): ProfilesStore {
-  const knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
-
-  const service = new ProfilesService(cellClient, zomeName);
-
-  const myAgentPubKey = serializeHash(cellClient.cellId[1]);
-
-  const myProfile: Readable<Profile> = derived(
-    knownProfilesStore,
-    profiles => profiles[myAgentPubKey]
-  );
-
-  return {
-    myAgentPubKey,
-    knownProfiles: derived(knownProfilesStore, profiles => profiles),
-    myProfile,
-    fetchAllProfiles: fetchAllProfiles(service, knownProfilesStore),
-    fetchAgentProfile: fetchAgentProfile(service, knownProfilesStore),
-    fetchMyProfile: fetchMyProfile(service, knownProfilesStore),
-    searchProfiles: searchProfiles(service, knownProfilesStore),
-    createProfile: createProfile(service, knownProfilesStore, myAgentPubKey),
-  };
+  }
 }
