@@ -24,7 +24,7 @@
       import {
         ProfilePrompt,
         SearchAgent,
-        createProfilesStore,
+        ProfilesStore,
         profilesStoreContext,
         ListProfiles,
       } from '../dist';
@@ -57,7 +57,7 @@
           new ContextProvider(
             this,
             profilesStoreContext,
-            createProfilesStore(cellClient)
+            new ProfilesStore(cellClient)
           );
 
           this.loaded = true;
