@@ -8,8 +8,7 @@ import {
 } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
-import { contextStore } from 'lit-svelte-stores';
-import { Dictionary } from '@holochain-open-dev/core-types';
+import { StoreSubscriber } from 'lit-svelte-stores';
 
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
@@ -33,11 +32,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   @property({ type: Boolean })
   _loading = true;
 
-  @contextStore({
-    context: profilesStoreContext,
-    selectStore: s => s.myProfile,
-  })
-  _myProfile!: Profile;
+  _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
 
   async firstUpdated() {
     await this._store.fetchMyProfile();
@@ -57,7 +52,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
 
   render() {
     return html`
-      ${!this._loading && this._myProfile
+      ${!this._loading && this._myProfile.value
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;

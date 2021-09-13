@@ -3,6 +3,7 @@ import { query, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+import { Dictionary } from '@holochain-open-dev/core-types';
 
 import {
   TextField,
@@ -15,7 +16,6 @@ import {
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
-import { Dictionary } from '@holochain-open-dev/core-types';
 
 /**
  * @element create-profile-form

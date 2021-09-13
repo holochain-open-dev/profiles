@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
 
-import { StoreController, contextStore } from 'lit-svelte-stores';
+import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
 import {
@@ -14,8 +14,6 @@ import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
-import { Dictionary } from '@holochain-open-dev/core-types';
-import { Profile } from '../types';
 
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
@@ -28,11 +26,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   @state()
   _loading = true;
 
-  @contextStore({
-    context: profilesStoreContext,
-    selectStore: s => s.knownProfiles,
-  })
-  _allProfiles!: Dictionary<Profile>;
+  _allProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
 
   async firstUpdated() {
     await this._store.fetchAllProfiles();
@@ -52,14 +46,14 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
 
-    if (Object.keys(this._allProfiles).length === 0)
+    if (Object.keys(this._allProfiles.value).length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
 
     return html`
       <mwc-list style="min-width: 80px;">
-        ${Object.entries(this._allProfiles).map(
+        ${Object.entries(this._allProfiles.value).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"
