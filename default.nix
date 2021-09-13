@@ -17,20 +17,21 @@ let
     holochainVersionId = "custom";
 
     holochainVersion = {
-      rev = "d003eb7a45f1d7125c4701332202761721793d68";
-      sha256 = "0qxadszm2a7807w49kfbj7cx6lr31qryxcyd2inyv7q5j7qbanf2";
-      cargoSha256 = "129wicin99kmxb2qwhll8f4q78gviyp73hrkm6klpkql6810y3jy";
-      bins = {
-        holochain = "holochain";
-        hc = "hc";
-      };
+     rev = "363af6d8af8d18e4616f6aa56ad4d1f0fabaafb7";
+     sha256 = "sha256:0ssjhang6zljs0zrph998zj7582rf0vdb45p855awa7fmzpd4kfa";
+     cargoSha256 = "sha256:0y72lm5b0fl9anb2z9pcx1i3shqdlckz04zx3phc084hbzpig4cq";
+     bins = {
+       holochain = "holochain";
+       hc = "hc";
+     };
 
-      lairKeystoreHashes = {
-        sha256 = "0khg5w5fgdp1sg22vqyzsb2ri7znbxiwl7vr2zx6bwn744wy2cyv";
-        cargoSha256 = "1lm8vrxh7fw7gcir9lq85frfd0rdcca9p7883nikjfbn21ac4sn4";
-      };
+     lairKeystoreHashes = {
+       sha256 = "sha256:05p8j1yfvwqg2amnbqaphc6cd92k65dq10v3afdj0k0kj42gd6ic";
+       cargoSha256 = "sha256:0bd1sjx4lngi543l0bnchmpz4qb3ysf8gisary1bhxzq47b286cf";
+     };
     };
   };
+
   nixpkgs = holonix.pkgs;
 in nixpkgs.mkShell {
   inputsFrom = [ holonix.main ];
