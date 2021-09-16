@@ -151,32 +151,36 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
 
   renderAvatar() {
     if (!this.avatarMode()) return html``;
-    if (this._avatar) {
-      return html`
-        <div class="column" style="align-items: center; ">
-          <sl-avatar
-            image="${this._avatar}"
-            alt="Avatar"
-            style="margin-bottom: 4px; --size: 3.5rem;"
-            initials=""
-          ></sl-avatar>
-          <span
-            class="placeholder label"
-            style="cursor: pointer;   text-decoration: underline;"
-            @click=${() => (this._avatar = undefined)}
-            >Clear</span
-          >
-        </div>
-      `;
-    }
     return html`
-      <div class="column" style="align-items: center;">
-        <mwc-fab
-          icon="add"
-          @click=${() => this._avatarFilePicker.click()}
-          style="margin-bottom: 4px;"
-        ></mwc-fab>
-        <span class="placeholder label">Avatar</span>
+      <div
+        style="width: 80px; height: 80px; justify-content: center;"
+        class="row"
+      >
+        ${this._avatar
+          ? html`
+              <div class="column" style="align-items: center; ">
+                <sl-avatar
+                  image="${this._avatar}"
+                  alt="Avatar"
+                  style="margin-bottom: 4px; --size: 3.5rem;"
+                  initials=""
+                ></sl-avatar>
+                <span
+                  class="placeholder label"
+                  style="cursor: pointer;   text-decoration: underline;"
+                  @click=${() => (this._avatar = undefined)}
+                  >Clear</span
+                >
+              </div>
+            `
+          : html` <div class="column" style="align-items: center;">
+              <mwc-fab
+                icon="add"
+                @click=${() => this._avatarFilePicker.click()}
+                style="margin-bottom: 4px;"
+              ></mwc-fab>
+              <span class="placeholder label">Avatar</span>
+            </div>`}
       </div>
     `;
   }
@@ -202,12 +206,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         <div class="column" style="margin: 16px;">
           <span class="title" style="margin-bottom: 24px;">Create Profile</span>
           <div class="row">
-            <div
-              style="width: 80px; height: 80px; justify-content: center;"
-              class="row"
-            >
-              ${this.renderAvatar()}
-            </div>
+            ${this.renderAvatar()}
 
             <mwc-textfield
               id="nickname-field"
