@@ -100,8 +100,8 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
 
   // Crop the image and return a base64 bytes string of its content
   resizeAndExport(img: HTMLImageElement) {
-    const MAX_WIDTH = 50;
-    const MAX_HEIGHT = 50;
+    const MAX_WIDTH = 300;
+    const MAX_HEIGHT = 300;
 
     let width = img.width;
     let height = img.height;
