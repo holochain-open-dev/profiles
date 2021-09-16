@@ -27,7 +27,6 @@ export declare class SearchAgent extends SearchAgent_base {
      */
     fieldLabel: string;
     /** Dependencies */
-    _profilesStore: ProfilesStore;
     _store: ProfilesStore;
     /** Private properties */
     _knownProfiles: StoreSubscriber<import("@holochain-open-dev/core-types").Dictionary<Profile>>;

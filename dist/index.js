@@ -7,4 +7,5 @@ export * from './elements/list-profiles';
 export * from './elements/holo-identicon';
 export * from './profiles-service';
 export * from './profiles-store';
+export * from './config';
 //# sourceMappingURL=index.js.map

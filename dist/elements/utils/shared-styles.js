@@ -28,5 +28,19 @@ export const sharedStyles = css `
     align-items: center;
     justify-content: center;
   }
+
+  .placeholder {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .label {
+    color: var(--mdc-text-field-label-ink-color, rgba(0, 0, 0, 0.6));
+    font-family: var(
+      --mdc-typography-caption-font-family,
+      var(--mdc-typography-font-family, Roboto, sans-serif)
+    );
+    font-size: var(--mdc-typography-caption-font-size, 0.79rem);
+    font-weight: var(--mdc-typography-caption-font-weight, 400);
+  }
 `;
 //# sourceMappingURL=shared-styles.js.map

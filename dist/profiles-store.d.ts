@@ -2,9 +2,9 @@ import { CellClient } from '@holochain-open-dev/cell-client';
 import { AgentPubKeyB64, Dictionary } from '@holochain-open-dev/core-types';
 import { AgentProfile, Profile } from './types';
 import { Readable } from 'svelte/store';
+import { ProfilesConfig } from './config';
 export declare class ProfilesStore {
     protected cellClient: CellClient;
-    protected zomeName: string;
     /** Private */
     private _service;
     private _knownProfilesStore;
@@ -14,7 +14,8 @@ export declare class ProfilesStore {
     knownProfiles: Readable<Dictionary<Profile>>;
     myProfile: Readable<Profile>;
     profileOf(agentPubKey: AgentPubKeyB64): Readable<Profile>;
-    constructor(cellClient: CellClient, zomeName?: string);
+    config: ProfilesConfig;
+    constructor(cellClient: CellClient, config: Partial<ProfilesConfig>);
     /** Actions */
     fetchAllProfiles(): Promise<void>;
     fetchAgentProfile(agentPubKey: AgentPubKeyB64): Promise<Profile>;

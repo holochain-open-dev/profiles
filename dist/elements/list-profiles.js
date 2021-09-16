@@ -6,8 +6,8 @@ import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@lit-labs/context';
 import { CircularProgress, ListItem, List, } from '@scoped-elements/material-web';
 import { sharedStyles } from './utils/shared-styles';
-import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
+import { AgentAvatar } from './agent-avatar';
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Dependencies */
@@ -43,10 +43,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
               .value=${agent_pub_key}
               style="--mdc-list-item-graphic-size: 32px;"
             >
-              <holo-identicon
-                slot="graphic"
-                .hash=${agent_pub_key}
-              ></holo-identicon>
+              <agent-avatar slot="graphic" .agentPubKey=${agent_pub_key}>
+              </agent-avatar>
               <span style="margin-left: 8px;">${profile.nickname}</span>
             </mwc-list-item>
           `)}
@@ -55,7 +53,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     }
     static get scopedElements() {
         return {
-            'holo-identicon': HoloIdenticon,
+            'agent-avatar': AgentAvatar,
             'mwc-circular-progress': CircularProgress,
             'mwc-list': List,
             'mwc-list-item': ListItem,

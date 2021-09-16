@@ -1,10 +1,10 @@
 import { __decorate } from "tslib";
 import { html, LitElement } from 'lit';
-import { query, property } from 'lit/decorators.js';
-import { classMap } from 'lit/directives/class-map.js';
+import { query, property, state } from 'lit/decorators.js';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { TextField, Button, Card, Ripple, Icon, } from '@scoped-elements/material-web';
+import { TextField, Button, Card, IconButton, Fab, } from '@scoped-elements/material-web';
+import { lightTheme, SlAvatar } from '@scoped-elements/shoelace';
 import { sharedStyles } from './utils/shared-styles';
 import { profilesStoreContext } from '../context';
 /**
@@ -21,12 +21,13 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
          */
         this.minLength = 3;
         this._existingUsernames = {};
+        this._avatar = undefined;
     }
     firstUpdated() {
         this._nicknameField.validityTransform = (newValue) => {
             this.requestUpdate();
             if (newValue.length < this.minLength) {
-                this._nicknameField.setCustomValidity(`Username is too shot, min. ${this.minLength} characters`);
+                this._nicknameField.setCustomValidity(`Username is too short`);
                 return {
                     valid: false,
                 };
@@ -40,13 +41,13 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
             };
         };
     }
-    static get styles() {
-        return sharedStyles;
-    }
     async createProfile() {
         const nickname = this._nicknameField.value;
         try {
             const fields = {};
+            if (this._avatar) {
+                fields['avatar'] = this._avatar;
+            }
             await this._store.createProfile({
                 nickname,
                 fields,
@@ -67,16 +68,119 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
             this._nicknameField.reportValidity();
         }
     }
+    // Crop the image and return a base64 bytes string of its content
+    resizeAndExport(img) {
+        const MAX_WIDTH = 50;
+        const MAX_HEIGHT = 50;
+        let width = img.width;
+        let height = img.height;
+        // Change the resizing logic
+        if (width > height) {
+            if (width > MAX_WIDTH) {
+                height = height * (MAX_WIDTH / width);
+                width = MAX_WIDTH;
+            }
+        }
+        else {
+            if (height > MAX_HEIGHT) {
+                width = width * (MAX_HEIGHT / height);
+                height = MAX_HEIGHT;
+            }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        // return the .toDataURL of the temp canvas
+        return canvas.toDataURL();
+    }
+    onAvatarUploaded() {
+        if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                var _a;
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => {
+                    this._avatar = this.resizeAndExport(img);
+                    this._avatarFilePicker.value = '';
+                };
+                img.src = (_a = e.target) === null || _a === void 0 ? void 0 : _a.result;
+            };
+            reader.readAsDataURL(this._avatarFilePicker.files[0]);
+        }
+    }
+    avatarMode() {
+        return this._store.config.avatarMode === 'avatar';
+    }
+    renderAvatar() {
+        if (!this.avatarMode())
+            return html ``;
+        if (this._avatar) {
+            return html `
+        <div class="column" style="align-items: center; ">
+          <sl-avatar
+            image="${this._avatar}"
+            alt="Avatar"
+            style="margin-bottom: 4px; --size: 3.5rem;"
+            initials=""
+          ></sl-avatar>
+          <span
+            class="placeholder label"
+            style="cursor: pointer;   text-decoration: underline;"
+            @click=${() => (this._avatar = undefined)}
+            >Clear</span
+          >
+        </div>
+      `;
+        }
+        return html `
+      <div class="column" style="align-items: center;">
+        <mwc-fab
+          icon="add"
+          @click=${() => this._avatarFilePicker.click()}
+          style="margin-bottom: 4px;"
+        ></mwc-fab>
+        <span class="placeholder label">Avatar</span>
+      </div>
+    `;
+    }
+    shouldCreateButtonBeEnabled() {
+        if (!this._nicknameField)
+            return false;
+        if (!this._nicknameField.validity.valid)
+            return false;
+        if (this.avatarMode() && !this._avatar)
+            return false;
+        return true;
+    }
     render() {
         return html `
+      ${this.avatarMode()
+            ? html `<input
+            type="file"
+            id="avatar-file-picker"
+            style="display: none;"
+            @change=${this.onAvatarUploaded}
+          />`
+            : html ``}
       <mwc-card style="width: auto">
         <div class="column" style="margin: 16px;">
           <span class="title" style="margin-bottom: 24px;">Create Profile</span>
-          <div class="row center-content">
+          <div class="row">
+            <div
+              style="width: 80px; height: 80px; justify-content: center;"
+              class="row"
+            >
+              ${this.renderAvatar()}
+            </div>
+
             <mwc-textfield
               id="nickname-field"
               outlined
               label="Nickname"
+              .helper=${`Min. ${this.minLength} characters`}
               @input=${() => this._nicknameField.reportValidity()}
               style="margin-left: 8px;"
             ></mwc-textfield>
@@ -84,12 +188,8 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
           <mwc-button
             id="create-profile-button"
             raised
-            class=${classMap({
-            'small-margin': !!this._nicknameField,
-            'big-margin': !this._nicknameField,
-        })}
-            .disabled=${!this._nicknameField ||
-            !this._nicknameField.validity.valid}
+            style="margin-top: 16px;"
+            .disabled=${!this.shouldCreateButtonBeEnabled()}
             label="CREATE PROFILE"
             @click=${() => this.createProfile()}
           ></mwc-button>
@@ -101,10 +201,14 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         return {
             'mwc-textfield': TextField,
             'mwc-button': Button,
-            'mwc-icon': Icon,
             'mwc-card': Card,
-            'mwc-ripple': Ripple,
+            'mwc-icon-button': IconButton,
+            'mwc-fab': Fab,
+            'sl-avatar': SlAvatar,
         };
+    }
+    static get styles() {
+        return [sharedStyles, lightTheme];
     }
 }
 __decorate([
@@ -116,4 +220,10 @@ __decorate([
 __decorate([
     query('#nickname-field')
 ], CreateProfileForm.prototype, "_nicknameField", void 0);
+__decorate([
+    query('#avatar-file-picker')
+], CreateProfileForm.prototype, "_avatarFilePicker", void 0);
+__decorate([
+    state()
+], CreateProfileForm.prototype, "_avatar", void 0);
 //# sourceMappingURL=create-profile-form.js.map

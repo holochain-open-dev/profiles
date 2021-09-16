@@ -4,10 +4,12 @@ import {
   Dictionary,
   serializeHash,
 } from '@holochain-open-dev/core-types';
+import merge from 'lodash-es/merge';
 
 import { ProfilesService } from './profiles-service';
 import { AgentProfile, Profile } from './types';
 import { writable, Writable, derived, Readable, get } from 'svelte/store';
+import { defaultConfig, ProfilesConfig } from './config';
 
 export class ProfilesStore {
   /** Private */
@@ -31,11 +33,14 @@ export class ProfilesStore {
     return derived(this._knownProfilesStore, profiles => profiles[agentPubKey]);
   }
 
+  config: ProfilesConfig;
+
   constructor(
     protected cellClient: CellClient,
-    protected zomeName = 'profiles'
+    config: Partial<ProfilesConfig>
   ) {
-    this._service = new ProfilesService(cellClient, zomeName);
+    this.config = merge(defaultConfig, config);
+    this._service = new ProfilesService(cellClient, this.config.zomeName);
     this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
   }
 

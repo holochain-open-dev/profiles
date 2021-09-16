@@ -41,7 +41,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
             .filter(([agentPubKey, profile]) => profile.nickname.startsWith(this._currentFilter))
             .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
         if (!this.includeMyself) {
-            filtered = filtered.filter(agent => this._profilesStore.myAgentPubKey !== agent.agent_pub_key);
+            filtered = filtered.filter(agent => this._store.myAgentPubKey !== agent.agent_pub_key);
         }
         return filtered;
     }
@@ -50,7 +50,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        await this._profilesStore.searchProfiles(nicknamePrefix);
+        await this._store.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)
@@ -153,9 +153,6 @@ __decorate([
 __decorate([
     property({ type: String, attribute: 'field-label' })
 ], SearchAgent.prototype, "fieldLabel", void 0);
-__decorate([
-    contextProvided({ context: profilesStoreContext })
-], SearchAgent.prototype, "_profilesStore", void 0);
 __decorate([
     contextProvided({ context: profilesStoreContext })
 ], SearchAgent.prototype, "_store", void 0);

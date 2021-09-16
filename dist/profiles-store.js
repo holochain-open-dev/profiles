@@ -1,15 +1,17 @@
 import { serializeHash, } from '@holochain-open-dev/core-types';
+import merge from 'lodash-es/merge';
 import { ProfilesService } from './profiles-service';
 import { writable, derived, get } from 'svelte/store';
+import { defaultConfig } from './config';
 export class ProfilesStore {
-    constructor(cellClient, zomeName = 'profiles') {
+    constructor(cellClient, config) {
         this.cellClient = cellClient;
-        this.zomeName = zomeName;
         this._knownProfilesStore = writable({});
         /** Readable stores */
         this.knownProfiles = derived(this._knownProfilesStore, i => i);
         this.myProfile = derived(this._knownProfilesStore, profiles => profiles[this.myAgentPubKey]);
-        this._service = new ProfilesService(cellClient, zomeName);
+        this.config = merge(defaultConfig, config);
+        this._service = new ProfilesService(cellClient, this.config.zomeName);
         this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
     }
     profileOf(agentPubKey) {

@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
-import { TextField, Button, Card, Ripple, Icon } from '@scoped-elements/material-web';
+import { TextField, Button, Card, IconButton, Fab } from '@scoped-elements/material-web';
+import { SlAvatar } from '@scoped-elements/shoelace';
 import { ProfilesStore } from '../profiles-store';
 declare const CreateProfileForm_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
@@ -20,16 +21,24 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
     _existingUsernames: {
         [key: string]: boolean;
     };
+    _avatarFilePicker: HTMLInputElement;
+    _avatar: string | undefined;
     firstUpdated(): void;
-    static get styles(): import("lit").CSSResult;
     createProfile(): Promise<void>;
+    resizeAndExport(img: HTMLImageElement): string;
+    onAvatarUploaded(): void;
+    avatarMode(): boolean;
+    renderAvatar(): import("lit").TemplateResult<1>;
+    shouldCreateButtonBeEnabled(): boolean;
     render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;
-        'mwc-icon': typeof Icon;
         'mwc-card': typeof Card;
-        'mwc-ripple': typeof Ripple;
+        'mwc-icon-button': typeof IconButton;
+        'mwc-fab': typeof Fab;
+        'sl-avatar': typeof SlAvatar;
     };
+    static get styles(): import("lit").CSSResultGroup[];
 }
 export {};

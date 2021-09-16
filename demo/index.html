@@ -57,7 +57,9 @@
           new ContextProvider(
             this,
             profilesStoreContext,
-            new ProfilesStore(cellClient)
+            new ProfilesStore(cellClient, {
+              avatarMode: 'avatar'
+            })
           );
 
           this.loaded = true;
