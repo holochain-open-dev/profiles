@@ -18,7 +18,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   agentPubKey!: AgentPubKeyB64;
 
   @property()
-  size: string = '32px';
+  size = '32px';
 
   /** Dependencies */
 

@@ -100,11 +100,11 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
 
   // Crop the image and return a base64 bytes string of its content
   resizeAndExport(img: HTMLImageElement) {
-    var MAX_WIDTH = 50;
-    var MAX_HEIGHT = 50;
+    const MAX_WIDTH = 50;
+    const MAX_HEIGHT = 50;
 
-    var width = img.width;
-    var height = img.height;
+    let width = img.width;
+    let height = img.height;
 
     // Change the resizing logic
     if (width > height) {
@@ -119,10 +119,10 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
       }
     }
 
-    var canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
-    var ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     ctx.drawImage(img, 0, 0, width, height);
 
     // return the .toDataURL of the temp canvas
