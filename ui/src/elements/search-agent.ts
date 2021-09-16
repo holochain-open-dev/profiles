@@ -48,9 +48,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   @contextProvided({ context: profilesStoreContext })
-  _profilesStore!: ProfilesStore;
-
-  @contextProvided({ context: profilesStoreContext })
   _store!: ProfilesStore;
 
   /** Private properties */
@@ -65,7 +62,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this._profilesStore.myAgentPubKey !== agent.agent_pub_key
+        agent => this._store.myAgentPubKey !== agent.agent_pub_key
       );
     }
 
@@ -88,7 +85,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this._profilesStore.searchProfiles(nicknamePrefix);
+    await this._store.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {
