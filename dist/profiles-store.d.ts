@@ -15,7 +15,7 @@ export declare class ProfilesStore {
     myProfile: Readable<Profile>;
     profileOf(agentPubKey: AgentPubKeyB64): Readable<Profile>;
     config: ProfilesConfig;
-    constructor(cellClient: CellClient, config: Partial<ProfilesConfig>);
+    constructor(cellClient: CellClient, config?: Partial<ProfilesConfig>);
     /** Actions */
     fetchAllProfiles(): Promise<void>;
     fetchAgentProfile(agentPubKey: AgentPubKeyB64): Promise<Profile>;

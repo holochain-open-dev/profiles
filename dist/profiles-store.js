@@ -4,7 +4,7 @@ import { ProfilesService } from './profiles-service';
 import { writable, derived, get } from 'svelte/store';
 import { defaultConfig } from './config';
 export class ProfilesStore {
-    constructor(cellClient, config) {
+    constructor(cellClient, config = {}) {
         this.cellClient = cellClient;
         this._knownProfilesStore = writable({});
         /** Readable stores */
