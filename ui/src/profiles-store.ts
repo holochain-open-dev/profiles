@@ -37,7 +37,7 @@ export class ProfilesStore {
 
   constructor(
     protected cellClient: CellClient,
-    config: Partial<ProfilesConfig>
+    config: Partial<ProfilesConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
     this._service = new ProfilesService(cellClient, this.config.zomeName);
