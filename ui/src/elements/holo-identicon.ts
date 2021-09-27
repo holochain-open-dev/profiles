@@ -21,6 +21,7 @@ export class HoloIdenticon extends LitElement {
     super.updated(changedValues);
 
     if (changedValues.has('hash') || changedValues.has('size')) {
+      console.log(this.hash, this.size)
       renderIcon(
         {
           hash: deserializeHash(this.hash),
