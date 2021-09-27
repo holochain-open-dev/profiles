@@ -8,7 +8,7 @@ declare const AgentAvatar_base: typeof LitElement & import("@open-wc/dedupe-mixi
 export declare class AgentAvatar extends AgentAvatar_base {
     /** Public properties */
     agentPubKey: AgentPubKeyB64;
-    size: string;
+    size: number;
     /** Dependencies */
     _store: ProfilesStore;
     _profile: StoreSubscriber<import("..").Profile>;

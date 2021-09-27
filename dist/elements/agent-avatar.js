@@ -11,7 +11,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public properties */
         super(...arguments);
-        this.size = '32px';
+        this.size = 32;
         this._profile = new StoreSubscriber(this, () => this._store.profileOf(this.agentPubKey));
     }
     async firstUpdated() {
@@ -29,7 +29,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
             return html `
         <sl-avatar
           .image=${this._profile.value.fields.avatar}
-          style="--size: ${this.size};"
+          style="--size: ${this.size}px;"
         ></sl-avatar>
       `;
     }

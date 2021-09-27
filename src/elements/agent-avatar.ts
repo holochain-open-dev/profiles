@@ -18,7 +18,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   agentPubKey!: AgentPubKeyB64;
 
   @property()
-  size = '32px';
+  size = 32;
 
   /** Dependencies */
 
@@ -45,7 +45,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       return html`
         <sl-avatar
           .image=${this._profile.value.fields.avatar}
-          style="--size: ${this.size};"
+          style="--size: ${this.size}px;"
         ></sl-avatar>
       `;
   }
