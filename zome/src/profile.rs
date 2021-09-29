@@ -52,7 +52,9 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
     if nickname_prefix.len() < 3 {
-        return Err(crate::err("Cannot search with a prefix less than 3 characters"));
+        return Err(crate::err(
+            "Cannot search with a prefix less than 3 characters",
+        ));
     }
 
     let prefix_path = prefix_path(nickname_prefix);
@@ -115,19 +117,22 @@ fn prefix_path(nickname: String) -> Path {
 fn get_agent_profiles_for_path(path_hash: EntryHash) -> ExternResult<Vec<AgentProfile>> {
     let links = get_links(path_hash, None)?;
 
-    links
+    let get_input = links
         .into_inner()
         .into_iter()
-        .map(get_agent_profile_from_link)
+        .map(|link| GetInput::new(link.target.into(), GetOptions::default()))
+        .collect();
+
+    let get_output = HDK.with(|h| h.borrow().get(get_input))?;
+
+    get_output
+        .into_iter()
+        .filter_map(|maybe_option| maybe_option)
+        .map(get_agent_profile_from_element)
         .collect()
 }
 
-fn get_agent_profile_from_link(link: Link) -> ExternResult<AgentProfile> {
-    let profile_hash = link.target;
-
-    let element =
-        get(profile_hash, GetOptions::default())?.ok_or(crate::err("could not get profile"))?;
-
+fn get_agent_profile_from_element(element: Element) -> ExternResult<AgentProfile> {
     let author = element.header().author().clone();
 
     let profile: Profile = utils::try_from_element(element)?;
