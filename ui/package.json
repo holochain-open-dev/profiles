@@ -31,7 +31,7 @@
     "@lit-labs/context": "github:holochain-open-dev/context#build",
     "@open-wc/scoped-elements": "^2.0.0-next.6",
     "@scoped-elements/material-web": "0.0.8",
-    "@scoped-elements/shoelace": "0.0.5",
+    "@scoped-elements/shoelace": "0.0.6",
     "lit": "^2.0.0",
     "lit-element": "^3.0.1",
     "lit-html": "^2.0.1",
