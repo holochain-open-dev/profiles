@@ -1,4 +1,5 @@
 import { Config, InstallAgentsHapps, Orchestrator } from "@holochain/tryorama";
+import Base64 from "js-base64";
 import path from "path";
 
 const conductorConfig = Config.gen();
@@ -23,6 +24,10 @@ const installation: InstallAgentsHapps = [
 const sleep = (ms) =>
   new Promise((resolve) => setTimeout(() => resolve(null), ms));
 
+function serializeHash(hash) {
+  return `u${Base64.fromUint8Array(hash, true)}`;
+}
+
 let orchestrator = new Orchestrator();
 
 orchestrator.registerScenario("create a profile and get it", async (s, t) => {
@@ -33,6 +38,9 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   const [[alice_profiles], [bob_profiles]] = await alice.installAgentsHapps(
     installation
   );
+
+  let alicePubkeyB64 = serializeHash(alice_profiles.agent);
+  let bobPubKeyB64 = serializeHash(bob_profiles.agent);
 
   let myProfile = await alice_profiles.cells[0].call(
     "profiles",
@@ -79,6 +87,13 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
     null
   );
   t.equal(allprofiles.length, 2);
+
+  let multipleProfiles = await bob_profiles.cells[0].call(
+    "profiles",
+    "get_agents_profile",
+    [alicePubkeyB64, bobPubKeyB64]
+  );
+  t.equal(multipleProfiles.length, 2);
 
   let profiles = await bob_profiles.cells[0].call(
     "profiles",

@@ -41,6 +41,15 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKeyB64) -> ExternResult<Option<A
 }
 
 #[hdk_extern]
+pub fn get_agents_profile(
+    agent_pub_keys_b64: Vec<AgentPubKeyB64>,
+) -> ExternResult<Vec<AgentProfile>> {
+    let agent_profiles = profile::get_agents_profile(agent_pub_keys_b64)?;
+
+    Ok(agent_profiles)
+}
+
+#[hdk_extern]
 pub fn get_my_profile(_: ()) -> ExternResult<Option<AgentProfile>> {
     let agent_info = agent_info()?;
 
