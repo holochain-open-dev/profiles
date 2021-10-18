@@ -1,13 +1,11 @@
 use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
-mod profile;
-mod utils;
+pub mod profile;
+pub mod utils;
 
 pub use profile::*;
 pub use utils::*;
-
-use profile::{AgentProfile, Profile};
 
 pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
