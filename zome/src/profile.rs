@@ -109,7 +109,9 @@ pub fn get_agent_profile(
 /** Private helpers */
 
 fn prefix_path(nickname: String) -> Path {
-    let (prefix, _) = nickname.as_str().split_at(3);
+    // conver to lowercase for path for ease of search
+    let lower_nickname = nickname.to_lowercase();
+    let (prefix, _) = lower_nickname.as_str().split_at(3);
 
     Path::from(format!("all_profiles.{}", prefix))
 }
