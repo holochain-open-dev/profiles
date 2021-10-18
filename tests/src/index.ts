@@ -1,10 +1,4 @@
-import {
-  Orchestrator,
-  Config,
-  InstallAgentsHapps,
-  TransportConfigType,
-  NetworkType,
-} from "@holochain/tryorama";
+import { Config, InstallAgentsHapps, Orchestrator } from "@holochain/tryorama";
 import path from "path";
 
 const conductorConfig = Config.gen();
@@ -29,14 +23,16 @@ const installation: InstallAgentsHapps = [
 const sleep = (ms) =>
   new Promise((resolve) => setTimeout(() => resolve(null), ms));
 
-const orchestrator = new Orchestrator();
+let orchestrator = new Orchestrator();
 
 orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   const [alice, bob] = await s.players([conductorConfig]);
 
   // install your happs into the coductors and destructuring the returned happ data using the same
   // array structure as you created in your installation array.
-  const [[alice_profiles], [bob_profiles]] = await alice.installAgentsHapps(installation);
+  const [[alice_profiles], [bob_profiles]] = await alice.installAgentsHapps(
+    installation
+  );
 
   let myProfile = await alice_profiles.cells[0].call(
     "profiles",
@@ -123,5 +119,66 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   t.equal(profiles[0].profile.nickname, "bobbo");
   t.equal(profiles[0].profile.fields.avatar, "bobboavatar");
 });
+
+orchestrator.run();
+orchestrator = new Orchestrator();
+
+orchestrator.registerScenario(
+  "create a profile with upper case and search it with lower case",
+  async (s, t) => {
+    const [alice, bob] = await s.players([conductorConfig]);
+
+    // install your happs into the coductors and destructuring the returned happ data using the same
+    // array structure as you created in your installation array.
+    const [[alice_profiles], [bob_profiles]] = await alice.installAgentsHapps(
+      installation
+    );
+
+    let profileHash = await alice_profiles.cells[0].call(
+      "profiles",
+      "create_profile",
+      {
+        nickname: "ALIce",
+        fields: {
+          avatar: "aliceavatar",
+        },
+      }
+    );
+    t.ok(profileHash);
+    await sleep(5000);
+
+    let profiles = await bob_profiles.cells[0].call(
+      "profiles",
+      "search_profiles",
+      {
+        nickname_prefix: "ali",
+      }
+    );
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.nickname, "ALIce");
+
+    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+      nickname_prefix: "aLI",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.nickname, "ALIce");
+
+    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+      nickname_prefix: "AlI",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.nickname, "ALIce");
+
+    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+      nickname_prefix: "ALI",
+    });
+    t.equal(profiles.length, 1);
+    t.ok(profiles[0].agent_pub_key);
+    t.equal(profiles[0].profile.nickname, "ALIce");
+  }
+);
 
 orchestrator.run();
