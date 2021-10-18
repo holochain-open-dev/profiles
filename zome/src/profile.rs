@@ -106,6 +106,40 @@ pub fn get_agent_profile(
     Ok(Some(agent_profile))
 }
 
+pub fn get_agents_profile(
+    agent_pub_keys_b64: Vec<AgentPubKeyB64>,
+) -> ExternResult<Vec<AgentProfile>> {
+    let link_tag = Some(link_tag("profile")?);
+
+    let get_links_input: Vec<GetLinksInput> = agent_pub_keys_b64
+        .into_iter()
+        .map(|agent_pub_key_b64| {
+            let agent_pub_key = AgentPubKey::from(agent_pub_key_b64.clone());
+            let agent_address: AnyDhtHash = agent_pub_key.into();
+            GetLinksInput::new(agent_address.into(), link_tag.clone())
+        })
+        .collect();
+
+    let get_links_output = HDK
+        .with(|h| h.borrow().get_links(get_links_input))?
+        .into_iter()
+        .map(|links| links.into_inner())
+        .flatten()
+        .collect::<Vec<Link>>();
+
+    let get_input = get_links_output
+        .into_iter()
+        .map(|link| GetInput::new(link.target.into(), GetOptions::default()))
+        .collect();
+    let get_output = HDK.with(|h| h.borrow().get(get_input))?;
+
+    get_output
+        .into_iter()
+        .filter_map(|maybe_option| maybe_option)
+        .map(get_agent_profile_from_element)
+        .collect()
+}
+
 /** Private helpers */
 
 fn prefix_path(nickname: String) -> Path {
