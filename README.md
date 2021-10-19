@@ -45,55 +45,81 @@ extern crate hc_zome_profiles;
 
 1. Install the module with:
 
-```bash 
+```bash
 npm install "https://github.com/holochain-open-dev/profiles#ui-build"
 ```
 
 2. Import and create the mobx store for profiles and for this module, and define the custom elements you need in your app:
 
 ```js
-import { ContextProviderElement } from "@lit-labs/context";
 import {
   ProfilePrompt,
+  SearchAgent,
   ProfilesStore,
-  ProfilesService,
+  profilesStoreContext,
+  ListProfiles,
 } from "@holochain-open-dev/profiles";
 import { AppWebsocket } from "@holochain/conductor-api";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
+import { LitElement, html } from "lit";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { ContextProvider } from "@lit-labs/context";
 
-async function setupProfiles() {
-  const appWebsocket = await ConductorApi.AppWebsocket.connect(
-    process.env.CONDUCTOR_URL,
-    12000
-  );
-  const appInfo = await appWebsocket.appInfo({
-    installed_app_id: "test-app",
-  });
+class ProfilesTest extends ScopedElementsMixin(LitElement) {
+  static get properties() {
+    return {
+      loaded: {
+        type: Boolean,
+      },
+    };
+  }
 
-  const cellData = appInfo.cell_data[0];
+  async firstUpdated() {
+    const appWebsocket = await AppWebsocket.connect("ws://localhost:8888");
+    const appInfo = await appWebsocket.appInfo({
+      installed_app_id: "test-app",
+    });
 
-  const cellClient = new HolochainClient(appWs, cellData);
+    const cellData = appInfo.cell_data[0];
+    const cellClient = new HolochainClient(appWebsocket, cellData);
 
-  const profilesService = new ProfilesService(cellClient);
-  const profilesStore = new ProfilesStore(profilesService);
+    new ContextProvider(
+      this,
+      profilesStoreContext,
+      new ProfilesStore(cellClient, {
+        avatarMode: "avatar",
+      })
+    );
 
-  customElements.define("context-provider", ContextProviderElement);
+    this.loaded = true;
+  }
 
-  const provider = document.getElementById("provider");
-  provider.name = PROFILES_STORE_CONTEXT;
-  provider.value = profilesStore;
-  customElements.define("profile-prompt", ProfilePrompt);
+  render() {
+    if (!this.loaded) return html`<span>Loading...</span>`;
+    return html`
+      <profile-prompt>
+        <list-profiles></list-profiles>
+        <search-agent include-myself></search-agent>
+      </profile-prompt>
+    `;
+  }
+
+  static get scopedElements() {
+    return {
+      "profile-prompt": ProfilePrompt,
+      "search-agent": SearchAgent,
+      "list-profiles": ListProfiles,
+    };
+  }
 }
-```
 
-3. All the elements you have defined are now available to use as normal HTML tags:
+customElements.define("profiles-test", ProfilesTest);
+```
 
 ```html
 ...
 <body>
-  <context-provider id="provider">
-    <profile-prompt style="height: 400px; width: 500px"></profile-prompt>
-  </context-provider>
+  <profiles-test></profiles-test>
 </body>
 ```
 
