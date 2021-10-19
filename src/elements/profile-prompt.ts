@@ -1,5 +1,5 @@
-import { css, html, LitElement, PropertyValues } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { css, html, LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
 
 import {
   Button,
@@ -14,7 +14,6 @@ import { sharedStyles } from './utils/shared-styles';
 import { CreateProfileForm } from './create-profile-form';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
-import { Profile } from '../types';
 
 /**
  * @element profile-prompt

@@ -19,6 +19,7 @@ export declare class ProfilesStore {
     /** Actions */
     fetchAllProfiles(): Promise<void>;
     fetchAgentProfile(agentPubKey: AgentPubKeyB64): Promise<Profile>;
+    fetchAgentsProfiles(agentPubKeys: AgentPubKeyB64[]): Promise<void>;
     fetchMyProfile(): Promise<void>;
     searchProfiles(nicknamePrefix: string): Promise<AgentProfile[]>;
     createProfile(profile: Profile): Promise<void>;

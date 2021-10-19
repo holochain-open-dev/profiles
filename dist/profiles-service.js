@@ -9,6 +9,9 @@ export class ProfilesService {
     async getAgentProfile(agentPubKey) {
         return this.callZome('get_agent_profile', agentPubKey);
     }
+    async getAgentsProfiles(agentPubKeys) {
+        return this.callZome('get_agents_profile', agentPubKeys);
+    }
     async searchProfiles(nicknamePrefix) {
         return this.callZome('search_profiles', {
             nickname_prefix: nicknamePrefix,

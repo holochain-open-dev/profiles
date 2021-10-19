@@ -1,4 +1,5 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { AgentProfile, Profile } from './types';
 
 export class ProfilesService {
@@ -8,8 +9,14 @@ export class ProfilesService {
     return this.callZome('get_my_profile', null);
   }
 
-  async getAgentProfile(agentPubKey: string): Promise<AgentProfile> {
+  async getAgentProfile(agentPubKey: AgentPubKeyB64): Promise<AgentProfile> {
     return this.callZome('get_agent_profile', agentPubKey);
+  }
+
+  async getAgentsProfiles(
+    agentPubKeys: AgentPubKeyB64[]
+  ): Promise<AgentProfile[]> {
+    return this.callZome('get_agents_profile', agentPubKeys);
   }
 
   async searchProfiles(nicknamePrefix: string): Promise<Array<AgentProfile>> {

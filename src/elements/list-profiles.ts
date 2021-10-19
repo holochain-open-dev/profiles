@@ -12,7 +12,6 @@ import {
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
-import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
 

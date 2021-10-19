@@ -40,6 +40,22 @@ export class ProfilesStore {
         });
         return profile.profile;
     }
+    async fetchAgentsProfiles(agentPubKeys) {
+        // For now, optimistic return of the cached profile
+        // TODO: implement cache invalidation
+        const knownProfiles = get(this._knownProfilesStore);
+        const profilesToFetch = Object.keys(knownProfiles).filter(pubKey => !agentPubKeys.includes(pubKey));
+        if (profilesToFetch.length === 0) {
+            return;
+        }
+        const fetchedProfiles = await this._service.getAgentsProfiles(profilesToFetch);
+        this._knownProfilesStore.update(profiles => {
+            for (const fetchedProfile of fetchedProfiles) {
+                profiles[fetchedProfile.agent_pub_key] = fetchedProfile.profile;
+            }
+            return profiles;
+        });
+    }
     async fetchMyProfile() {
         const profile = await this._service.getMyProfile();
         if (profile) {
