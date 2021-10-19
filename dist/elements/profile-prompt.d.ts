@@ -3,7 +3,6 @@ import { Button, CircularProgress, TextField } from '@scoped-elements/material-w
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { CreateProfileForm } from './create-profile-form';
 import { ProfilesStore } from '../profiles-store';
-import { Profile } from '../types';
 declare const ProfilePrompt_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element profile-prompt
@@ -14,7 +13,7 @@ export declare class ProfilePrompt extends ProfilePrompt_base {
     _store: ProfilesStore;
     /** Private properties */
     _loading: boolean;
-    _myProfile: StoreSubscriber<Profile>;
+    _myProfile: StoreSubscriber<import("..").Profile>;
     firstUpdated(): Promise<void>;
     renderPrompt(): import("lit-html").TemplateResult<1>;
     render(): import("lit-html").TemplateResult<1>;

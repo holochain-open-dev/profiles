@@ -11,7 +11,7 @@ import { contextProvided } from '@lit-labs/context';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 
-import { AgentProfile, Profile } from '../types';
+import { AgentProfile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';

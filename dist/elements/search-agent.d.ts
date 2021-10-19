@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { MenuSurface, List, ListItem, TextField } from '@scoped-elements/material-web';
 import { StoreSubscriber } from 'lit-svelte-stores';
-import { AgentProfile, Profile } from '../types';
+import { AgentProfile } from '../types';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
 declare const SearchAgent_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
@@ -29,7 +29,7 @@ export declare class SearchAgent extends SearchAgent_base {
     /** Dependencies */
     _store: ProfilesStore;
     /** Private properties */
-    _knownProfiles: StoreSubscriber<import("@holochain-open-dev/core-types").Dictionary<Profile>>;
+    _knownProfiles: StoreSubscriber<import("@holochain-open-dev/core-types").Dictionary<import("../types").Profile>>;
     get _filteredAgents(): Array<AgentProfile>;
     _currentFilter: string | undefined;
     _lastSearchedPrefix: string | undefined;
