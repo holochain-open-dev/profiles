@@ -148,10 +148,10 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                       style="--mdc-list-item-graphic-size: 32px;"
                       @request-selected=${() => this.onUsernameSelected(agent)}
                     >
-                      <holo-identicon
+                      <agent-avatar
                         slot="graphic"
-                        .hash=${agent.agent_pub_key}
-                      ></holo-identicon>
+                        .agentPubKey=${agent.agent_pub_key}
+                      ></agent-avatar>
                       <span style="margin-left: 8px;"
                         >${agent.profile.nickname}</span
                       >
