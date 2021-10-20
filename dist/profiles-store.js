@@ -34,6 +34,8 @@ export class ProfilesStore {
         if (knownProfiles[agentPubKey])
             return knownProfiles[agentPubKey];
         const profile = await this._service.getAgentProfile(agentPubKey);
+        if (!profile)
+            return;
         this._knownProfilesStore.update(profiles => {
             profiles[profile.agent_pub_key] = profile.profile;
             return profiles;
