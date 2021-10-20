@@ -6,8 +6,8 @@ import { contextProvided } from '@lit-labs/context';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { sharedStyles } from './utils/shared-styles';
-import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
+import { AgentAvatar } from './agent-avatar';
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
@@ -136,7 +136,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
     static get scopedElements() {
         return {
-            'holo-identicon': HoloIdenticon,
+            'agent-avatar': AgentAvatar,
             'mwc-textfield': TextField,
             'mwc-menu-surface': MenuSurface,
             'mwc-list': List,

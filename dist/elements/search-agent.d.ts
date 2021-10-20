@@ -3,7 +3,7 @@ import { MenuSurface, List, ListItem, TextField } from '@scoped-elements/materia
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { AgentProfile } from '../types';
 import { ProfilesStore } from '../profiles-store';
-import { HoloIdenticon } from './holo-identicon';
+import { AgentAvatar } from './agent-avatar';
 declare const SearchAgent_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
  * @element search-agent
@@ -42,7 +42,7 @@ export declare class SearchAgent extends SearchAgent_base {
     render(): import("lit-html").TemplateResult<1>;
     static get styles(): import("lit").CSSResult[];
     static get scopedElements(): {
-        'holo-identicon': typeof HoloIdenticon;
+        'agent-avatar': typeof AgentAvatar;
         'mwc-textfield': typeof TextField;
         'mwc-menu-surface': typeof MenuSurface;
         'mwc-list': typeof List;
