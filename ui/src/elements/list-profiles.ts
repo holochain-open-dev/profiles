@@ -62,7 +62,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
             >
               <agent-avatar slot="graphic" .agentPubKey=${agent_pub_key}>
               </agent-avatar>
-              <span style="margin-left: 8px;">${profile.nickname}</span>
+              <span>${profile.nickname}</span>
             </mwc-list-item>
           `
         )}
