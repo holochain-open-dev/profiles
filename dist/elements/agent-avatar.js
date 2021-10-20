@@ -25,13 +25,13 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
         .hash=${this.agentPubKey}
         .size=${this.size}
       ></holo-identicon>`;
-        /*  if (this._profile.value)
-           return html`
-             <sl-avatar
-               .image=${this._profile.value.fields.avatar}
-               style="--size: ${this.size}px;"
-             ></sl-avatar>
-           `; */
+        if (this._profile.value)
+            return html `
+        <sl-avatar
+          .image=${this._profile.value.fields.avatar}
+          style="--size: ${this.size}px;"
+        ></sl-avatar>
+      `;
         return html `<sl-skeleton
       effect="pulse"
       style="height: ${this.size}px; width: ${this.size}px"
@@ -41,7 +41,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
         return {
             'holo-identicon': HoloIdenticon,
             'sl-avatar': SlAvatar,
-            'sl-skeleton': SlSkeleton
+            'sl-skeleton': SlSkeleton,
         };
     }
 }
