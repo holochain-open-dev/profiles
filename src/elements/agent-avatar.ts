@@ -6,7 +6,7 @@ import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
-import { lightTheme, SlAvatar } from '@scoped-elements/shoelace';
+import { lightTheme, SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { StoreSubscriber } from 'lit-svelte-stores';
 
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
@@ -41,19 +41,24 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
         .hash=${this.agentPubKey}
         .size=${this.size}
       ></holo-identicon>`;
-    else
+   /*  if (this._profile.value)
       return html`
         <sl-avatar
           .image=${this._profile.value.fields.avatar}
           style="--size: ${this.size}px;"
         ></sl-avatar>
-      `;
+      `; */
+    return html`<sl-skeleton
+      effect="pulse"
+      style="height: ${this.size}px; width: ${this.size}px"
+    ></sl-skeleton>`;
   }
 
   static get scopedElements() {
     return {
       'holo-identicon': HoloIdenticon,
       'sl-avatar': SlAvatar,
+      'sl-skeleton': SlSkeleton
     };
   }
 
