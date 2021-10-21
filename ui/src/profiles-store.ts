@@ -56,7 +56,9 @@ export class ProfilesStore {
     });
   }
 
-  async fetchAgentProfile(agentPubKey: AgentPubKeyB64): Promise<Profile> {
+  async fetchAgentProfile(
+    agentPubKey: AgentPubKeyB64
+  ): Promise<Profile | undefined> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
@@ -65,6 +67,8 @@ export class ProfilesStore {
     if (knownProfiles[agentPubKey]) return knownProfiles[agentPubKey];
 
     const profile = await this._service.getAgentProfile(agentPubKey);
+
+    if (!profile) return;
 
     this._knownProfilesStore.update(profiles => {
       profiles[profile.agent_pub_key] = profile.profile;
@@ -79,8 +83,9 @@ export class ProfilesStore {
 
     const knownProfiles = get(this._knownProfilesStore);
 
-    const profilesToFetch = Object.keys(knownProfiles).filter(
-      pubKey => !agentPubKeys.includes(pubKey)
+    const agentsWeAlreadKnow = Object.keys(knownProfiles);
+    const profilesToFetch = agentPubKeys.filter(
+      pubKey => !agentsWeAlreadKnow.includes(pubKey)
     );
 
     if (profilesToFetch.length === 0) {

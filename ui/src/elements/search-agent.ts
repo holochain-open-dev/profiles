@@ -16,6 +16,7 @@ import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
+import { AgentAvatar } from './agent-avatar';
 
 /**
  * @element search-agent
@@ -182,7 +183,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   static get scopedElements() {
     return {
-      'holo-identicon': HoloIdenticon,
+      'agent-avatar': AgentAvatar,
       'mwc-textfield': TextField,
       'mwc-menu-surface': MenuSurface,
       'mwc-list': List,
