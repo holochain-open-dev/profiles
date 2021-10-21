@@ -46,7 +46,8 @@ export class ProfilesStore {
         // For now, optimistic return of the cached profile
         // TODO: implement cache invalidation
         const knownProfiles = get(this._knownProfilesStore);
-        const profilesToFetch = Object.keys(knownProfiles).filter(pubKey => !agentPubKeys.includes(pubKey));
+        const agentsWeAlreadKnow = Object.keys(knownProfiles);
+        const profilesToFetch = agentPubKeys.filter(pubKey => !agentsWeAlreadKnow.includes(pubKey));
         if (profilesToFetch.length === 0) {
             return;
         }
