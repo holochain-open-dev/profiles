@@ -31,7 +31,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
           .image=${this._profile.value.fields.avatar}
           style="--size: ${this.size}px;"
         >
-          <slot name="icon"></slot>
+          <div slot="icon"></div>
         </sl-avatar>
       `;
         return html `<sl-skeleton
