@@ -30,7 +30,10 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     >
       ${this._loading
             ? html `<mwc-circular-progress indeterminate></mwc-circular-progress>`
-            : html `<create-profile-form></create-profile-form>`}
+            : html ` <div class="column">
+            <slot name="hero"></slot>
+            <create-profile-form></create-profile-form>
+          </div>`}
     </div>`;
     }
     render() {
