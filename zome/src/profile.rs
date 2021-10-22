@@ -68,7 +68,6 @@ pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {
     let children = path.children()?;
 
     let agent_profiles: Vec<AgentProfile> = children
-        .into_inner()
         .into_iter()
         .map(|link| get_agent_profiles_for_path(link.target))
         .collect::<ExternResult<Vec<Vec<AgentProfile>>>>()?
@@ -88,13 +87,11 @@ pub fn get_agent_profile(
 
     let links = get_links(agent_address.into(), Some(link_tag("profile")?))?;
 
-    let inner_links = links.into_inner();
-
-    if inner_links.len() == 0 {
+    if links.len() == 0 {
         return Ok(None);
     }
 
-    let link = inner_links[0].clone();
+    let link = links[0].clone();
 
     let profile: Profile = utils::try_get_and_convert(link.target)?;
 
@@ -123,7 +120,6 @@ pub fn get_agents_profile(
     let get_links_output = HDK
         .with(|h| h.borrow().get_links(get_links_input))?
         .into_iter()
-        .map(|links| links.into_inner())
         .flatten()
         .collect::<Vec<Link>>();
 
@@ -154,7 +150,6 @@ fn get_agent_profiles_for_path(path_hash: EntryHash) -> ExternResult<Vec<AgentPr
     let links = get_links(path_hash, None)?;
 
     let get_input = links
-        .into_inner()
         .into_iter()
         .map(|link| GetInput::new(link.target.into(), GetOptions::default()))
         .collect();
