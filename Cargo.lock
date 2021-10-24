@@ -36,6 +36,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
 
 [[package]]
+name = "bit-set"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6e11e16035ea35e4e5997b393eacbf6f63983188f7a2ad25bfb13465f5ad59de"
+dependencies = [
+ "bit-vec",
+]
+
+[[package]]
+name = "bit-vec"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
+
+[[package]]
 name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -103,6 +118,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "gcollections"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2f551fdf23ef80329f754919669147a71c67b6cfe3569cd93b6fabdd62044377"
+dependencies = [
+ "bit-set",
+ "num-integer",
+ "num-traits",
+ "trilean",
+]
+
+[[package]]
 name = "hashbrown"
 version = "0.11.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -120,9 +147,9 @@ dependencies = [
 
 [[package]]
 name = "hdk"
-version = "0.0.109"
+version = "0.0.112"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83eb4f589343ee9435e2f82590dc43a118025426142ac8ffc1ebc2ab53b0f8f3"
+checksum = "ff876079ec7a06b7917ed66968503685db908513694de3e8e2948d126bfa6255"
 dependencies = [
  "hdk_derive",
  "holo_hash",
@@ -139,9 +166,9 @@ dependencies = [
 
 [[package]]
 name = "hdk_derive"
-version = "0.0.11"
+version = "0.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b30cc4971d89acee200566ab5f6b67a3defc7fda9d43d217fe8c6f6501270cc7"
+checksum = "a629d3c1d64a179d6038de36e69d9c6980b348c56dadfee4aa91ec59d6502587"
 dependencies = [
  "holochain_zome_types",
  "paste",
@@ -152,14 +179,15 @@ dependencies = [
 
 [[package]]
 name = "holo_hash"
-version = "0.0.8"
+version = "0.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7d90ea05b3f0d927ee5101f550d61b1a50576282b5308b21f334bd6d6066087"
+checksum = "ee83d18d883878dc9e6da3e162a42b882db62f3fd7e957e0b5b85f04a5dbe117"
 dependencies = [
  "base64",
  "blake2b_simd",
  "derive_more",
  "holochain_serialized_bytes",
+ "kitsune_p2p_dht_arc",
  "serde",
  "serde_bytes",
  "thiserror",
@@ -217,9 +245,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_zome_types"
-version = "0.0.11"
+version = "0.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "569579fb76173898655241acd4d7745b93930a9670537ad1473d387269d03a3d"
+checksum = "d287e13e403ea66f9615e3a301acd49f9649a0bb97c5a74fa14b23e13b126077"
 dependencies = [
  "chrono",
  "holo_hash",
@@ -254,10 +282,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "intervallum"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c8ccecd834666f695ecec3ff0d5fc32e32c91abea91a28fd0aceb4b35a82cee1"
+dependencies = [
+ "bit-set",
+ "gcollections",
+ "num-integer",
+ "num-traits",
+ "trilean",
+]
+
+[[package]]
 name = "itoa"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b71991ff56294aa922b450139ee08b3bfc70982c6b2c7562771375cf73542dd4"
+
+[[package]]
+name = "kitsune_p2p_dht_arc"
+version = "0.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c03c1cfdc73b33d3530d25e4ce2509f762bcb52960c037306fa5b022e4e67899"
+dependencies = [
+ "derive_more",
+ "gcollections",
+ "intervallum",
+ "num-traits",
+ "serde",
+]
 
 [[package]]
 name = "kitsune_p2p_timestamp"
@@ -687,6 +741,12 @@ dependencies = [
  "tracing-log",
  "tracing-serde",
 ]
+
+[[package]]
+name = "trilean"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "683ba5022fe6dbd7133cad150478ccf51bdb6d861515181e5fc6b4323d4fa424"
 
 [[package]]
 name = "ucd-trie"
