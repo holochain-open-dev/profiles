@@ -2,8 +2,8 @@
 manifest_version: "1"
 name: profiles-test
 description: ~
-slots:
-  - id: sample-slot
+roles:
+  - id: profiles
     provisioning:
       strategy: create
       deferred: false
