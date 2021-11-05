@@ -6,8 +6,9 @@ import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { HoloIdenticon } from './holo-identicon';
-import { lightTheme, SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
+import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { StoreSubscriber } from 'lit-svelte-stores';
+import { sharedStyles } from './utils/shared-styles';
 
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -64,5 +65,5 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     };
   }
 
-  static styles = [lightTheme];
+  static styles = [sharedStyles];
 }
