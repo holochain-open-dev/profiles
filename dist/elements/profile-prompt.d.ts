@@ -15,8 +15,8 @@ export declare class ProfilePrompt extends ProfilePrompt_base {
     _loading: boolean;
     _myProfile: StoreSubscriber<import("..").Profile>;
     firstUpdated(): Promise<void>;
-    renderPrompt(): import("lit-html").TemplateResult<1>;
-    render(): import("lit-html").TemplateResult<1>;
+    renderPrompt(): import("lit").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;

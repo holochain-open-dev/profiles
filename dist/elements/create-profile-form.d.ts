@@ -27,9 +27,9 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
     resizeAndExport(img: HTMLImageElement): string;
     onAvatarUploaded(): void;
     avatarMode(): boolean;
-    renderAvatar(): import("lit-html").TemplateResult<1>;
+    renderAvatar(): import("lit").TemplateResult<1>;
     shouldCreateButtonBeEnabled(): boolean;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {
         'mwc-textfield': typeof TextField;
         'mwc-button': typeof Button;

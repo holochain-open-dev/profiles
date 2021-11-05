@@ -12,7 +12,7 @@ export declare class AgentAvatar extends AgentAvatar_base {
     _store: ProfilesStore;
     _profile: StoreSubscriber<import("..").Profile>;
     firstUpdated(): Promise<void>;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     static get scopedElements(): {
         'holo-identicon': typeof HoloIdenticon;
         'sl-avatar': typeof import("@scoped-elements/shoelace/dist/sl-avatar").SlAvatar;
