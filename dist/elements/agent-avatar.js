@@ -5,8 +5,9 @@ import { html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { HoloIdenticon } from './holo-identicon';
-import { lightTheme, SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
+import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { StoreSubscriber } from 'lit-svelte-stores';
+import { sharedStyles } from './utils/shared-styles';
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public properties */
@@ -47,7 +48,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
         };
     }
 }
-AgentAvatar.styles = [lightTheme];
+AgentAvatar.styles = [sharedStyles];
 __decorate([
     property({
         attribute: 'agent-pub-key',

@@ -10,7 +10,7 @@ import {
   IconButton,
   Fab,
 } from '@scoped-elements/material-web';
-import { lightTheme, SlAvatar } from '@scoped-elements/shoelace';
+import { SlAvatar } from '@scoped-elements/shoelace';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
@@ -242,6 +242,6 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   }
 
   static get styles() {
-    return [sharedStyles, lightTheme];
+    return [sharedStyles];
   }
 }

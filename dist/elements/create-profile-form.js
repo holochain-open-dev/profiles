@@ -4,7 +4,7 @@ import { query, property, state } from 'lit/decorators.js';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { TextField, Button, Card, IconButton, Fab, } from '@scoped-elements/material-web';
-import { lightTheme, SlAvatar } from '@scoped-elements/shoelace';
+import { SlAvatar } from '@scoped-elements/shoelace';
 import { sharedStyles } from './utils/shared-styles';
 import { profilesStoreContext } from '../context';
 /**
@@ -207,7 +207,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         };
     }
     static get styles() {
-        return [sharedStyles, lightTheme];
+        return [sharedStyles];
     }
 }
 __decorate([
