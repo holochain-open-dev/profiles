@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
-    "@holochain-open-dev/cell-client": "0.0.9",
+    "@holochain-open-dev/cell-client": "0.1.0",
     "@holochain-open-dev/core-types": "0.1.1",
     "@lit-labs/context": "github:holochain-open-dev/context#build",
     "@open-wc/scoped-elements": "^2.0.1",
