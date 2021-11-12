@@ -1,5 +1,6 @@
 import { LitElement } from 'lit';
 import { TextField, Button, Card, IconButton, Fab } from '@scoped-elements/material-web';
+import { SlAvatar } from '@scoped-elements/shoelace';
 import { ProfilesStore } from '../profiles-store';
 declare const CreateProfileForm_base: typeof LitElement & import("@open-wc/dedupe-mixin").Constructor<import("@open-wc/scoped-elements/types/src/types").ScopedElementsHost>;
 /**
@@ -36,7 +37,7 @@ export declare class CreateProfileForm extends CreateProfileForm_base {
         'mwc-card': typeof Card;
         'mwc-icon-button': typeof IconButton;
         'mwc-fab': typeof Fab;
-        'sl-avatar': typeof import("@scoped-elements/shoelace/dist/sl-avatar").SlAvatar;
+        'sl-avatar': typeof SlAvatar;
     };
     static get styles(): import("lit").CSSResult[];
 }
