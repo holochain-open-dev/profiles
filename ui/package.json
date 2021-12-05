@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "start": "npm run build && CONDUCTOR_URL=ws://localhost:8888 concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
+    "start": "npm run build && concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config demo/web-dev-server.config.mjs\"",
     "build": "rimraf dist && tsc",
     "build-watch": "tsc --watch",
     "test": "npm run build && web-test-runner --coverage",

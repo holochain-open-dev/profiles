@@ -5,3 +5,4 @@ dist/
 .hc*
 *.dna
 *.happ
+.running
