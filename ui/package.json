@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
-    "@holochain-open-dev/cell-client": "0.1.0",
+    "@holochain-open-dev/cell-client": "0.1.2",
     "@holochain-open-dev/core-types": "0.1.1",
     "@lit-labs/context": "github:holochain-open-dev/context#build",
     "@open-wc/scoped-elements": "^2.0.1",
-    "@scoped-elements/material-web": "0.0.15",
+    "@scoped-elements/material-web": "0.0.16",
     "@scoped-elements/shoelace": "0.0.8",
     "lit": "^2.0.2",
     "lit-svelte-stores": "^0.1.3",
