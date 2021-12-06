@@ -17,7 +17,7 @@
     "playground": "run-singleton \"holochain-playground\""
   },
   "devDependencies": {
-    "@holochain-playground/cli": "0.0.3",
+    "@holochain-playground/cli": "0.0.4",
     "@rocket/cli": "^0.10.0",
     "@rocket/launch": "^0.6.0",
     "concurrently": "^6.2.1",
