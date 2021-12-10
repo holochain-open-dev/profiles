@@ -1,5 +1,5 @@
 let
-  holonixRev = "089a6f2f1627f0bd7e15c848b9f6886eb5d32c05";
+  holonixRev = "bcb7cbedfc06026181552a7d64db731c0398165c";
 
   holonixPath = builtins.fetchTarball "https://github.com/holochain/holonix/archive/${holonixRev}.tar.gz";
   holonix = import (holonixPath) {};
