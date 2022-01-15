@@ -1,4 +1,4 @@
-import plugins from '../web-dev.plugins.mjs';
+import plugins from './web-dev.plugins.mjs';
 
 export default {
   watch: true,
