@@ -32,7 +32,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     let agent_address: AnyDhtHash = agent_info.agent_initial_pubkey.clone().into();
 
     create_link(
-        path.hash()?,
+        path.path_entry_hash()?,
         profile_hash.clone(),
         link_tag(profile.nickname.as_str().clone())?,
     )?;
@@ -59,7 +59,7 @@ pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile
 
     let prefix_path = prefix_path(nickname_prefix);
 
-    get_agent_profiles_for_path(prefix_path.hash()?)
+    get_agent_profiles_for_path(prefix_path.path_entry_hash()?)
 }
 
 pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {

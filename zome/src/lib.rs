@@ -11,7 +11,11 @@ pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
 }
 
-entry_defs![Path::entry_def(), profile::Profile::entry_def()];
+entry_defs![
+    Path::entry_def(),
+    PathEntry::entry_def(),
+    profile::Profile::entry_def()
+];
 
 /** Profiles **/
 
