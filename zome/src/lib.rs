@@ -24,6 +24,11 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::create_profile(profile)
 }
 
+#[hdk_extern]
+pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
+    profile::update_profile(profile)
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchProfilesInput {
     nickname_prefix: String,
