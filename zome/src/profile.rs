@@ -50,6 +50,78 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     Ok(agent_profile)
 }
 
+pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
+    let agent_info = agent_info()?;
+
+    create_entry(&profile.clone())?;
+
+    let profile_hash = hash_entry(&profile.clone())?;
+
+    let path = prefix_path(profile.nickname.clone());
+
+    path.ensure()?;
+
+    let agent_address = agent_info.agent_initial_pubkey.clone();
+
+    let link_details = get_link_details(path.path_entry_hash()?, None)?.into_inner();
+
+    if link_details.len() > 0 {
+        // check whether the agent has committed a profile before
+        // needs to be checked because duplicate Profile is possible
+        let profile_exist = link_details
+            .clone()
+            .into_iter()
+            .find(|detail| detail.0.header().author().to_owned() == agent_address)
+            .is_some();
+        if profile_exist {
+            link_details
+                .clone()
+                .into_iter()
+                .filter_map(|detail| {
+                    let is_my_profile = detail.0.header().author().to_owned() == agent_address;
+                    let is_not_deleted = detail.1.is_empty();
+                    if is_my_profile && is_not_deleted {
+                        return Some(detail.0.as_hash().to_owned());
+                    } else {
+                        return None;
+                    }
+                })
+                .for_each(|header| {
+                    // ignore error
+                    match delete_link(header) {
+                        Ok(_) => (),
+                        // TODO: probably should return error once one of the delete fails
+                        Err(_) => (),
+                    }
+                });
+        }
+    }
+
+    let links = get_links(agent_address.clone().into(), Some(link_tag("profile")?))?;
+    if links.len() > 0 {
+        let link = links[0].clone();
+        delete_link(link.create_link_hash)?;
+    }
+
+    create_link(
+        path.path_entry_hash()?,
+        profile_hash.clone(),
+        link_tag(profile.nickname.as_str().clone())?,
+    )?;
+    create_link(
+        agent_address.into(),
+        profile_hash.clone(),
+        link_tag("profile")?,
+    )?;
+
+    let agent_profile = AgentProfile {
+        agent_pub_key: AgentPubKeyB64::from(agent_info.agent_initial_pubkey),
+        profile,
+    };
+
+    Ok(agent_profile)
+}
+
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<AgentProfile>> {
     if nickname_prefix.len() < 3 {
         return Err(crate::err(
