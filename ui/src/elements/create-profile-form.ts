@@ -40,7 +40,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   @query('#nickname-field')
   _nicknameField!: TextField;
 
-  _existingUsernames: { [key: string]: boolean } = {};
+  #existingUsernames: { [key: string]: boolean } = {};
 
   @query('#avatar-file-picker')
   _avatarFilePicker!: HTMLInputElement;
@@ -56,7 +56,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         return {
           valid: false,
         };
-      } else if (this._existingUsernames[newValue]) {
+      } else if (this.#existingUsernames[newValue]) {
         this._nicknameField.setCustomValidity('This nickname already exists');
         return { valid: false };
       }
@@ -93,7 +93,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         })
       );
     } catch (e) {
-      this._existingUsernames[nickname] = true;
+      this.#existingUsernames[nickname] = true;
       this._nicknameField.reportValidity();
     }
   }
@@ -230,6 +230,9 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
     `;
   }
 
+  /**
+   * @ignore
+   */
   static get scopedElements() {
     return {
       'mwc-textfield': TextField,

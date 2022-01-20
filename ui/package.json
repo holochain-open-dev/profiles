@@ -22,7 +22,9 @@
     "publish-storybook": "npm run lint && npm run analyze && npm run build && npm run build-storybook && gh-pages -b gh-pages -d storybook-static",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
     "publish-npm": "npm run lint && npm run build && cp ../README.md dist/  && cp ../LICENSE dist/ && cp package.json dist/ && cd dist/ && npm publish --access public && rimraf dist/",
-    "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
+    "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i",
+    "docs": "rocket build",
+    "docs:start": "rocket start"
   },
   "dependencies": {
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@mdjs/mdjs-preview": "^0.5.6",
     "@open-wc/eslint-config": "^2.0.0",
     "@open-wc/testing": "^3.0.0-next.5",
     "@open-wc/testing-karma": "^4.0.9",
@@ -54,6 +57,7 @@
     "@web/dev-server-storybook": "next",
     "@web/test-runner": "^0.11.0",
     "@web/test-runner-puppeteer": "^0.8.0",
+    "api-viewer-element": "^1.0.0-pre.3",
     "concurrently": "^5.1.0",
     "deepmerge": "^3.2.0",
     "eslint": "^6.1.0",
@@ -67,7 +71,7 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^1.11.0",
+    "tslib": "^2.0.0",
     "typescript": "4.3.5"
   },
   "eslintConfig": {
@@ -80,5 +84,6 @@
     "singleQuote": true,
     "arrowParens": "avoid"
   },
-  "customElements": "custom-elements.json"
+  "customElements": "custom-elements.json",
+  "type": "module"
 }
