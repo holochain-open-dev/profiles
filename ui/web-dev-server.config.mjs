@@ -4,7 +4,9 @@ export default {
   watch: true,
   nodeResolve: {
     browser: true,
-    preferBuiltins: false
+    preferBuiltins: false,
+    exportConditions: ['browser', 'development'],
+
   },
   appIndex: 'demo/index.html',
   rootDir: '../',

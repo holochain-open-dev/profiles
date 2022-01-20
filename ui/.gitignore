@@ -23,3 +23,4 @@
 /storybook-static/
 .hc*
 .hc
+*.tsbuildinfo

@@ -1,4 +1,4 @@
-import { Context, createContext } from '@lit-labs/context';
+import { Context, createContext } from '@holochain-open-dev/context';
 import { ProfilesStore } from './profiles-store';
 
 export const profilesStoreContext: Context<ProfilesStore> = createContext(
