@@ -52,14 +52,211 @@
     {
       "kind": "javascript-module",
       "path": "src/define-elements.ts",
-      "declarations": [],
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CPF",
+          "superclass": {
+            "name": "CreateProfileForm",
+            "module": "/src/elements/create-profile-form"
+          },
+          "tagName": "create-profile-form",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "min-length",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have",
+              "fieldName": "minLength",
+              "attribute": "min-length",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "minLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have",
+              "attribute": "min-length",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_nicknameField",
+              "type": {
+                "text": "TextField"
+              },
+              "privacy": "private",
+              "description": "Private properties",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "#existingUsernames",
+              "privacy": "private",
+              "type": {
+                "text": "{ [key: string]: boolean }"
+              },
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_avatarFilePicker",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_avatar",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "resizeAndExport",
+              "parameters": [
+                {
+                  "name": "img",
+                  "type": {
+                    "text": "HTMLImageElement"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "onAvatarUploaded",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "avatarMode",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderAvatar",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "shouldCreateButtonBeEnabled",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-created",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "after the profile has been created",
+              "inheritedFrom": {
+                "name": "CreateProfileForm",
+                "module": "src/elements/create-profile-form.ts"
+              }
+            }
+          ]
+        }
+      ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "CPF",
+          "declaration": {
+            "name": "CPF",
+            "module": "src/define-elements.ts"
+          }
+        },
         {
           "kind": "custom-element-definition",
           "name": "create-profile-form",
           "declaration": {
-            "name": "CreateProfileForm",
-            "module": "/src/elements/create-profile-form"
+            "name": "CPF",
+            "module": "src/define-elements.ts"
           }
         }
       ]
@@ -580,11 +777,12 @@
             },
             {
               "kind": "field",
-              "name": "_store",
+              "name": "store",
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "Dependencies"
+              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "attribute": "store"
             },
             {
               "kind": "field",
@@ -592,6 +790,7 @@
               "type": {
                 "text": "TextField"
               },
+              "privacy": "private",
               "description": "Private properties"
             },
             {
@@ -608,7 +807,8 @@
               "name": "_avatarFilePicker",
               "type": {
                 "text": "HTMLInputElement"
-              }
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -616,6 +816,7 @@
               "type": {
                 "text": "string | undefined"
               },
+              "privacy": "private",
               "default": "undefined"
             },
             {
@@ -670,6 +871,14 @@
               "description": "Minimum length that the nickname needs to have",
               "fieldName": "minLength",
               "attribute": "min-length"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "fieldName": "store"
             }
           ],
           "mixins": [

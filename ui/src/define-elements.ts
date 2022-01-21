@@ -1,3 +1,5 @@
-import { CreateProfileForm } from "./elements/create-profile-form";
+import { customElement } from 'lit/decorators.js';
+import { CreateProfileForm } from './elements/create-profile-form';
 
-customElements.define('create-profile-form', CreateProfileForm)
+@customElement('create-profile-form')
+export class CPF extends CreateProfileForm {}

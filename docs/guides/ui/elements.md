@@ -3,6 +3,7 @@
 ```js script
 import { html } from '@mdjs/mdjs-preview';
 import 'api-viewer-element';
+import '@holochain-open-dev/profiles/define-elements';
 ```
 
 ```js story

@@ -32,21 +32,26 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
 
   /** Dependencies */
 
+  /**
+   * `ProfilesStore` that is requested via context
+   * Only set this property if you want to override the store requested via context
+   */
   @contextProvided({ context: profilesStoreContext })
-  _store!: ProfilesStore;
+  @property({ type: Object })
+  store!: ProfilesStore;
 
   /** Private properties */
 
   @query('#nickname-field')
-  _nicknameField!: TextField;
+  private _nicknameField!: TextField;
 
   #existingUsernames: { [key: string]: boolean } = {};
 
   @query('#avatar-file-picker')
-  _avatarFilePicker!: HTMLInputElement;
+  private _avatarFilePicker!: HTMLInputElement;
 
   @state()
-  _avatar: string | undefined = undefined;
+  private _avatar: string | undefined = undefined;
 
   firstUpdated() {
     this._nicknameField.validityTransform = (newValue: string) => {
@@ -75,7 +80,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
       if (this._avatar) {
         fields['avatar'] = this._avatar;
       }
-      await this._store.createProfile({
+      await this.store.createProfile({
         nickname,
         fields,
       });
@@ -146,7 +151,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   }
 
   avatarMode() {
-    return this._store.config.avatarMode === 'avatar';
+    return this.store.config.avatarMode === 'avatar';
   }
 
   renderAvatar() {
