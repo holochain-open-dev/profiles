@@ -1,0 +1,1264 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/config.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "defaultConfig",
+          "type": {
+            "text": "ProfilesConfig"
+          },
+          "default": "{\n  zomeName: 'profiles',\n  avatarMode: 'avatar',\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defaultConfig",
+          "declaration": {
+            "name": "defaultConfig",
+            "module": "src/config.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "profilesStoreContext",
+          "type": {
+            "text": "Context<ProfilesStore>"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "profilesStoreContext",
+          "declaration": {
+            "name": "profilesStoreContext",
+            "module": "src/context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/define-elements.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "create-profile-form",
+          "declaration": {
+            "name": "CreateProfileForm",
+            "module": "/src/elements/create-profile-form"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./context"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/create-profile-form"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/search-agent"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/profile-prompt"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/list-profiles"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/agent-avatar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./elements/holo-identicon"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./profiles-service"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./profiles-store"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./config"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/profiles-service.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesService",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getMyProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<AgentProfile>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getAgentProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<AgentProfile>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKeyB64"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAgentsProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<AgentProfile[]>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKeys",
+                  "type": {
+                    "text": "AgentPubKeyB64[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "searchProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<AgentProfile>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nicknamePrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "getAllProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<Array<AgentProfile>>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<AgentProfile>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callZome",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "fn_name",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "payload",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesService",
+          "declaration": {
+            "name": "ProfilesService",
+            "module": "src/profiles-service.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/profiles-store.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesStore",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_service",
+              "type": {
+                "text": "ProfilesService"
+              },
+              "privacy": "private",
+              "description": "Private",
+              "default": "new ProfilesService(cellClient, this.config.zomeName)"
+            },
+            {
+              "kind": "field",
+              "name": "_knownProfilesStore",
+              "type": {
+                "text": "Writable<Dictionary<Profile>>"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "myAgentPubKey",
+              "type": {
+                "text": "AgentPubKeyB64"
+              },
+              "privacy": "public",
+              "description": "Static info"
+            },
+            {
+              "kind": "field",
+              "name": "knownProfiles",
+              "type": {
+                "text": "Readable<Dictionary<Profile>>"
+              },
+              "privacy": "public",
+              "description": "Readable stores"
+            },
+            {
+              "kind": "field",
+              "name": "myProfile",
+              "type": {
+                "text": "Readable<Profile>"
+              },
+              "privacy": "public"
+            },
+            {
+              "kind": "method",
+              "name": "profileOf",
+              "return": {
+                "type": {
+                  "text": "Readable<Profile>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKeyB64"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "config",
+              "type": {
+                "text": "ProfilesConfig"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "fetchAllProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "description": "Actions"
+            },
+            {
+              "kind": "method",
+              "name": "fetchAgentProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<Profile | undefined>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKeyB64"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fetchAgentsProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKeys",
+                  "type": {
+                    "text": "AgentPubKeyB64[]"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fetchMyProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "searchProfiles",
+              "return": {
+                "type": {
+                  "text": "Promise<AgentProfile[]>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nicknamePrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesStore",
+          "declaration": {
+            "name": "ProfilesStore",
+            "module": "src/profiles-store.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/agent-avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AgentAvatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKeyB64"
+              },
+              "description": "Public properties",
+              "attribute": "agent-pub-key"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "attribute": "size"
+            },
+            {
+              "kind": "field",
+              "name": "_store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Dependencies"
+            },
+            {
+              "kind": "field",
+              "name": "_profile",
+              "default": "new StoreSubscriber(this, () =>\n    this._store.profileOf(this.agentPubKey)\n  )"
+            },
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "static": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agent-pub-key",
+              "type": {
+                "text": "AgentPubKeyB64"
+              },
+              "description": "Public properties",
+              "fieldName": "agentPubKey"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "fieldName": "size"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AgentAvatar",
+          "declaration": {
+            "name": "AgentAvatar",
+            "module": "src/elements/agent-avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/create-profile-form.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CreateProfileForm",
+          "members": [
+            {
+              "kind": "field",
+              "name": "minLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have",
+              "attribute": "min-length"
+            },
+            {
+              "kind": "field",
+              "name": "_store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Dependencies"
+            },
+            {
+              "kind": "field",
+              "name": "_nicknameField",
+              "type": {
+                "text": "TextField"
+              },
+              "description": "Private properties"
+            },
+            {
+              "kind": "field",
+              "name": "#existingUsernames",
+              "privacy": "private",
+              "type": {
+                "text": "{ [key: string]: boolean }"
+              },
+              "default": "{}"
+            },
+            {
+              "kind": "field",
+              "name": "_avatarFilePicker",
+              "type": {
+                "text": "HTMLInputElement"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_avatar",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined"
+            },
+            {
+              "kind": "method",
+              "name": "createProfile"
+            },
+            {
+              "kind": "method",
+              "name": "resizeAndExport",
+              "parameters": [
+                {
+                  "name": "img",
+                  "type": {
+                    "text": "HTMLImageElement"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onAvatarUploaded"
+            },
+            {
+              "kind": "method",
+              "name": "avatarMode"
+            },
+            {
+              "kind": "method",
+              "name": "renderAvatar"
+            },
+            {
+              "kind": "method",
+              "name": "shouldCreateButtonBeEnabled"
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-created",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "after the profile has been created"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "min-length",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have",
+              "fieldName": "minLength",
+              "attribute": "min-length"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "create-profile-form",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CreateProfileForm",
+          "declaration": {
+            "name": "CreateProfileForm",
+            "module": "src/elements/create-profile-form.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/holo-identicon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "HoloIdenticon",
+          "members": [
+            {
+              "kind": "field",
+              "name": "hash",
+              "type": {
+                "text": "HoloHashB64"
+              },
+              "attribute": "hash"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number | undefined"
+              },
+              "default": "undefined",
+              "attribute": "size"
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "'square' | 'circle'"
+              },
+              "default": "'circle'",
+              "attribute": "shape"
+            },
+            {
+              "kind": "field",
+              "name": "_canvas",
+              "type": {
+                "text": "HTMLCanvasElement"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "hash",
+              "type": {
+                "text": "HoloHashB64"
+              },
+              "fieldName": "hash"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number | undefined"
+              },
+              "default": "undefined",
+              "resolveInitializer": {
+                "module": "src/elements/holo-identicon.ts"
+              },
+              "fieldName": "size"
+            },
+            {
+              "name": "shape",
+              "type": {
+                "text": "'square' | 'circle'"
+              },
+              "default": "'circle'",
+              "fieldName": "shape"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "HoloIdenticon",
+          "declaration": {
+            "name": "HoloIdenticon",
+            "module": "src/elements/holo-identicon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/list-profiles.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ListProfiles",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Dependencies"
+            },
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Private properties"
+            },
+            {
+              "kind": "field",
+              "name": "_allProfiles",
+              "default": "new StoreSubscriber(this, () => this._store.knownProfiles)"
+            },
+            {
+              "kind": "method",
+              "name": "initials",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nickname",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "static": true
+            }
+          ],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ListProfiles",
+          "declaration": {
+            "name": "ListProfiles",
+            "module": "src/elements/list-profiles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-prompt.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilePrompt",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Dependencies"
+            },
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Private properties",
+              "attribute": "_loading"
+            },
+            {
+              "kind": "field",
+              "name": "_myProfile",
+              "default": "new StoreSubscriber(this, () => this._store.myProfile)"
+            },
+            {
+              "kind": "method",
+              "name": "renderPrompt"
+            },
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "static": true
+            }
+          ],
+          "attributes": [
+            {
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Private properties",
+              "fieldName": "_loading"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-prompt",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilePrompt",
+          "declaration": {
+            "name": "ProfilePrompt",
+            "module": "src/elements/profile-prompt.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/search-agent.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SearchAgent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "clearOnSelect",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected",
+              "attribute": "clear-on-select"
+            },
+            {
+              "kind": "field",
+              "name": "includeMyself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select",
+              "attribute": "include-myself"
+            },
+            {
+              "kind": "field",
+              "name": "fieldLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search agent'",
+              "description": "Label for the agent searching field",
+              "attribute": "field-label"
+            },
+            {
+              "kind": "field",
+              "name": "_store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Dependencies"
+            },
+            {
+              "kind": "field",
+              "name": "_knownProfiles",
+              "default": "new StoreSubscriber(this, () => this._store.knownProfiles)",
+              "description": "Private properties"
+            },
+            {
+              "kind": "field",
+              "name": "_filteredAgents",
+              "type": {
+                "text": "Array<AgentProfile>"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_currentFilter",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
+              "name": "_lastSearchedPrefix",
+              "type": {
+                "text": "string | undefined"
+              },
+              "default": "undefined"
+            },
+            {
+              "kind": "field",
+              "name": "_textField",
+              "type": {
+                "text": "TextField"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_overlay",
+              "type": {
+                "text": "MenuSurface"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "searchAgents",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nicknamePrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "onFilterChange"
+            },
+            {
+              "kind": "method",
+              "name": "onUsernameSelected",
+              "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentProfile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "scopedElements",
+              "static": true
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects some agent. `event.detail.agent` will contain the agent selected"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clear-on-select",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected",
+              "fieldName": "clearOnSelect",
+              "attribute": "clear-on-select"
+            },
+            {
+              "name": "include-myself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select",
+              "fieldName": "includeMyself",
+              "attribute": "include-myself"
+            },
+            {
+              "name": "field-label",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search agent'",
+              "description": "Label for the agent searching field",
+              "fieldName": "fieldLabel",
+              "attribute": "field-label"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "search-agent",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SearchAgent",
+          "declaration": {
+            "name": "SearchAgent",
+            "module": "src/elements/search-agent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/utils/shared-styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sharedStyles",
+          "default": "css`\n  .row {\n    display: flex;\n    flex-direction: row;\n  }\n  .column {\n    display: flex;\n    flex-direction: column;\n  }\n  .small-margin {\n    margin-top: 6px;\n  }\n  .big-margin {\n    margin-top: 23px;\n  }\n\n  .fill {\n    flex: 1;\n    height: 100%;\n  }\n\n  .title {\n    font-size: 20px;\n  }\n\n  .center-content {\n    align-items: center;\n    justify-content: center;\n  }\n\n  .placeholder {\n    color: rgba(0, 0, 0, 0.7);\n  }\n\n  .label {\n    color: var(--mdc-text-field-label-ink-color, rgba(0, 0, 0, 0.6));\n    font-family: var(\n      --mdc-typography-caption-font-family,\n      var(--mdc-typography-font-family, Roboto, sans-serif)\n    );\n    font-size: var(--mdc-typography-caption-font-size, 0.79rem);\n    font-weight: var(--mdc-typography-caption-font-weight, 400);\n  }\n`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sharedStyles",
+          "declaration": {
+            "name": "sharedStyles",
+            "module": "src/elements/utils/shared-styles.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

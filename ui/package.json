@@ -6,6 +6,9 @@
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "npm run build && concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
     "build": "rimraf dist && tsc",
@@ -16,15 +19,9 @@
     "e2e": "CONDUCTOR_URL=ws://localhost:8888 concurrently -k -s first \"npm:test\" \"npm:start-holochain\"",
     "e2e-debug": "DEBUG=true npm run e2e",
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
-    "analyze": "cem analyze --litelement",
-    "storybook": "npm run analyze -- --exclude dist && web-dev-server -c .storybook/server.mjs",
-    "storybook:build": "npm run analyze -- --exclude dist && build-storybook",
-    "publish-storybook": "npm run lint && npm run analyze && npm run build && npm run build-storybook && gh-pages -b gh-pages -d storybook-static",
+    "analyze": "cem analyze --litelement --exclude dist",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
-    "publish-npm": "npm run lint && npm run build && cp ../README.md dist/  && cp ../LICENSE dist/ && cp package.json dist/ && cd dist/ && npm publish --access public && rimraf dist/",
-    "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i",
-    "docs": "rocket build",
-    "docs:start": "rocket start"
+    "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
     "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
@@ -57,7 +54,6 @@
     "@web/dev-server-storybook": "next",
     "@web/test-runner": "^0.11.0",
     "@web/test-runner-puppeteer": "^0.8.0",
-    "api-viewer-element": "^1.0.0-pre.3",
     "concurrently": "^5.1.0",
     "deepmerge": "^3.2.0",
     "eslint": "^6.1.0",
@@ -68,7 +64,6 @@
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
-
     "tslib": "^2.0.0",
     "typescript": "4.3.5"
   },

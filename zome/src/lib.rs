@@ -1,20 +1,17 @@
 use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
-pub mod profile;
-pub mod utils;
+mod profile;
+mod utils;
+mod types;
 
-pub use profile::*;
-pub use utils::*;
+pub use types::*;
 
-pub fn err(reason: &str) -> WasmError {
-    WasmError::Guest(String::from(reason))
-}
 
 entry_defs![
     Path::entry_def(),
     PathEntry::entry_def(),
-    profile::Profile::entry_def()
+    Profile::entry_def()
 ];
 
 /** Profiles **/
@@ -29,10 +26,6 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::update_profile(profile)
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SearchProfilesInput {
-    nickname_prefix: String,
-}
 #[hdk_extern]
 pub fn search_profiles(
     search_profiles_input: SearchProfilesInput,
