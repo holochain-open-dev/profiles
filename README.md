@@ -63,7 +63,7 @@ import { AppWebsocket } from "@holochain/conductor-api";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
 import { LitElement, html } from "lit";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { ContextProvider } from "@lit-labs/context";
+import { ContextProvider } from "@holochain-open-dev/context";
 
 class ProfilesTest extends ScopedElementsMixin(LitElement) {
   static get properties() {

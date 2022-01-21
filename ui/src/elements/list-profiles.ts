@@ -3,7 +3,7 @@ import { state } from 'lit/decorators.js';
 
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import {
   CircularProgress,
   ListItem,

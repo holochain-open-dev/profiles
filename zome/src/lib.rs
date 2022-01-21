@@ -11,13 +11,22 @@ pub fn err(reason: &str) -> WasmError {
     WasmError::Guest(String::from(reason))
 }
 
-entry_defs![Path::entry_def(), profile::Profile::entry_def()];
+entry_defs![
+    Path::entry_def(),
+    PathEntry::entry_def(),
+    profile::Profile::entry_def()
+];
 
 /** Profiles **/
 
 #[hdk_extern]
 pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     profile::create_profile(profile)
+}
+
+#[hdk_extern]
+pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
+    profile::update_profile(profile)
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

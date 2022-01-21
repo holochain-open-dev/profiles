@@ -12,5 +12,5 @@ name = "hc_zome_profiles"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.116"
-holo_hash = {version = "0.0.13", features = ["encoding"]}
+hdk = "0.0.118"
+holo_hash = {version = "0.0.15", features = ["encoding"]}

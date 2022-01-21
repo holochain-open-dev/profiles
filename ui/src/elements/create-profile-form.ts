@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { query, property, state } from 'lit/decorators.js';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { Dictionary } from '@holochain-open-dev/core-types';
 import {
