@@ -8,7 +8,8 @@
   "module": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./define-elements": "./dist/define-elements.js"
+    "./define-elements": "./dist/define-elements.js",
+    "./mocks": "./dist/mocks.js"
   },
   "files": [
     "dist"

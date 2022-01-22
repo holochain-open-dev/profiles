@@ -23,12 +23,14 @@
     "@holochain-playground/cli": "^0.0.8",
     "@rocket/cli": "^0.10.0",
     "@rocket/launch": "^0.6.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-replace": "^3.0.1",
     "api-viewer-element": "^1.0.0-pre.4",
     "concurrently": "^6.2.1",
     "concurrently-repeat": "^0.0.1",
     "cross-env": "^7.0.3",
     "new-port-cli": "^1.0.0",
+    "rocket-preset-code-tabs": "^0.2.10",
     "run-singleton-cli": "^0.0.5"
   },
   "type": "module"

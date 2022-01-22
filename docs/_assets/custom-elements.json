@@ -358,6 +358,145 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/mocks.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesZomeMock",
+          "members": [
+            {
+              "kind": "field",
+              "name": "cellId",
+              "type": {
+                "text": "CellId"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "myPubKeyB64"
+            },
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ nickname }",
+                  "type": {
+                    "text": "{ nickname: string }"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ nickname_prefix }",
+                  "type": {
+                    "text": "{ nickname_prefix: string }"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile"
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "agent_address",
+                  "type": {
+                    "text": "AgentPubKeyB64"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address",
+                  "type": {
+                    "text": "AgentPubKeyB64"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "callZome",
+              "return": {
+                "type": {
+                  "text": "Promise<any>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "zomeName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "fnName",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "payload",
+                  "type": {
+                    "text": "any"
+                  }
+                },
+                {
+                  "name": "timeout",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "addSignalHandler",
+              "return": {
+                "type": {
+                  "text": "Promise<{ unsubscribe: () => void }>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "signalHandler",
+                  "type": {
+                    "text": "AppSignalCb"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesZomeMock",
+          "declaration": {
+            "name": "ProfilesZomeMock",
+            "module": "src/mocks.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/profiles-service.ts",
       "declarations": [
         {

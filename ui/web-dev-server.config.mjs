@@ -6,7 +6,6 @@ export default {
     browser: true,
     preferBuiltins: false,
     exportConditions: ['browser', 'development'],
-
   },
   appIndex: 'demo/index.html',
   rootDir: '../',
