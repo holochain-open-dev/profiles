@@ -12,18 +12,20 @@ npm install @holochain/client
 npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
 ```
 
-2. Import the context and profiles elements with:
+2. [Choose which elements you need](/guides/ui/elements) and import them with:
+
+**If you are developing a normal web-app**:
 
 ```js
 import "@holochain-open-dev/profiles/create-profile";
-import "@holochain-open-dev/context/context-provider";
+import "@holochain-open-dev/profiles/list-profile";
 ```
 
 This will define all the elements from this module in the global `CustomElementsRegistry`.
 
 OR
 
-If you are using the `@open-wc/scoped-elements` pattern, you can import the elements' classes directly from the `@holochain-open-dev/profiles` package:
+**If you are using the `@open-wc/scoped-elements`** pattern (maybe because you are developing a library rather than a full SPA), you can import the elements' classes directly from the `@holochain-open-dev/profiles` package:
 
 ```js
 import { LitElement, html } from "lit";
@@ -43,7 +45,14 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 }
 ```
 
-3. Add the context provider **wrapping the whole section of your page in which you are going to be placing** the elements from `@holochain-open-dev/profiles`:
+3. Import the `<context-provider>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the elements from `@holochain-open-dev/profiles`:
+
+```js
+// This can be placed in the index.js, at the top level of your web-app.
+import "@holochain-open-dev/context/context-provider";
+```
+
+And then in your `index.html`:
 
 ```html
 <context-provider id="profiles-context">
@@ -75,7 +84,7 @@ const store = new ProfilesStore(cellClient, {
   avatarMode: "avatar",
 });
 
-const contextElement = document.getElementById('profiles-context);
+const contextElement = document.getElementById('profiles-context');
 contextElement.context = profilesStoreContext;
 contextElement.value = store;
 ```
