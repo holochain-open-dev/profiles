@@ -8,10 +8,9 @@ export default {
   setupDevAndBuildPlugins: [
     addPlugin(replace, {
       "import 'mermaid/dist/mermaid'": "import 'mermaid/dist/mermaid.js'",
+      "module.exports = ws": "export default WebSocket",
+      'import fetch from "cross-fetch";': "",
       delimiters: ["", ""],
-    }),
-    addPlugin(commonjs, {
-      include: [/node_modules/],
     }),
   ],
   presets: [rocketLaunch()],

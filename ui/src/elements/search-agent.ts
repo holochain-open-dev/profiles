@@ -14,33 +14,32 @@ import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { AgentProfile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
-import { HoloIdenticon } from './holo-identicon';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
 
 /**
  * @element search-agent
- * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
+ * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }
  */
 export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
   /**
-   * Whether to clear the field when an agent is selected
+   * Whether to clear the field when an agent is selected.
    * @attr clear-on-select
    */
   @property({ type: Boolean, attribute: 'clear-on-select' })
   clearOnSelect = false;
 
   /**
-   * Whether to include my own agent as a possible agent to select
+   * Whether to include my own agent as a possible agent to select.
    * @attr include-myself
    */
   @property({ type: Boolean, attribute: 'include-myself' })
   includeMyself = false;
 
   /**
-   * Label for the agent searching field
+   * Label for the agent searching field.
    * @attr field-label
    */
   @property({ type: String, attribute: 'field-label' })
@@ -48,14 +47,22 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   /** Dependencies */
 
+  /**
+   * `ProfilesStore` that is requested via context.
+   * Only set this property if you want to override the store requested via context.
+   */
   @contextProvided({ context: profilesStoreContext })
-  _store!: ProfilesStore;
+  @property({ type: Object })
+  store!: ProfilesStore;
 
   /** Private properties */
 
-  _knownProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
+  private _knownProfiles = new StoreSubscriber(
+    this,
+    () => this.store.knownProfiles
+  );
 
-  get _filteredAgents(): Array<AgentProfile> {
+  private get _filteredAgents(): Array<AgentProfile> {
     let filtered = Object.entries(this._knownProfiles.value)
       .filter(([agentPubKey, profile]) =>
         profile.nickname.startsWith(this._currentFilter as string)
@@ -63,7 +70,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this._store.myAgentPubKey !== agent.agent_pub_key
+        agent => this.store.myAgentPubKey !== agent.agent_pub_key
       );
     }
 
@@ -71,14 +78,14 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   @state()
-  _currentFilter: string | undefined = undefined;
+  private _currentFilter: string | undefined = undefined;
 
-  _lastSearchedPrefix: string | undefined = undefined;
+  private _lastSearchedPrefix: string | undefined = undefined;
 
   @query('#textfield')
-  _textField!: TextField;
+  private _textField!: TextField;
   @query('#overlay')
-  _overlay!: MenuSurface;
+  private _overlay!: MenuSurface;
 
   firstUpdated() {
     this.addEventListener('blur', () => this._overlay.close());
@@ -86,7 +93,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this._store.searchProfiles(nicknamePrefix);
+    await this.store.searchProfiles(nicknamePrefix);
   }
 
   onFilterChange() {
@@ -108,7 +115,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       this.dispatchEvent(
         new CustomEvent('agent-selected', {
           detail: {
-            agent,
+            agentPubKey: agent.agent_pub_key,
           },
         })
       );
@@ -181,6 +188,9 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     ];
   }
 
+  /**
+   * @ignore
+   */
   static get scopedElements() {
     return {
       'agent-avatar': AgentAvatar,

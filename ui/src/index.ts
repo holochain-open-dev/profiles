@@ -1,6 +1,6 @@
 export * from './types';
 export * from './context';
-export * from './elements/create-profile-form';
+export * from './elements/create-profile';
 export * from './elements/search-agent';
 export * from './elements/profile-prompt';
 export * from './elements/list-profiles';

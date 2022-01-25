@@ -51,218 +51,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/define-elements.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "CPF",
-          "superclass": {
-            "name": "CreateProfileForm",
-            "module": "/src/elements/create-profile-form"
-          },
-          "tagName": "create-profile-form",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "min-length",
-              "type": {
-                "text": "number"
-              },
-              "default": "3",
-              "description": "Minimum length that the nickname needs to have",
-              "fieldName": "minLength",
-              "attribute": "min-length",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "minLength",
-              "type": {
-                "text": "number"
-              },
-              "default": "3",
-              "description": "Minimum length that the nickname needs to have",
-              "attribute": "min-length",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_nicknameField",
-              "type": {
-                "text": "TextField"
-              },
-              "privacy": "private",
-              "description": "Private properties",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "#existingUsernames",
-              "privacy": "private",
-              "type": {
-                "text": "{ [key: string]: boolean }"
-              },
-              "default": "{}",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_avatarFilePicker",
-              "type": {
-                "text": "HTMLInputElement"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_avatar",
-              "type": {
-                "text": "string | undefined"
-              },
-              "privacy": "private",
-              "default": "undefined",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createProfile",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "resizeAndExport",
-              "parameters": [
-                {
-                  "name": "img",
-                  "type": {
-                    "text": "HTMLImageElement"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "onAvatarUploaded",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "avatarMode",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "renderAvatar",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "shouldCreateButtonBeEnabled",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            }
-          ],
-          "events": [
-            {
-              "name": "profile-created",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "after the profile has been created",
-              "inheritedFrom": {
-                "name": "CreateProfileForm",
-                "module": "src/elements/create-profile-form.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "CPF",
-          "declaration": {
-            "name": "CPF",
-            "module": "src/define-elements.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "create-profile-form",
-          "declaration": {
-            "name": "CPF",
-            "module": "src/define-elements.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/index.ts",
       "declarations": [],
       "exports": [
@@ -287,7 +75,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "./elements/create-profile-form"
+            "package": "./elements/create-profile"
           }
         },
         {
@@ -415,6 +203,10 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "get_all_profiles"
             },
             {
               "kind": "method",
@@ -809,6 +601,939 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/definitions/agent-avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AA",
+          "superclass": {
+            "name": "AgentAvatar",
+            "module": "/src/elements/agent-avatar"
+          },
+          "tagName": "agent-avatar",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "agent-pub-key",
+              "type": {
+                "text": "AgentPubKeyB64"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "fieldName": "agentPubKey",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the avatar image in pixels.",
+              "fieldName": "size",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKeyB64"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "attribute": "agent-pub-key",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the avatar image in pixels.",
+              "attribute": "size",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_profile",
+              "privacy": "private",
+              "default": "new StoreSubscriber(this, () =>\n    this.store.profileOf(this.agentPubKey)\n  )",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "agent-avatar",
+          "declaration": {
+            "name": "AA",
+            "module": "src/definitions/agent-avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/create-profile.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "CP",
+          "superclass": {
+            "name": "CreateProfile",
+            "module": "/src/elements/create-profile"
+          },
+          "tagName": "create-profile",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "min-length",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have in order to be valid.",
+              "fieldName": "minLength",
+              "attribute": "min-length",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "minLength",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Minimum length that the nickname needs to have in order to be valid.",
+              "attribute": "min-length",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_nicknameField",
+              "type": {
+                "text": "TextField"
+              },
+              "privacy": "private",
+              "description": "Private properties",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_existingUsernames",
+              "type": {
+                "text": "{ [key: string]: boolean }"
+              },
+              "privacy": "private",
+              "default": "{}",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_avatarFilePicker",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_avatar",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "resizeAndExport",
+              "parameters": [
+                {
+                  "name": "img",
+                  "type": {
+                    "text": "HTMLImageElement"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "onAvatarUploaded",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "avatarMode",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderAvatar",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "shouldCreateButtonBeEnabled",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-created",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }",
+              "inheritedFrom": {
+                "name": "CreateProfile",
+                "module": "src/elements/create-profile.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "create-profile",
+          "declaration": {
+            "name": "CP",
+            "module": "src/definitions/create-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/holo-identicon.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "HI",
+          "superclass": {
+            "name": "HoloIdenticon",
+            "module": "/src/elements/holo-identicon"
+          },
+          "tagName": "holo-identicon",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "hash",
+              "type": {
+                "text": "HoloHashB64"
+              },
+              "description": "REQUIRED. The hash that will be converted to an identicon.",
+              "fieldName": "hash",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the identicon in pixels.",
+              "fieldName": "size",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            },
+            {
+              "name": "shape",
+              "type": {
+                "text": "'square' | 'circle'"
+              },
+              "default": "'circle'",
+              "description": "Shape of the identicon.",
+              "fieldName": "shape",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "hash",
+              "type": {
+                "text": "HoloHashB64"
+              },
+              "description": "REQUIRED. The hash that will be converted to an identicon.",
+              "attribute": "hash",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the identicon in pixels.",
+              "attribute": "size",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "'square' | 'circle'"
+              },
+              "default": "'circle'",
+              "description": "Shape of the identicon.",
+              "attribute": "shape",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_canvas",
+              "type": {
+                "text": "HTMLCanvasElement"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "HoloIdenticon",
+                "module": "src/elements/holo-identicon.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "holo-identicon",
+          "declaration": {
+            "name": "HI",
+            "module": "src/definitions/holo-identicon.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/list-profiles.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "LP",
+          "superclass": {
+            "name": "ListProfiles",
+            "module": "/src/elements/list-profiles"
+          },
+          "tagName": "list-profiles",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "description": "Private properties",
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_allProfiles",
+              "privacy": "private",
+              "default": "new StoreSubscriber(\n    this,\n    () => this.store.knownProfiles\n  )",
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "initials",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nickname",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "fireAgentSelected",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }",
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "list-profiles",
+          "declaration": {
+            "name": "LP",
+            "module": "src/definitions/list-profiles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/profile-prompt.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PP",
+          "superclass": {
+            "name": "ProfilePrompt",
+            "module": "/src/elements/profile-prompt"
+          },
+          "tagName": "profile-prompt",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "ProfilePrompt",
+                "module": "src/elements/profile-prompt.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "ProfilePrompt",
+                "module": "src/elements/profile-prompt.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_loading",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true",
+              "description": "Private properties",
+              "inheritedFrom": {
+                "name": "ProfilePrompt",
+                "module": "src/elements/profile-prompt.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_myProfile",
+              "privacy": "private",
+              "default": "new StoreSubscriber(this, () => this.store.myProfile)",
+              "inheritedFrom": {
+                "name": "ProfilePrompt",
+                "module": "src/elements/profile-prompt.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderPrompt",
+              "inheritedFrom": {
+                "name": "ProfilePrompt",
+                "module": "src/elements/profile-prompt.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-prompt",
+          "declaration": {
+            "name": "PP",
+            "module": "src/definitions/profile-prompt.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/search-agent.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SA",
+          "superclass": {
+            "name": "SearchAgent",
+            "module": "/src/elements/search-agent"
+          },
+          "tagName": "search-agent",
+          "customElement": true,
+          "attributes": [
+            {
+              "name": "clear-on-select",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected.",
+              "fieldName": "clearOnSelect",
+              "attribute": "clear-on-select",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "name": "include-myself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "fieldName": "includeMyself",
+              "attribute": "include-myself",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "name": "field-label",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search agent'",
+              "description": "Label for the agent searching field.",
+              "fieldName": "fieldLabel",
+              "attribute": "field-label",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "clearOnSelect",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected.",
+              "attribute": "clear-on-select",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "includeMyself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "attribute": "include-myself",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "fieldLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search agent'",
+              "description": "Label for the agent searching field.",
+              "attribute": "field-label",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_knownProfiles",
+              "privacy": "private",
+              "default": "new StoreSubscriber(\n    this,\n    () => this.store.knownProfiles\n  )",
+              "description": "Private properties",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_filteredAgents",
+              "type": {
+                "text": "Array<AgentProfile>"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_currentFilter",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_lastSearchedPrefix",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "default": "undefined",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_textField",
+              "type": {
+                "text": "TextField"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_overlay",
+              "type": {
+                "text": "MenuSurface"
+              },
+              "privacy": "private",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "searchAgents",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nicknamePrefix",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "onFilterChange",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "onUsernameSelected",
+              "parameters": [
+                {
+                  "name": "agent",
+                  "type": {
+                    "text": "AgentProfile"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }",
+              "inheritedFrom": {
+                "name": "SearchAgent",
+                "module": "src/elements/search-agent.ts"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "search-agent",
+          "declaration": {
+            "name": "SA",
+            "module": "src/definitions/search-agent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/elements/agent-avatar.ts",
       "declarations": [
         {
@@ -822,7 +1547,7 @@
               "type": {
                 "text": "AgentPubKeyB64"
               },
-              "description": "Public properties",
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "attribute": "agent-pub-key"
             },
             {
@@ -832,25 +1557,23 @@
                 "text": "number"
               },
               "default": "32",
+              "description": "Size of the avatar image in pixels.",
               "attribute": "size"
             },
             {
               "kind": "field",
-              "name": "_store",
+              "name": "store",
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "Dependencies"
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store"
             },
             {
               "kind": "field",
               "name": "_profile",
-              "default": "new StoreSubscriber(this, () =>\n    this._store.profileOf(this.agentPubKey)\n  )"
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
+              "privacy": "private",
+              "default": "new StoreSubscriber(this, () =>\n    this.store.profileOf(this.agentPubKey)\n  )"
             }
           ],
           "attributes": [
@@ -859,7 +1582,7 @@
               "type": {
                 "text": "AgentPubKeyB64"
               },
-              "description": "Public properties",
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "fieldName": "agentPubKey"
             },
             {
@@ -868,7 +1591,16 @@
                 "text": "number"
               },
               "default": "32",
+              "description": "Size of the avatar image in pixels.",
               "fieldName": "size"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -897,12 +1629,12 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/create-profile-form.ts",
+      "path": "src/elements/create-profile.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "",
-          "name": "CreateProfileForm",
+          "description": "A custom element that fires event on value change.",
+          "name": "CreateProfile",
           "members": [
             {
               "kind": "field",
@@ -911,7 +1643,7 @@
                 "text": "number"
               },
               "default": "3",
-              "description": "Minimum length that the nickname needs to have",
+              "description": "Minimum length that the nickname needs to have in order to be valid.",
               "attribute": "min-length"
             },
             {
@@ -920,7 +1652,7 @@
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
               "attribute": "store"
             },
             {
@@ -934,11 +1666,11 @@
             },
             {
               "kind": "field",
-              "name": "#existingUsernames",
-              "privacy": "private",
+              "name": "_existingUsernames",
               "type": {
                 "text": "{ [key: string]: boolean }"
               },
+              "privacy": "private",
               "default": "{}"
             },
             {
@@ -997,7 +1729,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "after the profile has been created"
+              "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }"
             }
           ],
           "attributes": [
@@ -1007,7 +1739,7 @@
                 "text": "number"
               },
               "default": "3",
-              "description": "Minimum length that the nickname needs to have",
+              "description": "Minimum length that the nickname needs to have in order to be valid.",
               "fieldName": "minLength",
               "attribute": "min-length"
             },
@@ -1016,7 +1748,7 @@
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "`ProfilesStore` that is requested via context\nOnly set this property if you want to override the store requested via context",
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
               "fieldName": "store"
             }
           ],
@@ -1030,17 +1762,17 @@
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "create-profile-form",
+          "tagName": "create-profile",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "CreateProfileForm",
+          "name": "CreateProfile",
           "declaration": {
-            "name": "CreateProfileForm",
-            "module": "src/elements/create-profile-form.ts"
+            "name": "CreateProfile",
+            "module": "src/elements/create-profile.ts"
           }
         }
       ]
@@ -1060,15 +1792,17 @@
               "type": {
                 "text": "HoloHashB64"
               },
+              "description": "REQUIRED. The hash that will be converted to an identicon.",
               "attribute": "hash"
             },
             {
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "number | undefined"
+                "text": "number"
               },
-              "default": "undefined",
+              "default": "32",
+              "description": "Size of the identicon in pixels.",
               "attribute": "size"
             },
             {
@@ -1078,6 +1812,7 @@
                 "text": "'square' | 'circle'"
               },
               "default": "'circle'",
+              "description": "Shape of the identicon.",
               "attribute": "shape"
             },
             {
@@ -1085,7 +1820,8 @@
               "name": "_canvas",
               "type": {
                 "text": "HTMLCanvasElement"
-              }
+              },
+              "privacy": "private"
             }
           ],
           "attributes": [
@@ -1094,17 +1830,16 @@
               "type": {
                 "text": "HoloHashB64"
               },
+              "description": "REQUIRED. The hash that will be converted to an identicon.",
               "fieldName": "hash"
             },
             {
               "name": "size",
               "type": {
-                "text": "number | undefined"
+                "text": "number"
               },
-              "default": "undefined",
-              "resolveInitializer": {
-                "module": "src/elements/holo-identicon.ts"
-              },
+              "default": "32",
+              "description": "Size of the identicon in pixels.",
               "fieldName": "size"
             },
             {
@@ -1113,6 +1848,7 @@
                 "text": "'square' | 'circle'"
               },
               "default": "'circle'",
+              "description": "Shape of the identicon.",
               "fieldName": "shape"
             }
           ],
@@ -1145,11 +1881,12 @@
           "members": [
             {
               "kind": "field",
-              "name": "_store",
+              "name": "store",
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "Dependencies"
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store"
             },
             {
               "kind": "field",
@@ -1157,13 +1894,15 @@
               "type": {
                 "text": "boolean"
               },
+              "privacy": "private",
               "default": "true",
               "description": "Private properties"
             },
             {
               "kind": "field",
               "name": "_allProfiles",
-              "default": "new StoreSubscriber(this, () => this._store.knownProfiles)"
+              "privacy": "private",
+              "default": "new StoreSubscriber(\n    this,\n    () => this.store.knownProfiles\n  )"
             },
             {
               "kind": "method",
@@ -1183,9 +1922,35 @@
               ]
             },
             {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
+              "kind": "method",
+              "name": "fireAgentSelected",
+              "parameters": [
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -1198,6 +1963,7 @@
             "name": "LitElement",
             "package": "lit"
           },
+          "tagName": "list-profiles",
           "customElement": true
         }
       ],
@@ -1220,14 +1986,21 @@
           "kind": "class",
           "description": "",
           "name": "ProfilePrompt",
+          "slots": [
+            {
+              "description": "Will be displayed above the create-profile form when the user is prompted with it",
+              "name": "hero"
+            }
+          ],
           "members": [
             {
               "kind": "field",
-              "name": "_store",
+              "name": "store",
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "Dependencies"
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store"
             },
             {
               "kind": "field",
@@ -1235,34 +2008,29 @@
               "type": {
                 "text": "boolean"
               },
+              "privacy": "private",
               "default": "true",
-              "description": "Private properties",
-              "attribute": "_loading"
+              "description": "Private properties"
             },
             {
               "kind": "field",
               "name": "_myProfile",
-              "default": "new StoreSubscriber(this, () => this._store.myProfile)"
+              "privacy": "private",
+              "default": "new StoreSubscriber(this, () => this.store.myProfile)"
             },
             {
               "kind": "method",
               "name": "renderPrompt"
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
             }
           ],
           "attributes": [
             {
-              "name": "_loading",
+              "name": "store",
               "type": {
-                "text": "boolean"
+                "text": "ProfilesStore"
               },
-              "default": "true",
-              "description": "Private properties",
-              "fieldName": "_loading"
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -1306,7 +2074,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether to clear the field when an agent is selected",
+              "description": "Whether to clear the field when an agent is selected.",
               "attribute": "clear-on-select"
             },
             {
@@ -1316,7 +2084,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether to include my own agent as a possible agent to select",
+              "description": "Whether to include my own agent as a possible agent to select.",
               "attribute": "include-myself"
             },
             {
@@ -1326,21 +2094,23 @@
                 "text": "string"
               },
               "default": "'Search agent'",
-              "description": "Label for the agent searching field",
+              "description": "Label for the agent searching field.",
               "attribute": "field-label"
             },
             {
               "kind": "field",
-              "name": "_store",
+              "name": "store",
               "type": {
                 "text": "ProfilesStore"
               },
-              "description": "Dependencies"
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "attribute": "store"
             },
             {
               "kind": "field",
               "name": "_knownProfiles",
-              "default": "new StoreSubscriber(this, () => this._store.knownProfiles)",
+              "privacy": "private",
+              "default": "new StoreSubscriber(\n    this,\n    () => this.store.knownProfiles\n  )",
               "description": "Private properties"
             },
             {
@@ -1348,7 +2118,8 @@
               "name": "_filteredAgents",
               "type": {
                 "text": "Array<AgentProfile>"
-              }
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -1356,6 +2127,7 @@
               "type": {
                 "text": "string | undefined"
               },
+              "privacy": "private",
               "default": "undefined"
             },
             {
@@ -1364,6 +2136,7 @@
               "type": {
                 "text": "string | undefined"
               },
+              "privacy": "private",
               "default": "undefined"
             },
             {
@@ -1371,14 +2144,16 @@
               "name": "_textField",
               "type": {
                 "text": "TextField"
-              }
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
               "name": "_overlay",
               "type": {
                 "text": "MenuSurface"
-              }
+              },
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -1412,11 +2187,6 @@
                   }
                 }
               ]
-            },
-            {
-              "kind": "field",
-              "name": "scopedElements",
-              "static": true
             }
           ],
           "events": [
@@ -1425,7 +2195,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when the user selects some agent. `event.detail.agent` will contain the agent selected"
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }"
             }
           ],
           "attributes": [
@@ -1435,7 +2205,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether to clear the field when an agent is selected",
+              "description": "Whether to clear the field when an agent is selected.",
               "fieldName": "clearOnSelect",
               "attribute": "clear-on-select"
             },
@@ -1445,7 +2215,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether to include my own agent as a possible agent to select",
+              "description": "Whether to include my own agent as a possible agent to select.",
               "fieldName": "includeMyself",
               "attribute": "include-myself"
             },
@@ -1455,9 +2225,17 @@
                 "text": "string"
               },
               "default": "'Search agent'",
-              "description": "Label for the agent searching field",
+              "description": "Label for the agent searching field.",
               "fieldName": "fieldLabel",
               "attribute": "field-label"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
+              "fieldName": "store"
             }
           ],
           "mixins": [

@@ -17,14 +17,16 @@ import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 
 /**
- * @element create-profile-form
- * @fires profile-created - after the profile has been created
+ * A custom element that fires event on value change.
+ * 
+ * @element create-profile
+ * @fires profile-created - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
  */
-export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
+export class CreateProfile extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
   /**
-   * Minimum length that the nickname needs to have
+   * Minimum length that the nickname needs to have in order to be valid.
    * @attr min-length
    */
   @property({ type: Number, attribute: 'min-length' })
@@ -33,8 +35,8 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context
-   * Only set this property if you want to override the store requested via context
+   * `ProfilesStore` that is requested via context.
+   * Only set this property if you want to override the store requested via context.
    */
   @contextProvided({ context: profilesStoreContext })
   @property({ type: Object })
@@ -45,7 +47,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
   @query('#nickname-field')
   private _nicknameField!: TextField;
 
-  #existingUsernames: { [key: string]: boolean } = {};
+  private _existingUsernames: { [key: string]: boolean } = {};
 
   @query('#avatar-file-picker')
   private _avatarFilePicker!: HTMLInputElement;
@@ -61,7 +63,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         return {
           valid: false,
         };
-      } else if (this.#existingUsernames[newValue]) {
+      } else if (this._existingUsernames[newValue]) {
         this._nicknameField.setCustomValidity('This nickname already exists');
         return { valid: false };
       }
@@ -98,7 +100,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
         })
       );
     } catch (e) {
-      this.#existingUsernames[nickname] = true;
+      this._existingUsernames[nickname] = true;
       this._nicknameField.reportValidity();
     }
   }
@@ -210,7 +212,7 @@ export class CreateProfileForm extends ScopedElementsMixin(LitElement) {
       <mwc-card style="width: auto">
         <div class="column" style="margin: 16px;">
           <span class="title" style="margin-bottom: 24px;">Create Profile</span>
-          <div class="row">
+          <div class="row" style="justify-content: center" ;>
             ${this.renderAvatar()}
 
             <mwc-textfield

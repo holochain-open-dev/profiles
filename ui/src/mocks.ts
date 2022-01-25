@@ -1,13 +1,20 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
-import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
-import { CellId, AppSignalCb, fakeAgentPubKey } from '@holochain/client';
+import {
+  AgentPubKeyB64,
+  deserializeHash,
+  serializeHash,
+} from '@holochain-open-dev/core-types';
+import { CellId, AppSignalCb } from '@holochain/client';
 import { AgentProfile } from './types';
 
 export class ProfilesZomeMock implements CellClient {
   constructor(protected agents: Array<AgentProfile> = []) {}
 
   get cellId(): CellId {
-    return [fakeAgentPubKey(), fakeAgentPubKey()];
+    return [
+      deserializeHash('uhC0kkSpFl08_2D0Pvw2vEVEkfSgDVZCkyOf1je6qIdClO1o'),
+      deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI'),
+    ];
   }
 
   get myPubKeyB64() {
@@ -43,6 +50,10 @@ export class ProfilesZomeMock implements CellClient {
   get_agent_profile(agent_address: AgentPubKeyB64) {
     const agent = this.findAgent(agent_address);
     return agent ? agent : undefined;
+  }
+
+  get_all_profiles() {
+    return this.agents;
   }
 
   findAgent(agent_address: AgentPubKeyB64) {
