@@ -1,7 +1,7 @@
 {
   "name": "@holochain-open-dev/profiles",
   "version": "0.0.1",
-  "description": "TODO: change description",
+  "description": "UI module for the Holochain profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
   "main": "dist/index.js",
@@ -34,7 +34,7 @@
     "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
-    "@holo-host/identicon": "git+https://github.com/holo-host/identicon.git#types",
+    "@holo-host/identicon": "^0.1.0",
     "@holochain-open-dev/cell-client": "^0.2.0",
     "@holochain/client": "^0.3.2",
     "@holochain-open-dev/core-types": "0.1.1",
