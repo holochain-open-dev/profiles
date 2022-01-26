@@ -15,9 +15,9 @@
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
     "playground": "run-singleton \"holochain-playground\"",
-    "docs:setup": "npm run -w @holochain-open-dev/profiles analyze && cp ui/custom-elements.json docs/_assets",
+    "docs:setup": "npm run -w @holochain-open-dev/profiles analyze && cp ui/custom-elements.json docs/_assets/_static",
     "docs:start": "npm run docs:setup && rocket start",
-    "docs:publish": "npm run docs:setup && rocket build"
+    "docs:publish": "npm run docs:setup && rocket build && gh-pages --dotfiles -d ./_site -b gh-pages"
   },
   "devDependencies": {
     "@holochain-playground/cli": "^0.0.8",
@@ -29,8 +29,8 @@
     "concurrently": "^6.2.1",
     "concurrently-repeat": "^0.0.1",
     "cross-env": "^7.0.3",
+    "gh-pages": "^3.2.3",
     "new-port-cli": "^1.0.0",
-    "rocket-preset-code-tabs": "^0.2.10",
     "run-singleton-cli": "^0.0.5"
   },
   "type": "module"

@@ -53,6 +53,14 @@ const store = new ProfilesStore(
   ])
 );
 
+let src = "/_merged_assets/_static/custom-elements.json";
+const isGhPages = !window.location.href.includes("localhost:");
+
+if (isGhPages) {
+  const components = window.location.href.split("/");
+  src = `/${components[3]}${src}`;
+}
+
 export const foo = () => html`
   <link
     href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
@@ -60,11 +68,7 @@ export const foo = () => html`
   />
 
   <context-provider .context=${profilesStoreContext} .value=${store}>
-    <api-viewer
-      src="/_merged_assets/custom-elements.json"
-      exclude-knobs="store"
-      section="demo"
-    >
+    <api-viewer src="${src}" exclude-knobs="store" section="demo">
       <template data-element="agent-avatar" data-target="host">
         <agent-avatar
           agent-pub-key="uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU"

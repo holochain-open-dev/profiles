@@ -21,4 +21,5 @@ export default {
       mainFields: ["module", "browser", "main"],
     },
   },
+  pathPrefix: "/profiles/",
 };
