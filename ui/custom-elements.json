@@ -181,9 +181,9 @@
               "name": "search_profiles",
               "parameters": [
                 {
-                  "name": "{ nickname_prefix }",
+                  "name": "{ nicknamePrefix }",
                   "type": {
-                    "text": "{ nickname_prefix: string }"
+                    "text": "{ nicknamePrefix: string }"
                   }
                 }
               ]
@@ -301,16 +301,17 @@
               "name": "getMyProfile",
               "return": {
                 "type": {
-                  "text": "Promise<AgentProfile>"
+                  "text": ""
                 }
-              }
+              },
+              "description": "Get my profile, if it has been created"
             },
             {
               "kind": "method",
               "name": "getAgentProfile",
               "return": {
                 "type": {
-                  "text": "Promise<AgentProfile>"
+                  "text": ""
                 }
               },
               "parameters": [
@@ -318,16 +319,18 @@
                   "name": "agentPubKey",
                   "type": {
                     "text": "AgentPubKeyB64"
-                  }
+                  },
+                  "description": "the agent to get the profile for"
                 }
-              ]
+              ],
+              "description": "Get the profile for the given agent, if they have created it"
             },
             {
               "kind": "method",
               "name": "getAgentsProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<AgentProfile[]>"
+                  "text": ""
                 }
               },
               "parameters": [
@@ -335,16 +338,18 @@
                   "name": "agentPubKeys",
                   "type": {
                     "text": "AgentPubKeyB64[]"
-                  }
+                  },
+                  "description": "the agents to get the profile for"
                 }
-              ]
+              ],
+              "description": "Get the profiles for the given agent"
             },
             {
               "kind": "method",
               "name": "searchProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Array<AgentProfile>>"
+                  "text": ""
                 }
               },
               "parameters": [
@@ -352,25 +357,28 @@
                   "name": "nicknamePrefix",
                   "type": {
                     "text": "string"
-                  }
+                  },
+                  "description": "must be of at least 3 characters"
                 }
-              ]
+              ],
+              "description": "Search profiles that start with nicknamePrefix"
             },
             {
               "kind": "method",
               "name": "getAllProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Array<AgentProfile>>"
+                  "text": ""
                 }
-              }
+              },
+              "description": "Get the profiles for all the agents in the DHT"
             },
             {
               "kind": "method",
               "name": "createProfile",
               "return": {
                 "type": {
-                  "text": "Promise<AgentProfile>"
+                  "text": ""
                 }
               },
               "parameters": [
@@ -378,9 +386,11 @@
                   "name": "profile",
                   "type": {
                     "text": "Profile"
-                  }
+                  },
+                  "description": "the profile to create"
                 }
-              ]
+              ],
+              "description": "Create my profile"
             },
             {
               "kind": "method",
@@ -500,7 +510,7 @@
                   "text": "Promise<void>"
                 }
               },
-              "description": "Actions"
+              "description": "Fetches the profiles for all agents in the DHT\n\nYou can subscribe to `knowProfiles` to get updated with all the profiles when this call is done\n\nWarning! Can be very slow"
             },
             {
               "kind": "method",
@@ -517,7 +527,8 @@
                     "text": "AgentPubKeyB64"
                   }
                 }
-              ]
+              ],
+              "description": "Fetches the profile for the given agent"
             },
             {
               "kind": "method",
@@ -534,7 +545,8 @@
                     "text": "AgentPubKeyB64[]"
                   }
                 }
-              ]
+              ],
+              "description": "Fetches the profiles for the given agents in the DHT\n\nYou can subscribe to knowProfiles to get updated with all the profiles when this call is done\n\nUse this over `fetchAgentProfile` when fetching multiple profiles, as it will be more performant"
             },
             {
               "kind": "method",
@@ -543,14 +555,15 @@
                 "type": {
                   "text": "Promise<void>"
                 }
-              }
+              },
+              "description": "Fetch my profile\n\nYou can subscribe to `myProfile` to get updated with my profile"
             },
             {
               "kind": "method",
               "name": "searchProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<AgentProfile[]>"
+                  "text": ""
                 }
               },
               "parameters": [
@@ -558,9 +571,11 @@
                   "name": "nicknamePrefix",
                   "type": {
                     "text": "string"
-                  }
+                  },
+                  "description": "must be of at least 3 characters"
                 }
-              ]
+              ],
+              "description": "Search the profiles for the agent with nicknames starting with the given nicknamePrefix"
             },
             {
               "kind": "method",
@@ -575,9 +590,11 @@
                   "name": "profile",
                   "type": {
                     "text": "Profile"
-                  }
+                  },
+                  "description": "profile to be created"
                 }
-              ]
+              ],
+              "description": "Create my profile\n\nNote that there is no guarantee on nickname uniqness"
             }
           ]
         }
@@ -598,6 +615,108 @@
       "path": "src/types.ts",
       "declarations": [],
       "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -2259,108 +2378,6 @@
           "declaration": {
             "name": "SearchAgent",
             "module": "src/elements/search-agent.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]
