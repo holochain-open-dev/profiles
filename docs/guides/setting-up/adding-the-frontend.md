@@ -1,4 +1,4 @@
-# Setting Up >> Adding the UI Module ||20
+# Setting Up >> Adding the Frontend ||20
 
 > This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
 
@@ -14,7 +14,7 @@ npm install @holochain/client
 npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
 ```
 
-2. [Choose which elements you need](/guides/frontend/elements/index.html) and import them with:
+2. [Choose which elements you need](/guides/frontend/elements/index.html) and import them:
 
 **If you are developing a normal web-app**:
 
@@ -23,7 +23,7 @@ import "@holochain-open-dev/profiles/create-profile";
 import "@holochain-open-dev/profiles/list-profile";
 ```
 
-This will define all the elements from this module in the global `CustomElementsRegistry`.
+This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
 
 OR
 

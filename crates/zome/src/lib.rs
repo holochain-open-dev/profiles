@@ -1,3 +1,12 @@
+//! ## hc_zome_profiles
+//! 
+//! Profiles zome for any Holochain app.
+//! 
+//! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
+//! you can directly include this zome in your DNA.
+//! 
+//! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
+
 use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
@@ -39,8 +48,8 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKeyB64) -> ExternResult<Option<A
 }
 
 /// Returns the profiles for the given agents if they have created them.
-/// 
-/// Use this function if you need to get the profile for multiple agents at the same time, 
+///
+/// Use this function if you need to get the profile for multiple agents at the same time,
 /// as it will be more performant than doing multiple `get_agent_profile`.
 #[hdk_extern]
 pub fn get_agents_profile(
@@ -63,7 +72,7 @@ pub fn get_my_profile(_: ()) -> ExternResult<Option<AgentProfile>> {
 }
 
 /// Gets all the profiles that have been created in the network.
-/// 
+///
 /// Careful! This will not be very performant in large networks.
 /// In the future a cursor type functionality will be added to make this function performant.
 #[hdk_extern]

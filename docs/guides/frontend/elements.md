@@ -6,7 +6,7 @@ To add one of these elements to your web-app, import it like this:
 import "@holochain-open-dev/profiles/agent-avatar";
 ```
 
-Keep in mind that these elements should be placed inside a `<context-provider>` that provides the `ProfilesStore`. Follow the [Adding the UI](/guides/setting-up/installing-the-ui/) guide to get started, or read [this to know more about the context pattern]().
+Keep in mind that these elements should be placed inside a `<context-provider>` that provides the `ProfilesStore`. Follow the [Adding the UI](/guides/setting-up/adding-the-frontend/) guide to get started, or read [this to know more about the context pattern]().
 
 Click on the selector on the right to look at all the elements available.
 

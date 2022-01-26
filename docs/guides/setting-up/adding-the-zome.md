@@ -8,7 +8,7 @@
 
 ```toml
 [dependencies]
-hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main" package = "hc_zome_profiles"}
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main", package = "hc_zome_profiles"}
 ```
 
 5. Create a `src` folder besides the `Cargo.toml` with this content:
