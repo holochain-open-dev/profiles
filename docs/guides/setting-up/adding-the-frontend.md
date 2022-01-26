@@ -70,7 +70,7 @@ import {
   SearchAgent,
   ProfilesStore,
   ListProfiles,
-  profilesStoreContext
+  profilesStoreContext,
 } from "@holochain-open-dev/profiles";
 import { AppWebsocket } from "@holochain/client";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
@@ -86,9 +86,21 @@ const store = new ProfilesStore(cellClient, {
   avatarMode: "avatar",
 });
 
-const contextElement = document.getElementById('profiles-context');
+const contextElement = document.getElementById("profiles-context");
 contextElement.context = profilesStoreContext;
 contextElement.value = store;
+```
+
+5. Add the Material Icons font in your `<head>` tag:
+
+```html
+<head>
+  ...
+  <link
+    href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
+    rel="stylesheet"
+  />
+</head>
 ```
 
 You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/profiles/blob/main/ui/demo/index.html).

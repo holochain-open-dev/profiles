@@ -31,9 +31,9 @@ export class ProfilesZomeMock implements CellClient {
     return agent;
   }
 
-  search_profiles({ nickname_prefix }: { nickname_prefix: string }) {
+  search_profiles({ nicknamePrefix }: { nicknamePrefix: string }) {
     return this.agents.filter(a =>
-      a.profile.nickname.startsWith(nickname_prefix.slice(0, 3))
+      a.profile.nickname.startsWith(nicknamePrefix.slice(0, 3))
     );
   }
 

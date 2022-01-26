@@ -31,7 +31,7 @@ customElements.define("context-provider", ContextProviderElement);
 const store = new ProfilesStore(
   new ProfilesZomeMock([
     {
-      agent_pub_key: "uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww",
+      agentPubKey: "uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww",
       profile: {
         nickname: "Alice",
         fields: {
@@ -41,7 +41,7 @@ const store = new ProfilesStore(
       },
     },
     {
-      agent_pub_key: "uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU",
+      agentPubKey: "uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU",
       profile: {
         nickname: "Bob",
         fields: {

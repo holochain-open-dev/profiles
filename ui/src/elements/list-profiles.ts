@@ -37,7 +37,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
   private _allProfiles = new StoreSubscriber(
     this,
-    () => this.store.knownProfiles
+    () => this.store?.knownProfiles
   );
 
   async firstUpdated() {
