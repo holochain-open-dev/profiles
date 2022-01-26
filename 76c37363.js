@@ -10454,7 +10454,7 @@ var Jg=tg`
 
   <context-provider .context=${lk} .value=${uA}>
     <api-viewer
-      src="_merged_assets/_static/custom-elements.json"
+      src="/_merged_assets/_static/custom-elements.json"
       exclude-knobs="store"
       section="demo"
     >
@@ -10479,4 +10479,4 @@ var Jg=tg`
       </template>
     </api-viewer>
   </context-provider>
-`,fA=document,gA=[{key:"foo",story:mA}];let bA=!1;for(const e of gA){const t=fA.querySelector(`[mdjs-story-name="${e.key}"]`);t&&(t.story=e.story,t.key=e.key,bA=!0,Object.assign(t,{}))}bA&&(customElements.get("mdjs-preview")||import("./bf92a62b.js"),customElements.get("mdjs-story")||import("./00ac6480.js"));export{Ue as M,mA as f};
+`,fA=document,gA=[{key:"foo",story:mA}];let bA=!1;for(const e of gA){const t=fA.querySelector(`[mdjs-story-name="${e.key}"]`);t&&(t.story=e.story,t.key=e.key,bA=!0,Object.assign(t,{}))}bA&&(customElements.get("mdjs-preview")||import("./c8138a8f.js"),customElements.get("mdjs-story")||import("./219df775.js"));export{Ue as M,mA as f};
