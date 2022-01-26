@@ -81,6 +81,9 @@
       "eslint-config-prettier"
     ]
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "prettier": {
     "singleQuote": true,
     "arrowParens": "avoid"
