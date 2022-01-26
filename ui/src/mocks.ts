@@ -23,7 +23,7 @@ export class ProfilesZomeMock implements CellClient {
 
   create_profile({ nickname }: { nickname: string }) {
     const agent: AgentProfile = {
-      agent_pub_key: this.myPubKeyB64,
+      agentPubKey: this.myPubKeyB64,
       profile: { nickname, fields: {} },
     };
     this.agents.push(agent);
@@ -42,7 +42,7 @@ export class ProfilesZomeMock implements CellClient {
 
     if (!agent) return undefined;
     return {
-      agent_pub_key: agent.agent_pub_key,
+      agentPubKey: agent.agentPubKey,
       profile: agent ? agent.profile : undefined,
     };
   }
@@ -57,7 +57,7 @@ export class ProfilesZomeMock implements CellClient {
   }
 
   findAgent(agent_address: AgentPubKeyB64) {
-    return this.agents.find(user => user.agent_pub_key === agent_address);
+    return this.agents.find(user => user.agentPubKey === agent_address);
   }
 
   callZome(

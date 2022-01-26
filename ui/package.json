@@ -1,7 +1,7 @@
 {
   "name": "@holochain-open-dev/profiles",
   "version": "0.0.1",
-  "description": "UI module for the Holochain profiles zome",
+  "description": "UI Module for the Holochain hc_zome_profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
   "main": "dist/index.js",

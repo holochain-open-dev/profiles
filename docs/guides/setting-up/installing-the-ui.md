@@ -1,4 +1,6 @@
-# Setting Up >> Adding the UI ||20
+# Setting Up >> Adding the UI Module ||20
+
+> This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
 
 0. If you haven't yet, install the `@holochain/client`:
 
@@ -12,7 +14,7 @@ npm install @holochain/client
 npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
 ```
 
-2. [Choose which elements you need](/guides/ui/elements) and import them with:
+2. [Choose which elements you need](/guides/frontend/elements/index.html) and import them with:
 
 **If you are developing a normal web-app**:
 
@@ -25,7 +27,7 @@ This will define all the elements from this module in the global `CustomElements
 
 OR
 
-**If you are using the `@open-wc/scoped-elements`** pattern (maybe because you are developing a library rather than a full SPA), you can import the elements' classes directly from the `@holochain-open-dev/profiles` package:
+**If you are using the `@open-wc/scoped-elements`** pattern (maybe because you are developing a library rather than a full SPA), you can import the elements' classes directly from the `@holochain-open-dev/profiles` package instead of defining them globally:
 
 ```js
 import { LitElement, html } from "lit";

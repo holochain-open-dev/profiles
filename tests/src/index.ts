@@ -93,7 +93,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
     "get_my_profile",
     null
   );
-  t.ok(myProfile.agent_pub_key);
+  t.ok(myProfile.agentPubKey);
   t.equal(myProfile.profile.nickname, "alice2");
 
   let allprofiles = await bob_profiles.cells[0].call(
@@ -114,38 +114,38 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
     "profiles",
     "search_profiles",
     {
-      nickname_prefix: "sdf",
+      nicknamePrefix: "sdf",
     }
   );
   t.equal(profiles.length, 0);
 
   profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-    nickname_prefix: "alic",
+    nicknamePrefix: "alic",
   });
   t.equal(profiles.length, 2);
-  t.ok(profiles[0].agent_pub_key);
+  t.ok(profiles[0].agentPubKey);
   t.equal(profiles[1].profile.nickname, "alice2");
 
   profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-    nickname_prefix: "ali",
+    nicknamePrefix: "ali",
   });
   t.equal(profiles.length, 2);
-  t.ok(profiles[0].agent_pub_key);
+  t.ok(profiles[0].agentPubKey);
   t.equal(profiles[1].profile.nickname, "alice2");
   t.equal(profiles[1].profile.fields.avatar, "aliceavatar2");
 
   profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-    nickname_prefix: "alice",
+    nicknamePrefix: "alice",
   });
   t.equal(profiles.length, 2);
-  t.ok(profiles[1].agent_pub_key);
+  t.ok(profiles[1].agentPubKey);
   t.equal(profiles[1].profile.nickname, "alice2");
 
   profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-    nickname_prefix: "alice_",
+    nicknamePrefix: "alice_",
   });
   t.equal(profiles.length, 2);
-  t.ok(profiles[0].agent_pub_key);
+  t.ok(profiles[0].agentPubKey);
   t.equal(profiles[0].profile.nickname, "alice_bob");
   t.equal(profiles[0].profile.fields.avatar, "bobboavatar");
 });
@@ -181,32 +181,32 @@ orchestrator.registerScenario(
       "profiles",
       "search_profiles",
       {
-        nickname_prefix: "ali",
+        nicknamePrefix: "ali",
       }
     );
     t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
+    t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
     profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-      nickname_prefix: "aLI",
+      nicknamePrefix: "aLI",
     });
     t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
+    t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
     profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-      nickname_prefix: "AlI",
+      nicknamePrefix: "AlI",
     });
     t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
+    t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
     profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
-      nickname_prefix: "ALI",
+      nicknamePrefix: "ALI",
     });
     t.equal(profiles.length, 1);
-    t.ok(profiles[0].agent_pub_key);
+    t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
   }
 );

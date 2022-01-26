@@ -1,4 +1,4 @@
-# UI Documentation >> ProfilesStore ||20
+# Frontend Docs >> ProfilesStore ||20
 
 The `ProfilesStore` is a JS class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements. 
 

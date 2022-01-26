@@ -21,7 +21,7 @@ export class ProfilesService {
 
   async searchProfiles(nicknamePrefix: string): Promise<Array<AgentProfile>> {
     return this.callZome('search_profiles', {
-      nickname_prefix: nicknamePrefix,
+      nicknamePrefix: nicknamePrefix,
     });
   }
 
@@ -33,7 +33,7 @@ export class ProfilesService {
     const profileResult = await this.callZome('create_profile', profile);
 
     return {
-      agent_pub_key: profileResult.agent_pub_key,
+      agentPubKey: profileResult.agentPubKey,
       profile: profileResult.profile,
     };
   }

@@ -67,10 +67,10 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       .filter(([agentPubKey, profile]) =>
         profile.nickname.startsWith(this._currentFilter as string)
       )
-      .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
+      .map(([agentPubKey, profile]) => ({ agentPubKey, profile }));
     if (!this.includeMyself) {
       filtered = filtered.filter(
-        agent => this.store.myAgentPubKey !== agent.agent_pub_key
+        agent => this.store.myAgentPubKey !== agent.agentPubKey
       );
     }
 
@@ -115,7 +115,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       this.dispatchEvent(
         new CustomEvent('agent-selected', {
           detail: {
-            agentPubKey: agent.agent_pub_key,
+            agentPubKey: agent.agentPubKey,
           },
         })
       );
@@ -152,13 +152,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                   <mwc-list style="min-width: 80px;">
                     <mwc-list-item
                       graphic="avatar"
-                      .value=${agent.agent_pub_key}
+                      .value=${agent.agentPubKey}
                       style="--mdc-list-item-graphic-size: 32px;"
                       @request-selected=${() => this.onUsernameSelected(agent)}
                     >
                       <agent-avatar
                         slot="graphic"
-                        .agentPubKey=${agent.agent_pub_key}
+                        .agentPubKey=${agent.agentPubKey}
                       ></agent-avatar>
                       <span style="margin-left: 8px;"
                         >${agent.profile.nickname}</span

@@ -1,4 +1,4 @@
-# UI Documentation >> Elements ||10
+# Frontend Docs >> Elements ||10
 
 To add one of these elements to your web-app, import it like this:
 

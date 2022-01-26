@@ -50,7 +50,7 @@ export class ProfilesStore {
 
     this._knownProfilesStore.update(profiles => {
       for (const profile of allProfiles) {
-        profiles[profile.agent_pub_key] = profile.profile;
+        profiles[profile.agentPubKey] = profile.profile;
       }
       return profiles;
     });
@@ -71,7 +71,7 @@ export class ProfilesStore {
     if (!profile) return;
 
     this._knownProfilesStore.update(profiles => {
-      profiles[profile.agent_pub_key] = profile.profile;
+      profiles[profile.agentPubKey] = profile.profile;
       return profiles;
     });
     return profile.profile;
@@ -98,7 +98,7 @@ export class ProfilesStore {
 
     this._knownProfilesStore.update(profiles => {
       for (const fetchedProfile of fetchedProfiles) {
-        profiles[fetchedProfile.agent_pub_key] = fetchedProfile.profile;
+        profiles[fetchedProfile.agentPubKey] = fetchedProfile.profile;
       }
       return profiles;
     });
@@ -108,7 +108,7 @@ export class ProfilesStore {
     const profile = await this._service.getMyProfile();
     if (profile) {
       this._knownProfilesStore.update(profiles => {
-        profiles[profile.agent_pub_key] = profile.profile;
+        profiles[profile.agentPubKey] = profile.profile;
         return profiles;
       });
     }
@@ -119,7 +119,7 @@ export class ProfilesStore {
 
     this._knownProfilesStore.update(profiles => {
       for (const profile of searchedProfiles) {
-        profiles[profile.agent_pub_key] = profile.profile;
+        profiles[profile.agentPubKey] = profile.profile;
       }
       return profiles;
     });
