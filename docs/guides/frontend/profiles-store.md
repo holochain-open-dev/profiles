@@ -6,7 +6,7 @@ The `ProfilesStore` is a JS class that contains `svelte` stores, to which you ca
 import { ProfilesStore } from '@holochain-open-dev/profiles';
 
 const config = {
-  avatarMode
+  avatarMode: 'identicon'
 };
 const store = new ProfilesStore(cellClient, config);
 ```

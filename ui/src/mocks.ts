@@ -7,8 +7,13 @@ import {
 import { CellId, AppSignalCb } from '@holochain/client';
 import { AgentProfile } from './types';
 
+const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
+
 export class ProfilesZomeMock implements CellClient {
-  constructor(protected agents: Array<AgentProfile> = []) {}
+  constructor(
+    protected agents: Array<AgentProfile> = [],
+    protected latency: number = 500
+  ) {}
 
   get cellId(): CellId {
     return [
@@ -60,12 +65,13 @@ export class ProfilesZomeMock implements CellClient {
     return this.agents.find(user => user.agentPubKey === agent_address);
   }
 
-  callZome(
+  async callZome(
     zomeName: string,
     fnName: string,
     payload: any,
     timeout?: number
   ): Promise<any> {
+    await sleep(this.latency);
     return (this as any)[fnName](payload);
   }
   addSignalHandler(
