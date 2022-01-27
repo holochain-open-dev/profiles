@@ -18,7 +18,7 @@ import { profilesStoreContext } from '../context';
 
 /**
  * A custom element that fires event on value change.
- * 
+ *
  * @element create-profile
  * @fires profile-created - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
  */
@@ -211,7 +211,11 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
         : html``}
       <mwc-card style="width: auto">
         <div class="column" style="margin: 16px;">
-          <span class="title" style="margin-bottom: 24px;">Create Profile</span>
+          <span
+            class="title"
+            style="margin-bottom: 24px; align-self: flex-start"
+            >Create Profile</span
+          >
           <div class="row" style="justify-content: center" ;>
             ${this.renderAvatar()}
 
