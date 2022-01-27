@@ -142,7 +142,6 @@ dependencies = [
  "derive_more",
  "hc_zome_profiles_types",
  "hdk",
- "holo_hash",
  "serde",
 ]
 
@@ -152,7 +151,6 @@ version = "0.0.1"
 dependencies = [
  "derive_more",
  "hdk",
- "holo_hash",
  "serde",
 ]
 

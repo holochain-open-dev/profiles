@@ -1,6 +1,5 @@
 # Setting Up >> Adding the Zome ||10
 
-
 1. Create a new `profiles` folder in the `zomes` of the consuming DNA.
 2. Add a new `Cargo.toml` in that folder. In its content, paste the `Cargo.toml` content from any zome.
 3. Change the `name` properties of the `Cargo.toml` file to `profiles`.
@@ -8,8 +7,10 @@
 
 ```toml
 [dependencies]
-hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", branch = "main", package = "hc_zome_profiles"}
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", rev = "for-hc-v0.0.124", package = "hc_zome_profiles"}
 ```
+
+Replace the `rev` field with the holochain version you are using. See [which tags are available](https://github.com/holochain-open-dev/profiles/tags).
 
 5. Create a `src` folder besides the `Cargo.toml` with this content:
 

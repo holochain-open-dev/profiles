@@ -13,5 +13,4 @@ derive_more = "0"
 serde = "1"
 
 hc_zome_profiles_types = {path = "../types"}
-hdk = "0.0.120"
-holo_hash = {version = "0.0.17", features = ["encoding"]}
+hdk = {version = "0.0.120", features = ["encoding"]}
