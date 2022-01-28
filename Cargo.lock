@@ -140,7 +140,7 @@ name = "hc_zome_profiles"
 version = "0.0.1"
 dependencies = [
  "derive_more",
- "hc_zome_profiles_types",
+ "hc_zome_profiles_types 0.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "hdk",
  "serde",
 ]
@@ -148,6 +148,17 @@ dependencies = [
 [[package]]
 name = "hc_zome_profiles_types"
 version = "0.0.1"
+dependencies = [
+ "derive_more",
+ "hdk",
+ "serde",
+]
+
+[[package]]
+name = "hc_zome_profiles_types"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fca484afd02c99efe9b8e2c44cca153d93c09d7f6235b85bac203b96e7ded420"
 dependencies = [
  "derive_more",
  "hdk",
