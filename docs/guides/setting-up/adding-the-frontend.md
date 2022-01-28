@@ -47,7 +47,7 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 }
 ```
 
-3. Import the `<context-provider>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the elements from `@holochain-open-dev/profiles`:
+3. Import the `<context-provider>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the elements from `@holochain-open-dev/profiles` (you can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context)):
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.

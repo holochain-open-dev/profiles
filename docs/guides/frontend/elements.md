@@ -6,7 +6,7 @@ To add one of these elements to your web-app, import it like this:
 import "@holochain-open-dev/profiles/agent-avatar";
 ```
 
-Keep in mind that these elements should be placed inside a `<context-provider>` that provides the `ProfilesStore`. Follow the [Adding the UI](/guides/setting-up/adding-the-frontend/) guide to get started, or read [this to know more about the context pattern](https://holochain-open-dev.github.io/reusable-modules/frontend/using#Context).
+Keep in mind that these elements should be placed inside a `<context-provider>` that provides an initialized  `ProfilesStore`, associated with the `profilesStoreContext` context . Follow the [Adding the UI](/guides/setting-up/adding-the-frontend/) guide to get started, or read [this to know more about the context pattern](https://holochain-open-dev.github.io/reusable-modules/frontend/using#Context).
 
 Click on the selector on the right to look at all the elements available.
 
@@ -19,14 +19,12 @@ import "@holochain-open-dev/profiles/list-profiles";
 import "@holochain-open-dev/profiles/holo-identicon";
 import "@holochain-open-dev/profiles/agent-avatar";
 import "@holochain-open-dev/profiles/profile-prompt";
-import { ContextProviderElement } from "@holochain-open-dev/context";
+import "@holochain-open-dev/context/context-provider";
 import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
 import {
   profilesStoreContext,
   ProfilesStore,
 } from "@holochain-open-dev/profiles";
-
-customElements.define("context-provider", ContextProviderElement);
 
 const store = new ProfilesStore(
   new ProfilesZomeMock([

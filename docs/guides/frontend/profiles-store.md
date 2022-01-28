@@ -20,4 +20,4 @@ export interface ProfilesConfig {
 }
 ```
 
-Learn more about the stores and how to integrate them in different frameworks [here]().
+Learn more about the stores and how to integrate them in different frameworks [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#stores).

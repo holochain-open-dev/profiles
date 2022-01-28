@@ -10,4 +10,4 @@ const service = new ProfilesService(cellClient);
 service.getMyProfile().then(myProfile => console.log(myProfile));
 ```
 
-Learn more about the services [here](). 
+Learn more about the services [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#services). 
