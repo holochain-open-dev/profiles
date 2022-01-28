@@ -47,4 +47,3 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           nix-shell . --run "cd ui && npm run lint && npm run build"
-          

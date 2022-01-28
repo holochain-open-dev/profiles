@@ -55,15 +55,17 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   fireAgentSelected(index: number) {
     const agentPubKey = Object.keys(this._allProfiles.value)[index];
 
-    this.dispatchEvent(
-      new CustomEvent('agent-selected', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          agentPubKey,
-        },
-      })
-    );
+    if (agentPubKey) {
+      this.dispatchEvent(
+        new CustomEvent('agent-selected', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            agentPubKey,
+          },
+        })
+      );
+    }
   }
 
   render() {
