@@ -14,7 +14,7 @@ npm install @holochain/client
 npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
 ```
 
-2. [Choose which elements you need](/guides/frontend/elements/index.html) and import them:
+2. [Choose which elements you need](../frontend/elements/index.html) and import them:
 
 **If you are developing a normal web-app**:
 
