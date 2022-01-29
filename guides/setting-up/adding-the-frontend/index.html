@@ -272,14 +272,11 @@
 <li>After you connect to Holochain and create the <code>AppWebsocket</code>, create the <code>ProfilesStore</code> and attach it to the <code>&lt;context-provider&gt;</code> element:</li>
 </ol>
 <pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token punctuation">{</span>
-  <span class="token maybe-class-name">ProfilePrompt</span><span class="token punctuation">,</span>
-  <span class="token maybe-class-name">SearchAgent</span><span class="token punctuation">,</span>
   <span class="token maybe-class-name">ProfilesStore</span><span class="token punctuation">,</span>
-  <span class="token maybe-class-name">ListProfiles</span><span class="token punctuation">,</span>
   profilesStoreContext<span class="token punctuation">,</span>
 <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain-open-dev/profiles"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">AppWebsocket</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain/client"</span><span class="token punctuation">;</span>
 <span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">HolochainClient</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain-open-dev/cell-client"</span><span class="token punctuation">;</span>
+<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">AppWebsocket</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain/client"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> appWebsocket <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token maybe-class-name">AppWebsocket</span><span class="token punctuation">.</span><span class="token method function property-access">connect</span><span class="token punctuation">(</span><span class="token string">"ws://localhost:8888"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> appInfo <span class="token operator">=</span> <span class="token keyword">await</span> appWebsocket<span class="token punctuation">.</span><span class="token method function property-access">appInfo</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
