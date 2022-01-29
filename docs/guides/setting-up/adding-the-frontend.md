@@ -20,7 +20,7 @@ npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-
 
 ```js
 import "@holochain-open-dev/profiles/create-profile";
-import "@holochain-open-dev/profiles/list-profile";
+import "@holochain-open-dev/profiles/list-profiles";
 ```
 
 This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
