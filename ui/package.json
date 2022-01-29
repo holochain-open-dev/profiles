@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Frontend module for the Holochain hc_zome_profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -9,6 +9,9 @@
   "exports": {
     ".": "./dist/index.js",
     "./create-profile": "./dist/definitions/create-profile.js",
+    "./update-profile": "./dist/definitions/update-profile.js",
+    "./my-profile": "./dist/definitions/my-profile.js",
+    "./profile-detail": "./dist/definitions/profile-detail.js",
     "./profile-prompt": "./dist/definitions/profile-prompt.js",
     "./search-agent": "./dist/definitions/search-agent.js",
     "./agent-avatar": "./dist/definitions/agent-avatar.js",

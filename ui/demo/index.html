@@ -26,7 +26,8 @@
         SearchAgent,
         ProfilesStore,
         profilesStoreContext,
-        ListProfiles,
+        ProfileDetail,
+        MyProfile,
       } from '../dist';
       import { AppWebsocket } from '@holochain/client';
       import { HolochainClient } from '@holochain-open-dev/cell-client';
@@ -59,7 +60,7 @@
 
           this.store = new ProfilesStore(cellClient, {
             avatarMode: 'avatar',
-            additionalFields: ['bio'],
+            additionalFields: ['bio', 'location'],
           });
           this.loaded = true;
         }
@@ -72,8 +73,7 @@
               .value=${this.store}
             >
               <profile-prompt>
-                <list-profiles></list-profiles>
-                <search-agent include-myself></search-agent>
+                <my-profile style="height: 800px; width: 800px;"></my-profile>
               </profile-prompt>
             </context-provider>
           `;
@@ -82,8 +82,7 @@
         static get scopedElements() {
           return {
             'profile-prompt': ProfilePrompt,
-            'search-agent': SearchAgent,
-            'list-profiles': ListProfiles,
+            'my-profile': MyProfile,
             'context-provider': ContextProviderElement,
           };
         }

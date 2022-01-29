@@ -9,6 +9,7 @@ import {
   Card,
   IconButton,
   Fab,
+  CircularProgress,
 } from '@scoped-elements/material-web';
 import { SlAvatar } from '@scoped-elements/shoelace';
 
@@ -18,14 +19,13 @@ import { profilesStoreContext } from '../context';
 import { resizeAndExport } from './utils/image';
 import { EditProfile } from './edit-profile';
 import { Profile } from '../types';
+import { StoreSubscriber } from 'lit-svelte-stores';
 
 /**
- * A custom element that fires event on value change.
- *
- * @element create-profile
- * @fires profile-created - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
+ * @element update-profile
+ * @fires profile-updated - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
  */
-export class CreateProfile extends ScopedElementsMixin(LitElement) {
+export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
@@ -38,11 +38,21 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  async createProfile(profile: Profile) {
-    await this.store.createProfile(profile);
+  @state()
+  private _loading = true;
+
+  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+
+  async firstUpdated() {
+    await this.store.fetchMyProfile();
+    this._loading = false;
+  }
+
+  async updateProfile(profile: Profile) {
+    await this.store.updateProfile(profile);
 
     this.dispatchEvent(
-      new CustomEvent('profile-created', {
+      new CustomEvent('profile-updated', {
         detail: {
           profile,
         },
@@ -53,20 +63,21 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
+    if (this._loading)
+      return html`<div
+        class="column"
+        style="align-items: center; justify-content: center; flex: 1;"
+      >
+        <mwc-circular-progress indeterminate></mwc-circular-progress>
+      </div>`;
+
     return html`
-      <mwc-card>
-        <div class="column" style="margin: 16px;">
-          <span
-            class="title"
-            style="margin-bottom: 24px; align-self: flex-start"
-            >Create Profile</span
-          >
-          <edit-profile
-            save-profile-label="Create Profile"
-            @save-profile=${(e: CustomEvent) =>
-              this.createProfile(e.detail.profile)}
-          ></edit-profile></div
-      ></mwc-card>
+      <edit-profile
+        .profile=${this._myProfile.value}
+        save-profile-label="Update Profile"
+        @save-profile=${(e: CustomEvent) =>
+          this.updateProfile(e.detail.profile)}
+      ></edit-profile>
     `;
   }
 
@@ -75,6 +86,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
+      'mwc-circular-progress': CircularProgress,
       'edit-profile': EditProfile,
       'mwc-card': Card,
     };

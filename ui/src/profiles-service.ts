@@ -62,8 +62,23 @@ export class ProfilesService {
    * @param profile the profile to create
    * @returns my profile with my agentPubKey
    */
-  async createProfile(profile: Profile): Promise<AgentProfile> {
+   async createProfile(profile: Profile): Promise<AgentProfile> {
     const profileResult = await this.callZome('create_profile', profile);
+
+    return {
+      agentPubKey: profileResult.agentPubKey,
+      profile: profileResult.profile,
+    };
+  }
+
+  /**
+   * Update my profile
+   * 
+   * @param profile the profile to create
+   * @returns my profile with my agentPubKey
+   */
+  async updateProfile(profile: Profile): Promise<AgentProfile> {
+    const profileResult = await this.callZome('update_profile', profile);
 
     return {
       agentPubKey: profileResult.agentPubKey,
