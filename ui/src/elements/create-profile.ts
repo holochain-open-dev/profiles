@@ -15,6 +15,7 @@ import { SlAvatar } from '@scoped-elements/shoelace';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
+import { resizeAndExport } from './utils/image';
 
 /**
  * A custom element that fires event on value change.
@@ -78,7 +79,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
     const nickname = this._nicknameField.value;
 
     try {
-      const fields: Dictionary<string> = {};
+      const fields: Dictionary<string> = this.getAdditionalFieldsValues();
       if (this._avatar) {
         fields['avatar'] = this._avatar;
       }
@@ -105,37 +106,6 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  // Crop the image and return a base64 bytes string of its content
-  resizeAndExport(img: HTMLImageElement) {
-    const MAX_WIDTH = 300;
-    const MAX_HEIGHT = 300;
-
-    let width = img.width;
-    let height = img.height;
-
-    // Change the resizing logic
-    if (width > height) {
-      if (width > MAX_WIDTH) {
-        height = height * (MAX_WIDTH / width);
-        width = MAX_WIDTH;
-      }
-    } else {
-      if (height > MAX_HEIGHT) {
-        width = width * (MAX_HEIGHT / height);
-        height = MAX_HEIGHT;
-      }
-    }
-
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    ctx.drawImage(img, 0, 0, width, height);
-
-    // return the .toDataURL of the temp canvas
-    return canvas.toDataURL();
-  }
-
   onAvatarUploaded() {
     if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
       const reader = new FileReader();
@@ -143,7 +113,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = () => {
-          this._avatar = this.resizeAndExport(img);
+          this._avatar = resizeAndExport(img);
           this._avatarFilePicker.value = '';
         };
         img.src = e.target?.result as string;
@@ -196,7 +166,54 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
     if (!this._nicknameField) return false;
     if (!this._nicknameField.validity.valid) return false;
     if (this.avatarMode() && !this._avatar) return false;
+    if (
+      Object.values(this.getAdditionalTextFields()).find(t => !t.validity.valid)
+    )
+      return false;
+
     return true;
+  }
+
+  textfieldToFieldId(field: TextField): string {
+    return field.id.split('-')[2];
+  }
+
+  getAdditionalFieldsValues(): Dictionary<string> {
+    const textfields = this.getAdditionalTextFields();
+
+    const values: Dictionary<string> = {};
+    for (const [id, textfield] of Object.entries(textfields)) {
+      values[id] = textfield.value;
+    }
+
+    return values;
+  }
+
+  getAdditionalTextFields(): Dictionary<TextField> {
+    const textfields = Array.from(
+      this.shadowRoot!.querySelectorAll('mwc-textfield')
+    ).filter(f => f.id !== 'nickname-field') as TextField[];
+
+    const fields: Dictionary<TextField> = {};
+    for (const field of textfields) {
+      const id = this.textfieldToFieldId(field);
+      fields[id] = field;
+    }
+    return fields;
+  }
+
+  renderField(fieldName: string) {
+    return html`
+      <mwc-textfield
+        id="profile-field-${fieldName}"
+        outlined
+        required
+        autoValidate
+        .label=${fieldName}
+        @input=${() => this.requestUpdate()}
+        style="margin-top: 8px;"
+      ></mwc-textfield>
+    `;
   }
 
   render() {
@@ -228,6 +245,11 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
               style="margin-left: 8px;"
             ></mwc-textfield>
           </div>
+
+          ${this.store.config.additionalFields.map(field =>
+            this.renderField(field)
+          )}
+
           <mwc-button
             id="create-profile-button"
             raised
