@@ -66,14 +66,11 @@ And then in your `index.html`:
 
 ```js
 import {
-  ProfilePrompt,
-  SearchAgent,
   ProfilesStore,
-  ListProfiles,
   profilesStoreContext,
 } from "@holochain-open-dev/profiles";
-import { AppWebsocket } from "@holochain/client";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
+import { AppWebsocket } from "@holochain/client";
 
 const appWebsocket = await AppWebsocket.connect("ws://localhost:8888");
 const appInfo = await appWebsocket.appInfo({
