@@ -70,22 +70,22 @@ import {
   profilesStoreContext,
 } from "@holochain-open-dev/profiles";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
-import { AppWebsocket } from "@holochain/client";
 
-const appWebsocket = await AppWebsocket.connect("ws://localhost:8888");
-const appInfo = await appWebsocket.appInfo({
-  installed_app_id: "test-app",
-});
+async function setupProfiles() {
+  const client = await HolochainClient.connect(
+    `ws://localhost:${process.env.HC_PORT}`,
+    "my-app-id"
+  );
+  const cellClient = client.forCell(client.cellDataByRoleId("my-cell-role"));
 
-const cellData = appInfo.cell_data[0];
-const cellClient = new HolochainClient(appWebsocket, cellData);
-const store = new ProfilesStore(cellClient, {
-  avatarMode: "avatar",
-});
+  const store = new ProfilesStore(cellClient, {
+    avatarMode: "avatar",
+  });
 
-const contextElement = document.getElementById("profiles-context");
-contextElement.context = profilesStoreContext;
-contextElement.value = store;
+  const contextElement = document.getElementById("profiles-context");
+  contextElement.context = profilesStoreContext;
+  contextElement.value = store;
+}
 ```
 
 5. Add the Material Icons font in your `<head>` tag:
