@@ -33,7 +33,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
    * Label for the save profile button.
    */
   @property({ type: String, attribute: 'save-profile-label' })
-  saveProfileLabel: string = 'Save Profile';
+  saveProfileLabel = 'Save Profile';
 
   /** Dependencies */
 
