@@ -64,7 +64,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     this._nicknameField.validityTransform = (newValue: string) => {
       this.requestUpdate();
       if (newValue.length < this.store.config.minNicknameLength) {
-        this._nicknameField.setCustomValidity(`Username is too short`);
+        this._nicknameField.setCustomValidity(`Nickname is too short`);
         return {
           valid: false,
         };

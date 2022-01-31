@@ -29,7 +29,6 @@
         ProfileDetail,
         MyProfile,
       } from '../dist';
-      import { AppWebsocket } from '@holochain/client';
       import { HolochainClient } from '@holochain-open-dev/cell-client';
       import { LitElement, html } from 'lit';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
@@ -48,15 +47,13 @@
         }
 
         async firstUpdated() {
-          const appWebsocket = await AppWebsocket.connect(
-            `ws://localhost:${process.env.HC_PORT}`
+          const client = await HolochainClient.connect(
+            `ws://localhost:${process.env.HC_PORT}`,
+            'test-app'
           );
-          const appInfo = await appWebsocket.appInfo({
-            installed_app_id: 'test-app',
-          });
-
-          const cellData = appInfo.cell_data[0];
-          const cellClient = new HolochainClient(appWebsocket, cellData);
+          const cellClient = client.forCell(
+            client.cellDataByRoleId('profiles')
+          );
 
           this.store = new ProfilesStore(cellClient, {
             avatarMode: 'avatar',

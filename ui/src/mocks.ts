@@ -9,11 +9,13 @@ import { AgentProfile } from './types';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
 
-export class ProfilesZomeMock implements CellClient {
+export class ProfilesZomeMock extends CellClient {
   constructor(
     protected agents: Array<AgentProfile> = [],
     protected latency: number = 500
-  ) {}
+  ) {
+    super(null as any, null as any);
+  }
 
   get cellId(): CellId {
     return [
@@ -74,9 +76,7 @@ export class ProfilesZomeMock implements CellClient {
     await sleep(this.latency);
     return (this as any)[fnName](payload);
   }
-  addSignalHandler(
-    signalHandler: AppSignalCb
-  ): Promise<{ unsubscribe: () => void }> {
+  addSignalHandler(signalHandler: AppSignalCb): { unsubscribe: () => void } {
     throw new Error('Method not implemented.');
   }
 }
