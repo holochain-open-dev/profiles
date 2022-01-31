@@ -54,8 +54,8 @@
 
   
 
-<link rel="preload" href="../../../221cc344.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="../../../67e79892.js" as="script" crossorigin="anonymous">
+<link rel="preload" href="../../../b17ad70a.js" as="script" crossorigin="anonymous">
+<link rel="preload" href="../../../780953eb.js" as="script" crossorigin="anonymous">
 <link rel="preload" href="../../../4d30c7b8.js" as="script" crossorigin="anonymous">
 </head>
 
@@ -222,14 +222,17 @@
 <pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">ProfilesStore</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">'@holochain-open-dev/profiles'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token punctuation">{</span>
-  avatarMode<span class="token punctuation">:</span> <span class="token string">'identicon'</span>
+  avatarMode<span class="token punctuation">:</span> <span class="token string">'identicon'</span><span class="token punctuation">,</span>
+  additionalFields<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'Location'</span><span class="token punctuation">,</span> <span class="token string">'Bio'</span><span class="token punctuation">]</span> <span class="token comment">// Custom app level profile fields</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span>
 <span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProfilesStore</span><span class="token punctuation">(</span>cellClient<span class="token punctuation">,</span> config<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>The config for the <code>ProfilesStore</code> has these options:</p>
 <pre class="language-ts"><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">ProfilesConfig</span> <span class="token punctuation">{</span>
-  zomeName<span class="token punctuation">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>                     <span class="token comment">// default: profiles</span>
+  zomeName<span class="token punctuation">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>                     <span class="token comment">// default: 'profiles'</span>
   avatarMode<span class="token punctuation">:</span> <span class="token string">'identicon'</span> <span class="token operator">|</span> <span class="token string">'avatar'</span><span class="token punctuation">;</span>   <span class="token comment">// default: 'avatar'</span>
+  additionalFields<span class="token punctuation">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>           <span class="token comment">// default: []</span>
+  minNicknameLength<span class="token punctuation">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>            <span class="token comment">// default: 3</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Learn more about the stores and how to integrate them in different frameworks <a href="https://holochain-open-dev.github.io/reusable-modules/frontend/using/#stores">here</a>.</p>
@@ -343,7 +346,7 @@ Commons Attribution 4.0</a>
   
 
 
-<script type="module" src="../../../221cc344.js"></script>
+<script type="module" src="../../../b17ad70a.js"></script>
 <script type="module" src="../../../4d30c7b8.js" inject-service-worker=""></script>
 
 </body></html>
