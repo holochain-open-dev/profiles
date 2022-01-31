@@ -285,7 +285,7 @@
               "name": "addSignalHandler",
               "return": {
                 "type": {
-                  "text": "Promise<{ unsubscribe: () => void }>"
+                  "text": "{ unsubscribe: () => void }"
                 }
               },
               "parameters": [
@@ -297,7 +297,11 @@
                 }
               ]
             }
-          ]
+          ],
+          "superclass": {
+            "name": "CellClient",
+            "package": "@holochain-open-dev/cell-client"
+          }
         }
       ],
       "exports": [
@@ -671,6 +675,12 @@
           }
         }
       ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/shim.d.ts",
+      "declarations": [],
+      "exports": []
     },
     {
       "kind": "javascript-module",

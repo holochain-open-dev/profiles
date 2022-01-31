@@ -2,13 +2,7 @@
 
 > This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
 
-0. If you haven't yet, install the `@holochain/client`:
-
-```bash
-npm install @holochain/client
-```
-
-1. Install this module and the necessary packages with:
+1. Install this module and its necessary dependencies with:
 
 ```bash
 npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
@@ -73,7 +67,7 @@ import { HolochainClient } from "@holochain-open-dev/cell-client";
 
 async function setupProfiles() {
   const client = await HolochainClient.connect(
-    `ws://localhost:${process.env.HC_PORT}`,
+    `ws://localhost:8888`,
     "my-app-id"
   );
   const cellClient = client.forCell(client.cellDataByRoleId("my-cell-role"));
