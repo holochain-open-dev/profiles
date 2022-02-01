@@ -2,6 +2,8 @@
 
 > This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
 
+> [Go here](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/) to look at examples of integration of this module in different frontend frameworks (Vue, Svelte, etc.).
+
 1. Install this module and its necessary dependencies with:
 
 ```bash
