@@ -71,6 +71,7 @@
             >
               <profile-prompt>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
+                <search-agent include-myself></search-agent>
               </profile-prompt>
             </context-provider>
           `;
@@ -80,6 +81,7 @@
           return {
             'profile-prompt': ProfilePrompt,
             'my-profile': MyProfile,
+            'search-agent': SearchAgent,
             'context-provider': ContextProviderElement,
           };
         }

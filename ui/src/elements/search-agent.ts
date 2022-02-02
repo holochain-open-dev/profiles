@@ -110,6 +110,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   onUsernameSelected(agent: AgentProfile) {
+    console.log(agent);
     // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(
@@ -147,14 +148,19 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         </mwc-textfield>
         <mwc-menu-surface absolute id="overlay" x="4" y="28">
           ${this._filteredAgents.length > 0
-            ? this._filteredAgents.map(
-                agent => html`
-                  <mwc-list style="min-width: 80px;">
-                    <mwc-list-item
+            ? html`
+                <mwc-list
+                  style="min-width: 80px;"
+                  @selected=${(e: CustomEvent) =>
+                    this.onUsernameSelected(
+                      this._filteredAgents[e.detail.index]
+                    )}
+                >
+                  ${this._filteredAgents.map(
+                    agent => html` <mwc-list-item
                       graphic="avatar"
                       .value=${agent.agentPubKey}
                       style="--mdc-list-item-graphic-size: 32px;"
-                      @request-selected=${() => this.onUsernameSelected(agent)}
                     >
                       <agent-avatar
                         slot="graphic"
@@ -163,10 +169,10 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                       <span style="margin-left: 8px;"
                         >${agent.profile.nickname}</span
                       >
-                    </mwc-list-item>
-                  </mwc-list>
-                `
-              )
+                    </mwc-list-item>`
+                  )}
+                </mwc-list>
+              `
             : html`<mwc-list-item>No agents match the filter</mwc-list-item>`}
         </mwc-menu-surface>
       </div>

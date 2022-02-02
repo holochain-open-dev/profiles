@@ -25,6 +25,7 @@
     "@rocket/launch": "^0.6.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-replace": "^3.0.1",
+    "@scoped-elements/markdown-renderer": "^0.0.3",
     "api-viewer-element": "^1.0.0-pre.4",
     "concurrently": "^6.2.1",
     "concurrently-repeat": "^0.0.1",
