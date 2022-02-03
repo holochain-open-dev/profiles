@@ -10399,7 +10399,7 @@ var eb=ig`
       .circle {
         border-radius: 50%;
       }
-    `}}Je([h({type:String})],$k.prototype,"hash",void 0),Je([h({type:Number})],$k.prototype,"size",void 0),Je([h({type:String})],$k.prototype,"shape",void 0),Je([f("#canvas")],$k.prototype,"_canvas",void 0);class eC extends(Le(o)){constructor(){super(...arguments),this.size=32,this._profile=new yk(this,(()=>this.store.profileOf(this.agentPubKey)))}async firstUpdated(){"avatar"===this.store.config.avatarMode&&await this.store.fetchAgentProfile(this.agentPubKey)}render(){return"identicon"===this.store.config.avatarMode?n`<holo-identicon
+    `}}Je([h({type:String})],$k.prototype,"hash",void 0),Je([h({type:Number})],$k.prototype,"size",void 0),Je([h({type:String})],$k.prototype,"shape",void 0),Je([f("#canvas")],$k.prototype,"_canvas",void 0);class eC extends(Le(o)){constructor(){super(...arguments),this.size=32,this._profile=new yk(this,(()=>{var e;return null===(e=this.store)||void 0===e?void 0:e.profileOf(this.agentPubKey)}))}async firstUpdated(){"avatar"===this.store.config.avatarMode&&await this.store.fetchAgentProfile(this.agentPubKey)}render(){return"identicon"===this.store.config.avatarMode?n`<holo-identicon
         .hash=${this.agentPubKey}
         .size=${this.size}
       ></holo-identicon>`:this._profile.value?n`
@@ -10412,7 +10412,7 @@ var eb=ig`
       `:n`<sl-skeleton
       effect="pulse"
       style="height: ${this.size}px; width: ${this.size}px"
-    ></sl-skeleton>`}static get scopedElements(){return{"holo-identicon":$k,"sl-avatar":lk,"sl-skeleton":sk}}}eC.styles=[om],Je([h({attribute:"agent-pub-key",type:String})],eC.prototype,"agentPubKey",void 0),Je([h({type:Number})],eC.prototype,"size",void 0),Je([ho({context:am}),h({type:Object})],eC.prototype,"store",void 0);class tC extends(Le(o)){constructor(){super(...arguments),this.clearOnSelect=!1,this.includeMyself=!1,this.fieldLabel="Search agent",this._knownProfiles=new yk(this,(()=>this.store.knownProfiles)),this._currentFilter=void 0,this._lastSearchedPrefix=void 0}get _filteredAgents(){let e=Object.entries(this._knownProfiles.value).filter((([e,t])=>t.nickname.startsWith(this._currentFilter))).map((([e,t])=>({agentPubKey:e,profile:t})));return this.includeMyself||(e=e.filter((e=>this.store.myAgentPubKey!==e.agentPubKey))),e}firstUpdated(){this.addEventListener("blur",(()=>this._overlay.close()))}async searchAgents(e){this._lastSearchedPrefix=e,await this.store.searchProfiles(e)}onFilterChange(){if(this._textField.value.length<3)return;this._overlay.show(),this._currentFilter=this._textField.value;const e=this._currentFilter.slice(0,3);e!==this._lastSearchedPrefix&&this.searchAgents(e)}onUsernameSelected(e){e&&(this.dispatchEvent(new CustomEvent("agent-selected",{detail:{agentPubKey:e.agentPubKey}})),this.clearOnSelect?(this._textField.value="",this._currentFilter=void 0):this._textField.value=e.profile.nickname,this._overlay.close())}render(){return n`
+    ></sl-skeleton>`}static get scopedElements(){return{"holo-identicon":$k,"sl-avatar":lk,"sl-skeleton":sk}}}eC.styles=[om],Je([h({attribute:"agent-pub-key",type:String})],eC.prototype,"agentPubKey",void 0),Je([h({type:Number})],eC.prototype,"size",void 0),Je([ho({context:am}),h({type:Object})],eC.prototype,"store",void 0);class tC extends(Le(o)){constructor(){super(...arguments),this.clearOnSelect=!1,this.includeMyself=!1,this.fieldLabel="Search agent",this._knownProfiles=new yk(this,(()=>{var e;return null===(e=this.store)||void 0===e?void 0:e.knownProfiles})),this._currentFilter=void 0,this._lastSearchedPrefix=void 0}get _filteredAgents(){let e=Object.entries(this._knownProfiles.value).filter((([e,t])=>t.nickname.startsWith(this._currentFilter))).map((([e,t])=>({agentPubKey:e,profile:t})));return this.includeMyself||(e=e.filter((e=>this.store.myAgentPubKey!==e.agentPubKey))),e}firstUpdated(){this.addEventListener("blur",(()=>this._overlay.close()))}async searchAgents(e){this._lastSearchedPrefix=e,await this.store.searchProfiles(e)}onFilterChange(){if(this._textField.value.length<3)return;this._overlay.show(),this._currentFilter=this._textField.value;const e=this._currentFilter.slice(0,3);e!==this._lastSearchedPrefix&&this.searchAgents(e)}onUsernameSelected(e){e&&(this.dispatchEvent(new CustomEvent("agent-selected",{detail:{agentPubKey:e.agentPubKey}})),this.clearOnSelect?(this._textField.value="",this._currentFilter=void 0):this._textField.value=e.profile.nickname,this._overlay.close())}render(){return n`
       <div style="position: relative; flex: 1; display: flex;">
         <mwc-textfield
           id="textfield"
@@ -10426,13 +10426,15 @@ var eb=ig`
         >
         </mwc-textfield>
         <mwc-menu-surface absolute id="overlay" x="4" y="28">
-          ${this._filteredAgents.length>0?this._filteredAgents.map((e=>n`
-                  <mwc-list style="min-width: 80px;">
-                    <mwc-list-item
+          ${this._filteredAgents.length>0?n`
+                <mwc-list
+                  style="min-width: 80px;"
+                  @selected=${e=>this.onUsernameSelected(this._filteredAgents[e.detail.index])}
+                >
+                  ${this._filteredAgents.map((e=>n` <mwc-list-item
                       graphic="avatar"
                       .value=${e.agentPubKey}
                       style="--mdc-list-item-graphic-size: 32px;"
-                      @request-selected=${()=>this.onUsernameSelected(e)}
                     >
                       <agent-avatar
                         slot="graphic"
@@ -10441,9 +10443,9 @@ var eb=ig`
                       <span style="margin-left: 8px;"
                         >${e.profile.nickname}</span
                       >
-                    </mwc-list-item>
-                  </mwc-list>
-                `)):n`<mwc-list-item>No agents match the filter</mwc-list-item>`}
+                    </mwc-list-item>`))}
+                </mwc-list>
+              `:n`<mwc-list-item>No agents match the filter</mwc-list-item>`}
         </mwc-menu-surface>
       </div>
     `}static get styles(){return[om,a`
@@ -10526,7 +10528,7 @@ var eb=ig`
         style="align-items: center; justify-content: center; flex: 1;"
       >
         <span class="placeholder">This agent hasn't created a profile yet</span>
-      </div>`}static get scopedElements(){return{"agent-avatar":eC,"sl-skeleton":sk}}}aC.styles=[om],Je([h({type:String,attribute:"agent-pub-key"})],aC.prototype,"agentPubKey",void 0),Je([ho({context:am}),h({type:Object})],aC.prototype,"store",void 0),Je([u()],aC.prototype,"_loading",void 0);let nC=class extends aC{};nC=Je([d("profile-detail")],nC);class sC extends(Le(o)){constructor(){super(...arguments),this._loading=!0,this._myProfile=new yk(this,(()=>this.store.myProfile))}async firstUpdated(){await this.store.fetchMyProfile(),this._loading=!1}async updateProfile(e){await this.store.updateProfile(e),this.dispatchEvent(new CustomEvent("profile-updated",{detail:{profile:e},bubbles:!0,composed:!0}))}render(){return this._loading?n`<div
+      </div>`}static get scopedElements(){return{"agent-avatar":eC,"sl-skeleton":sk}}}aC.styles=[om],Je([h({type:String,attribute:"agent-pub-key"})],aC.prototype,"agentPubKey",void 0),Je([ho({context:am}),h({type:Object})],aC.prototype,"store",void 0),Je([u()],aC.prototype,"_loading",void 0);let nC=class extends aC{};nC=Je([d("profile-detail")],nC);class sC extends(Le(o)){constructor(){super(...arguments),this._loading=!0,this._myProfile=new yk(this,(()=>{var e;return null===(e=this.store)||void 0===e?void 0:e.myProfile}))}async firstUpdated(){await this.store.fetchMyProfile(),this._loading=!1}async updateProfile(e){await this.store.updateProfile(e),this.dispatchEvent(new CustomEvent("profile-updated",{detail:{profile:e},bubbles:!0,composed:!0}))}render(){return this._loading?n`<div
         class="column"
         style="align-items: center; justify-content: center; flex: 1;"
       >
@@ -10547,7 +10549,7 @@ var eb=ig`
           @click=${()=>this._editing=!0}
         ></mwc-icon-button>
       </profile-detail>
-    `}static get scopedElements(){return{"mwc-icon-button":Rc,"profile-detail":aC,"update-profile":sC}}}lC.styles=[om],Je([ho({context:am}),h({type:Object})],lC.prototype,"store",void 0),Je([u()],lC.prototype,"_editing",void 0);let cC=class extends lC{};cC=Je([d("my-profile")],cC);let dC=class extends sC{};dC=Je([d("update-profile")],dC);let pC=class extends $k{};pC=Je([d("holo-identicon")],pC);let hC=class extends eC{};hC=Je([d("agent-avatar")],hC);class uC extends(Le(o)){constructor(){super(...arguments),this._loading=!0,this._myProfile=new yk(this,(()=>this.store.myProfile))}async firstUpdated(){await this.store.fetchMyProfile(),this._loading=!1}renderPrompt(){return n` <div
+    `}static get scopedElements(){return{"mwc-icon-button":Rc,"profile-detail":aC,"update-profile":sC}}}lC.styles=[om],Je([ho({context:am}),h({type:Object})],lC.prototype,"store",void 0),Je([u()],lC.prototype,"_editing",void 0);let cC=class extends lC{};cC=Je([d("my-profile")],cC);let dC=class extends sC{};dC=Je([d("update-profile")],dC);let pC=class extends $k{};pC=Je([d("holo-identicon")],pC);let hC=class extends eC{};hC=Je([d("agent-avatar")],hC);class uC extends(Le(o)){constructor(){super(...arguments),this._loading=!0,this._myProfile=new yk(this,(()=>{var e;return null===(e=this.store)||void 0===e?void 0:e.myProfile}))}async firstUpdated(){await this.store.fetchMyProfile(),this._loading=!1}renderPrompt(){return n` <div
       class="column"
       style="align-items: center; justify-content: center; flex: 1;"
     >
@@ -10603,4 +10605,4 @@ var vS="application/x-postmate-v1+json",yS=0,xS={handshake:1,"handshake-reply":1
       </template>
     </api-viewer>
   </context-provider>
-`,WE=document,KE=[{key:"foo",story:GE}];let XE=!1;for(const e of KE){const t=WE.querySelector(`[mdjs-story-name="${e.key}"]`);t&&(t.story=e.story,t.key=e.key,XE=!0,Object.assign(t,{}))}XE&&(customElements.get("mdjs-preview")||import("./5afd07eb.js"),customElements.get("mdjs-story")||import("./5c9e6fee.js"));export{Ue as M,GE as f};
+`,WE=document,KE=[{key:"foo",story:GE}];let XE=!1;for(const e of KE){const t=WE.querySelector(`[mdjs-story-name="${e.key}"]`);t&&(t.story=e.story,t.key=e.key,XE=!0,Object.assign(t,{}))}XE&&(customElements.get("mdjs-preview")||import("./7acfc3c9.js"),customElements.get("mdjs-story")||import("./48a1a706.js"));export{Ue as M,GE as f};

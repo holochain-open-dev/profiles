@@ -19,6 +19,9 @@
 <meta name="description" content="A Holochain module to handle profiles with at least a nickname">
 <meta property="og:description" content="A Holochain module to handle profiles with at least a nickname">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/themes/light.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/shoelace.js"></script>
+
   
     <link rel="apple-touch-icon" sizes="180x180" href="../../../assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/favicon-32x32.png">
@@ -219,21 +222,20 @@
   
     <h1 id="setting-up-adding-the-zome"><a class="anchor" href="#setting-up-adding-the-zome"><svg class="octicon octicon-link" viewBox="0 0 16 16" aria-hidden="true" width="16" height="16"><path fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"></path></svg></a>Setting Up: Adding the Zome</h1>
 <ol>
-<li>Create a new <code>profiles</code> folder in the <code>zomes</code> of the consuming DNA.</li>
-<li>Add a new <code>Cargo.toml</code> in that folder. In its content, paste the <code>Cargo.toml</code> content from any zome.</li>
-<li>Change the <code>name</code> properties of the <code>Cargo.toml</code> file to <code>profiles</code>.</li>
+<li>In your <code>zomes</code> folder, run <code>cargo new profiles --lib</code>.</li>
 <li>Add this zome as a dependency in the <code>Cargo.toml</code> file:</li>
 </ol>
 <pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">dependencies</span><span class="token punctuation">]</span>
 <span class="token key property">hc_zome_profiles</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span><span class="token key property">git</span> <span class="token punctuation">=</span> <span class="token string">"https://github.com/holochain-open-dev/profiles"</span><span class="token punctuation">,</span> <span class="token key property">rev</span> <span class="token punctuation">=</span> <span class="token string">"for-hc-v0.0.124"</span><span class="token punctuation">,</span> <span class="token key property">package</span> <span class="token punctuation">=</span> <span class="token string">"hc_zome_profiles"</span><span class="token punctuation">}</span>
 </code></pre>
 <p>Replace the <code>rev</code> field with the holochain version you are using. See <a href="https://github.com/holochain-open-dev/profiles/tags">which tags are available</a>.</p>
-<ol start="5">
-<li>Create a <code>src</code> folder besides the <code>Cargo.toml</code> with this content:</li>
+<ol start="3">
+<li>Replace the contents of the <code>lib.rs</code> with this content:</li>
 </ol>
 <pre class="language-rust"><code class="language-rust"><span class="token keyword">extern</span> <span class="token keyword">crate</span> hc_zome_profiles<span class="token punctuation">;</span>
 </code></pre>
-<ol start="6">
+<ol start="4">
+<li>Add this new crate to your top level <code>Cargo.toml</code>.</li>
 <li>Add the zome into your <code>dna.yaml</code> file.</li>
 <li>Compile the DNA with the usual <code>CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown</code>.</li>
 </ol>
