@@ -1,13 +1,13 @@
 # Frontend Docs >> ProfilesStore ||20
 
-The `ProfilesStore` is a JS class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements. 
+The `ProfilesStore` is a JS class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements.
 
 ```js
-import { ProfilesStore } from '@holochain-open-dev/profiles';
+import { ProfilesStore } from "@holochain-open-dev/profiles";
 
 const config = {
-  avatarMode: 'identicon',
-  additionalFields: ['Location', 'Bio'] // Custom app level profile fields
+  avatarMode: "identicon",
+  additionalFields: ["Location", "Bio"], // Custom app level profile fields
 };
 const store = new ProfilesStore(cellClient, config);
 ```
@@ -18,10 +18,10 @@ The config for the `ProfilesStore` has these options:
 
 ```ts
 export interface ProfilesConfig {
-  zomeName: string;                     // default: 'profiles'
-  avatarMode: 'identicon' | 'avatar';   // default: 'avatar'
-  additionalFields: string[];           // default: []
-  minNicknameLength: number;            // default: 3
+  zomeName: string; // default: 'profiles'
+  avatarMode: "identicon" | "avatar"; // default: 'avatar'
+  additionalFields: string[]; // default: []
+  minNicknameLength: number; // default: 3
 }
 ```
 

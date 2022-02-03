@@ -11,10 +11,8 @@ const resolveOptions = {
 
 /** @type {import('@rocket/cli').RocketCliOptions} */
 export default {
-  setupDevAndBuildPlugins: [
-    addPlugin(commonjs, {}),
-    adjustPluginOptions(resolve, resolveOptions),
-  ],
+  setupDevAndBuildPlugins: [addPlugin(commonjs, {})],
+  setupBuildPlugins: [adjustPluginOptions(resolve, resolveOptions)],
   presets: [rocketLaunch()],
   devServer: {
     nodeResolve: resolveOptions,
