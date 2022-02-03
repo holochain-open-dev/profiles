@@ -39,7 +39,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   store!: ProfilesStore;
 
   private _profile = new StoreSubscriber(this, () =>
-    this.store.profileOf(this.agentPubKey)
+    this.store?.profileOf(this.agentPubKey)
   );
 
   async firstUpdated() {

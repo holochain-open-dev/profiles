@@ -59,7 +59,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   private _knownProfiles = new StoreSubscriber(
     this,
-    () => this.store.knownProfiles
+    () => this.store?.knownProfiles
   );
 
   private get _filteredAgents(): Array<AgentProfile> {
@@ -110,7 +110,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   onUsernameSelected(agent: AgentProfile) {
-    console.log(agent);
     // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(

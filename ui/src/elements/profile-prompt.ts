@@ -37,7 +37,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   @state()
   private _loading = true;
 
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+  private _myProfile = new StoreSubscriber(this, () => this.store?.myProfile);
 
   async firstUpdated() {
     await this.store.fetchMyProfile();
