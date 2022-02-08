@@ -26,13 +26,16 @@
         SearchAgent,
         ProfilesStore,
         profilesStoreContext,
-        ListProfiles,
+        ProfileDetail,
+        MyProfile,
       } from '../dist';
-      import { AppWebsocket } from '@holochain/conductor-api';
       import { HolochainClient } from '@holochain-open-dev/cell-client';
       import { LitElement, html } from 'lit';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-      import { ContextProvider } from '@lit-labs/context';
+      import {
+        provide,
+        ContextProviderElement,
+      } from '@holochain-open-dev/context';
 
       class ProfilesTest extends ScopedElementsMixin(LitElement) {
         static get properties() {
@@ -44,42 +47,42 @@
         }
 
         async firstUpdated() {
-          const appWebsocket = await AppWebsocket.connect(
-            `ws://localhost:${process.env.HC_PORT}`
+          const client = await HolochainClient.connect(
+            `ws://localhost:${process.env.HC_PORT}`,
+            'test-app'
           );
-          const appInfo = await appWebsocket.appInfo({
-            installed_app_id: 'test-app',
+          const cellClient = client.forCell(
+            client.cellDataByRoleId('profiles')
+          );
+
+          this.store = new ProfilesStore(cellClient, {
+            avatarMode: 'avatar',
+            additionalFields: ['bio', 'location'],
           });
-
-          const cellData = appInfo.cell_data[0];
-          const cellClient = new HolochainClient(appWebsocket, cellData);
-
-          new ContextProvider(
-            this,
-            profilesStoreContext,
-            new ProfilesStore(cellClient, {
-              avatarMode: 'avatar',
-            })
-          );
-
           this.loaded = true;
         }
 
         render() {
           if (!this.loaded) return html`<span>Loading...</span>`;
           return html`
-            <profile-prompt>
-              <list-profiles></list-profiles>
-              <search-agent include-myself></search-agent>
-            </profile-prompt>
+            <context-provider
+              .context=${profilesStoreContext}
+              .value=${this.store}
+            >
+              <profile-prompt>
+                <my-profile style="height: 800px; width: 800px;"></my-profile>
+                <search-agent include-myself></search-agent>
+              </profile-prompt>
+            </context-provider>
           `;
         }
 
         static get scopedElements() {
           return {
             'profile-prompt': ProfilePrompt,
+            'my-profile': MyProfile,
             'search-agent': SearchAgent,
-            'list-profiles': ListProfiles,
+            'context-provider': ContextProviderElement,
           };
         }
       }

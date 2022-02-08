@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 
 import {
   Button,
@@ -7,34 +7,40 @@ import {
   TextField,
 } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { StoreSubscriber } from 'lit-svelte-stores';
 
 import { sharedStyles } from './utils/shared-styles';
-import { CreateProfileForm } from './create-profile-form';
+import { CreateProfile } from './create-profile';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 
 /**
  * @element profile-prompt
+ * @slot hero - Will be displayed above the create-profile form when the user is prompted with it
  */
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
   /** Dependencies */
 
+  /**
+   * `ProfilesStore` that is requested via context.
+   * Only set this property if you want to override the store requested via context.
+   */
   @contextProvided({ context: profilesStoreContext })
-  _store!: ProfilesStore;
+  @property({ type: Object })
+  store!: ProfilesStore;
 
   /** Private properties */
 
-  @property({ type: Boolean })
-  _loading = true;
+  @state()
+  private _loading = true;
 
-  _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
+  private _myProfile = new StoreSubscriber(this, () => this.store?.myProfile);
 
   async firstUpdated() {
-    await this._store.fetchMyProfile();
+    await this.store.fetchMyProfile();
     this._loading = false;
   }
 
@@ -47,7 +53,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
         ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>`
         : html` <div class="column" style="align-items: center;">
             <slot name="hero"></slot>
-            <create-profile-form></create-profile-form>
+            <create-profile></create-profile>
           </div>`}
     </div>`;
   }
@@ -60,12 +66,15 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     `;
   }
 
+  /**
+   * @ignore
+   */
   static get scopedElements() {
     return {
       'mwc-textfield': TextField,
       'mwc-button': Button,
       'mwc-circular-progress': CircularProgress,
-      'create-profile-form': CreateProfileForm,
+      'create-profile': CreateProfile,
     };
   }
 

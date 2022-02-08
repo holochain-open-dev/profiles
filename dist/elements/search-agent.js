@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { css, html, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { MenuSurface, List, ListItem, TextField, } from '@scoped-elements/material-web';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { sharedStyles } from './utils/shared-styles';
@@ -10,38 +10,38 @@ import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
 /**
  * @element search-agent
- * @fires agent-selected - Fired when the user selects some agent. `event.detail.agent` will contain the agent selected
+ * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }
  */
 export class SearchAgent extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public attributes */
         super(...arguments);
         /**
-         * Whether to clear the field when an agent is selected
+         * Whether to clear the field when an agent is selected.
          * @attr clear-on-select
          */
         this.clearOnSelect = false;
         /**
-         * Whether to include my own agent as a possible agent to select
+         * Whether to include my own agent as a possible agent to select.
          * @attr include-myself
          */
         this.includeMyself = false;
         /**
-         * Label for the agent searching field
+         * Label for the agent searching field.
          * @attr field-label
          */
         this.fieldLabel = 'Search agent';
         /** Private properties */
-        this._knownProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
+        this._knownProfiles = new StoreSubscriber(this, () => { var _a; return (_a = this.store) === null || _a === void 0 ? void 0 : _a.knownProfiles; });
         this._currentFilter = undefined;
         this._lastSearchedPrefix = undefined;
     }
     get _filteredAgents() {
         let filtered = Object.entries(this._knownProfiles.value)
             .filter(([agentPubKey, profile]) => profile.nickname.startsWith(this._currentFilter))
-            .map(([agent_pub_key, profile]) => ({ agent_pub_key, profile }));
+            .map(([agentPubKey, profile]) => ({ agentPubKey, profile }));
         if (!this.includeMyself) {
-            filtered = filtered.filter(agent => this._store.myAgentPubKey !== agent.agent_pub_key);
+            filtered = filtered.filter(agent => this.store.myAgentPubKey !== agent.agentPubKey);
         }
         return filtered;
     }
@@ -50,7 +50,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
     async searchAgents(nicknamePrefix) {
         this._lastSearchedPrefix = nicknamePrefix;
-        await this._store.searchProfiles(nicknamePrefix);
+        await this.store.searchProfiles(nicknamePrefix);
     }
     onFilterChange() {
         if (this._textField.value.length < 3)
@@ -67,7 +67,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         if (agent) {
             this.dispatchEvent(new CustomEvent('agent-selected', {
                 detail: {
-                    agent,
+                    agentPubKey: agent.agentPubKey,
                 },
             }));
             // If the consumer says so, clear the field
@@ -97,24 +97,26 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         </mwc-textfield>
         <mwc-menu-surface absolute id="overlay" x="4" y="28">
           ${this._filteredAgents.length > 0
-            ? this._filteredAgents.map(agent => html `
-                  <mwc-list style="min-width: 80px;">
-                    <mwc-list-item
+            ? html `
+                <mwc-list
+                  style="min-width: 80px;"
+                  @selected=${(e) => this.onUsernameSelected(this._filteredAgents[e.detail.index])}
+                >
+                  ${this._filteredAgents.map(agent => html ` <mwc-list-item
                       graphic="avatar"
-                      .value=${agent.agent_pub_key}
+                      .value=${agent.agentPubKey}
                       style="--mdc-list-item-graphic-size: 32px;"
-                      @request-selected=${() => this.onUsernameSelected(agent)}
                     >
                       <agent-avatar
                         slot="graphic"
-                        .agentPubKey=${agent.agent_pub_key}
+                        .agentPubKey=${agent.agentPubKey}
                       ></agent-avatar>
                       <span style="margin-left: 8px;"
                         >${agent.profile.nickname}</span
                       >
-                    </mwc-list-item>
-                  </mwc-list>
-                `)
+                    </mwc-list-item>`)}
+                </mwc-list>
+              `
             : html `<mwc-list-item>No agents match the filter</mwc-list-item>`}
         </mwc-menu-surface>
       </div>
@@ -134,6 +136,9 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       `,
         ];
     }
+    /**
+     * @ignore
+     */
     static get scopedElements() {
         return {
             'agent-avatar': AgentAvatar,
@@ -154,8 +159,9 @@ __decorate([
     property({ type: String, attribute: 'field-label' })
 ], SearchAgent.prototype, "fieldLabel", void 0);
 __decorate([
-    contextProvided({ context: profilesStoreContext })
-], SearchAgent.prototype, "_store", void 0);
+    contextProvided({ context: profilesStoreContext }),
+    property({ type: Object })
+], SearchAgent.prototype, "store", void 0);
 __decorate([
     state()
 ], SearchAgent.prototype, "_currentFilter", void 0);

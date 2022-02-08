@@ -1,15 +1,16 @@
 import { __decorate } from "tslib";
 import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { Button, CircularProgress, TextField, } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { sharedStyles } from './utils/shared-styles';
-import { CreateProfileForm } from './create-profile-form';
+import { CreateProfile } from './create-profile';
 import { profilesStoreContext } from '../context';
 /**
  * @element profile-prompt
+ * @slot hero - Will be displayed above the create-profile form when the user is prompted with it
  */
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     constructor() {
@@ -17,10 +18,10 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
         super(...arguments);
         /** Private properties */
         this._loading = true;
-        this._myProfile = new StoreSubscriber(this, () => this._store.myProfile);
+        this._myProfile = new StoreSubscriber(this, () => { var _a; return (_a = this.store) === null || _a === void 0 ? void 0 : _a.myProfile; });
     }
     async firstUpdated() {
-        await this._store.fetchMyProfile();
+        await this.store.fetchMyProfile();
         this._loading = false;
     }
     renderPrompt() {
@@ -32,7 +33,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
             ? html `<mwc-circular-progress indeterminate></mwc-circular-progress>`
             : html ` <div class="column" style="align-items: center;">
             <slot name="hero"></slot>
-            <create-profile-form></create-profile-form>
+            <create-profile></create-profile>
           </div>`}
     </div>`;
     }
@@ -43,12 +44,15 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
             : this.renderPrompt()}
     `;
     }
+    /**
+     * @ignore
+     */
     static get scopedElements() {
         return {
             'mwc-textfield': TextField,
             'mwc-button': Button,
             'mwc-circular-progress': CircularProgress,
-            'create-profile-form': CreateProfileForm,
+            'create-profile': CreateProfile,
         };
     }
     static get styles() {
@@ -63,9 +67,10 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     }
 }
 __decorate([
-    contextProvided({ context: profilesStoreContext })
-], ProfilePrompt.prototype, "_store", void 0);
+    contextProvided({ context: profilesStoreContext }),
+    property({ type: Object })
+], ProfilePrompt.prototype, "store", void 0);
 __decorate([
-    property({ type: Boolean })
+    state()
 ], ProfilePrompt.prototype, "_loading", void 0);
 //# sourceMappingURL=profile-prompt.js.map

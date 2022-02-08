@@ -1,5 +1,5 @@
 import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -13,31 +13,43 @@ import { sharedStyles } from './utils/shared-styles';
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 
+  /**
+   * REQUIRED. The public key identifying the agent whose profile is going to be shown.
+   */
   @property({
     attribute: 'agent-pub-key',
+    type: String,
   })
   agentPubKey!: AgentPubKeyB64;
 
-  @property()
+  /**
+   * Size of the avatar image in pixels.
+   */
+  @property({ type: Number })
   size = 32;
 
   /** Dependencies */
 
+  /**
+   * `ProfilesStore` that is requested via context.
+   * Only set this property if you want to override the store requested via context.
+   */
   @contextProvided({ context: profilesStoreContext })
-  _store!: ProfilesStore;
+  @property({ type: Object })
+  store!: ProfilesStore;
 
-  _profile = new StoreSubscriber(this, () =>
-    this._store.profileOf(this.agentPubKey)
+  private _profile = new StoreSubscriber(this, () =>
+    this.store?.profileOf(this.agentPubKey)
   );
 
   async firstUpdated() {
-    if (this._store.config.avatarMode === 'avatar') {
-      await this._store.fetchAgentProfile(this.agentPubKey);
+    if (this.store.config.avatarMode === 'avatar') {
+      await this.store.fetchAgentProfile(this.agentPubKey);
     }
   }
 
   render() {
-    if (this._store.config.avatarMode === 'identicon')
+    if (this.store.config.avatarMode === 'identicon')
       return html`<holo-identicon
         .hash=${this.agentPubKey}
         .size=${this.size}
@@ -57,6 +69,9 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     ></sl-skeleton>`;
   }
 
+  /**
+   * @ignore
+   */
   static get scopedElements() {
     return {
       'holo-identicon': HoloIdenticon,

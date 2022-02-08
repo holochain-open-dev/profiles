@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -12,16 +12,19 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     constructor() {
         /** Public properties */
         super(...arguments);
+        /**
+         * Size of the avatar image in pixels.
+         */
         this.size = 32;
-        this._profile = new StoreSubscriber(this, () => this._store.profileOf(this.agentPubKey));
+        this._profile = new StoreSubscriber(this, () => { var _a; return (_a = this.store) === null || _a === void 0 ? void 0 : _a.profileOf(this.agentPubKey); });
     }
     async firstUpdated() {
-        if (this._store.config.avatarMode === 'avatar') {
-            await this._store.fetchAgentProfile(this.agentPubKey);
+        if (this.store.config.avatarMode === 'avatar') {
+            await this.store.fetchAgentProfile(this.agentPubKey);
         }
     }
     render() {
-        if (this._store.config.avatarMode === 'identicon')
+        if (this.store.config.avatarMode === 'identicon')
             return html `<holo-identicon
         .hash=${this.agentPubKey}
         .size=${this.size}
@@ -40,6 +43,9 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       style="height: ${this.size}px; width: ${this.size}px"
     ></sl-skeleton>`;
     }
+    /**
+     * @ignore
+     */
     static get scopedElements() {
         return {
             'holo-identicon': HoloIdenticon,
@@ -52,12 +58,14 @@ AgentAvatar.styles = [sharedStyles];
 __decorate([
     property({
         attribute: 'agent-pub-key',
+        type: String,
     })
 ], AgentAvatar.prototype, "agentPubKey", void 0);
 __decorate([
-    property()
+    property({ type: Number })
 ], AgentAvatar.prototype, "size", void 0);
 __decorate([
-    contextProvided({ context: profilesStoreContext })
-], AgentAvatar.prototype, "_store", void 0);
+    contextProvided({ context: profilesStoreContext }),
+    property({ type: Object })
+], AgentAvatar.prototype, "store", void 0);
 //# sourceMappingURL=agent-avatar.js.map

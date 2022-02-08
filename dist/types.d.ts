@@ -4,6 +4,9 @@ export interface Profile {
     fields: Dictionary<string>;
 }
 export interface AgentProfile {
-    agent_pub_key: AgentPubKeyB64;
+    agentPubKey: AgentPubKeyB64;
     profile: Profile;
+}
+export interface SearchProfilesInput {
+    nicknamePrefix: string;
 }

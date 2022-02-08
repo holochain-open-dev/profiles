@@ -5,23 +5,31 @@ import renderIcon from '@holo-host/identicon';
 import { classMap } from 'lit/directives/class-map.js';
 
 export class HoloIdenticon extends LitElement {
-  @property()
+  /**
+   * REQUIRED. The hash that will be converted to an identicon.
+   */
+  @property({ type: String })
   hash!: HoloHashB64;
 
-  @property()
-  size: number | undefined = undefined;
+  /**
+   * Size of the identicon in pixels.
+   */
+  @property({ type: Number })
+  size = 32;
 
-  @property()
+  /**
+   * Shape of the identicon.
+   */
+  @property({ type: String })
   shape: 'square' | 'circle' = 'circle';
 
   @query('#canvas')
-  _canvas!: HTMLCanvasElement;
+  private _canvas!: HTMLCanvasElement;
 
   updated(changedValues: PropertyValues) {
     super.updated(changedValues);
 
     if (changedValues.has('hash') || changedValues.has('size')) {
-      console.log(this.hash, this.size)
       renderIcon(
         {
           hash: deserializeHash(this.hash),

@@ -1,9 +1,9 @@
 import { css, html, LitElement } from 'lit';
-import { state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
+import { contextProvided } from '@holochain-open-dev/context';
 import {
   CircularProgress,
   ListItem,
@@ -15,21 +15,33 @@ import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
 
+/**
+ * @element list-profiles
+ * @fires agent-selected - Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }
+ */
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
+  /**
+   * `ProfilesStore` that is requested via context.
+   * Only set this property if you want to override the store requested via context.
+   */
   @contextProvided({ context: profilesStoreContext })
-  _store!: ProfilesStore;
+  @property({ type: Object })
+  store!: ProfilesStore;
 
   /** Private properties */
 
   @state()
-  _loading = true;
+  private _loading = true;
 
-  _allProfiles = new StoreSubscriber(this, () => this._store.knownProfiles);
+  private _allProfiles = new StoreSubscriber(
+    this,
+    () => this.store?.knownProfiles
+  );
 
   async firstUpdated() {
-    await this._store.fetchAllProfiles();
+    await this.store.fetchAllProfiles();
     this._loading = false;
   }
 
@@ -38,6 +50,22 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
       .split(' ')
       .map(name => name[0])
       .join('');
+  }
+
+  fireAgentSelected(index: number) {
+    const agentPubKey = Object.keys(this._allProfiles.value)[index];
+
+    if (agentPubKey) {
+      this.dispatchEvent(
+        new CustomEvent('agent-selected', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            agentPubKey,
+          },
+        })
+      );
+    }
   }
 
   render() {
@@ -52,7 +80,10 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
       >`;
 
     return html`
-      <mwc-list style="min-width: 80px;">
+      <mwc-list
+        style="min-width: 80px;"
+        @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
+      >
         ${Object.entries(this._allProfiles.value).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
@@ -79,6 +110,9 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     `,
   ];
 
+  /**
+   * @ignore
+   */
   static get scopedElements() {
     return {
       'agent-avatar': AgentAvatar,

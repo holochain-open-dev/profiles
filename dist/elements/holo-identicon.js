@@ -7,13 +7,18 @@ import { classMap } from 'lit/directives/class-map.js';
 export class HoloIdenticon extends LitElement {
     constructor() {
         super(...arguments);
-        this.size = undefined;
+        /**
+         * Size of the identicon in pixels.
+         */
+        this.size = 32;
+        /**
+         * Shape of the identicon.
+         */
         this.shape = 'circle';
     }
     updated(changedValues) {
         super.updated(changedValues);
         if (changedValues.has('hash') || changedValues.has('size')) {
-            console.log(this.hash, this.size);
             renderIcon({
                 hash: deserializeHash(this.hash),
                 size: this.size,
@@ -46,13 +51,13 @@ export class HoloIdenticon extends LitElement {
     }
 }
 __decorate([
-    property()
+    property({ type: String })
 ], HoloIdenticon.prototype, "hash", void 0);
 __decorate([
-    property()
+    property({ type: Number })
 ], HoloIdenticon.prototype, "size", void 0);
 __decorate([
-    property()
+    property({ type: String })
 ], HoloIdenticon.prototype, "shape", void 0);
 __decorate([
     query('#canvas')
