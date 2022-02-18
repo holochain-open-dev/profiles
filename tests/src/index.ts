@@ -28,6 +28,8 @@ function serializeHash(hash) {
   return `u${Base64.fromUint8Array(hash, true)}`;
 }
 
+const zomeName = 'profiles';
+
 let orchestrator = new Orchestrator();
 
 orchestrator.registerScenario("create a profile and get it", async (s, t) => {
@@ -39,18 +41,19 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
     installation
   );
 
+
   let alicePubkeyB64 = serializeHash(alice_profiles.agent);
   let bobPubKeyB64 = serializeHash(bob_profiles.agent);
 
   let myProfile = await alice_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "get_my_profile",
     null
   );
   t.notOk(myProfile);
 
   let profileHash = await alice_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "create_profile",
     {
       nickname: "alice",
@@ -65,7 +68,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
 
   // set nickname as alice to make sure bob's is not getting deleted
   // with alice's update
-  profileHash = await bob_profiles.cells[0].call("profiles", "create_profile", {
+  profileHash = await bob_profiles.cells[0].call(zomeName, "create_profile", {
     nickname: "alice_bob",
     fields: {
       avatar: "bobboavatar",
@@ -76,7 +79,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   await sleep(5000);
 
   profileHash = await alice_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "update_profile",
     {
       nickname: "alice2",
@@ -89,7 +92,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   t.ok(profileHash);
 
   myProfile = await alice_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "get_my_profile",
     null
   );
@@ -97,21 +100,21 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   t.equal(myProfile.profile.nickname, "alice2");
 
   let allprofiles = await bob_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "get_all_profiles",
     null
   );
   t.equal(allprofiles.length, 2);
 
   let multipleProfiles = await bob_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "get_agents_profile",
     [alicePubkeyB64, bobPubKeyB64]
   );
   t.equal(multipleProfiles.length, 2);
 
   let profiles = await bob_profiles.cells[0].call(
-    "profiles",
+    zomeName,
     "search_profiles",
     {
       nicknamePrefix: "sdf",
@@ -119,14 +122,14 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   );
   t.equal(profiles.length, 0);
 
-  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+  profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
     nicknamePrefix: "alic",
   });
   t.equal(profiles.length, 2);
   t.ok(profiles[0].agentPubKey);
   t.equal(profiles[1].profile.nickname, "alice2");
 
-  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+  profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
     nicknamePrefix: "ali",
   });
   t.equal(profiles.length, 2);
@@ -134,14 +137,14 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
   t.equal(profiles[1].profile.nickname, "alice2");
   t.equal(profiles[1].profile.fields.avatar, "aliceavatar2");
 
-  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+  profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
     nicknamePrefix: "alice",
   });
   t.equal(profiles.length, 2);
   t.ok(profiles[1].agentPubKey);
   t.equal(profiles[1].profile.nickname, "alice2");
 
-  profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+  profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
     nicknamePrefix: "alice_",
   });
   t.equal(profiles.length, 2);
@@ -165,7 +168,7 @@ orchestrator.registerScenario(
     );
 
     let profileHash = await alice_profiles.cells[0].call(
-      "profiles",
+      zomeName,
       "create_profile",
       {
         nickname: "ALIce",
@@ -178,7 +181,7 @@ orchestrator.registerScenario(
     await sleep(5000);
 
     let profiles = await bob_profiles.cells[0].call(
-      "profiles",
+      zomeName,
       "search_profiles",
       {
         nicknamePrefix: "ali",
@@ -188,21 +191,21 @@ orchestrator.registerScenario(
     t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
-    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
       nicknamePrefix: "aLI",
     });
     t.equal(profiles.length, 1);
     t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
-    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
       nicknamePrefix: "AlI",
     });
     t.equal(profiles.length, 1);
     t.ok(profiles[0].agentPubKey);
     t.equal(profiles[0].profile.nickname, "ALIce");
 
-    profiles = await bob_profiles.cells[0].call("profiles", "search_profiles", {
+    profiles = await bob_profiles.cells[0].call(zomeName, "search_profiles", {
       nicknamePrefix: "ALI",
     });
     t.equal(profiles.length, 1);
