@@ -1,11 +1,11 @@
 import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { contextProvided } from '@holochain-open-dev/context';
+import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
-import { HoloIdenticon } from './holo-identicon';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { StoreSubscriber } from 'lit-svelte-stores';
 import { sharedStyles } from './utils/shared-styles';

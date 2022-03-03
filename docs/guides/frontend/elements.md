@@ -19,7 +19,7 @@ import "@holochain-open-dev/profiles/list-profiles";
 import "@holochain-open-dev/profiles/profile-detail";
 import "@holochain-open-dev/profiles/my-profile";
 import "@holochain-open-dev/profiles/update-profile";
-import "@holochain-open-dev/profiles/holo-identicon";
+
 import "@holochain-open-dev/profiles/agent-avatar";
 import "@holochain-open-dev/profiles/profile-prompt";
 import "@holochain-open-dev/context/context-provider";
@@ -84,11 +84,6 @@ export const foo = () => html`
         <profile-detail
           agent-pub-key="uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU"
         ></profile-detail>
-      </template>
-      <template data-element="holo-identicon" data-target="host">
-        <holo-identicon
-          hash="uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU"
-        ></holo-identicon>
       </template>
 
       <template data-element="profile-prompt" data-target="slot">

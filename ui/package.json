@@ -15,7 +15,6 @@
     "./profile-prompt": "./dist/definitions/profile-prompt.js",
     "./search-agent": "./dist/definitions/search-agent.js",
     "./agent-avatar": "./dist/definitions/agent-avatar.js",
-    "./holo-identicon": "./dist/definitions/holo-identicon.js",
     "./list-profiles": "./dist/definitions/list-profiles.js",
     "./mocks": "./dist/mocks.js"
   },
@@ -37,11 +36,11 @@
     "publish-to-branch": "npm run lint && npm run build && rimraf node_modules && gh-pages -d ./ -b ui-build && cd .. && npm i"
   },
   "dependencies": {
-    "@holo-host/identicon": "^0.1.0",
-    "@holochain-open-dev/cell-client": "^0.3.2",
     "@holochain/client": "^0.3.2",
-    "@holochain-open-dev/core-types": "^0.2.0",
+    "@holochain-open-dev/cell-client": "^0.3.2",
     "@holochain-open-dev/context": "^0.0.3",
+    "@holochain-open-dev/core-types": "^0.2.0",
+    "@holochain-open-dev/utils": "^0.0.1",
     "@open-wc/scoped-elements": "^2.0.1",
     "@scoped-elements/material-web": "0.0.16",
     "@scoped-elements/shoelace": "0.0.8",
