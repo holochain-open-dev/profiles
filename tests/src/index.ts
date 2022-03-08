@@ -43,6 +43,7 @@ orchestrator.registerScenario("create a profile and get it", async (s, t) => {
 
 
   let alicePubkeyB64 = serializeHash(alice_profiles.agent);
+  console.log(alicePubkeyB64)
   let bobPubKeyB64 = serializeHash(bob_profiles.agent);
 
   let myProfile = await alice_profiles.cells[0].call(

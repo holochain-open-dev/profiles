@@ -7,7 +7,6 @@ export * from './elements/search-agent';
 export * from './elements/profile-prompt';
 export * from './elements/list-profiles';
 export * from './elements/agent-avatar';
-export * from './elements/holo-identicon';
 export * from './elements/profile-detail';
 export * from './profiles-service';
 export * from './profiles-store';
