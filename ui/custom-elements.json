@@ -131,14 +131,6 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "./elements/holo-identicon"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "*",
-          "declaration": {
-            "name": "*",
             "package": "./elements/profile-detail"
           }
         },
@@ -678,15 +670,111 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/shim.d.ts",
+      "path": "src/types.ts",
       "declarations": [],
       "exports": []
     },
     {
       "kind": "javascript-module",
-      "path": "src/types.ts",
-      "declarations": [],
-      "exports": []
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
+          }
+        }
+      ]
     },
     {
       "kind": "javascript-module",
@@ -888,128 +976,6 @@
           "declaration": {
             "name": "CP",
             "module": "src/definitions/create-profile.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/definitions/holo-identicon.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "HI",
-          "superclass": {
-            "name": "HoloIdenticon",
-            "module": "/src/elements/holo-identicon"
-          },
-          "tagName": "holo-identicon",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "hash",
-              "type": {
-                "text": "HoloHashB64"
-              },
-              "description": "REQUIRED. The hash that will be converted to an identicon.",
-              "fieldName": "hash",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            },
-            {
-              "name": "size",
-              "type": {
-                "text": "number"
-              },
-              "default": "32",
-              "description": "Size of the identicon in pixels.",
-              "fieldName": "size",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            },
-            {
-              "name": "shape",
-              "type": {
-                "text": "'square' | 'circle'"
-              },
-              "default": "'circle'",
-              "description": "Shape of the identicon.",
-              "fieldName": "shape",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "hash",
-              "type": {
-                "text": "HoloHashB64"
-              },
-              "description": "REQUIRED. The hash that will be converted to an identicon.",
-              "attribute": "hash",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "number"
-              },
-              "default": "32",
-              "description": "Size of the identicon in pixels.",
-              "attribute": "size",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "'square' | 'circle'"
-              },
-              "default": "'circle'",
-              "description": "Shape of the identicon.",
-              "attribute": "shape",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_canvas",
-              "type": {
-                "text": "HTMLCanvasElement"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "HoloIdenticon",
-                "module": "src/elements/holo-identicon.ts"
-              }
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "custom-element-definition",
-          "name": "holo-identicon",
-          "declaration": {
-            "name": "HI",
-            "module": "src/definitions/holo-identicon.ts"
           }
         }
       ]
@@ -2195,99 +2161,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/elements/holo-identicon.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "HoloIdenticon",
-          "members": [
-            {
-              "kind": "field",
-              "name": "hash",
-              "type": {
-                "text": "HoloHashB64"
-              },
-              "description": "REQUIRED. The hash that will be converted to an identicon.",
-              "attribute": "hash"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "number"
-              },
-              "default": "32",
-              "description": "Size of the identicon in pixels.",
-              "attribute": "size"
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "'square' | 'circle'"
-              },
-              "default": "'circle'",
-              "description": "Shape of the identicon.",
-              "attribute": "shape"
-            },
-            {
-              "kind": "field",
-              "name": "_canvas",
-              "type": {
-                "text": "HTMLCanvasElement"
-              },
-              "privacy": "private"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "hash",
-              "type": {
-                "text": "HoloHashB64"
-              },
-              "description": "REQUIRED. The hash that will be converted to an identicon.",
-              "fieldName": "hash"
-            },
-            {
-              "name": "size",
-              "type": {
-                "text": "number"
-              },
-              "default": "32",
-              "description": "Size of the identicon in pixels.",
-              "fieldName": "size"
-            },
-            {
-              "name": "shape",
-              "type": {
-                "text": "'square' | 'circle'"
-              },
-              "default": "'circle'",
-              "description": "Shape of the identicon.",
-              "fieldName": "shape"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "HoloIdenticon",
-          "declaration": {
-            "name": "HoloIdenticon",
-            "module": "src/elements/holo-identicon.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/elements/list-profiles.ts",
       "declarations": [
         {
@@ -2944,108 +2817,6 @@
           "declaration": {
             "name": "UpdateProfile",
             "module": "src/elements/update-profile.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]
