@@ -2,7 +2,7 @@ import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { contextProvided } from '@holochain-open-dev/context';
 import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
@@ -50,18 +50,21 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
 
   render() {
     if (this.store.config.avatarMode === 'identicon')
-      return html`<holo-identicon
-        .hash=${this.agentPubKey}
-        .size=${this.size}
-      ></holo-identicon>`;
+      return html` <div style="position: relative">
+        <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
+        </holo-identicon>
+        <div class="badge"><slot name="badge"></slot></div>
+      </div>`;
     if (this._profile.value)
       return html`
-        <sl-avatar
-          .image=${this._profile.value.fields.avatar}
-          style="--size: ${this.size}px;"
-        >
-          <div slot="icon"></div>
-        </sl-avatar>
+        <div style="position: relative">
+          <sl-avatar
+            .image=${this._profile.value.fields.avatar}
+            style="--size: ${this.size}px;"
+          >
+          </sl-avatar>
+          <div class="badge"><slot name="badge"></slot></div>
+        </div>
       `;
     return html`<sl-skeleton
       effect="pulse"
@@ -80,5 +83,14 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     };
   }
 
-  static styles = [sharedStyles];
+  static styles = [
+    sharedStyles,
+    css`
+      .badge {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+    `,
+  ];
 }
