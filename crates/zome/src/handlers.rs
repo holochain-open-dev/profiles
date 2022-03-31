@@ -19,11 +19,13 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     create_link(
         path.path_entry_hash()?,
         profile_hash.clone(),
+        HdkLinkType::Any,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
         profile_hash.clone(),
+        HdkLinkType::Any,
         link_tag("profile")?,
     )?;
 
@@ -91,11 +93,13 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
     create_link(
         path.path_entry_hash()?,
         profile_hash.clone(),
+        HdkLinkType::Any,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
         profile_hash.clone(),
+        HdkLinkType::Any,
         link_tag("profile")?,
     )?;
 
