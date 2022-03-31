@@ -3,6 +3,17 @@ use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 use std::convert::TryInto;
 
+enum ProfileLinkType {
+    PathToProfile = 0,
+    AgentToProfile = 1,
+}
+
+impl From<ProfileLinkType> for LinkType {
+    fn from(hdk_link_type: ProfileLinkType) -> Self {
+        Self(hdk_link_type as u8)
+    }
+}
+
 pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     let agent_info = agent_info()?;
 
@@ -19,11 +30,13 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     create_link(
         path.path_entry_hash()?,
         profile_hash.clone(),
+        ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
         profile_hash.clone(),
+        ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
 
@@ -91,11 +104,13 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
     create_link(
         path.path_entry_hash()?,
         profile_hash.clone(),
+        ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
         profile_hash.clone(),
+        ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
 
