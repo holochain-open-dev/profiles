@@ -25,17 +25,17 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
     path.ensure()?;
 
-    let agent_address: AnyDhtHash = agent_info.agent_initial_pubkey.clone().into();
+    let agent_address = agent_info.agent_initial_pubkey.clone();
 
     create_link(
-        path.path_entry_hash()?,
-        profile_hash.clone(),
+        path.path_entry_hash()?.into(),
+        profile_hash.clone().into(),
         ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
-        profile_hash.clone(),
+        profile_hash.clone().into(),
         ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
@@ -61,7 +61,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
     let agent_address = agent_info.agent_initial_pubkey.clone();
 
-    let link_details = get_link_details(path.path_entry_hash()?, None)?.into_inner();
+    let link_details = get_link_details(path.path_entry_hash()?.into(), None)?.into_inner();
 
     if link_details.len() > 0 {
         // check whether the agent has committed a profile before
@@ -102,14 +102,14 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
     }
 
     create_link(
-        path.path_entry_hash()?,
-        profile_hash.clone(),
+        path.path_entry_hash()?.into(),
+        profile_hash.clone().into(),
         ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
         agent_address.into(),
-        profile_hash.clone(),
+        profile_hash.clone().into(),
         ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
@@ -141,7 +141,7 @@ pub fn get_all_profiles() -> ExternResult<Vec<AgentProfile>> {
 
     let agent_profiles: Vec<AgentProfile> = children
         .into_iter()
-        .map(|link| get_agent_profiles_for_path(link.target))
+        .map(|link| get_agent_profiles_for_path(link.target.into()))
         .collect::<ExternResult<Vec<Vec<AgentProfile>>>>()?
         .into_iter()
         .flatten()
@@ -155,9 +155,7 @@ pub fn get_agent_profile(
 ) -> ExternResult<Option<AgentProfile>> {
     let agent_pub_key = AgentPubKey::from(wrapped_agent_pub_key.clone());
 
-    let agent_address: AnyDhtHash = agent_pub_key.into();
-
-    let links = get_links(agent_address.into(), Some(link_tag("profile")?))?;
+    let links = get_links(agent_pub_key.into(), Some(link_tag("profile")?))?;
 
     if links.len() == 0 {
         return Ok(None);
@@ -165,7 +163,7 @@ pub fn get_agent_profile(
 
     let link = links[0].clone();
 
-    let profile: Profile = utils::try_get_and_convert(link.target)?;
+    let profile: Profile = utils::try_get_and_convert(link.target.into())?;
 
     let agent_profile = AgentProfile {
         agent_pub_key: wrapped_agent_pub_key,
@@ -184,8 +182,8 @@ pub fn get_agents_profile(
         .into_iter()
         .map(|agent_pub_key_b64| {
             let agent_pub_key = AgentPubKey::from(agent_pub_key_b64.clone());
-            let agent_address: AnyDhtHash = agent_pub_key.into();
-            GetLinksInput::new(agent_address.into(), link_tag.clone())
+
+            GetLinksInput::new(agent_pub_key.into(), link_tag.clone())
         })
         .collect();
 
@@ -219,7 +217,7 @@ fn prefix_path(nickname: String) -> Path {
 }
 
 fn get_agent_profiles_for_path(path_hash: EntryHash) -> ExternResult<Vec<AgentProfile>> {
-    let links = get_links(path_hash, None)?;
+    let links = get_links(path_hash.into(), None)?;
 
     let get_input = links
         .into_iter()

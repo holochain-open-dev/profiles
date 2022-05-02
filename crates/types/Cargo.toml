@@ -17,4 +17,4 @@ name = "hc_zome_profiles_types"
 derive_more = "0"
 serde = "1"
 
-hdk = {version = "0.0.127", features = ["encoding"]}
+hdk = {version = "0.0.130", features = ["encoding"]}
