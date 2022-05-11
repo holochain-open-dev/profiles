@@ -3,7 +3,6 @@ import { Dictionary } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import {
   Button,
-  Card,
   Fab,
   IconButton,
   TextField,
@@ -11,6 +10,7 @@ import {
 import { SlAvatar } from '@scoped-elements/shoelace';
 import { html, LitElement } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
+import { localized, msg, str } from '@lit/localize';
 
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
@@ -22,6 +22,7 @@ import { sharedStyles } from './utils/shared-styles';
  * @element edit-profile
  * @fires save-profile - Fired when the save profile button is clicked
  */
+@localized()
 export class EditProfile extends ScopedElementsMixin(LitElement) {
   /**
    * The profile to be edited.
@@ -33,7 +34,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
    * Label for the save profile button.
    */
   @property({ type: String, attribute: 'save-profile-label' })
-  saveProfileLabel = 'Save Profile';
+  saveProfileLabel: string | undefined;
 
   /** Dependencies */
 
@@ -64,12 +65,14 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     this._nicknameField.validityTransform = (newValue: string) => {
       this.requestUpdate();
       if (newValue.length < this.store.config.minNicknameLength) {
-        this._nicknameField.setCustomValidity(`Nickname is too short`);
+        this._nicknameField.setCustomValidity(msg(`Nickname is too short`));
         return {
           valid: false,
         };
       } else if (this._existingUsernames[newValue]) {
-        this._nicknameField.setCustomValidity('This nickname already exists');
+        this._nicknameField.setCustomValidity(
+          msg('This nickname already exists')
+        );
         return { valid: false };
       }
 
@@ -96,7 +99,10 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   }
 
   avatarMode() {
-    return this.store.config.avatarMode === 'avatar';
+    return (
+      this.store.config.avatarMode === 'avatar-required' ||
+      this.store.config.avatarMode === 'avatar-optional'
+    );
   }
 
   renderAvatar() {
@@ -119,7 +125,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
                   class="placeholder label"
                   style="cursor: pointer;   text-decoration: underline;"
                   @click=${() => (this._avatar = undefined)}
-                  >Clear</span
+                  >${msg('Clear')}</span
                 >
               </div>
             `
@@ -138,7 +144,8 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   shouldSaveButtonBeEnabled() {
     if (!this._nicknameField) return false;
     if (!this._nicknameField.validity.valid) return false;
-    if (this.avatarMode() && !this._avatar) return false;
+    if (this.store.config.avatarMode === 'avatar-required' && !this._avatar)
+      return false;
     if (
       Object.values(this.getAdditionalTextFields()).find(t => !t.validity.valid)
     )
@@ -206,7 +213,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
         outlined
         required
         autoValidate
-        validationMessage="This field is required"
+        .validationMessage=${msg('This field is required')}
         .label=${fieldName}
         .value=${this.profile?.fields[fieldName] || ''}
         @input=${() => this.requestUpdate()}
@@ -235,9 +242,11 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
             <mwc-textfield
               id="nickname-field"
               outlined
-              label="Nickname"
+              .label=${msg('Nickname')}
               .value=${this.profile?.nickname || ''}
-              .helper=${`Min. ${this.store.config.minNicknameLength} characters`}
+              .helper=${msg(
+                str`Min. ${this.store.config.minNicknameLength} characters`
+              )}
               @input=${() => this._nicknameField.reportValidity()}
               style="margin-left: 8px;"
             ></mwc-textfield>
@@ -251,7 +260,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
             raised
             style="margin-top: 8px;"
             .disabled=${!this.shouldSaveButtonBeEnabled()}
-            .label=${this.saveProfileLabel}
+            .label=${this.saveProfileLabel ?? msg('Save Profile')}
             @click=${() => this.fireSaveProfile()}
           ></mwc-button>
         </div>

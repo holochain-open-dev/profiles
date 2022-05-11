@@ -27,3 +27,4 @@
 ## Rocket ignore files (need to be the full relative path to the folders)
 .hc
 *.tsbuildinfo
+locales/

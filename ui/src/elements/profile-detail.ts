@@ -1,15 +1,16 @@
 import { contextProvided } from '@holochain-open-dev/context';
-import { AgentPubKeyB64, Dictionary } from '@holochain-open-dev/core-types';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
-import { StoreSubscriber } from 'lit-svelte-stores';
-import { property, state } from 'lit/decorators.js';
+import { TaskSubscriber } from 'lit-svelte-stores';
+import { property } from 'lit/decorators.js';
 import { SlSkeleton } from '@scoped-elements/shoelace';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
 import { AgentAvatar } from './agent-avatar';
+import { msg } from '@lit/localize';
 
 /**
  * @element profile-detail
@@ -35,23 +36,15 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  @state()
-  private _loading = true;
-
-  private _agentProfile = new StoreSubscriber(this, () =>
-    this.store?.profileOf(this.agentPubKey)
+  private _agentProfileTask = new TaskSubscriber(this, () =>
+    this.store.fetchAgentProfile(this.agentPubKey)
   );
 
-  async firstUpdated() {
-    await this.store.fetchAgentProfile(this.agentPubKey);
-    this._loading = false;
-  }
-
-  getAdditionalFields(): Dictionary<string> {
-    const fields: Dictionary<string> = {};
+  getAdditionalFields(): Record<string, string> {
+    const fields: Record<string, string> = {};
 
     for (const [key, value] of Object.entries(
-      this._agentProfile.value.fields
+      this._agentProfileTask.value!.fields
     )) {
       if (key !== 'avatar') {
         fields[key] = value;
@@ -71,7 +64,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this._loading)
+    if (this._agentProfileTask.loading)
       return html`
         <div class="column">
           <div class="row" style="align-items: center">
@@ -98,12 +91,14 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         </div>
       `;
 
-    if (!this._agentProfile.value)
+    if (!this._agentProfileTask.value)
       return html`<div
         class="column"
         style="align-items: center; justify-content: center; flex: 1;"
       >
-        <span class="placeholder">This agent hasn't created a profile yet</span>
+        <span class="placeholder"
+          >${msg("This agent hasn't created a profile yet")}</span
+        >
       </div>`;
 
     return html`
@@ -111,7 +106,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         <div class="row" style="align-items: center">
           <agent-avatar .agentPubKey=${this.agentPubKey}></agent-avatar>
           <span style="font-size: 16px; margin-left: 8px;"
-            >${this._agentProfile.value.nickname}</span
+            >${this._agentProfileTask.value.nickname}</span
           >
 
           <span style="flex: 1"></span>

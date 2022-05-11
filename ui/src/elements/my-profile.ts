@@ -6,7 +6,6 @@ import { property, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
-import { EditProfile } from './edit-profile';
 import { ProfileDetail } from './profile-detail';
 import { IconButton } from '@scoped-elements/material-web';
 import { UpdateProfile } from './update-profile';

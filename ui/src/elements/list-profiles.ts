@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-import { StoreSubscriber } from 'lit-svelte-stores';
+import { TaskSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@holochain-open-dev/context';
 import {
@@ -32,18 +32,9 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  @state()
-  private _loading = true;
-
-  private _allProfiles = new StoreSubscriber(
-    this,
-    () => this.store?.knownProfiles
+  private _allProfilesTask = new TaskSubscriber(this, () =>
+    this.store.fetchAllProfiles()
   );
-
-  async firstUpdated() {
-    await this.store.fetchAllProfiles();
-    this._loading = false;
-  }
 
   initials(nickname: string): string {
     return nickname
@@ -53,7 +44,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   }
 
   fireAgentSelected(index: number) {
-    const agentPubKey = Object.keys(this._allProfiles.value)[index];
+    const agentPubKey = Object.keys(this._allProfilesTask.value)[index];
 
     if (agentPubKey) {
       this.dispatchEvent(
@@ -69,12 +60,12 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this._loading)
+    if (this._allProfilesTask.loading)
       return html`<div class="fill center-content">
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`;
 
-    if (Object.keys(this._allProfiles.value).length === 0)
+    if (Object.keys(this._allProfilesTask.value).length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
@@ -84,7 +75,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         style="min-width: 80px;"
         @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
       >
-        ${Object.entries(this._allProfiles.value).map(
+        ${Object.entries(this._allProfilesTask.value).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"

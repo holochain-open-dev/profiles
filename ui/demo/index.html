@@ -36,6 +36,19 @@
         provide,
         ContextProviderElement,
       } from '@holochain-open-dev/context';
+      import { configureLocalization } from '@lit/localize';
+      // Generated via output.localeCodesModule
+      import * as templates_es from '../locales/es-419.js';
+
+      const locales = new Map([['es-419', templates_es]]);
+
+      export const { getLocale, setLocale } = configureLocalization({
+        sourceLocale: 'en',
+        targetLocales: ['es-419'],
+        loadLocale: async locale => locales.get(locale),
+      });
+
+      setLocale('es-419');
 
       class ProfilesTest extends ScopedElementsMixin(LitElement) {
         static get properties() {
@@ -56,7 +69,6 @@
           );
 
           this.store = new ProfilesStore(cellClient, {
-            avatarMode: 'avatar',
             additionalFields: ['Bio', 'Location'],
           });
           this.loaded = true;

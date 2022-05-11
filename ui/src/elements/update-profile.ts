@@ -1,25 +1,16 @@
 import { html, LitElement } from 'lit';
-import { query, property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { Dictionary } from '@holochain-open-dev/core-types';
-import {
-  TextField,
-  Button,
-  Card,
-  IconButton,
-  Fab,
-  CircularProgress,
-} from '@scoped-elements/material-web';
-import { SlAvatar } from '@scoped-elements/shoelace';
+import { Card, CircularProgress } from '@scoped-elements/material-web';
+import { msg } from '@lit/localize';
+import { TaskSubscriber } from 'lit-svelte-stores';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
-import { resizeAndExport } from './utils/image';
 import { EditProfile } from './edit-profile';
 import { Profile } from '../types';
-import { StoreSubscriber } from 'lit-svelte-stores';
 
 /**
  * @element update-profile
@@ -38,15 +29,9 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  @state()
-  private _loading = true;
-
-  private _myProfile = new StoreSubscriber(this, () => this.store?.myProfile);
-
-  async firstUpdated() {
-    await this.store.fetchMyProfile();
-    this._loading = false;
-  }
+  private _myProfileTask = new TaskSubscriber(this, () =>
+    this.store.fetchMyProfile()
+  );
 
   async updateProfile(profile: Profile) {
     await this.store.updateProfile(profile);
@@ -63,7 +48,7 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this._loading)
+    if (this._myProfileTask.loading)
       return html`<div
         class="column"
         style="align-items: center; justify-content: center; flex: 1;"
@@ -73,8 +58,8 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
 
     return html`
       <edit-profile
-        .profile=${this._myProfile.value}
-        save-profile-label="Update Profile"
+        .profile=${this._myProfileTask.value}
+        .save-profile-label=${msg('Update Profile')}
         @save-profile=${(e: CustomEvent) =>
           this.updateProfile(e.detail.profile)}
       ></edit-profile>

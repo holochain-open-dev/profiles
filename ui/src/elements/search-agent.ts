@@ -8,14 +8,15 @@ import {
   TextField,
 } from '@scoped-elements/material-web';
 import { contextProvided } from '@holochain-open-dev/context';
-import { StoreSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 
-import { AgentProfile } from '../types';
+import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
+import { msg } from '@lit/localize';
 
 /**
  * @element search-agent
@@ -43,7 +44,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
    * @attr field-label
    */
   @property({ type: String, attribute: 'field-label' })
-  fieldLabel = 'Search agent';
+  fieldLabel: string | undefined;
 
   /** Dependencies */
 
@@ -57,13 +58,10 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _knownProfiles = new StoreSubscriber(
-    this,
-    () => this.store?.knownProfiles
-  );
+  private _knownProfiles: Record<AgentPubKeyB64, Profile> = {};
 
   private get _filteredAgents(): Array<AgentProfile> {
-    let filtered = Object.entries(this._knownProfiles.value)
+    let filtered = Object.entries(this._knownProfiles)
       .filter(([agentPubKey, profile]) =>
         profile.nickname.startsWith(this._currentFilter as string)
       )
@@ -93,7 +91,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   async searchAgents(nicknamePrefix: string): Promise<void> {
     this._lastSearchedPrefix = nicknamePrefix;
-    await this.store.searchProfiles(nicknamePrefix);
+    const profiles = await this.store.searchProfiles(nicknamePrefix);
+
+    for (const { agentPubKey, profile } of profiles) {
+      this._knownProfiles[agentPubKey] = profile;
+    }
+
+    this.requestUpdate();
   }
 
   onFilterChange() {
@@ -138,8 +142,8 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
           id="textfield"
           style="flex: 1;"
           class="input"
-          .label=${this.fieldLabel}
-          placeholder="At least 3 chars..."
+          .label=${this.fieldLabel ?? msg('Search agent')}
+          .placeholder=${msg('At least 3 chars...')}
           outlined
           @input=${() => this.onFilterChange()}
           @focus=${() => this._currentFilter && this._overlay.show()}
@@ -172,7 +176,9 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                   )}
                 </mwc-list>
               `
-            : html`<mwc-list-item>No agents match the filter</mwc-list-item>`}
+            : html`<mwc-list-item
+                >${msg('No agents match the filter')}</mwc-list-item
+              >`}
         </mwc-menu-surface>
       </div>
     `;

@@ -1,23 +1,15 @@
 import { html, LitElement } from 'lit';
-import { query, property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { contextProvided } from '@holochain-open-dev/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { Dictionary } from '@holochain-open-dev/core-types';
-import {
-  TextField,
-  Button,
-  Card,
-  IconButton,
-  Fab,
-} from '@scoped-elements/material-web';
-import { SlAvatar } from '@scoped-elements/shoelace';
+import { Card } from '@scoped-elements/material-web';
 
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
-import { resizeAndExport } from './utils/image';
 import { EditProfile } from './edit-profile';
 import { Profile } from '../types';
+import { localized, msg } from '@lit/localize';
 
 /**
  * A custom element that fires event on value change.
@@ -25,6 +17,7 @@ import { Profile } from '../types';
  * @element create-profile
  * @fires profile-created - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
  */
+@localized()
 export class CreateProfile extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
@@ -59,10 +52,10 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
           <span
             class="title"
             style="margin-bottom: 24px; align-self: flex-start"
-            >Create Profile</span
+            >${msg('Create Profile')}</span
           >
           <edit-profile
-            save-profile-label="Create Profile"
+            .saveProfileLabel=${msg('Create Profile')}
             @save-profile=${(e: CustomEvent) =>
               this.createProfile(e.detail.profile)}
           ></edit-profile></div

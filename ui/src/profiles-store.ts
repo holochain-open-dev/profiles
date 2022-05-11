@@ -1,38 +1,22 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
-import {
-  AgentPubKeyB64,
-  Dictionary,
-  serializeHash,
-} from '@holochain-open-dev/core-types';
+import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
 import merge from 'lodash-es/merge';
 
 import { ProfilesService } from './profiles-service';
 import { AgentProfile, Profile } from './types';
 import { writable, Writable, derived, Readable, get } from 'svelte/store';
 import { defaultConfig, ProfilesConfig } from './config';
+import { pick } from 'lodash-es';
 
 export class ProfilesStore {
   /** Private */
   private _service: ProfilesService;
-  private _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
+  private _knownProfilesStore: Writable<Record<string, Profile>> = writable({});
 
   /** Static info */
   public myAgentPubKey: AgentPubKeyB64;
 
   /** Readable stores */
-
-  // Store containing all the profiles that have been fetched
-  // The key is the agentPubKey of the agent
-  public knownProfiles: Readable<Dictionary<Profile>> = derived(
-    this._knownProfilesStore,
-    i => i
-  );
-
-  // Store containing my profile
-  public myProfile: Readable<Profile> = derived(
-    this._knownProfilesStore,
-    profiles => profiles[this.myAgentPubKey]
-  );
 
   // Returns a store with the profile of the given agent
   profileOf(agentPubKey: AgentPubKeyB64): Readable<Profile> {
@@ -55,11 +39,9 @@ export class ProfilesStore {
   /**
    * Fetches the profiles for all agents in the DHT
    *
-   * You can subscribe to `knowProfiles` to get updated with all the profiles when this call is done
-   *
    * Warning! Can be very slow
    */
-  async fetchAllProfiles(): Promise<void> {
+  async fetchAllProfiles(): Promise<Readable<Record<string, Profile>>> {
     const allProfiles = await this._service.getAllProfiles();
 
     this._knownProfilesStore.update(profiles => {
@@ -68,6 +50,8 @@ export class ProfilesStore {
       }
       return profiles;
     });
+
+    return derived(this._knownProfilesStore, i => i);
   }
 
   /**
@@ -75,23 +59,24 @@ export class ProfilesStore {
    */
   async fetchAgentProfile(
     agentPubKey: AgentPubKeyB64
-  ): Promise<Profile | undefined> {
+  ): Promise<Readable<Profile | undefined>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
     const knownProfiles = get(this._knownProfilesStore);
 
-    if (knownProfiles[agentPubKey]) return knownProfiles[agentPubKey];
+    if (!knownProfiles[agentPubKey]) {
+      const profile = await this._service.getAgentProfile(agentPubKey);
 
-    const profile = await this._service.getAgentProfile(agentPubKey);
+      if (profile) {
+        this._knownProfilesStore.update(profiles => {
+          profiles[profile.agentPubKey] = profile.profile;
+          return profiles;
+        });
+      }
+    }
 
-    if (!profile) return;
-
-    this._knownProfilesStore.update(profiles => {
-      profiles[profile.agentPubKey] = profile.profile;
-      return profiles;
-    });
-    return profile.profile;
+    return derived(this._knownProfilesStore, profiles => profiles[agentPubKey]);
   }
 
   /**
@@ -101,7 +86,9 @@ export class ProfilesStore {
    *
    * Use this over `fetchAgentProfile` when fetching multiple profiles, as it will be more performant
    */
-  async fetchAgentsProfiles(agentPubKeys: AgentPubKeyB64[]): Promise<void> {
+  async fetchAgentsProfiles(
+    agentPubKeys: AgentPubKeyB64[]
+  ): Promise<Readable<Record<string, Profile>>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
@@ -112,20 +99,20 @@ export class ProfilesStore {
       pubKey => !agentsWeAlreadKnow.includes(pubKey)
     );
 
-    if (profilesToFetch.length === 0) {
-      return;
+    if (profilesToFetch.length > 0) {
+      const fetchedProfiles = await this._service.getAgentsProfiles(
+        profilesToFetch
+      );
+
+      this._knownProfilesStore.update(profiles => {
+        for (const fetchedProfile of fetchedProfiles) {
+          profiles[fetchedProfile.agentPubKey] = fetchedProfile.profile;
+        }
+        return profiles;
+      });
     }
 
-    const fetchedProfiles = await this._service.getAgentsProfiles(
-      profilesToFetch
-    );
-
-    this._knownProfilesStore.update(profiles => {
-      for (const fetchedProfile of fetchedProfiles) {
-        profiles[fetchedProfile.agentPubKey] = fetchedProfile.profile;
-      }
-      return profiles;
-    });
+    return derived(this._knownProfilesStore, s => pick(s, agentPubKeys));
   }
 
   /**
@@ -133,7 +120,7 @@ export class ProfilesStore {
    *
    * You can subscribe to `myProfile` to get updated with my profile
    */
-  async fetchMyProfile(): Promise<void> {
+  async fetchMyProfile(): Promise<Readable<Profile | undefined>> {
     const profile = await this._service.getMyProfile();
     if (profile) {
       this._knownProfilesStore.update(profiles => {
@@ -141,6 +128,8 @@ export class ProfilesStore {
         return profiles;
       });
     }
+
+    return derived(this._knownProfilesStore, s => s[this.myAgentPubKey]);
   }
 
   /**

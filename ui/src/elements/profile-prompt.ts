@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
 import {
   Button,
@@ -8,7 +8,7 @@ import {
 } from '@scoped-elements/material-web';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { contextProvided } from '@holochain-open-dev/context';
-import { StoreSubscriber } from 'lit-svelte-stores';
+import { TaskSubscriber } from 'lit-svelte-stores';
 
 import { sharedStyles } from './utils/shared-styles';
 import { CreateProfile } from './create-profile';
@@ -34,22 +34,16 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  @state()
-  private _loading = true;
-
-  private _myProfile = new StoreSubscriber(this, () => this.store?.myProfile);
-
-  async firstUpdated() {
-    await this.store.fetchMyProfile();
-    this._loading = false;
-  }
+  private _myProfileTask = new TaskSubscriber(this, () =>
+    this.store.fetchMyProfile()
+  );
 
   renderPrompt() {
     return html` <div
       class="column"
       style="align-items: center; justify-content: center; flex: 1;"
     >
-      ${this._loading
+      ${this._myProfileTask.loading
         ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>`
         : html` <div class="column" style="align-items: center;">
             <slot name="hero"></slot>
@@ -60,7 +54,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
 
   render() {
     return html`
-      ${!this._loading && this._myProfile.value
+      ${!this._myProfileTask.loading && this._myProfileTask.value
         ? html`<slot></slot>`
         : this.renderPrompt()}
     `;

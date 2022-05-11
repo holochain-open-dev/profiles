@@ -3,12 +3,13 @@ import { contextProvided } from '@holochain-open-dev/context';
 import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
-import { StoreSubscriber } from 'lit-svelte-stores';
+import { TaskSubscriber } from 'lit-svelte-stores';
 import { sharedStyles } from './utils/shared-styles';
+import { Profile } from '../types';
 
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Public properties */
@@ -38,38 +39,51 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  private _profile = new StoreSubscriber(this, () =>
-    this.store?.profileOf(this.agentPubKey)
-  );
+  @state()
+  private _profile!: TaskSubscriber<Profile | undefined>;
 
   async firstUpdated() {
-    if (this.store.config.avatarMode === 'avatar') {
-      await this.store.fetchAgentProfile(this.agentPubKey);
+    if (
+      this.store.config.avatarMode === 'avatar-required' ||
+      this.store.config.avatarMode === 'avatar-optional'
+    ) {
+      this._profile = new TaskSubscriber(this, () =>
+        this.store.fetchAgentProfile(this.agentPubKey)
+      );
     }
+  }
+
+  renderIdenticon() {
+    return html` <div style="position: relative">
+      <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
+      </holo-identicon>
+      <div class="badge"><slot name="badge"></slot></div>
+    </div>`;
   }
 
   render() {
     if (this.store.config.avatarMode === 'identicon')
-      return html` <div style="position: relative">
-        <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
-        </holo-identicon>
+      return this.renderIdenticon();
+
+    if (!this._profile || this._profile.loading)
+      return html`<sl-skeleton
+        effect="pulse"
+        style="height: ${this.size}px; width: ${this.size}px"
+      ></sl-skeleton>`;
+
+    if (!this._profile.value || !this._profile.value.fields.avatar)
+      return this.renderIdenticon();
+
+    return html`
+      <div style="position: relative">
+        <sl-avatar
+          .image=${this._profile.value.fields.avatar}
+          style="--size: ${this.size}px;"
+        >
+        </sl-avatar>
         <div class="badge"><slot name="badge"></slot></div>
-      </div>`;
-    if (this._profile.value)
-      return html`
-        <div style="position: relative">
-          <sl-avatar
-            .image=${this._profile.value.fields.avatar}
-            style="--size: ${this.size}px;"
-          >
-          </sl-avatar>
-          <div class="badge"><slot name="badge"></slot></div>
-        </div>
-      `;
-    return html`<sl-skeleton
-      effect="pulse"
-      style="height: ${this.size}px; width: ${this.size}px"
-    ></sl-skeleton>`;
+      </div>
+    `;
   }
 
   /**

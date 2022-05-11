@@ -1,8 +1,8 @@
-import { AgentPubKeyB64, Dictionary } from '@holochain-open-dev/core-types';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 
 export interface Profile {
   nickname: string;
-  fields: Dictionary<string>;
+  fields: Record<string, string>;
 }
 
 export interface AgentProfile {
