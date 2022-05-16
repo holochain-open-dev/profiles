@@ -32,23 +32,7 @@
       import { LitElement, html } from 'lit';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
       import { SlBadge } from '@scoped-elements/shoelace';
-      import {
-        provide,
-        ContextProviderElement,
-      } from '@holochain-open-dev/context';
-      import { configureLocalization } from '@lit/localize';
-      // Generated via output.localeCodesModule
-      import * as templates_es from '../locales/es-419.js';
-
-      const locales = new Map([['es-419', templates_es]]);
-
-      export const { getLocale, setLocale } = configureLocalization({
-        sourceLocale: 'en',
-        targetLocales: ['es-419'],
-        loadLocale: async locale => locales.get(locale),
-      });
-
-      setLocale('es-419');
+      import { ContextProviderElement } from '@holochain-open-dev/context';
 
       class ProfilesTest extends ScopedElementsMixin(LitElement) {
         static get properties() {
