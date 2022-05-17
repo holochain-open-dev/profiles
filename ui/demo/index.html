@@ -27,6 +27,7 @@
         ProfilesStore,
         profilesStoreContext,
         MyProfile,
+        SearchAgent
       } from '../dist';
       import { HolochainClient } from '@holochain-open-dev/cell-client';
       import { LitElement, html } from 'lit';
@@ -71,6 +72,7 @@
             >
               <profile-prompt>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
+                <search-agent include-myself></search-agent>
                 <agent-avatar .agentPubKey=${this.store.myAgentPubKey}>
                   <div
                     style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
@@ -85,6 +87,7 @@
         static get scopedElements() {
           return {
             'profile-prompt': ProfilePrompt,
+            'search-agent': SearchAgent,
             'my-profile': MyProfile,
             'context-provider': ContextProviderElement,
             'agent-avatar': AgentAvatar,
