@@ -22,6 +22,12 @@ export class ProfilesStore {
     return derived(this._knownProfilesStore, i => i);
   }
 
+  // Store containing my profile
+  public myProfile: Readable<Profile> = derived(
+    this._knownProfilesStore,
+    profiles => profiles[this.myAgentPubKey]
+  );
+
   // Returns a store with the profile of the given agent
   profileOf(agentPubKey: AgentPubKeyB64): Readable<Profile> {
     return derived(this._knownProfilesStore, profiles => profiles[agentPubKey]);
