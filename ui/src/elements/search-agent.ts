@@ -7,15 +7,15 @@ import {
   ListItem,
   TextField,
 } from '@scoped-elements/material-web';
-import { contextProvided } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 
 import { AgentProfile, Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { msg } from '@lit/localize';
 
 /**

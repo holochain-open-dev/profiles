@@ -7,13 +7,13 @@
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client
+npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client
 ```
 
 Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to. In the case of the apps generated with the RAD tools:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/context @holochain-open-dev/cell-client -w ui
+npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client -w ui
 ```
 
 2. [Choose which elements you need](../frontend/elements.md) and import them:
@@ -76,36 +76,34 @@ async function setupProfilesStore() {
 ```
 
 
-4. Import the `<context-provider>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the elements from `@holochain-open-dev/profiles`:
+4. Import the `<profiles-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@holochain-open-dev/profiles`:
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
-import "@holochain-open-dev/context/context-provider";
+import "@holochain-open-dev/profiles/profiles-context";
 ```
 
 And then in your html:
 
 ```html
-<context-provider>
+<profiles-context>
   <create-profile></create-profile>
-</context-provider>
+</profiles-context>
 ```
 
-5. Attach the `profilesStore` to the `<context-provider>` element:
+5. Attach the `profilesStore` to the `<profiles-context>` element:
 
 - Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), select the framework you are using, and follow its example.
 
 These are the high level instructions for it:
 
-1. Set the `context` property of the `<context-provider>` element to `profilesStoreContext`.
-2. Set the `value` property of it to your already instantiated `ProfilesStore` object.
+1. Set the `store` property of it to your already instantiated `ProfilesStore` object.
 
 If you **are not using any framework**:
 
 ```js
-const contextElement = document.querySelector("context-provider");
-contextElement.context = profilesStoreContext;
-contextElement.value = store;
+const contextElement = document.querySelector("profiles-context");
+contextElement.store = store;
 ```
 
 > You can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context).

@@ -1,10 +1,10 @@
-
 export * from './types';
 export * from './context';
 export * from './elements/create-profile';
 export * from './elements/update-profile';
 export * from './elements/my-profile';
 export * from './elements/search-agent';
+export * from './elements/profiles-context';
 export * from './elements/profile-prompt';
 export * from './elements/list-profiles';
 export * from './elements/agent-avatar';

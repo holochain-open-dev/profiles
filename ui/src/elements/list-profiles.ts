@@ -3,7 +3,7 @@ import { property } from 'lit/decorators.js';
 
 import { TaskSubscriber } from 'lit-svelte-stores';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@holochain-open-dev/context';
+import { contextProvided } from '@lit-labs/context';
 import {
   CircularProgress,
   ListItem,
