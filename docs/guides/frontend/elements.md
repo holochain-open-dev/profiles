@@ -6,11 +6,12 @@ To add one of these elements to your web-app, import it like this:
 import "@holochain-open-dev/profiles/agent-avatar";
 ```
 
-Keep in mind that these elements should be placed inside a `<context-provider>` that provides an initialized `ProfilesStore`, associated with the `profilesStoreContext` context . Follow the [Adding the UI](../setting-up/adding-the-frontend.md) guide to get started, or read [this to know more about the context pattern](https://holochain-open-dev.github.io/reusable-modules/frontend/using#Context).
+Keep in mind that these elements should be placed inside a `<profiles-context>` that provides an initialized `ProfilesStore`. Follow the [Adding the UI](../setting-up/adding-the-frontend.md) guide to get started, or read [this to know more about the context pattern](https://holochain-open-dev.github.io/reusable-modules/frontend/using#Context).
 
 Click on the selector on the right to look at all the elements available.
 
 ```js story
+import "@webcomponents/scoped-custom-element-registry";
 import { html } from "@mdjs/mdjs-preview";
 import "api-viewer-element";
 import "@holochain-open-dev/profiles/create-profile";
@@ -22,12 +23,9 @@ import "@holochain-open-dev/profiles/update-profile";
 
 import "@holochain-open-dev/profiles/agent-avatar";
 import "@holochain-open-dev/profiles/profile-prompt";
-import "@holochain-open-dev/context/context-provider";
+import "@holochain-open-dev/profiles/profiles-context";
 import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
-import {
-  profilesStoreContext,
-  ProfilesStore,
-} from "@holochain-open-dev/profiles";
+import { ProfilesStore } from "@holochain-open-dev/profiles";
 
 const store = new ProfilesStore(
   new ProfilesZomeMock([
@@ -73,7 +71,7 @@ export const foo = () => html`
     rel="stylesheet"
   />
 
-  <context-provider .context=${profilesStoreContext} .value=${store}>
+  <profiles-context .store=${store}>
     <api-viewer src="${src}" exclude-knobs="store" section="demo">
       <template data-element="agent-avatar" data-target="host">
         <agent-avatar
@@ -95,6 +93,6 @@ export const foo = () => html`
         <search-agent style="margin-bottom: 80px"></search-agent>
       </template>
     </api-viewer>
-  </context-provider>
+  </profiles-context>
 `;
 ```
