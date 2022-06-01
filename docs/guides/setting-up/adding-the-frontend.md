@@ -10,7 +10,7 @@
 npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client
 ```
 
-Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to. In the case of the apps generated with the RAD tools:
+Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the RAD tools:
 
 ```bash
 npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client -w ui
@@ -18,7 +18,7 @@ npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client -w ui
 
 2. [Choose which elements you need](../frontend/elements.md) and import them:
 
-**If you are developing a normal web-app**:
+**If you are developing a web-app SPA** (and not a library of elements):
 
 ```js
 import "@holochain-open-dev/profiles/create-profile";
@@ -49,7 +49,7 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 }
 ```
 
-3. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
+1. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
 
 ```js
 import {
@@ -67,11 +67,12 @@ async function setupProfilesStore() {
     "my-app-id"
   );
   // TODO: change "my-cell-role" for the roleId that you can find in your "happ.yaml"
-  const cellClient = client.forCell(client.cellDataByRoleId("my-cell-role"));
+  const cellClient = client.forCell(client.cellDataByRoleId("my-cell-role")!);
 
-  const store = new ProfilesStore(cellClient, {
-    avatarMode: "avatar",
+  const profilesStore = new ProfilesStore(cellClient, {
+    avatarMode: "avatar-optional",
   });
+  return profilesStore;
 }
 ```
 
@@ -83,10 +84,11 @@ async function setupProfilesStore() {
 import "@holochain-open-dev/profiles/profiles-context";
 ```
 
-And then in your html:
+And then add the `<profiles-context>` element in your html:
 
 ```html
 <profiles-context>
+  <!-- Replace <create-profile> with the contents of your application -->
   <create-profile></create-profile>
 </profiles-context>
 ```
@@ -95,11 +97,32 @@ And then in your html:
 
 - Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), select the framework you are using, and follow its example.
 
-These are the high level instructions for it:
+You need to set the `store` property of it to your already instantiated `ProfilesStore` object:
 
-1. Set the `store` property of it to your already instantiated `ProfilesStore` object.
+- If you **are using some JS framework**:
 
-If you **are not using any framework**:
+- In React:
+
+```html
+<!-- React -->
+<profiles-context store={profilesStore}><!-- ... --></profiles-context>
+
+<!-- Angular -->
+<profiles-context [store]="profilesStore"><!-- ... --></profiles-context>
+
+<!-- Vue -->
+<profiles-context :store="profilesStore"><!-- ... --></profiles-context>
+
+<!-- Svelte -->
+<profiles-context store={profilesStore}><!-- ... --></profiles-context>
+
+<!-- Lit -->
+<profiles-context .store=${profilesStore}><!-- ... --></profiles-context>
+```
+
+OR
+
+- If you **are not using any framework**:
 
 ```js
 const contextElement = document.querySelector("profiles-context");
@@ -108,7 +131,7 @@ contextElement.store = store;
 
 > You can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context).
 
-5. Add the Material Icons font in your `<head>` tag:
+6. Add the Material Icons font in your `<head>` tag:
 
 ```html
 <head>
