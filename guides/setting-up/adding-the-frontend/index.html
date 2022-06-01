@@ -232,13 +232,13 @@
 </ol>
 <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> @holochain-open-dev/profiles @holochain-open-dev/cell-client
 </code></pre>
-<p>Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to. In the case of the apps generated with the RAD tools:</p>
+<p>Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the RAD tools:</p>
 <pre class="language-bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> @holochain-open-dev/profiles @holochain-open-dev/cell-client -w ui
 </code></pre>
 <ol start="2">
 <li><a href="../../frontend/elements/">Choose which elements you need</a> and import them:</li>
 </ol>
-<p><strong>If you are developing a normal web-app</strong>:</p>
+<p><strong>If you are developing a web-app SPA</strong> (and not a library of elements):</p>
 <pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/create-profile"</span><span class="token punctuation">;</span>
 <span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/list-profiles"</span><span class="token punctuation">;</span>
 </code></pre>
@@ -261,7 +261,7 @@
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<ol start="3">
+<ol>
 <li>Connect to Holochain with the <code>HolochainClient</code>, and create the <code>ProfilesStore</code> with it:</li>
 </ol>
 <pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token punctuation">{</span>
@@ -279,11 +279,12 @@
     <span class="token string">"my-app-id"</span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token comment">// TODO: change "my-cell-role" for the roleId that you can find in your "happ.yaml"</span>
-  <span class="token keyword">const</span> cellClient <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token method function property-access">forCell</span><span class="token punctuation">(</span>client<span class="token punctuation">.</span><span class="token method function property-access">cellDataByRoleId</span><span class="token punctuation">(</span><span class="token string">"my-cell-role"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> cellClient <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token method function property-access">forCell</span><span class="token punctuation">(</span>client<span class="token punctuation">.</span><span class="token method function property-access">cellDataByRoleId</span><span class="token punctuation">(</span><span class="token string">"my-cell-role"</span><span class="token punctuation">)</span><span class="token operator">!</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-  <span class="token keyword">const</span> store <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProfilesStore</span><span class="token punctuation">(</span>cellClient<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-    avatarMode<span class="token punctuation">:</span> <span class="token string">"avatar"</span><span class="token punctuation">,</span>
+  <span class="token keyword">const</span> profilesStore <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProfilesStore</span><span class="token punctuation">(</span>cellClient<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    avatarMode<span class="token punctuation">:</span> <span class="token string">"avatar-optional"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> profilesStore<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <ol start="4">
@@ -292,8 +293,9 @@
 <pre class="language-js"><code class="language-js"><span class="token comment">// This can be placed in the index.js, at the top level of your web-app.</span>
 <span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/profiles-context"</span><span class="token punctuation">;</span>
 </code></pre>
-<p>And then in your html:</p>
+<p>And then add the <code>&lt;profiles-context&gt;</code> element in your html:</p>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+  <span class="token comment">&lt;!-- Replace &lt;create-profile&gt; with the contents of your application --&gt;</span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>create-profile</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>create-profile</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 </code></pre>
@@ -303,18 +305,41 @@
 <ul>
 <li>Go to <a href="https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/">this page</a>, select the framework you are using, and follow its example.</li>
 </ul>
-<p>These are the high level instructions for it:</p>
-<ol>
-<li>Set the <code>store</code> property of it to your already instantiated <code>ProfilesStore</code> object.</li>
-</ol>
-<p>If you <strong>are not using any framework</strong>:</p>
+<p>You need to set the <code>store</code> property of it to your already instantiated <code>ProfilesStore</code> object:</p>
+<ul>
+<li>
+<p>If you <strong>are using some JS framework</strong>:</p>
+</li>
+<li>
+<p>In React:</p>
+</li>
+</ul>
+<pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- React --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation">=</span>{profilesStore}</span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- Angular --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">[store]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- Vue --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">:store</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- Svelte --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation">=</span>{profilesStore}</span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token comment">&lt;!-- Lit --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">.store</span><span class="token attr-value"><span class="token punctuation">=</span>${profilesStore}</span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+<p>OR</p>
+<ul>
+<li>If you <strong>are not using any framework</strong>:</li>
+</ul>
 <pre class="language-js"><code class="language-js"><span class="token keyword">const</span> contextElement <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">querySelector</span><span class="token punctuation">(</span><span class="token string">"profiles-context"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 contextElement<span class="token punctuation">.</span><span class="token property-access">store</span> <span class="token operator">=</span> store<span class="token punctuation">;</span>
 </code></pre>
 <blockquote>
 <p>You can read more about the context pattern <a href="https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context">here</a>.</p>
 </blockquote>
-<ol start="5">
+<ol start="6">
 <li>Add the Material Icons font in your <code>&lt;head&gt;</code> tag:</li>
 </ol>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
