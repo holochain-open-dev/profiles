@@ -4,7 +4,7 @@ import {
   deserializeHash,
   serializeHash,
 } from '@holochain-open-dev/core-types';
-import { CellId, AppSignalCb } from '@holochain/client';
+import { AppSignalCb } from '@holochain/client';
 import { AgentProfile } from './types';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
@@ -14,18 +14,17 @@ export class ProfilesZomeMock extends CellClient {
     protected agents: Array<AgentProfile> = [],
     protected latency: number = 500
   ) {
-    super(null as any, null as any);
-  }
-
-  get cellId(): CellId {
-    return [
-      deserializeHash('uhC0kkSpFl08_2D0Pvw2vEVEkfSgDVZCkyOf1je6qIdClO1o'),
-      deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI'),
-    ];
+    super(null as any, {
+      cell_id: [
+        deserializeHash('uhC0kkSpFl08_2D0Pvw2vEVEkfSgDVZCkyOf1je6qIdClO1o'),
+        deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI'),
+      ],
+      role_id: 'profiles',
+    });
   }
 
   get myPubKeyB64() {
-    return serializeHash(this.cellId[1]);
+    return serializeHash(this.cell.cell_id[1]);
   }
 
   create_profile({ nickname }: { nickname: string }) {
