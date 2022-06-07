@@ -6,8 +6,8 @@
     "tests"
   ],
   "scripts": {
-    "start": "npm run build:happ && npm run start:agent",
-    "network": "npm run build:happ && concurrently-repeat \"npm run start:agent\"",
+    "start": "npm run network 2",
+    "network": "hc s clean && npm run build:happ && concurrently-repeat \"npm run start:agent\"",
     "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/profiles\"",
     "test": "npm run build:happ && npm t -w @holochain-open-dev/profiles-test",
     "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/profiles-test.happ --run=$HC_PORT network  --bootstrap https://bootstrap-staging.holo.host/ quic",

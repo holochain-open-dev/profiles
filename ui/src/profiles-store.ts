@@ -31,7 +31,7 @@ export class ProfilesStore {
   ) {
     this.config = merge(defaultConfig, config);
     this._service = new ProfilesService(cellClient, this.config.zomeName);
-    this.myAgentPubKey = serializeHash(cellClient.cellId[1]);
+    this.myAgentPubKey = serializeHash(cellClient.cell.cell_id[1]);
   }
 
   /** Actions */
