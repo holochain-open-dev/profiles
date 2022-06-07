@@ -200,13 +200,6 @@
           "members": [
             {
               "kind": "field",
-              "name": "cellId",
-              "type": {
-                "text": "CellId"
-              }
-            },
-            {
-              "kind": "field",
               "name": "myPubKeyB64"
             },
             {
