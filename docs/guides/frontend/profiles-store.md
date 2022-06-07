@@ -19,7 +19,7 @@ The config for the `ProfilesStore` has these options:
 ```ts
 export interface ProfilesConfig {
   zomeName: string; // default: 'profiles'
-  avatarMode: "identicon" | "avatar"; // default: 'avatar'
+  avatarMode: "identicon" | "avatar-required" | "avatar-optional"; // default: 'avatar-optional'
   additionalFields: string[]; // default: []
   minNicknameLength: number; // default: 3
 }
