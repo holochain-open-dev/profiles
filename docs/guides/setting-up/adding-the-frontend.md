@@ -7,13 +7,13 @@
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client
+npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client  @holochain/client
 ```
 
 Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the RAD tools:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client -w ui
+npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client @holochain/client -w ui
 ```
 
 2. [Choose which elements you need](../frontend/elements.md) and import them:
@@ -49,25 +49,30 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 }
 ```
 
-1. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
+3. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
 
 ```js
-import {
-  ProfilesStore,
-  profilesStoreContext,
-} from "@holochain-open-dev/profiles";
+import { ProfilesStore } from "@holochain-open-dev/profiles";
+import { AppWebsocket } from "@holochain/client";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
 
 async function setupProfilesStore() {
-  const client = await HolochainClient.connect(
-    // TODO: change this to the port where holochain is listening,
-    // or `ws://localhost:${process.env.HC_PORT}` if you used the scaffolding tooling to bootstrap the application
-    `ws://localhost:8888`,
-    // TODO: change "my-app-id" for the installed_app_id of your application
-    "my-app-id"
+  // TODO: change this to the port where holochain is listening,
+  // or keep `ws://localhost:${process.env.HC_PORT}` if you used the scaffolding tooling to bootstrap the application
+  const appWs = await AppWebsocket.connect(
+    `ws://localhost:${process.env.HC_PORT}`
   );
-  // TODO: change "my-cell-role" for the roleId that you can find in your "happ.yaml"
-  const cellClient = client.forCell(client.cellDataByRoleId("my-cell-role")!);
+
+  // TODO: change "MY_APP_ID" for the installed_app_id of your application
+  const appInfo = await appWs.appInfo({
+    installed_app_id: <MY_APP_ID>,
+  });
+  // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
+  const cell = appInfo.cell_data.find((c) => c.role_id === <MY_CELL_ROLE>);
+
+  const client = new HolochainClient(appWs);
+
+  const cellClient = new CellClient(client, cell);
 
   const profilesStore = new ProfilesStore(cellClient, {
     avatarMode: "avatar-optional",
@@ -75,7 +80,6 @@ async function setupProfilesStore() {
   return profilesStore;
 }
 ```
-
 
 4. Import the `<profiles-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@holochain-open-dev/profiles`:
 
@@ -101,11 +105,9 @@ You need to set the `store` property of it to your already instantiated `Profile
 
 - If you **are using some JS framework**:
 
-- In React:
-
 ```html
 <!-- React -->
-<profiles-context store={profilesStore}><!-- ... --></profiles-context>
+<profiles-context store="{profilesStore}"><!-- ... --></profiles-context>
 
 <!-- Angular -->
 <profiles-context [store]="profilesStore"><!-- ... --></profiles-context>
@@ -114,10 +116,10 @@ You need to set the `store` property of it to your already instantiated `Profile
 <profiles-context :store="profilesStore"><!-- ... --></profiles-context>
 
 <!-- Svelte -->
-<profiles-context store={profilesStore}><!-- ... --></profiles-context>
+<profiles-context store="{profilesStore}"><!-- ... --></profiles-context>
 
 <!-- Lit -->
-<profiles-context .store=${profilesStore}><!-- ... --></profiles-context>
+<profiles-context .store="${profilesStore}"><!-- ... --></profiles-context>
 ```
 
 OR
@@ -144,6 +146,5 @@ contextElement.store = store;
 ```
 
 You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/profiles/blob/main/ui/demo/index.html).
-
 
 That's it! You can spend some time now to take a look at [which elements are available for you to reuse](../frontend/elements.md).
