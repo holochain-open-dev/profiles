@@ -28,14 +28,14 @@ pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
     let agent_address = agent_info.agent_initial_pubkey.clone();
 
     create_link(
-        path.path_entry_hash()?.into(),
-        profile_hash.clone().into(),
+        path.path_entry_hash()?,
+        profile_hash.clone(),
         ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
-        agent_address.into(),
-        profile_hash.clone().into(),
+        agent_address,
+        profile_hash.clone(),
         ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
@@ -61,7 +61,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
 
     let agent_address = agent_info.agent_initial_pubkey.clone();
 
-    let link_details = get_link_details(path.path_entry_hash()?.into(), None)?.into_inner();
+    let link_details = get_link_details(path.path_entry_hash()?, None)?.into_inner();
 
     if link_details.len() > 0 {
         // check whether the agent has committed a profile before
@@ -95,21 +95,21 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
         }
     }
 
-    let links = get_links(agent_address.clone().into(), Some(link_tag("profile")?))?;
+    let links = get_links(agent_address.clone(), Some(link_tag("profile")?))?;
     if links.len() > 0 {
         let link = links[0].clone();
         delete_link(link.create_link_hash)?;
     }
 
     create_link(
-        path.path_entry_hash()?.into(),
-        profile_hash.clone().into(),
+        path.path_entry_hash()?,
+        profile_hash.clone(),
         ProfileLinkType::PathToProfile,
         link_tag(profile.nickname.as_str().clone())?,
     )?;
     create_link(
-        agent_address.into(),
-        profile_hash.clone().into(),
+        agent_address,
+        profile_hash.clone(),
         ProfileLinkType::AgentToProfile,
         link_tag("profile")?,
     )?;
@@ -155,7 +155,7 @@ pub fn get_agent_profile(
 ) -> ExternResult<Option<AgentProfile>> {
     let agent_pub_key = AgentPubKey::from(wrapped_agent_pub_key.clone());
 
-    let links = get_links(agent_pub_key.into(), Some(link_tag("profile")?))?;
+    let links = get_links(agent_pub_key, Some(link_tag("profile")?))?;
 
     if links.len() == 0 {
         return Ok(None);
@@ -217,7 +217,7 @@ fn prefix_path(nickname: String) -> Path {
 }
 
 fn get_agent_profiles_for_path(path_hash: EntryHash) -> ExternResult<Vec<AgentProfile>> {
-    let links = get_links(path_hash.into(), None)?;
+    let links = get_links(path_hash, None)?;
 
     let get_input = links
         .into_iter()
