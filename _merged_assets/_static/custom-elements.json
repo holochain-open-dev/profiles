@@ -36,7 +36,7 @@
           "type": {
             "text": "ProfilesConfig"
           },
-          "default": "{\n  zomeName: 'profiles',\n  avatarMode: 'avatar-optional',\n  additionalFields: [],\n  minNicknameLength: 3,\n}"
+          "default": "{\n  avatarMode: 'avatar-optional',\n  additionalFields: [],\n  minNicknameLength: 3,\n}"
         }
       ],
       "exports": [
@@ -497,21 +497,12 @@
           "members": [
             {
               "kind": "field",
-              "name": "_service",
-              "type": {
-                "text": "ProfilesService"
-              },
-              "privacy": "private",
-              "description": "Private",
-              "default": "new ProfilesService(cellClient, this.config.zomeName)"
-            },
-            {
-              "kind": "field",
               "name": "_knownProfilesStore",
               "type": {
                 "text": "Writable<Record<string, Profile>>"
               },
-              "privacy": "private"
+              "privacy": "private",
+              "description": "Private"
             },
             {
               "kind": "field",
@@ -521,24 +512,6 @@
               },
               "privacy": "public",
               "description": "Static info"
-            },
-            {
-              "kind": "method",
-              "name": "profileOf",
-              "return": {
-                "type": {
-                  "text": "Readable<Profile>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "agentPubKey",
-                  "type": {
-                    "text": "AgentPubKeyB64"
-                  }
-                }
-              ],
-              "description": "Readable stores"
             },
             {
               "kind": "field",
@@ -682,108 +655,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/definitions/agent-avatar.ts",
       "declarations": [
         {
@@ -878,11 +749,8 @@
             },
             {
               "kind": "field",
-              "name": "_profile",
-              "type": {
-                "text": "TaskSubscriber<Profile | undefined>"
-              },
-              "privacy": "private",
+              "name": "_profileTask",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -891,6 +759,22 @@
             {
               "kind": "method",
               "name": "renderIdenticon",
+              "inheritedFrom": {
+                "name": "AgentAvatar",
+                "module": "src/elements/agent-avatar.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile | undefined"
+                  }
+                }
+              ],
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -1042,7 +926,7 @@
               "kind": "field",
               "name": "_allProfilesTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchAllProfiles()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAllProfiles(),\n    () => [this.store]\n  )",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "ListProfiles",
@@ -1078,6 +962,22 @@
                   "name": "index",
                   "type": {
                     "text": "number"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ListProfiles",
+                "module": "src/elements/list-profiles.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderList",
+              "parameters": [
+                {
+                  "name": "profiles",
+                  "type": {
+                    "text": "Record<AgentPubKeyB64, Profile>"
                   }
                 }
               ],
@@ -1254,7 +1154,7 @@
               "kind": "field",
               "name": "_agentProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchAgentProfile(this.agentPubKey)\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "ProfileDetail",
@@ -1288,6 +1188,22 @@
                   "name": "fieldValue",
                   "type": {
                     "text": "string"
+                  }
+                }
+              ],
+              "inheritedFrom": {
+                "name": "ProfileDetail",
+                "module": "src/elements/profile-detail.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile | undefined"
                   }
                 }
               ],
@@ -1356,7 +1272,7 @@
               "kind": "field",
               "name": "_myProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchMyProfile()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchMyProfile(),\n    () => [this.store]\n  )",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "ProfilePrompt",
@@ -1366,6 +1282,14 @@
             {
               "kind": "method",
               "name": "renderPrompt",
+              "parameters": [
+                {
+                  "name": "myProfile",
+                  "type": {
+                    "text": "Profile | undefined"
+                  }
+                }
+              ],
               "inheritedFrom": {
                 "name": "ProfilePrompt",
                 "module": "src/elements/profile-prompt.ts"
@@ -1757,7 +1681,7 @@
               "kind": "field",
               "name": "_myProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchMyProfile()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchMyProfile(),\n    () => [this.store]\n  )",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "UpdateProfile",
@@ -1846,15 +1770,24 @@
             },
             {
               "kind": "field",
-              "name": "_profile",
-              "type": {
-                "text": "TaskSubscriber<Profile | undefined>"
-              },
-              "privacy": "private"
+              "name": "_profileTask",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )"
             },
             {
               "kind": "method",
               "name": "renderIdenticon"
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile | undefined"
+                  }
+                }
+              ]
             }
           ],
           "attributes": [
@@ -2204,7 +2137,7 @@
               "kind": "field",
               "name": "_allProfilesTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchAllProfiles()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAllProfiles(),\n    () => [this.store]\n  )",
               "description": "Private properties"
             },
             {
@@ -2232,6 +2165,18 @@
                   "name": "index",
                   "type": {
                     "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderList",
+              "parameters": [
+                {
+                  "name": "profiles",
+                  "type": {
+                    "text": "Record<AgentPubKeyB64, Profile>"
                   }
                 }
               ]
@@ -2376,7 +2321,7 @@
               "kind": "field",
               "name": "_agentProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchAgentProfile(this.agentPubKey)\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
               "description": "Private properties"
             },
             {
@@ -2402,6 +2347,18 @@
                   "name": "fieldValue",
                   "type": {
                     "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile | undefined"
                   }
                 }
               ]
@@ -2478,12 +2435,20 @@
               "kind": "field",
               "name": "_myProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchMyProfile()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchMyProfile(),\n    () => [this.store]\n  )",
               "description": "Private properties"
             },
             {
               "kind": "method",
-              "name": "renderPrompt"
+              "name": "renderPrompt",
+              "parameters": [
+                {
+                  "name": "myProfile",
+                  "type": {
+                    "text": "Profile | undefined"
+                  }
+                }
+              ]
             }
           ],
           "attributes": [
@@ -2794,7 +2759,7 @@
               "kind": "field",
               "name": "_myProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(this, () =>\n    this.store.fetchMyProfile()\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchMyProfile(),\n    () => [this.store]\n  )",
               "description": "Private properties"
             },
             {
@@ -2850,6 +2815,108 @@
           "declaration": {
             "name": "UpdateProfile",
             "module": "src/elements/update-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]

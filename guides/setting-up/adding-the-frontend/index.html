@@ -57,9 +57,9 @@
 
   
 
-<link rel="preload" href="../../../3e8840dc.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="../../../cf258927.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="../../../4d30c7b8.js" as="script" crossorigin="anonymous">
+<link rel="preload" href="../../../f6e454c4.js" as="script" crossorigin="anonymous" />
+<link rel="preload" href="../../../af4cc5f6.js" as="script" crossorigin="anonymous" />
+<link rel="preload" href="../../../4d30c7b8.js" as="script" crossorigin="anonymous" />
 </head>
 
   
@@ -239,24 +239,24 @@
 <li><a href="../../frontend/elements/">Choose which elements you need</a> and import them:</li>
 </ol>
 <p><strong>If you are developing a web-app SPA</strong> (and not a library of elements):</p>
-<pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/create-profile"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/list-profiles"</span><span class="token punctuation">;</span>
+<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token string">"@holochain-open-dev/profiles/create-profile"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">"@holochain-open-dev/profiles/list-profiles"</span><span class="token punctuation">;</span>
 </code></pre>
 <p>This will define all the elements from this module in the global <code>CustomElementsRegistry</code>. You can read more about Custom Elements <a href="https://developers.google.com/web/fundamentals/web-components/customelements">here</a>.</p>
 <p>OR</p>
 <p><strong>If you are using the <code>@open-wc/scoped-elements</code></strong> pattern (maybe because you are developing a library rather than a full SPA), you can import the elements' classes directly from the <code>@holochain-open-dev/profiles</code> package instead of defining them globally:</p>
-<pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">LitElement</span><span class="token punctuation">,</span> html <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"lit"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">ScopedElementsMixin</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@open-wc/scoped-elements"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">CreateProfile</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain-open-dev/profiles"</span><span class="token punctuation">;</span>
+<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> LitElement<span class="token punctuation">,</span> html <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"lit"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> ScopedElementsMixin <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@open-wc/scoped-elements"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> CreateProfile <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@holochain-open-dev/profiles"</span><span class="token punctuation">;</span>
 
-<span class="token keyword module">export</span> <span class="token keyword">class</span> <span class="token class-name">ProfilesTest</span> <span class="token keyword">extends</span> <span class="token class-name">ScopedElementsMixin</span><span class="token punctuation">(</span><span class="token maybe-class-name">LitElement</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">ProfilesTest</span> <span class="token keyword">extends</span> <span class="token class-name">ScopedElementsMixin</span><span class="token punctuation">(</span>LitElement<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token function">render</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> html<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token html language-html"> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>create-profile</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>create-profile</span><span class="token punctuation">&gt;</span></span> </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> html<span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string"> &lt;create-profile&gt;&lt;/create-profile&gt; </span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 
   <span class="token keyword">static</span> <span class="token keyword">get</span> <span class="token function">scopedElements</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> <span class="token punctuation">{</span>
-      <span class="token string">"create-profile"</span><span class="token punctuation">:</span> <span class="token maybe-class-name">CreateProfile</span><span class="token punctuation">,</span>
+      <span class="token string-property property">"create-profile"</span><span class="token operator">:</span> CreateProfile<span class="token punctuation">,</span>
     <span class="token punctuation">}</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
@@ -264,30 +264,30 @@
 <ol start="3">
 <li>Connect to Holochain with the <code>HolochainClient</code>, and create the <code>ProfilesStore</code> with it:</li>
 </ol>
-<pre class="language-js"><code class="language-js"><span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">ProfilesStore</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain-open-dev/profiles"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">AppWebsocket</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain/client"</span><span class="token punctuation">;</span>
-<span class="token keyword module">import</span> <span class="token punctuation">{</span> <span class="token maybe-class-name">HolochainClient</span> <span class="token punctuation">}</span> <span class="token keyword module">from</span> <span class="token string">"@holochain-open-dev/cell-client"</span><span class="token punctuation">;</span>
+<pre class="language-js"><code class="language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> ProfilesStore<span class="token punctuation">,</span> ProfilesService <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@holochain-open-dev/profiles"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> AppWebsocket <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@holochain/client"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> HolochainClient <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@holochain-open-dev/cell-client"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">setupProfilesStore</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token comment">// TODO: change this to the port where holochain is listening,</span>
   <span class="token comment">// or keep `ws://localhost:${process.env.HC_PORT}` if you used the scaffolding tooling to bootstrap the application</span>
-  <span class="token keyword">const</span> appWs <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token maybe-class-name">AppWebsocket</span><span class="token punctuation">.</span><span class="token method function property-access">connect</span><span class="token punctuation">(</span>
-    <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">ws://localhost:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>process<span class="token punctuation">.</span><span class="token property-access">env</span><span class="token punctuation">.</span><span class="token constant">HC_PORT</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span>
+  <span class="token keyword">const</span> appWs <span class="token operator">=</span> <span class="token keyword">await</span> AppWebsocket<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span>
+    <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">ws://localhost:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">HC_PORT</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span>
   <span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token comment">// TODO: change "MY_APP_ID" for the installed_app_id of your application</span>
-  <span class="token keyword">const</span> appInfo <span class="token operator">=</span> <span class="token keyword">await</span> appWs<span class="token punctuation">.</span><span class="token method function property-access">appInfo</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-    installed_app_id<span class="token punctuation">:</span> <span class="token operator">&lt;</span><span class="token constant">MY_APP_ID</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+  <span class="token keyword">const</span> appInfo <span class="token operator">=</span> <span class="token keyword">await</span> appWs<span class="token punctuation">.</span><span class="token function">appInfo</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token literal-property property">installed_app_id</span><span class="token operator">:</span> <span class="token operator">&lt;</span><span class="token constant">MY_APP_ID</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token comment">// TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"</span>
-  <span class="token keyword">const</span> cell <span class="token operator">=</span> appInfo<span class="token punctuation">.</span><span class="token property-access">cell_data</span><span class="token punctuation">.</span><span class="token method function property-access">find</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token arrow operator">=&gt;</span> c<span class="token punctuation">.</span><span class="token property-access">role_id</span> <span class="token operator">===</span> <span class="token operator">&lt;</span><span class="token constant">MY_CELL_ROLE</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> cell <span class="token operator">=</span> appInfo<span class="token punctuation">.</span>cell_data<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> c<span class="token punctuation">.</span>role_id <span class="token operator">===</span> <span class="token operator">&lt;</span><span class="token constant">MY_CELL_ROLE</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token keyword">const</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HolochainClient</span><span class="token punctuation">(</span>appWs<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token keyword">const</span> cellClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CellClient</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> cell<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-  <span class="token keyword">const</span> profilesStore <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProfilesStore</span><span class="token punctuation">(</span>cellClient<span class="token punctuation">,</span> <span class="token punctuation">{</span>
-    avatarMode<span class="token punctuation">:</span> <span class="token string">"avatar-optional"</span><span class="token punctuation">,</span>
+  <span class="token keyword">const</span> profilesStore <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProfilesStore</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ProfilesService</span><span class="token punctuation">(</span>cellClient<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">avatarMode</span><span class="token operator">:</span> <span class="token string">"avatar-optional"</span><span class="token punctuation">,</span>
   <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token keyword">return</span> profilesStore<span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
@@ -296,7 +296,7 @@
 <li>Import the <code>&lt;profiles-context&gt;</code> element and add it to your html <strong>wrapping the whole section of your page in which you are going to be placing</strong> the other elements from <code>@holochain-open-dev/profiles</code>:</li>
 </ol>
 <pre class="language-js"><code class="language-js"><span class="token comment">// This can be placed in the index.js, at the top level of your web-app.</span>
-<span class="token keyword module">import</span> <span class="token string">"@holochain-open-dev/profiles/profiles-context"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">"@holochain-open-dev/profiles/profiles-context"</span><span class="token punctuation">;</span>
 </code></pre>
 <p>And then add the <code>&lt;profiles-context&gt;</code> element in your html:</p>
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
@@ -315,26 +315,26 @@
 <li>If you <strong>are using some JS framework</strong>:</li>
 </ul>
 <pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- React --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>{profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 
 <span class="token comment">&lt;!-- Angular --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">[store]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">[store]</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 
 <span class="token comment">&lt;!-- Vue --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">:store</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">:store</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>profilesStore<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 
 <span class="token comment">&lt;!-- Svelte --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>{profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">store</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 
 <span class="token comment">&lt;!-- Lit --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">.store</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>profiles-context</span> <span class="token attr-name">.store</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${profilesStore}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token comment">&lt;!-- ... --&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>profiles-context</span><span class="token punctuation">&gt;</span></span>
 </code></pre>
 <p>OR</p>
 <ul>
 <li>If you <strong>are not using any framework</strong>:</li>
 </ul>
-<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> contextElement <span class="token operator">=</span> <span class="token dom variable">document</span><span class="token punctuation">.</span><span class="token method function property-access">querySelector</span><span class="token punctuation">(</span><span class="token string">"profiles-context"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-contextElement<span class="token punctuation">.</span><span class="token property-access">store</span> <span class="token operator">=</span> store<span class="token punctuation">;</span>
+<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> contextElement <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">querySelector</span><span class="token punctuation">(</span><span class="token string">"profiles-context"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+contextElement<span class="token punctuation">.</span>store <span class="token operator">=</span> store<span class="token punctuation">;</span>
 </code></pre>
 <blockquote>
 <p>You can read more about the context pattern <a href="https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context">here</a>.</p>
@@ -345,8 +345,8 @@ contextElement<span class="token punctuation">.</span><span class="token propert
 <pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
   ...
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span>
-    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block<span class="token punctuation">"</span></span>
-    <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span>
+    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://fonts.googleapis.com/css?family=Material+Icons&amp;display=block<span class="token punctuation">"</span></span>
+    <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span>
   <span class="token punctuation">/&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
 </code></pre>
@@ -462,7 +462,7 @@ Commons Attribution 4.0</a>
   
 
 
-<script type="module" src="../../../3e8840dc.js"></script>
+<script type="module" src="../../../f6e454c4.js"></script>
 <script type="module" src="../../../4d30c7b8.js" inject-service-worker=""></script>
 
 </body></html>

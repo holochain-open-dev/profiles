@@ -57,9 +57,9 @@
 
   
 
-<link rel="preload" href="../../../3e8840dc.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="../../../cf258927.js" as="script" crossorigin="anonymous">
-<link rel="preload" href="../../../4d30c7b8.js" as="script" crossorigin="anonymous">
+<link rel="preload" href="../../../f6e454c4.js" as="script" crossorigin="anonymous" />
+<link rel="preload" href="../../../af4cc5f6.js" as="script" crossorigin="anonymous" />
+<link rel="preload" href="../../../4d30c7b8.js" as="script" crossorigin="anonymous" />
 </head>
 
   
@@ -225,18 +225,18 @@
 <li>In your <code>zomes</code> folder, run <code>cargo new profiles --lib</code>.</li>
 <li>Add this to the <code>Cargo.toml</code> file of the new crate:</li>
 </ol>
-<pre class="language-toml"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">lib</span><span class="token punctuation">]</span>
-<span class="token key property">crate-type</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span><span class="token string">"cdylib"</span><span class="token punctuation">,</span> <span class="token string">"rlib"</span><span class="token punctuation">]</span>
-<span class="token key property">name</span> <span class="token punctuation">=</span> <span class="token string">"profiles"</span>
+<pre><code class="language-toml">[lib]
+crate-type = ["cdylib", "rlib"]
+name = "profiles"
 
-<span class="token punctuation">[</span><span class="token table class-name">dependencies</span><span class="token punctuation">]</span>
-<span class="token key property">hc_zome_profiles</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span><span class="token key property">git</span> <span class="token punctuation">=</span> <span class="token string">"https://github.com/holochain-open-dev/profiles"</span><span class="token punctuation">,</span> <span class="token key property">rev</span> <span class="token punctuation">=</span> <span class="token string">"for-hdk-v0.0.130"</span><span class="token punctuation">,</span> <span class="token key property">package</span> <span class="token punctuation">=</span> <span class="token string">"hc_zome_profiles"</span><span class="token punctuation">}</span>
+[dependencies]
+hc_zome_profiles = {git = "https://github.com/holochain-open-dev/profiles", rev = "for-hdk-v0.0.130", package = "hc_zome_profiles"}
 </code></pre>
 <p>Replace the <code>rev</code> field with the holochain version you are using. See <a href="https://github.com/holochain-open-dev/profiles/tags">which tags are available</a>.</p>
 <ol start="3">
 <li>Replace the contents of the <code>lib.rs</code> with this content:</li>
 </ol>
-<pre class="language-rust"><code class="language-rust"><span class="token keyword">extern</span> <span class="token keyword">crate</span> hc_zome_profiles<span class="token punctuation">;</span>
+<pre><code class="language-rust">extern crate hc_zome_profiles;
 </code></pre>
 <ol start="4">
 <li>In the <code>Cargo.toml</code> at the root of your project, add this new crate to the worskpace <code>members</code>.</li>
@@ -359,7 +359,7 @@ Commons Attribution 4.0</a>
   
 
 
-<script type="module" src="../../../3e8840dc.js"></script>
+<script type="module" src="../../../f6e454c4.js"></script>
 <script type="module" src="../../../4d30c7b8.js" inject-service-worker=""></script>
 
 </body></html>
