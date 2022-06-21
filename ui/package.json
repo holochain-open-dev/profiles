@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Frontend module for the Holochain hc_zome_profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -26,7 +26,7 @@
   "scripts": {
     "start": "npm run build && concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
     "build": "tsc",
-    "build-watch": "tsc --watch --preserveWatchOutput",
+    "build-watch": "run-singleton \"tsc --watch --preserveWatchOutput\"",
     "test": "npm run build && web-test-runner --coverage",
     "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
     "test-watch": "web-test-runner --watch",
@@ -40,18 +40,18 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/cell-client": "^0.4.0",
-    "@lit-labs/context": "^0.1.1",
+    "@holochain-open-dev/cell-client": "^0.5.3",
+    "@lit-labs/context": "^0.1.2",
     "@holochain-open-dev/core-types": "^0.2.0",
     "@holochain-open-dev/utils": "^0.0.11",
-    "@holochain/client": "^0.3.2",
+    "@holochain/client": "^0.4.1",
     "@lit/localize": "^0.11.2",
     "@open-wc/scoped-elements": "^2.1.1",
     "@scoped-elements/material-web": "0.0.19",
     "@scoped-elements/shoelace": "0.0.8",
     "@webcomponents/scoped-custom-element-registry": "^0.0.5",
     "lit": "^2.1.1",
-    "lit-svelte-stores": "^0.1.9",
+    "lit-svelte-stores": "^0.2.0",
     "lodash-es": "^4.17.21",
     "svelte": "^3.42.4"
   },
@@ -81,6 +81,7 @@
     "lint-staged": "^10.0.0",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2",
+    "run-singleton-cli": "^0.0.5",
     "tslib": "^2.0.0",
     "typescript": "4.3.5"
   },

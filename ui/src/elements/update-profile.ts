@@ -29,8 +29,10 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _myProfileTask = new TaskSubscriber(this, () =>
-    this.store.fetchMyProfile()
+  private _myProfileTask = new TaskSubscriber(
+    this,
+    () => this.store.fetchMyProfile(),
+    () => [this.store]
   );
 
   async updateProfile(profile: Profile) {
@@ -48,22 +50,21 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this._myProfileTask.loading)
-      return html`<div
-        class="column"
-        style="align-items: center; justify-content: center; flex: 1;"
-      >
-        <mwc-circular-progress indeterminate></mwc-circular-progress>
-      </div>`;
-
-    return html`
-      <edit-profile
-        .profile=${this._myProfileTask.value}
-        .save-profile-label=${msg('Update Profile')}
-        @save-profile=${(e: CustomEvent) =>
-          this.updateProfile(e.detail.profile)}
-      ></edit-profile>
-    `;
+    return this._myProfileTask.render({
+      pending: () => html`<div
+      class="column"
+      style="align-items: center; justify-content: center; flex: 1;"
+    >
+      <mwc-circular-progress indeterminate></mwc-circular-progress>
+    </div>`,
+      complete: profile => html`
+        <edit-profile
+          .profile=${profile}
+          .save-profile-label=${msg('Update Profile')}
+          @save-profile=${(e: CustomEvent) =>
+            this.updateProfile(e.detail.profile)}
+        ></edit-profile>`,
+    });
   }
 
   /**

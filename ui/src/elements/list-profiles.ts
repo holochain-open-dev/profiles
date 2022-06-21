@@ -14,6 +14,8 @@ import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
+import { Profile } from '../types';
 
 /**
  * @element list-profiles
@@ -32,8 +34,10 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _allProfilesTask = new TaskSubscriber(this, () =>
-    this.store.fetchAllProfiles()
+  private _allProfilesTask = new TaskSubscriber(
+    this,
+    () => this.store.fetchAllProfiles(),
+    () => [this.store]
   );
 
   initials(nickname: string): string {
@@ -44,7 +48,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   }
 
   fireAgentSelected(index: number) {
-    const agentPubKey = Object.keys(this._allProfilesTask.value)[index];
+    const agentPubKey = Object.keys(this._allProfilesTask.value!)[index];
 
     if (agentPubKey) {
       this.dispatchEvent(
@@ -59,13 +63,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  render() {
-    if (this._allProfilesTask.loading)
-      return html`<div class="fill center-content">
-        <mwc-circular-progress indeterminate></mwc-circular-progress>
-      </div>`;
-
-    if (Object.keys(this._allProfilesTask.value).length === 0)
+  renderList(profiles: Record<AgentPubKeyB64, Profile>) {
+    if (Object.keys(profiles).length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
@@ -75,7 +74,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         style="min-width: 80px;"
         @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
       >
-        ${Object.entries(this._allProfilesTask.value).map(
+        ${Object.entries(profiles).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"
@@ -90,6 +89,15 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         )}
       </mwc-list>
     `;
+  }
+
+  render() {
+    return this._allProfilesTask.render({
+      pending: () => html`<div class="fill center-content">
+      <mwc-circular-progress indeterminate></mwc-circular-progress>
+    </div>`,
+      complete: profiles => this.renderList(profiles),
+    });
   }
 
   static styles = [

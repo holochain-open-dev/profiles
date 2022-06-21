@@ -62,7 +62,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   private get _filteredAgents(): Array<AgentProfile> {
     let filtered = Object.entries(this._knownProfiles)
-      .filter(([agentPubKey, profile]) =>
+      .filter(([_, profile]) =>
         profile.nickname.toLowerCase().startsWith(this._currentFilter?.toLowerCase() as string)
       )
       .map(([agentPubKey, profile]) => ({ agentPubKey, profile }));

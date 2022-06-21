@@ -3,7 +3,7 @@ import { contextProvided } from '@lit-labs/context';
 import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
@@ -39,19 +39,11 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  @state()
-  private _profile!: TaskSubscriber<Profile | undefined>;
-
-  async firstUpdated() {
-    if (
-      this.store.config.avatarMode === 'avatar-required' ||
-      this.store.config.avatarMode === 'avatar-optional'
-    ) {
-      this._profile = new TaskSubscriber(this, () =>
-        this.store.fetchAgentProfile(this.agentPubKey)
-      );
-    }
-  }
+  _profileTask = new TaskSubscriber(
+    this,
+    () => this.store.fetchAgentProfile(this.agentPubKey),
+    () => [this.store, this.agentPubKey]
+  );
 
   renderIdenticon() {
     return html` <div style="position: relative">
@@ -61,29 +53,32 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     </div>`;
   }
 
-  render() {
-    if (this.store.config.avatarMode === 'identicon')
-      return this.renderIdenticon();
-
-    if (!this._profile || this._profile.loading)
-      return html`<sl-skeleton
-        effect="pulse"
-        style="height: ${this.size}px; width: ${this.size}px"
-      ></sl-skeleton>`;
-
-    if (!this._profile.value || !this._profile.value.fields.avatar)
-      return this.renderIdenticon();
+  renderProfile(profile: Profile | undefined) {
+    if (!profile || !profile.fields.avatar) return this.renderIdenticon();
 
     return html`
       <div style="position: relative">
         <sl-avatar
-          .image=${this._profile.value.fields.avatar}
+          .image=${profile.fields.avatar}
           style="--size: ${this.size}px;"
         >
         </sl-avatar>
         <div class="badge"><slot name="badge"></slot></div>
       </div>
     `;
+  }
+
+  render() {
+    if (this.store.config.avatarMode === 'identicon')
+      return this.renderIdenticon();
+
+    return this._profileTask.render({
+      complete: profile => this.renderProfile(profile),
+      pending: () => html`<sl-skeleton
+        effect="pulse"
+        style="height: ${this.size}px; width: ${this.size}px"
+      ></sl-skeleton>`,
+    });
   }
 
   /**

@@ -11,6 +11,7 @@ import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
 import { AgentAvatar } from './agent-avatar';
 import { msg } from '@lit/localize';
+import { Profile } from '../types';
 
 /**
  * @element profile-detail
@@ -36,8 +37,10 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _agentProfileTask = new TaskSubscriber(this, () =>
-    this.store.fetchAgentProfile(this.agentPubKey)
+  private _agentProfileTask = new TaskSubscriber(
+    this,
+    () => this.store.fetchAgentProfile(this.agentPubKey),
+    () => [this.store, this.agentPubKey]
   );
 
   getAdditionalFields(): Record<string, string> {
@@ -63,35 +66,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
     `;
   }
 
-  render() {
-    if (this._agentProfileTask.loading)
-      return html`
-        <div class="column">
-          <div class="row" style="align-items: center">
-            <sl-skeleton
-              effect="pulse"
-              style="height: 32px; width: 32px; border-radius: 50%;"
-            ></sl-skeleton>
-            <div>
-              <sl-skeleton
-                effect="pulse"
-                style="width: 122px; margin-left: 8px;"
-              ></sl-skeleton>
-            </div>
-          </div>
-
-          ${this.store.config.additionalFields.map(
-            () => html`
-              <sl-skeleton
-                effect="pulse"
-                style="width: 200px; margin-top: 16px;"
-              ></sl-skeleton>
-            `
-          )}
-        </div>
-      `;
-
-    if (!this._agentProfileTask.value)
+  renderProfile(profile: Profile | undefined) {
+    if (!profile)
       return html`<div
         class="column"
         style="align-items: center; justify-content: center; flex: 1;"
@@ -106,7 +82,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         <div class="row" style="align-items: center">
           <agent-avatar .agentPubKey=${this.agentPubKey}></agent-avatar>
           <span style="font-size: 16px; margin-left: 8px;"
-            >${this._agentProfileTask.value.nickname}</span
+            >${profile.nickname}</span
           >
 
           <span style="flex: 1"></span>
@@ -119,6 +95,37 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         )}
       </div>
     `;
+  }
+
+  render() {
+    return this._agentProfileTask.render({
+      pending: () => html`
+      <div class="column">
+        <div class="row" style="align-items: center">
+          <sl-skeleton
+            effect="pulse"
+            style="height: 32px; width: 32px; border-radius: 50%;"
+          ></sl-skeleton>
+          <div>
+            <sl-skeleton
+              effect="pulse"
+              style="width: 122px; margin-left: 8px;"
+            ></sl-skeleton>
+          </div>
+        </div>
+
+        ${this.store.config.additionalFields.map(
+          () => html`
+            <sl-skeleton
+              effect="pulse"
+              style="width: 200px; margin-top: 16px;"
+            ></sl-skeleton>
+          `
+        )}
+      </div>
+    `,
+      complete: profile => this.renderProfile(profile),
+    });
   }
 
   /**

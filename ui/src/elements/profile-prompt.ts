@@ -14,6 +14,7 @@ import { sharedStyles } from './utils/shared-styles';
 import { CreateProfile } from './create-profile';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
+import { Profile } from '../types';
 
 /**
  * @element profile-prompt
@@ -34,30 +35,36 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _myProfileTask = new TaskSubscriber(this, () =>
-    this.store.fetchMyProfile()
+  private _myProfileTask = new TaskSubscriber(
+    this,
+    () => this.store.fetchMyProfile(),
+    () => [this.store]
   );
 
-  renderPrompt() {
-    return html` <div
+  renderPrompt(myProfile: Profile | undefined) {
+    if (myProfile) return html`<slot></slot>`;
+
+    return html`
+    <div
       class="column"
       style="align-items: center; justify-content: center; flex: 1;"
     >
-      ${this._myProfileTask.loading
-        ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>`
-        : html` <div class="column" style="align-items: center;">
-            <slot name="hero"></slot>
-            <create-profile></create-profile>
-          </div>`}
-    </div>`;
+      <div class="column" style="align-items: center;">
+        <slot name="hero"></slot>
+        <create-profile></create-profile>
+      </div>
+    </div>
+    `;
   }
 
   render() {
-    return html`
-      ${!this._myProfileTask.loading && this._myProfileTask.value
-        ? html`<slot></slot>`
-        : this.renderPrompt()}
-    `;
+    return this._myProfileTask.render({
+      pending: () => html`
+        <div class="column" style="align-items: center; justify-content: center; flex: 1;">
+          <mwc-circular-progress indeterminate></mwc-circular-progress>
+        </div>`,
+      complete: profile => this.renderPrompt(profile),
+    });
   }
 
   /**

@@ -28,6 +28,7 @@
         MyProfile,
         ProfilesContext,
         SearchAgent,
+        ProfilesService
       } from '../dist';
       import {
         HolochainClient,
@@ -61,7 +62,7 @@
 
           const cellClient = new CellClient(client, cell);
 
-          this.store = new ProfilesStore(cellClient, {
+          this.store = new ProfilesStore(new ProfilesService(cellClient), {
             additionalFields: ['Bio', 'Location'],
           });
           this.loaded = true;

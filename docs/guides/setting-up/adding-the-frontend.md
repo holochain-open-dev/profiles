@@ -52,7 +52,7 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 3. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
 
 ```js
-import { ProfilesStore } from "@holochain-open-dev/profiles";
+import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
 import { AppWebsocket } from "@holochain/client";
 import { HolochainClient } from "@holochain-open-dev/cell-client";
 
@@ -74,7 +74,7 @@ async function setupProfilesStore() {
 
   const cellClient = new CellClient(client, cell);
 
-  const profilesStore = new ProfilesStore(cellClient, {
+  const profilesStore = new ProfilesStore(new ProfilesService(cellClient), {
     avatarMode: "avatar-optional",
   });
   return profilesStore;
