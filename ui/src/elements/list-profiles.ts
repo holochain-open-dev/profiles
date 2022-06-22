@@ -28,7 +28,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext })
+  @contextProvided({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
@@ -94,8 +94,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   render() {
     return this._allProfilesTask.render({
       pending: () => html`<div class="fill center-content">
-      <mwc-circular-progress indeterminate></mwc-circular-progress>
-    </div>`,
+        <mwc-circular-progress indeterminate></mwc-circular-progress>
+      </div>`,
       complete: profiles => this.renderList(profiles),
     });
   }

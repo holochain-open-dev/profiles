@@ -23,7 +23,7 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext })
+  @contextProvided({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
@@ -52,18 +52,17 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   render() {
     return this._myProfileTask.render({
       pending: () => html`<div
-      class="column"
-      style="align-items: center; justify-content: center; flex: 1;"
-    >
-      <mwc-circular-progress indeterminate></mwc-circular-progress>
-    </div>`,
-      complete: profile => html`
-        <edit-profile
-          .profile=${profile}
-          .save-profile-label=${msg('Update Profile')}
-          @save-profile=${(e: CustomEvent) =>
-            this.updateProfile(e.detail.profile)}
-        ></edit-profile>`,
+        class="column"
+        style="align-items: center; justify-content: center; flex: 1;"
+      >
+        <mwc-circular-progress indeterminate></mwc-circular-progress>
+      </div>`,
+      complete: profile => html` <edit-profile
+        .profile=${profile}
+        .save-profile-label=${msg('Update Profile')}
+        @save-profile=${(e: CustomEvent) =>
+          this.updateProfile(e.detail.profile)}
+      ></edit-profile>`,
     });
   }
 

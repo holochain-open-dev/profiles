@@ -31,7 +31,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext })
+  @contextProvided({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
@@ -100,30 +100,30 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   render() {
     return this._agentProfileTask.render({
       pending: () => html`
-      <div class="column">
-        <div class="row" style="align-items: center">
-          <sl-skeleton
-            effect="pulse"
-            style="height: 32px; width: 32px; border-radius: 50%;"
-          ></sl-skeleton>
-          <div>
+        <div class="column">
+          <div class="row" style="align-items: center">
             <sl-skeleton
               effect="pulse"
-              style="width: 122px; margin-left: 8px;"
+              style="height: 32px; width: 32px; border-radius: 50%;"
             ></sl-skeleton>
+            <div>
+              <sl-skeleton
+                effect="pulse"
+                style="width: 122px; margin-left: 8px;"
+              ></sl-skeleton>
+            </div>
           </div>
-        </div>
 
-        ${this.store.config.additionalFields.map(
-          () => html`
-            <sl-skeleton
-              effect="pulse"
-              style="width: 200px; margin-top: 16px;"
-            ></sl-skeleton>
-          `
-        )}
-      </div>
-    `,
+          ${this.store.config.additionalFields.map(
+            () => html`
+              <sl-skeleton
+                effect="pulse"
+                style="width: 200px; margin-top: 16px;"
+              ></sl-skeleton>
+            `
+          )}
+        </div>
+      `,
       complete: profile => this.renderProfile(profile),
     });
   }

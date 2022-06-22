@@ -25,7 +25,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext })
+  @contextProvided({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
