@@ -75,7 +75,14 @@
               <profile-prompt>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
                 <search-agent include-myself></search-agent>
-                <agent-avatar .agentPubKey=${this.store.myAgentPubKey}>
+                <div style="overflow: hidden; height: 70px; border: 1px solid black;">
+                  .hoistTooltip=false
+                  <agent-avatar .agentPubKey=${this.store.myAgentPubKey}>
+                </div>
+                <div style="overflow: hidden; height: 70px; border: 1px solid black;">
+                  .hoistTooltip=true
+                  <agent-avatar .agentPubKey=${this.store.myAgentPubKey} hoistTooltip>
+                </div>
                   <div
                     style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
                     slot="badge"

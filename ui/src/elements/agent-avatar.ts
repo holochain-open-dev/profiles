@@ -39,6 +39,9 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
+  @property({ type: Boolean })
+  hoistTooltip: boolean = false;
+
   _profileTask = new TaskSubscriber(
     this,
     () => this.store.fetchAgentProfile(this.agentPubKey),
@@ -47,7 +50,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
 
   renderIdenticon() {
     return html` <div style="position: relative">
-      <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
+      <holo-identicon .hash=${this.agentPubKey} .size=${this.size} .hoistTooltip=${this.hoistTooltip}>
       </holo-identicon>
       <div class="badge"><slot name="badge"></slot></div>
     </div>`;
