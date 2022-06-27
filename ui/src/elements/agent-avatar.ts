@@ -4,10 +4,12 @@ import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
+import { styleMap } from 'lit-html/directives/style-map.js';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { TaskSubscriber } from 'lit-svelte-stores';
+
+import { profilesStoreContext } from '../context';
+import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
 import { Profile } from '../types';
 
@@ -46,7 +48,13 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   );
 
   renderIdenticon() {
-    return html` <div style="position: relative">
+    return html` <div
+      style=${styleMap({
+        position: 'relative',
+        height: `${this.size}px`,
+        width: `${this.size}px`,
+      })}
+    >
       <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
       </holo-identicon>
       <div class="badge"><slot name="badge"></slot></div>
@@ -57,7 +65,13 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     if (!profile || !profile.fields.avatar) return this.renderIdenticon();
 
     return html`
-      <div style="position: relative">
+      <div
+        style=${styleMap({
+          position: 'relative',
+          height: `${this.size}px`,
+          width: `${this.size}px`,
+        })}
+      >
         <sl-avatar
           .image=${profile.fields.avatar}
           style="--size: ${this.size}px;"
