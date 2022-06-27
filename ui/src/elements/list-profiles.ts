@@ -71,7 +71,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
     return html`
       <mwc-list
-        style="min-width: 80px;"
+        style="min-width: 80px; width: 100%;"
         @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
       >
         ${Object.entries(profiles).map(

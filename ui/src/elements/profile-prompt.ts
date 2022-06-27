@@ -47,7 +47,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     return html`
     <div
       class="column"
-      style="align-items: center; justify-content: center; flex: 1;"
+      style="align-items: center; flex: 1;"
     >
       <div class="column" style="align-items: center;">
         <slot name="hero"></slot>

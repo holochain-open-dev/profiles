@@ -26,6 +26,7 @@
         AgentAvatar,
         ProfilesStore,
         MyProfile,
+        ListProfiles,
         ProfilesContext,
         SearchAgent,
         ProfilesService
@@ -81,6 +82,10 @@
                     slot="badge"
                   ></div>
                 </agent-avatar>
+                <div style="width: 200px; margin-left: 20px; display: flex; flex-direction: column;">
+                  <div>All profiles:</div>
+                  <list-profiles style="width: 170px; height: 300px; border: 1px solid gray; overflow-y: auto;"></list-profiles>
+                </div>
               </profile-prompt>
             </profiles-context>
           `;
@@ -94,6 +99,7 @@
             'profiles-context': ProfilesContext,
             'agent-avatar': AgentAvatar,
             'sl-badge': SlBadge,
+            'list-profiles': ListProfiles,
           };
         }
       }
