@@ -33,7 +33,7 @@
     "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
     "new-port-cli": "^1.0.0",
-    "run-singleton-cli": "^0.0.5"
+    "run-singleton-cli": "^0.0.6"
   },
   "type": "module"
 }

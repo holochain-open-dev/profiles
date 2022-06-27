@@ -28,6 +28,7 @@
         MyProfile,
         ProfilesContext,
         SearchAgent,
+        ListProfiles,
         ProfilesService
       } from '../dist';
       import {
@@ -73,6 +74,7 @@
           return html`
             <profiles-context .store=${this.store}>
               <profile-prompt>
+                <list-profiles></list-profiles>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
                 <search-agent include-myself></search-agent>
                 <agent-avatar .agentPubKey=${this.store.myAgentPubKey}>
@@ -91,6 +93,7 @@
             'profile-prompt': ProfilePrompt,
             'search-agent': SearchAgent,
             'my-profile': MyProfile,
+            'list-profiles': ListProfiles,
             'profiles-context': ProfilesContext,
             'agent-avatar': AgentAvatar,
             'sl-badge': SlBadge,

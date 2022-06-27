@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Frontend module for the Holochain hc_zome_profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "npm run build && concurrently -k --names -k \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
+    "start": "npm run build && concurrently \"npm run build-watch\" \"web-dev-server --config web-dev-server.config.mjs\"",
     "build": "tsc",
     "build-watch": "run-singleton \"tsc --watch --preserveWatchOutput\"",
     "test": "npm run build && web-test-runner --coverage",
