@@ -50,7 +50,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
           <div class="flex-scrollable-y">
             <div
               class="column"
-              style="align-items: center; justify-content: center; flex: 1;"
+              style="align-items: center; justify-content: center; flex: 1; padding-bottom: 10px;"
             >
               <div class="column" style="align-items: center;">
                 <slot name="hero"></slot>
