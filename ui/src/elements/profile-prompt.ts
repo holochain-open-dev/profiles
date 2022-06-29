@@ -45,24 +45,32 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     if (myProfile) return html`<slot></slot>`;
 
     return html`
-    <div
-      class="column"
-      style="align-items: center; justify-content: center; flex: 1;"
-    >
-      <div class="column" style="align-items: center;">
-        <slot name="hero"></slot>
-        <create-profile></create-profile>
+      <div class="flex-scrollable-parent">
+        <div class="flex-scrollable-container">
+          <div class="flex-scrollable-y">
+            <div
+              class="column"
+              style="align-items: center; justify-content: center; flex: 1;"
+            >
+              <div class="column" style="align-items: center;">
+                <slot name="hero"></slot>
+                <create-profile></create-profile>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
     `;
   }
 
   render() {
     return this._myProfileTask.render({
-      pending: () => html`
-        <div class="column" style="align-items: center; justify-content: center; flex: 1;">
-          <mwc-circular-progress indeterminate></mwc-circular-progress>
-        </div>`,
+      pending: () => html` <div
+        class="column"
+        style="align-items: center; justify-content: center; flex: 1;"
+      >
+        <mwc-circular-progress indeterminate></mwc-circular-progress>
+      </div>`,
       complete: profile => this.renderPrompt(profile),
     });
   }
