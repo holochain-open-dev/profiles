@@ -70,6 +70,10 @@ async function setupProfilesStore() {
   // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
   const cell = appInfo.cell_data.find((c) => c.role_id === <MY_CELL_ROLE>);
 
+  if (!cell) {
+    throw new Error('There are no cells with the given role id in this app');
+  }
+
   const client = new HolochainClient(appWs);
 
   const cellClient = new CellClient(client, cell);
