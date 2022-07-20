@@ -1,8 +1,9 @@
 [workspace]
 members = [
-  "crates/zome",
-  "crates/types",
+  "crates/*",
+  "tests",
 ]
+resolver = "2"
 
 [profile.dev]
 opt-level = "z"

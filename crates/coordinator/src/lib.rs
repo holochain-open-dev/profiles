@@ -7,25 +7,21 @@
 //! 
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
-use hdk::prelude::holo_hash::AgentPubKeyB64;
 use hdk::prelude::*;
 
 mod handlers;
-mod utils;
 
 use hc_zome_profiles_types::*;
 
-entry_defs![PathEntry::entry_def(), Profile::entry_def()];
-
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn create_profile(profile: Profile) -> ExternResult<AgentProfile> {
+pub fn create_profile(profile: Profile) -> ExternResult<Record> {
     handlers::create_profile(profile)
 }
 
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
+pub fn update_profile(profile: Profile) -> ExternResult<Record> {
     handlers::update_profile(profile)
 }
 
@@ -33,7 +29,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<AgentProfile> {
 #[hdk_extern]
 pub fn search_profiles(
     search_profiles_input: SearchProfilesInput,
-) -> ExternResult<Vec<AgentProfile>> {
+) -> ExternResult<Vec<Record>> {
     let agent_profiles = handlers::search_profiles(search_profiles_input.nickname_prefix)?;
 
     Ok(agent_profiles)
@@ -41,7 +37,7 @@ pub fn search_profiles(
 
 /// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
-pub fn get_agent_profile(agent_pub_key: AgentPubKeyB64) -> ExternResult<Option<AgentProfile>> {
+pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Record>> {
     let agent_profile = handlers::get_agent_profile(agent_pub_key)?;
 
     Ok(agent_profile)
@@ -52,21 +48,21 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKeyB64) -> ExternResult<Option<A
 /// Use this function if you need to get the profile for multiple agents at the same time,
 /// as it will be more performant than doing multiple `get_agent_profile`.
 #[hdk_extern]
-pub fn get_agents_profile(
-    agent_pub_keys_b64: Vec<AgentPubKeyB64>,
-) -> ExternResult<Vec<AgentProfile>> {
-    let agent_profiles = handlers::get_agents_profile(agent_pub_keys_b64)?;
+pub fn get_agents_profiles(
+    agent_pub_keys: Vec<AgentPubKey>,
+) -> ExternResult<Vec<Record>> {
+    let agent_profiles = handlers::get_agents_profiles(agent_pub_keys)?;
 
     Ok(agent_profiles)
 }
 
 /// Gets the profile for the agent calling this function, if they have created it.
 #[hdk_extern]
-pub fn get_my_profile(_: ()) -> ExternResult<Option<AgentProfile>> {
+pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
     let agent_info = agent_info()?;
 
     let agent_profile =
-        handlers::get_agent_profile(AgentPubKeyB64::from(agent_info.agent_initial_pubkey))?;
+        handlers::get_agent_profile(agent_info.agent_initial_pubkey)?;
 
     Ok(agent_profile)
 }
@@ -76,7 +72,7 @@ pub fn get_my_profile(_: ()) -> ExternResult<Option<AgentProfile>> {
 /// Careful! This will not be very performant in large networks.
 /// In the future a cursor type functionality will be added to make this function performant.
 #[hdk_extern]
-pub fn get_all_profiles(_: ()) -> ExternResult<Vec<AgentProfile>> {
+pub fn get_all_profiles(_: ()) -> ExternResult<Vec<Record>> {
     let agent_profiles = handlers::get_all_profiles()?;
 
     Ok(agent_profiles)

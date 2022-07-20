@@ -2,14 +2,13 @@
   "name": "@holochain-open-dev/profiles-dev",
   "private": true,
   "workspaces": [
-    "ui",
-    "tests"
+    "ui"
   ],
   "scripts": {
     "start": "npm run network 2",
     "network": "hc s clean && npm run build:happ && concurrently-repeat \"npm run start:agent\"",
     "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run playground\" \"npm run start:happ\" \"npm run start -w @holochain-open-dev/profiles\"",
-    "test": "npm run build:happ && npm t -w @holochain-open-dev/profiles-test",
+    "test": "npm run build:happ && cargo test",
     "start:happ": "RUST_LOG=warn hc s generate ./workdir/happ/profiles-test.happ --run=$HC_PORT network  --bootstrap https://bootstrap-staging.holo.host/ quic",
     "build:happ": "npm run build:dna && hc app pack workdir/happ",
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
@@ -21,7 +20,7 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/to-markdown": "^0.1.0",
-    "@holochain-playground/cli": "^0.0.8",
+    "@holochain-playground/cli": "^0.0.11",
     "@rocket/cli": "^0.10.0",
     "@rocket/launch": "^0.6.0",
     "@rollup/plugin-commonjs": "18.0.0",

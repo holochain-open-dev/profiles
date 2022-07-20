@@ -1,8 +1,15 @@
 ---
 manifest_version: "1"
 name: profiles-test
-uuid: 00000000-0000-0000-0000-000000000000
-properties: ~
-zomes:
-  - name: profiles
-    bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles.wasm
+
+integrity:
+  uid: 00000000-0000-0000-0000-000000000000
+  properties: ~
+  zomes:
+    - name: profiles_integrity
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
+
+coordinator:
+  zomes:
+    - name: profiles
+      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm

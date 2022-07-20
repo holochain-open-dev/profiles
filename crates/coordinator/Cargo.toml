@@ -1,20 +1,22 @@
 [package]
 authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
-description = "Types for the hc_zome_profiles zome"
+description = "Profiles zome for any Holochain app"
 documentation = "https://holochain-open-dev.github.io/profiles"
 edition = "2018"
-homepage = "https://docs.rs/hc_zome_profiles_types"
+homepage = "https://docs.rs/hc_zome_profiles"
 license = "MIT"
-name = "hc_zome_profiles_types"
+name = "hc_zome_profiles_coordinator"
 repository = "https://github.com/holochain-open-dev/profiles"
 version = "0.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "hc_zome_profiles_types"
+name = "hc_zome_profiles_coordinator"
 
 [dependencies]
 derive_more = "0"
 serde = "1"
 
-hdi = "0.0.14"
+hc_zome_profiles_types = {path = "../types"}
+hc_zome_profiles_integrity = {path = "../integrity"}
+hdk = "0.0.142"

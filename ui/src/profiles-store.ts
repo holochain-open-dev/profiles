@@ -1,15 +1,28 @@
-import { AgentPubKeyB64, serializeHash } from '@holochain-open-dev/core-types';
+import {
+  AgentPubKeyB64,
+  serializeHash,
+  Dictionary,
+} from '@holochain-open-dev/core-types';
 import merge from 'lodash-es/merge';
 import { pick } from 'lodash-es';
-import { writable, Writable, derived, Readable, get } from 'svelte/store';
+import {
+  writable,
+  Writable,
+  derived,
+  Readable,
+  get,
+  readable,
+  Subscriber,
+} from 'svelte/store';
+import { Record } from '@holochain/client';
 
 import { ProfilesService } from './profiles-service';
-import { AgentProfile, Profile } from './types';
+import { Profile } from './types';
 import { defaultConfig, ProfilesConfig } from './config';
 
 export class ProfilesStore {
   /** Private */
-  private _knownProfilesStore: Writable<Record<string, Profile>> = writable({});
+  private _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
 
   /** Static info */
   public myAgentPubKey: AgentPubKeyB64;
@@ -31,7 +44,7 @@ export class ProfilesStore {
    *
    * Warning! Can be very slow
    */
-  async fetchAllProfiles(): Promise<Readable<Record<string, Profile>>> {
+  async fetchAllProfiles(): Promise<Readable<Dictionary<Profile>>> {
     const allProfiles = await this.service.getAllProfiles();
 
     this._knownProfilesStore.update(profiles => {
