@@ -14,8 +14,8 @@ import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { Profile } from '../types';
+import { HoloHashMap } from '@holochain-open-dev/utils';
 
 /**
  * @element list-profiles
@@ -48,7 +48,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   }
 
   fireAgentSelected(index: number) {
-    const agentPubKey = Object.keys(this._allProfilesTask.value!)[index];
+    const agentPubKey = this._allProfilesTask.value?.keys()[index];
 
     if (agentPubKey) {
       this.dispatchEvent(
@@ -63,8 +63,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  renderList(profiles: Record<AgentPubKeyB64, Profile>) {
-    if (Object.keys(profiles).length === 0)
+  renderList(profiles: HoloHashMap<Profile>) {
+    if (profiles.keys().length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
@@ -74,11 +74,11 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         style="min-width: 80px; flex: 1;"
         @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
       >
-        ${Object.entries(profiles).map(
+        ${profiles.entries().map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"
-              .value=${agent_pub_key}
+              .value=${agent_pub_key.toString()}
               style="--mdc-list-item-graphic-size: 32px;"
             >
               <agent-avatar slot="graphic" .agentPubKey=${agent_pub_key}>

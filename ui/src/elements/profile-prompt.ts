@@ -93,6 +93,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
       css`
         :host {
           display: flex;
+          flex: 1;
         }
       `,
     ];

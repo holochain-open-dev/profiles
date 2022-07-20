@@ -1,4 +1,3 @@
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { contextProvided } from '@lit-labs/context';
 import { HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
@@ -7,6 +6,7 @@ import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { TaskSubscriber } from 'lit-svelte-stores';
+import { AgentPubKey } from '@holochain/client';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
@@ -20,10 +20,9 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
    * REQUIRED. The public key identifying the agent whose profile is going to be shown.
    */
   @property({
-    attribute: 'agent-pub-key',
-    type: String,
+    type: Object,
   })
-  agentPubKey!: AgentPubKeyB64;
+  agentPubKey!: AgentPubKey;
 
   /**
    * Size of the avatar image in pixels.

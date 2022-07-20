@@ -4,14 +4,16 @@ import {
   deserializeHash,
   serializeHash,
 } from '@holochain-open-dev/core-types';
-import { AppSignalCb } from '@holochain/client';
-import { AgentProfile } from './types';
+import { fakeRecord, HoloHashMap } from '@holochain-open-dev/utils';
+import { AgentPubKey, AppSignalCb, Record } from '@holochain/client';
+import { encode } from '@msgpack/msgpack';
+import { Profile } from './types';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
 
 export class ProfilesZomeMock extends CellClient {
   constructor(
-    protected agents: Array<AgentProfile> = [],
+    protected agents: HoloHashMap<Profile> = new HoloHashMap(),
     protected latency: number = 500
   ) {
     super(null as any, {
@@ -23,47 +25,40 @@ export class ProfilesZomeMock extends CellClient {
     });
   }
 
-  get myPubKeyB64() {
-    return serializeHash(this.cell.cell_id[1]);
+  get myPubKey() {
+    return this.cell.cell_id[1];
   }
 
-  create_profile({ nickname }: { nickname: string }) {
-    const agent: AgentProfile = {
-      agentPubKey: this.myPubKeyB64,
-      profile: { nickname, fields: {} },
-    };
-    this.agents.push(agent);
+  create_profile({ nickname }: { nickname: string }): Record {
+    const profile = { nickname, fields: {} };
+    this.agents.put(this.myPubKey, profile);
 
-    return agent;
+    return fakeRecord({
+      entry: encode(profile),
+      entry_type: 'App',
+    });
   }
 
-  search_profiles({ nicknamePrefix }: { nicknamePrefix: string }) {
-    return this.agents.filter(a =>
-      a.profile.nickname.startsWith(nicknamePrefix.slice(0, 3))
+  search_profiles({ nickname_prefix }: { nickname_prefix: string }) {
+    return this.agents.pickBy(profile =>
+      profile.nickname.startsWith(nickname_prefix.slice(0, 3))
     );
   }
 
   get_my_profile() {
-    const agent = this.findAgent(this.myPubKeyB64);
-
-    if (!agent) return undefined;
-    return {
-      agentPubKey: agent.agentPubKey,
-      profile: agent ? agent.profile : undefined,
-    };
+    return this.agents.get(this.myPubKey);
   }
 
-  get_agent_profile(agent_address: AgentPubKeyB64) {
-    const agent = this.findAgent(agent_address);
-    return agent ? agent : undefined;
+  get_agent_profile(agent_address: AgentPubKey) {
+    return this.agents.get(agent_address);
   }
 
   get_all_profiles() {
-    return this.agents;
-  }
-
-  findAgent(agent_address: AgentPubKeyB64) {
-    return this.agents.find(user => user.agentPubKey === agent_address);
+    return this.agents
+      .values()
+      .map(profile =>
+        fakeRecord({ entry: encode(profile), entry_type: 'App' })
+      );
   }
 
   async callZome(

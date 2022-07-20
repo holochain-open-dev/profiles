@@ -1,22 +1,23 @@
-import { css, html, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
-
+import { css, html, LitElement } from 'lit';
 import {
   MenuSurface,
   List,
   ListItem,
   TextField,
 } from '@scoped-elements/material-web';
+import { AgentPubKey } from '@holochain/client';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
+import { msg } from '@lit/localize';
+import { isEqual } from 'lodash-es';
+import { HoloHashMap } from '@holochain-open-dev/utils';
 
-import { AgentProfile, Profile } from '../types';
+import { Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
 import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
-import { msg } from '@lit/localize';
 
 /**
  * @element search-agent
@@ -58,21 +59,21 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _knownProfiles: Record<AgentPubKeyB64, Profile> = {};
+  private _knownProfiles: HoloHashMap<Profile> = new HoloHashMap();
 
-  private get _filteredAgents(): Array<AgentProfile> {
-    let filtered = Object.entries(this._knownProfiles)
-      .filter(([_, profile]) =>
-        profile.nickname.toLowerCase().startsWith(this._currentFilter?.toLowerCase() as string)
+  private get _filteredAgents(): Array<[AgentPubKey, Profile]> {
+    const profiles = this._knownProfiles.pickBy(
+      (value, key) =>
+        !isEqual(key, this.store.myAgentPubKey) || this.includeMyself
+    );
+
+    return profiles
+      .pickBy((profile, key) =>
+        profile.nickname
+          .toLowerCase()
+          .startsWith(this._currentFilter?.toLowerCase() as string)
       )
-      .map(([agentPubKey, profile]) => ({ agentPubKey, profile }));
-    if (!this.includeMyself) {
-      filtered = filtered.filter(
-        agent => this.store.myAgentPubKey !== agent.agentPubKey
-      );
-    }
-
-    return filtered;
+      .entries();
   }
 
   @state()
@@ -93,9 +94,10 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     this._lastSearchedPrefix = nicknamePrefix;
     const profiles = await this.store.searchProfiles(nicknamePrefix);
 
-    for (const { agentPubKey, profile } of profiles) {
-      this._knownProfiles[agentPubKey] = profile;
-    }
+    this._knownProfiles = new HoloHashMap([
+      ...this._knownProfiles.entries(),
+      ...profiles.entries(),
+    ]);
 
     this.requestUpdate();
   }
@@ -113,13 +115,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  onUsernameSelected(agent: AgentProfile) {
+  onUsernameSelected(agent: [AgentPubKey, Profile]) {
     // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(
         new CustomEvent('agent-selected', {
           detail: {
-            agentPubKey: agent.agentPubKey,
+            agentPubKey: agent[0],
           },
         })
       );
@@ -129,7 +131,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         this._textField.value = '';
         this._currentFilter = undefined;
       } else {
-        this._textField.value = agent.profile.nickname;
+        this._textField.value = agent[1].nickname;
       }
       this._overlay.close();
     }
@@ -160,18 +162,15 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                     )}
                 >
                   ${this._filteredAgents.map(
-                    agent => html` <mwc-list-item
+                    ([pubkey, profile]) => html` <mwc-list-item
                       graphic="avatar"
-                      .value=${agent.agentPubKey}
                       style="--mdc-list-item-graphic-size: 32px;"
                     >
                       <agent-avatar
                         slot="graphic"
-                        .agentPubKey=${agent.agentPubKey}
+                        .agentPubKey=${pubkey}
                       ></agent-avatar>
-                      <span style="margin-left: 8px;"
-                        >${agent.profile.nickname}</span
-                      >
+                      <span style="margin-left: 8px;">${profile.nickname}</span>
                     </mwc-list-item>`
                   )}
                 </mwc-list>

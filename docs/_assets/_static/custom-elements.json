@@ -200,11 +200,16 @@
           "members": [
             {
               "kind": "field",
-              "name": "myPubKeyB64"
+              "name": "myPubKey"
             },
             {
               "kind": "method",
               "name": "create_profile",
+              "return": {
+                "type": {
+                  "text": "Record"
+                }
+              },
               "parameters": [
                 {
                   "name": "{ nickname }",
@@ -219,9 +224,9 @@
               "name": "search_profiles",
               "parameters": [
                 {
-                  "name": "{ nicknamePrefix }",
+                  "name": "{ nickname_prefix }",
                   "type": {
-                    "text": "{ nicknamePrefix: string }"
+                    "text": "{ nickname_prefix: string }"
                   }
                 }
               ]
@@ -237,7 +242,7 @@
                 {
                   "name": "agent_address",
                   "type": {
-                    "text": "AgentPubKeyB64"
+                    "text": "AgentPubKey"
                   }
                 }
               ]
@@ -245,18 +250,6 @@
             {
               "kind": "method",
               "name": "get_all_profiles"
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address",
-                  "type": {
-                    "text": "AgentPubKeyB64"
-                  }
-                }
-              ]
             },
             {
               "kind": "method",
@@ -360,7 +353,7 @@
                 {
                   "name": "agentPubKey",
                   "type": {
-                    "text": "AgentPubKeyB64"
+                    "text": "AgentPubKey"
                   },
                   "description": "the agent to get the profile for"
                 }
@@ -379,7 +372,7 @@
                 {
                   "name": "agentPubKeys",
                   "type": {
-                    "text": "AgentPubKeyB64[]"
+                    "text": "AgentPubKey[]"
                   },
                   "description": "the agents to get the profile for"
                 }
@@ -499,7 +492,7 @@
               "kind": "field",
               "name": "_knownProfilesStore",
               "type": {
-                "text": "Writable<Record<string, Profile>>"
+                "text": "Writable<HoloHashMap<Profile>>"
               },
               "privacy": "private",
               "description": "Private"
@@ -508,10 +501,11 @@
               "kind": "field",
               "name": "myAgentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "privacy": "public",
-              "description": "Static info"
+              "description": "Static info",
+              "default": "service.cellClient.cell.cell_id[1]"
             },
             {
               "kind": "field",
@@ -525,7 +519,7 @@
               "name": "fetchAllProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Readable<Record<string, Profile>>>"
+                  "text": "Promise<Readable<HoloHashMap<Profile>>>"
                 }
               },
               "description": "Fetches the profiles for all agents in the DHT\n\nWarning! Can be very slow"
@@ -542,7 +536,7 @@
                 {
                   "name": "agentPubKey",
                   "type": {
-                    "text": "AgentPubKeyB64"
+                    "text": "AgentPubKey"
                   }
                 }
               ],
@@ -553,14 +547,14 @@
               "name": "fetchAgentsProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Readable<Record<string, Profile>>>"
+                  "text": "Promise<Readable<HoloHashMap<Profile>>>"
                 }
               },
               "parameters": [
                 {
                   "name": "agentPubKeys",
                   "type": {
-                    "text": "AgentPubKeyB64[]"
+                    "text": "AgentPubKey[]"
                   }
                 }
               ],
@@ -669,9 +663,9 @@
           "customElement": true,
           "attributes": [
             {
-              "name": "agent-pub-key",
+              "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "fieldName": "agentPubKey",
@@ -711,10 +705,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
-              "attribute": "agent-pub-key",
+              "attribute": "agentPubKey",
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -977,7 +971,7 @@
                 {
                   "name": "profiles",
                   "type": {
-                    "text": "Record<AgentPubKeyB64, Profile>"
+                    "text": "HoloHashMap<Profile>"
                   }
                 }
               ],
@@ -1099,9 +1093,9 @@
           "customElement": true,
           "attributes": [
             {
-              "name": "agent-pub-key",
+              "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "fieldName": "agentPubKey",
@@ -1128,10 +1122,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
-              "attribute": "agent-pub-key",
+              "attribute": "agentPubKey",
               "inheritedFrom": {
                 "name": "ProfileDetail",
                 "module": "src/elements/profile-detail.ts"
@@ -1491,10 +1485,10 @@
               "kind": "field",
               "name": "_knownProfiles",
               "type": {
-                "text": "Record<AgentPubKeyB64, Profile>"
+                "text": "HoloHashMap<Profile>"
               },
               "privacy": "private",
-              "default": "{}",
+              "default": "new HoloHashMap()",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "SearchAgent",
@@ -1505,7 +1499,7 @@
               "kind": "field",
               "name": "_filteredAgents",
               "type": {
-                "text": "Array<AgentProfile>"
+                "text": "Array<[AgentPubKey, Profile]>"
               },
               "privacy": "private",
               "inheritedFrom": {
@@ -1599,7 +1593,7 @@
                 {
                   "name": "agent",
                   "type": {
-                    "text": "AgentProfile"
+                    "text": "[AgentPubKey, Profile]"
                   }
                 }
               ],
@@ -1744,10 +1738,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
-              "attribute": "agent-pub-key"
+              "attribute": "agentPubKey"
             },
             {
               "kind": "field",
@@ -1792,9 +1786,9 @@
           ],
           "attributes": [
             {
-              "name": "agent-pub-key",
+              "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "fieldName": "agentPubKey"
@@ -2176,7 +2170,7 @@
                 {
                   "name": "profiles",
                   "type": {
-                    "text": "Record<AgentPubKeyB64, Profile>"
+                    "text": "HoloHashMap<Profile>"
                   }
                 }
               ]
@@ -2303,10 +2297,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
-              "attribute": "agent-pub-key"
+              "attribute": "agentPubKey"
             },
             {
               "kind": "field",
@@ -2366,9 +2360,9 @@
           ],
           "attributes": [
             {
-              "name": "agent-pub-key",
+              "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKeyB64"
+                "text": "AgentPubKey"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "fieldName": "agentPubKey"
@@ -2582,17 +2576,17 @@
               "kind": "field",
               "name": "_knownProfiles",
               "type": {
-                "text": "Record<AgentPubKeyB64, Profile>"
+                "text": "HoloHashMap<Profile>"
               },
               "privacy": "private",
-              "default": "{}",
+              "default": "new HoloHashMap()",
               "description": "Private properties"
             },
             {
               "kind": "field",
               "name": "_filteredAgents",
               "type": {
-                "text": "Array<AgentProfile>"
+                "text": "Array<[AgentPubKey, Profile]>"
               },
               "privacy": "private"
             },
@@ -2658,7 +2652,7 @@
                 {
                   "name": "agent",
                   "type": {
-                    "text": "AgentProfile"
+                    "text": "[AgentPubKey, Profile]"
                   }
                 }
               ]

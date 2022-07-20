@@ -1,10 +1,10 @@
 import { contextProvided } from '@lit-labs/context';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
 import { TaskSubscriber } from 'lit-svelte-stores';
 import { property } from 'lit/decorators.js';
 import { SlSkeleton } from '@scoped-elements/shoelace';
+import { AgentPubKey } from '@holochain/client';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
@@ -22,8 +22,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property({ type: String, attribute: 'agent-pub-key' })
-  agentPubKey!: AgentPubKeyB64;
+  @property({ type: Object })
+  agentPubKey!: AgentPubKey;
 
   /** Dependencies */
 

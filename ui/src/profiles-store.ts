@@ -1,20 +1,9 @@
-import {
-  AgentPubKeyB64,
-  serializeHash,
-  Dictionary,
-} from '@holochain-open-dev/core-types';
+import { HoloHashMap } from '@holochain-open-dev/utils';
 import merge from 'lodash-es/merge';
-import { pick } from 'lodash-es';
-import {
-  writable,
-  Writable,
-  derived,
-  Readable,
-  get,
-  readable,
-  Subscriber,
-} from 'svelte/store';
-import { Record } from '@holochain/client';
+import isEqual from 'lodash-es/isEqual';
+import { writable, Writable, derived, Readable, get } from 'svelte/store';
+import { AgentPubKey, Record } from '@holochain/client';
+import { decode } from '@msgpack/msgpack';
 
 import { ProfilesService } from './profiles-service';
 import { Profile } from './types';
@@ -22,10 +11,10 @@ import { defaultConfig, ProfilesConfig } from './config';
 
 export class ProfilesStore {
   /** Private */
-  private _knownProfilesStore: Writable<Dictionary<Profile>> = writable({});
+  private _knownProfilesStore: Writable<HoloHashMap<Profile>> = writable(new HoloHashMap());
 
   /** Static info */
-  public myAgentPubKey: AgentPubKeyB64;
+  public myAgentPubKey: AgentPubKey;
 
   config: ProfilesConfig;
 
@@ -34,7 +23,7 @@ export class ProfilesStore {
     config: Partial<ProfilesConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this.myAgentPubKey = serializeHash(service.cellClient.cell.cell_id[1]);
+    this.myAgentPubKey = service.cellClient.cell.cell_id[1];
   }
 
   /** Actions */
@@ -44,12 +33,15 @@ export class ProfilesStore {
    *
    * Warning! Can be very slow
    */
-  async fetchAllProfiles(): Promise<Readable<Dictionary<Profile>>> {
+  async fetchAllProfiles(): Promise<Readable<HoloHashMap<Profile>>> {
     const allProfiles = await this.service.getAllProfiles();
 
     this._knownProfilesStore.update(profiles => {
-      for (const profile of allProfiles) {
-        profiles[profile.agentPubKey] = profile.profile;
+      for (const record of allProfiles) {
+        profiles.put(
+          record.signed_action.hashed.content.author,
+          decode((record.entry as any).Present.entry) as Profile
+        );
       }
       return profiles;
     });
@@ -61,25 +53,30 @@ export class ProfilesStore {
    * Fetches the profile for the given agent
    */
   async fetchAgentProfile(
-    agentPubKey: AgentPubKeyB64
+    agentPubKey: AgentPubKey
   ): Promise<Readable<Profile | undefined>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
     const knownProfiles = get(this._knownProfilesStore);
 
-    if (!knownProfiles[agentPubKey]) {
-      const profile = await this.service.getAgentProfile(agentPubKey);
+    if (!knownProfiles.get(agentPubKey)) {
+      const record = await this.service.getAgentProfile(agentPubKey);
 
-      if (profile) {
+      if (record) {
         this._knownProfilesStore.update(profiles => {
-          profiles[profile.agentPubKey] = profile.profile;
+          profiles.put(
+            record.signed_action.hashed.content.author,
+            decode((record.entry as any).Present.entry) as Profile
+          );
           return profiles;
         });
       }
     }
 
-    return derived(this._knownProfilesStore, profiles => profiles[agentPubKey]);
+    return derived(this._knownProfilesStore, profiles =>
+      profiles.get(agentPubKey)
+    );
   }
 
   /**
@@ -90,16 +87,15 @@ export class ProfilesStore {
    * Use this over `fetchAgentProfile` when fetching multiple profiles, as it will be more performant
    */
   async fetchAgentsProfiles(
-    agentPubKeys: AgentPubKeyB64[]
-  ): Promise<Readable<Record<string, Profile>>> {
+    agentPubKeys: AgentPubKey[]
+  ): Promise<Readable<HoloHashMap<Profile>>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
     const knownProfiles = get(this._knownProfilesStore);
 
-    const agentsWeAlreadKnow = Object.keys(knownProfiles);
     const profilesToFetch = agentPubKeys.filter(
-      pubKey => !agentsWeAlreadKnow.includes(pubKey)
+      pubKey => !knownProfiles.has(pubKey)
     );
 
     if (profilesToFetch.length > 0) {
@@ -109,13 +105,18 @@ export class ProfilesStore {
 
       this._knownProfilesStore.update(profiles => {
         for (const fetchedProfile of fetchedProfiles) {
-          profiles[fetchedProfile.agentPubKey] = fetchedProfile.profile;
+          profiles.put(
+            fetchedProfile.signed_action.hashed.content.author,
+            decode((fetchedProfile.entry as any).Present.entry) as Profile
+          );
         }
         return profiles;
       });
     }
 
-    return derived(this._knownProfilesStore, s => pick(s, agentPubKeys));
+    return derived(this._knownProfilesStore, knownProfiles =>
+      knownProfiles.pick(a => !!agentPubKeys.find(pubkey => isEqual(pubkey, a)))
+    );
   }
 
   /**
@@ -127,12 +128,18 @@ export class ProfilesStore {
     const profile = await this.service.getMyProfile();
     if (profile) {
       this._knownProfilesStore.update(profiles => {
-        profiles[profile.agentPubKey] = profile.profile;
+        profiles.put(
+          profile.signed_action.hashed.content.author,
+          decode((profile.entry as any).Present.entry) as Profile
+        );
         return profiles;
       });
     }
 
-    return derived(this._knownProfilesStore, s => s[this.myAgentPubKey]);
+    return derived(
+      this._knownProfilesStore,
+      s => s.get(this.myAgentPubKey)
+    );
   }
 
   /**
@@ -141,16 +148,24 @@ export class ProfilesStore {
    * @param nicknamePrefix must be of at least 3 characters
    * @returns the profiles with the nickname starting with nicknamePrefix
    */
-  async searchProfiles(nicknamePrefix: string): Promise<AgentProfile[]> {
+  async searchProfiles(nicknamePrefix: string): Promise<HoloHashMap<Profile>> {
     const searchedProfiles = await this.service.searchProfiles(nicknamePrefix);
-
+    const byPubKey: HoloHashMap<Profile> = new HoloHashMap();
     this._knownProfilesStore.update(profiles => {
       for (const profile of searchedProfiles) {
-        profiles[profile.agentPubKey] = profile.profile;
+        byPubKey.put(
+          profile.signed_action.hashed.content.author,
+          decode((profile.entry as any).Present.entry) as Profile
+        );
+        profiles.put(
+          profile.signed_action.hashed.content.author,
+          decode((profile.entry as any).Present.entry) as Profile
+        );
       }
       return profiles;
     });
-    return searchedProfiles;
+
+    return byPubKey;
   }
 
   /**
@@ -164,7 +179,7 @@ export class ProfilesStore {
     await this.service.createProfile(profile);
 
     this._knownProfilesStore.update(profiles => {
-      profiles[this.myAgentPubKey] = profile;
+      profiles.put(this.myAgentPubKey, profile);
       return profiles;
     });
   }
@@ -178,7 +193,7 @@ export class ProfilesStore {
     await this.service.updateProfile(profile);
 
     this._knownProfilesStore.update(profiles => {
-      profiles[this.myAgentPubKey] = profile;
+      profiles.put(this.myAgentPubKey, profile);
       return profiles;
     });
   }
