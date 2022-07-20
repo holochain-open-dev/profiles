@@ -75,7 +75,7 @@ async fn create_and_get() {
 
     let _bobs_profile: Record = conductors[1]
         .call(
-            &alice_zome,
+            &bob_zome,
             "create_profile",
             Profile {
                 nickname: "bob".into(),

@@ -31,7 +31,6 @@ async fn create_and_get() {
     let alice_profile: Record = conductors[0]
         .call(&alice_zome, "create_profile", profile)
         .await;
-
     let bobs_profile: Record = conductors[1]
         .call(
             &bob_zome,
@@ -69,7 +68,7 @@ async fn create_and_get() {
         .await;
 
     assert_eq!(profiles_searched.len(), 1);
-    assert_eq!(profiles_searched[1], bobs_profile);
+    assert_eq!(profiles_searched[0], bobs_profile);
 
     let profiles_searched: Vec<Record> = conductors[1]
         .call(
