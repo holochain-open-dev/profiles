@@ -282,6 +282,10 @@
   <span class="token comment">// TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"</span>
   <span class="token keyword">const</span> cell <span class="token operator">=</span> appInfo<span class="token punctuation">.</span>cell_data<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">c</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> c<span class="token punctuation">.</span>role_id <span class="token operator">===</span> <span class="token operator">&lt;</span><span class="token constant">MY_CELL_ROLE</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>cell<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">'There are no cells with the given role id in this app'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
   <span class="token keyword">const</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HolochainClient</span><span class="token punctuation">(</span>appWs<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
   <span class="token keyword">const</span> cellClient <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CellClient</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> cell<span class="token punctuation">)</span><span class="token punctuation">;</span>
