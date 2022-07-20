@@ -61,7 +61,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   private _knownProfiles: HoloHashMap<Profile> = new HoloHashMap();
 
-  private get _filteredAgents(): Array<[AgentPubKey, Profile]> {
+  private get _filteredAgents() {
     const profiles = this._knownProfiles.pickBy(
       (value, key) =>
         !isEqual(key, this.store.myAgentPubKey) || this.includeMyself
@@ -115,7 +115,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  onUsernameSelected(agent: [AgentPubKey, Profile]) {
+  onUsernameSelected(agent: any) {
     // If nickname matches agent, user has selected it
     if (agent) {
       this.dispatchEvent(
