@@ -13,3 +13,5 @@ coordinator:
   zomes:
     - name: profiles
       bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
+      dependencies:
+        - name: profiles_integrity
