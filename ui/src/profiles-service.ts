@@ -30,7 +30,7 @@ export class ProfilesService {
    * @returns the profile of the agents, in the same order as the input parameters
    */
   async getAgentsProfiles(agentPubKeys: AgentPubKey[]): Promise<Record[]> {
-    return this.callZome('get_agents_profile', agentPubKeys);
+    return this.callZome('get_agents_profiles', agentPubKeys);
   }
 
   /**
