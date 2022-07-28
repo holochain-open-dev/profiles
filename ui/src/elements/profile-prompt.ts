@@ -45,19 +45,13 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     if (myProfile) return html`<slot></slot>`;
 
     return html`
-      <div class="flex-scrollable-parent">
-        <div class="flex-scrollable-container">
-          <div class="flex-scrollable-y">
-            <div
-              class="column"
-              style="align-items: center; justify-content: center; flex: 1; padding-bottom: 10px;"
-            >
-              <div class="column" style="align-items: center;">
-                <slot name="hero"></slot>
-                <create-profile></create-profile>
-              </div>
-            </div>
-          </div>
+      <div
+        class="column"
+        style="align-items: center; justify-content: center; flex: 1; padding-bottom: 10px;"
+      >
+        <div class="column" style="align-items: center;">
+          <slot name="hero"></slot>
+          <create-profile></create-profile>
         </div>
       </div>
     `;
