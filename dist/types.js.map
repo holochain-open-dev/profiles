@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../src/types.ts"],"names":[],"mappings":"","sourcesContent":["import { Dictionary } from \"@holochain-open-dev/core-types\";\n\nexport interface Profile {\n  nickname: string;\n  fields: Dictionary<string>;\n}\n"]}
