@@ -1,10 +1,9 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import {
-  AgentPubKeyB64,
   deserializeHash,
-  serializeHash,
-} from '@holochain-open-dev/core-types';
-import { fakeRecord, HoloHashMap } from '@holochain-open-dev/utils';
+  fakeRecord,
+  HoloHashMap,
+} from '@holochain-open-dev/utils';
 import { AgentPubKey, AppSignalCb, Record } from '@holochain/client';
 import { encode } from '@msgpack/msgpack';
 import { Profile } from './types';

@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Frontend module for the Holochain hc_zome_profiles zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -42,7 +42,6 @@
   "dependencies": {
     "@holochain-open-dev/cell-client": "^0.6.1",
     "@lit-labs/context": "^0.1.2",
-    "@holochain-open-dev/core-types": "^0.2.0",
     "@holochain-open-dev/utils": "^0.2.4",
     "@holochain/client": "^0.6.0",
     "@lit/localize": "^0.11.2",

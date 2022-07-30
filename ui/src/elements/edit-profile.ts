@@ -1,5 +1,4 @@
 import { contextProvided } from '@lit-labs/context';
-import { Dictionary } from '@holochain-open-dev/core-types';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import {
   Button,
@@ -158,10 +157,10 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     return field.id.split('-')[2];
   }
 
-  getAdditionalFieldsValues(): Dictionary<string> {
+  getAdditionalFieldsValues(): Record<string, string> {
     const textfields = this.getAdditionalTextFields();
 
-    const values: Dictionary<string> = {};
+    const values: Record<string, string> = {};
     for (const [id, textfield] of Object.entries(textfields)) {
       values[id] = textfield.value;
     }
@@ -169,12 +168,12 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     return values;
   }
 
-  getAdditionalTextFields(): Dictionary<TextField> {
+  getAdditionalTextFields(): Record<string, TextField> {
     const textfields = Array.from(
       this.shadowRoot!.querySelectorAll('mwc-textfield')
     ).filter(f => f.id !== 'nickname-field') as TextField[];
 
-    const fields: Dictionary<TextField> = {};
+    const fields: Record<string, TextField> = {};
     for (const field of textfields) {
       const id = this.textfieldToFieldId(field);
       fields[id] = field;
@@ -185,7 +184,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   fireSaveProfile() {
     const nickname = this._nicknameField.value;
 
-    const fields: Dictionary<string> = this.getAdditionalFieldsValues();
+    const fields: Record<string, string> = this.getAdditionalFieldsValues();
     if (this._avatar) {
       fields['avatar'] = this._avatar;
     }
