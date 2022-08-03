@@ -53,8 +53,8 @@ coordinator:
   zomes: 
     - name: profiles
       bundled: ../../target/wasm32-unknown-unknown/release/profiles.wasm
-        dependencies:
-          - name: profiles_integrity
+      dependencies:
+        - name: profiles_integrity
 ```
 
 Be careful about the bundled path `../../` , change that to whatever path matches your target folder.
