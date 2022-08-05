@@ -17,4 +17,4 @@ name = "hc_zome_profiles_types"
 derive_more = "0"
 serde = "1"
 
-hdi = "0.0.14"
+holochain_deterministic_integrity = "0.0.10"

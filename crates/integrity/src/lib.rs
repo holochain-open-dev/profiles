@@ -7,7 +7,7 @@
 //! 
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
-use hdi::prelude::*;
+use holochain_deterministic_integrity::prelude::*;
 use hc_zome_profiles_types::*;
 
 #[hdk_entry_defs]
