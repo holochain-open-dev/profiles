@@ -1,8 +1,10 @@
 [workspace]
 members = [
+  "crates/types/*",
   "crates/*",
   "tests",
 ]
+exclude = [ "crates/types" ]
 resolver = "2"
 
 [profile.dev]
