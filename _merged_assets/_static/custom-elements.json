@@ -492,7 +492,7 @@
               "kind": "field",
               "name": "_knownProfilesStore",
               "type": {
-                "text": "Writable<HoloHashMap<Profile>>"
+                "text": "Writable<AgentPubKeyMap<Profile>>"
               },
               "privacy": "private",
               "description": "Private"
@@ -519,7 +519,7 @@
               "name": "fetchAllProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Readable<HoloHashMap<Profile>>>"
+                  "text": "Promise<Readable<AgentPubKeyMap<Profile>>>"
                 }
               },
               "description": "Fetches the profiles for all agents in the DHT\n\nWarning! Can be very slow"
@@ -547,7 +547,7 @@
               "name": "fetchAgentsProfiles",
               "return": {
                 "type": {
-                  "text": "Promise<Readable<HoloHashMap<Profile>>>"
+                  "text": "Promise<Readable<AgentPubKeyMap<Profile>>>"
                 }
               },
               "parameters": [
@@ -971,7 +971,7 @@
                 {
                   "name": "profiles",
                   "type": {
-                    "text": "HoloHashMap<Profile>"
+                    "text": "AgentPubKeyMap<Profile>"
                   }
                 }
               ],
@@ -1485,10 +1485,10 @@
               "kind": "field",
               "name": "_knownProfiles",
               "type": {
-                "text": "HoloHashMap<Profile>"
+                "text": "AgentPubKeyMap<Profile>"
               },
               "privacy": "private",
-              "default": "new HoloHashMap()",
+              "default": "new AgentPubKeyMap()",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "SearchAgent",
@@ -1498,9 +1498,6 @@
             {
               "kind": "field",
               "name": "_filteredAgents",
-              "type": {
-                "text": "Array<[AgentPubKey, Profile]>"
-              },
               "privacy": "private",
               "inheritedFrom": {
                 "name": "SearchAgent",
@@ -1593,7 +1590,7 @@
                 {
                   "name": "agent",
                   "type": {
-                    "text": "[AgentPubKey, Profile]"
+                    "text": "any"
                   }
                 }
               ],
@@ -2019,7 +2016,7 @@
               "name": "getAdditionalFieldsValues",
               "return": {
                 "type": {
-                  "text": "Dictionary<string>"
+                  "text": "Record<string, string>"
                 }
               }
             },
@@ -2028,7 +2025,7 @@
               "name": "getAdditionalTextFields",
               "return": {
                 "type": {
-                  "text": "Dictionary<TextField>"
+                  "text": "Record<string, TextField>"
                 }
               }
             },
@@ -2170,7 +2167,7 @@
                 {
                   "name": "profiles",
                   "type": {
-                    "text": "HoloHashMap<Profile>"
+                    "text": "AgentPubKeyMap<Profile>"
                   }
                 }
               ]
@@ -2576,18 +2573,15 @@
               "kind": "field",
               "name": "_knownProfiles",
               "type": {
-                "text": "HoloHashMap<Profile>"
+                "text": "AgentPubKeyMap<Profile>"
               },
               "privacy": "private",
-              "default": "new HoloHashMap()",
+              "default": "new AgentPubKeyMap()",
               "description": "Private properties"
             },
             {
               "kind": "field",
               "name": "_filteredAgents",
-              "type": {
-                "text": "Array<[AgentPubKey, Profile]>"
-              },
               "privacy": "private"
             },
             {
@@ -2652,7 +2646,7 @@
                 {
                   "name": "agent",
                   "type": {
-                    "text": "[AgentPubKey, Profile]"
+                    "text": "any"
                   }
                 }
               ]
