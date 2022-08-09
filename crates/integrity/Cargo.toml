@@ -17,5 +17,5 @@ name = "hc_zome_profiles_integrity"
 derive_more = "0"
 serde = "1"
 
-hc_zome_profiles_types = {path = "../types"}
+hc_zome_profiles_integrity_types = {path = "../types/integrity_types"}
 hdi = "0.0.14"

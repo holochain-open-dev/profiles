@@ -1,5 +1,5 @@
+use hc_zome_profiles_integrity_types::*;
 use hc_zome_profiles_integrity::*;
-use hc_zome_profiles_types::*;
 use hdk::{hash_path::path::TypedPath, prelude::*};
 
 pub fn create_profile(profile: Profile) -> ExternResult<Record> {

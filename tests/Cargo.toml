@@ -12,4 +12,5 @@ hdk = {version = "0.0.142", features = ["encoding", "test_utils"]}
 holochain = {version = "0.0.150", default-features = false, features = ["test_utils"]}
 tokio = {version = "1.3", features = ["full"]}
 
-hc_zome_profiles_types = {path = "../crates/types"}
+hc_zome_profiles_coordinator_types = {path = "../crates/types/coordinator_types"}
+hc_zome_profiles_integrity_types = {path = "../crates/types/integrity_types"}
