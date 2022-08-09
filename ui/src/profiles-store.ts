@@ -1,8 +1,8 @@
-import { HoloHashMap } from '@holochain-open-dev/utils';
+import { AgentPubKeyMap } from '@holochain-open-dev/utils';
 import merge from 'lodash-es/merge';
 import isEqual from 'lodash-es/isEqual';
 import { writable, Writable, derived, Readable, get } from 'svelte/store';
-import { AgentPubKey, Record } from '@holochain/client';
+import { AgentPubKey } from '@holochain/client';
 import { decode } from '@msgpack/msgpack';
 
 import { ProfilesService } from './profiles-service';
@@ -11,7 +11,7 @@ import { defaultConfig, ProfilesConfig } from './config';
 
 export class ProfilesStore {
   /** Private */
-  private _knownProfilesStore: Writable<HoloHashMap<Profile>> = writable(new HoloHashMap());
+  private _knownProfilesStore: Writable<AgentPubKeyMap<Profile>> = writable(new AgentPubKeyMap());
 
   /** Static info */
   public myAgentPubKey: AgentPubKey;
@@ -33,7 +33,7 @@ export class ProfilesStore {
    *
    * Warning! Can be very slow
    */
-  async fetchAllProfiles(): Promise<Readable<HoloHashMap<Profile>>> {
+  async fetchAllProfiles(): Promise<Readable<AgentPubKeyMap<Profile>>> {
     const allProfiles = await this.service.getAllProfiles();
 
     this._knownProfilesStore.update(profiles => {
@@ -88,7 +88,7 @@ export class ProfilesStore {
    */
   async fetchAgentsProfiles(
     agentPubKeys: AgentPubKey[]
-  ): Promise<Readable<HoloHashMap<Profile>>> {
+  ): Promise<Readable<AgentPubKeyMap<Profile>>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
 
@@ -148,9 +148,9 @@ export class ProfilesStore {
    * @param nicknamePrefix must be of at least 3 characters
    * @returns the profiles with the nickname starting with nicknamePrefix
    */
-  async searchProfiles(nicknamePrefix: string): Promise<HoloHashMap<Profile>> {
+  async searchProfiles(nicknamePrefix: string): Promise<AgentPubKeyMap<Profile>> {
     const searchedProfiles = await this.service.searchProfiles(nicknamePrefix);
-    const byPubKey: HoloHashMap<Profile> = new HoloHashMap();
+    const byPubKey: AgentPubKeyMap<Profile> = new AgentPubKeyMap();
     this._knownProfilesStore.update(profiles => {
       for (const profile of searchedProfiles) {
         byPubKey.put(

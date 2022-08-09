@@ -11,7 +11,7 @@ import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { msg } from '@lit/localize';
 import { isEqual } from 'lodash-es';
-import { HoloHashMap } from '@holochain-open-dev/utils';
+import { AgentPubKeyMap } from '@holochain-open-dev/utils';
 
 import { Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
@@ -59,7 +59,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _knownProfiles: HoloHashMap<Profile> = new HoloHashMap();
+  private _knownProfiles: AgentPubKeyMap<Profile> = new AgentPubKeyMap();
 
   private get _filteredAgents() {
     const profiles = this._knownProfiles.pickBy(
@@ -94,7 +94,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     this._lastSearchedPrefix = nicknamePrefix;
     const profiles = await this.store.searchProfiles(nicknamePrefix);
 
-    this._knownProfiles = new HoloHashMap([
+    this._knownProfiles = new AgentPubKeyMap([
       ...this._knownProfiles.entries(),
       ...profiles.entries(),
     ]);

@@ -15,7 +15,7 @@ import { ProfilesStore } from '../profiles-store';
 import { profilesStoreContext } from '../context';
 import { AgentAvatar } from './agent-avatar';
 import { Profile } from '../types';
-import { HoloHashMap } from '@holochain-open-dev/utils';
+import { AgentPubKeyMap } from '@holochain-open-dev/utils';
 
 /**
  * @element list-profiles
@@ -63,7 +63,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  renderList(profiles: HoloHashMap<Profile>) {
+  renderList(profiles: AgentPubKeyMap<Profile>) {
     if (profiles.keys().length === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item

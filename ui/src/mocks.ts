@@ -1,8 +1,8 @@
 import { CellClient } from '@holochain-open-dev/cell-client';
 import {
+  AgentPubKeyMap,
   deserializeHash,
   fakeRecord,
-  HoloHashMap,
 } from '@holochain-open-dev/utils';
 import { AgentPubKey, AppSignalCb, Record } from '@holochain/client';
 import { encode } from '@msgpack/msgpack';
@@ -12,7 +12,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
 
 export class ProfilesZomeMock extends CellClient {
   constructor(
-    protected agents: HoloHashMap<Profile> = new HoloHashMap(),
+    protected agents: AgentPubKeyMap<Profile> = new AgentPubKeyMap(),
     protected latency: number = 500
   ) {
     super(null as any, {
