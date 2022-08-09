@@ -11,6 +11,7 @@ Keep in mind that these elements should be placed inside a `<profiles-context>` 
 Click on the selector on the right to look at all the elements available.
 
 ```js story
+import "@webcomponents/scoped-custom-element-registry";
 import { html } from "@mdjs/mdjs-preview";
 import "api-viewer-element";
 import "@holochain-open-dev/profiles/create-profile";
