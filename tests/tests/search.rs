@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
-use hc_zome_profiles_types::*;
+use hc_zome_profiles_coordinator_types::*;
+use hc_zome_profiles_integrity_types::*;
 use hdk::prelude::*;
 use holochain::test_utils::consistency_10s;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};

@@ -1,17 +1,18 @@
 //! ## hc_zome_profiles
-//! 
+//!
 //! Profiles zome for any Holochain app.
-//! 
+//!
 //! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
 //! you can directly include this zome in your DNA.
-//! 
+//!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
 use hdk::prelude::*;
 
 mod handlers;
 
-use hc_zome_profiles_types::*;
+use hc_zome_profiles_coordinator_types::*;
+use hc_zome_profiles_integrity_types::*;
 
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
@@ -27,9 +28,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
 
 /// From a search input of at least 3 characters, returns all the agents whose nickname starts with that prefix.
 #[hdk_extern]
-pub fn search_profiles(
-    search_profiles_input: SearchProfilesInput,
-) -> ExternResult<Vec<Record>> {
+pub fn search_profiles(search_profiles_input: SearchProfilesInput) -> ExternResult<Vec<Record>> {
     let agent_profiles = handlers::search_profiles(search_profiles_input.nickname_prefix)?;
 
     Ok(agent_profiles)
@@ -48,9 +47,7 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Reco
 /// Use this function if you need to get the profile for multiple agents at the same time,
 /// as it will be more performant than doing multiple `get_agent_profile`.
 #[hdk_extern]
-pub fn get_agents_profiles(
-    agent_pub_keys: Vec<AgentPubKey>,
-) -> ExternResult<Vec<Record>> {
+pub fn get_agents_profiles(agent_pub_keys: Vec<AgentPubKey>) -> ExternResult<Vec<Record>> {
     let agent_profiles = handlers::get_agents_profiles(agent_pub_keys)?;
 
     Ok(agent_profiles)
@@ -61,8 +58,7 @@ pub fn get_agents_profiles(
 pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
     let agent_info = agent_info()?;
 
-    let agent_profile =
-        handlers::get_agent_profile(agent_info.agent_initial_pubkey)?;
+    let agent_profile = handlers::get_agent_profile(agent_info.agent_initial_pubkey)?;
 
     Ok(agent_profile)
 }
