@@ -6,12 +6,11 @@ import {
   ListItem,
   TextField,
 } from '@scoped-elements/material-web';
-import { AgentPubKey } from '@holochain/client';
 import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { msg } from '@lit/localize';
 import { isEqual } from 'lodash-es';
-import { AgentPubKeyMap } from '@holochain-open-dev/utils';
+import { AgentPubKeyMap, serializeHash } from '@holochain-open-dev/utils';
 
 import { Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';
@@ -168,7 +167,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
                     >
                       <agent-avatar
                         slot="graphic"
-                        .agentPubKey=${pubkey}
+                        .agentPubKey=${serializeHash(pubkey)}
                       ></agent-avatar>
                       <span style="margin-left: 8px;">${profile.nickname}</span>
                     </mwc-list-item>`

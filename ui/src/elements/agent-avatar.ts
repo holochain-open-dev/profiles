@@ -1,12 +1,12 @@
 import { contextProvided } from '@lit-labs/context';
-import { HoloIdenticon } from '@holochain-open-dev/utils';
+import { deserializeHash, HoloIdenticon } from '@holochain-open-dev/utils';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { TaskSubscriber } from 'lit-svelte-stores';
-import { AgentPubKey } from '@holochain/client';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
@@ -20,9 +20,10 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
    * REQUIRED. The public key identifying the agent whose profile is going to be shown.
    */
   @property({
-    type: Object,
+    type: String,
+    attribute: 'agent-pub-key'
   })
-  agentPubKey!: AgentPubKey;
+  agentPubKey!: AgentPubKeyB64;
 
   /**
    * Size of the avatar image in pixels.
@@ -40,9 +41,9 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  _profileTask = new TaskSubscriber(
+  private _profileTask = new TaskSubscriber(
     this,
-    () => this.store.fetchAgentProfile(this.agentPubKey),
+    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),
     () => [this.store, this.agentPubKey]
   );
 

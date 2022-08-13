@@ -9,6 +9,7 @@ import { sharedStyles } from './utils/shared-styles';
 import { ProfileDetail } from './profile-detail';
 import { IconButton } from '@scoped-elements/material-web';
 import { UpdateProfile } from './update-profile';
+import { serializeHash } from '@holochain-open-dev/utils';
 
 /**
  * @element profile-detail
@@ -36,7 +37,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.myAgentPubKey}>
+      <profile-detail .agentPubKey=${serializeHash(this.store.myAgentPubKey)}>
         <mwc-icon-button
           slot="action"
           icon="edit"

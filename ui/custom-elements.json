@@ -663,9 +663,9 @@
           "customElement": true,
           "attributes": [
             {
-              "name": "agentPubKey",
+              "name": "agent-pub-key",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "fieldName": "agentPubKey",
@@ -705,10 +705,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
-              "attribute": "agentPubKey",
+              "attribute": "agent-pub-key",
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -744,7 +744,7 @@
             {
               "kind": "field",
               "name": "_profileTask",
-              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),\n    () => [this.store, this.agentPubKey]\n  )",
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -1093,9 +1093,9 @@
           "customElement": true,
           "attributes": [
             {
-              "name": "agentPubKey",
+              "name": "agent-pub-key",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "fieldName": "agentPubKey",
@@ -1122,10 +1122,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
-              "attribute": "agentPubKey",
+              "attribute": "agent-pub-key",
               "inheritedFrom": {
                 "name": "ProfileDetail",
                 "module": "src/elements/profile-detail.ts"
@@ -1148,7 +1148,7 @@
               "kind": "field",
               "name": "_agentProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),\n    () => [this.store, this.agentPubKey]\n  )",
               "description": "Private properties",
               "inheritedFrom": {
                 "name": "ProfileDetail",
@@ -1724,108 +1724,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/elements/agent-avatar.ts",
       "declarations": [
         {
@@ -1837,10 +1735,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
-              "attribute": "agentPubKey"
+              "attribute": "agent-pub-key"
             },
             {
               "kind": "field",
@@ -1864,7 +1762,7 @@
             {
               "kind": "field",
               "name": "_profileTask",
-              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )"
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),\n    () => [this.store, this.agentPubKey]\n  )"
             },
             {
               "kind": "method",
@@ -1885,9 +1783,9 @@
           ],
           "attributes": [
             {
-              "name": "agentPubKey",
+              "name": "agent-pub-key",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
               "fieldName": "agentPubKey"
@@ -2396,10 +2294,10 @@
               "kind": "field",
               "name": "agentPubKey",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
-              "attribute": "agentPubKey"
+              "attribute": "agent-pub-key"
             },
             {
               "kind": "field",
@@ -2414,7 +2312,7 @@
               "kind": "field",
               "name": "_agentProfileTask",
               "privacy": "private",
-              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(this.agentPubKey),\n    () => [this.store, this.agentPubKey]\n  )",
+              "default": "new TaskSubscriber(\n    this,\n    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),\n    () => [this.store, this.agentPubKey]\n  )",
               "description": "Private properties"
             },
             {
@@ -2459,9 +2357,9 @@
           ],
           "attributes": [
             {
-              "name": "agentPubKey",
+              "name": "agent-pub-key",
               "type": {
-                "text": "AgentPubKey"
+                "text": "AgentPubKeyB64"
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "fieldName": "agentPubKey"
@@ -2905,6 +2803,108 @@
           "declaration": {
             "name": "UpdateProfile",
             "module": "src/elements/update-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]

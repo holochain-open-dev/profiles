@@ -4,14 +4,15 @@ import { html, LitElement } from 'lit';
 import { TaskSubscriber } from 'lit-svelte-stores';
 import { property } from 'lit/decorators.js';
 import { SlSkeleton } from '@scoped-elements/shoelace';
-import { AgentPubKey } from '@holochain/client';
+import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
+import { msg } from '@lit/localize';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
 import { AgentAvatar } from './agent-avatar';
-import { msg } from '@lit/localize';
 import { Profile } from '../types';
+import { deserializeHash, serializeHash } from '@holochain-open-dev/utils';
 
 /**
  * @element profile-detail
@@ -22,8 +23,11 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property({ type: Object })
-  agentPubKey!: AgentPubKey;
+  @property({
+    type: String,
+    attribute: 'agent-pub-key',
+  })
+  agentPubKey!: AgentPubKeyB64;
 
   /** Dependencies */
 
@@ -39,7 +43,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   private _agentProfileTask = new TaskSubscriber(
     this,
-    () => this.store.fetchAgentProfile(this.agentPubKey),
+    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),
     () => [this.store, this.agentPubKey]
   );
 
