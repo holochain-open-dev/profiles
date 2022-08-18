@@ -1715,7 +1715,6 @@ dependencies = [
 name = "hc_zome_profiles_coordinator"
 version = "0.0.1"
 dependencies = [
- "chrono",
  "derive_more",
  "hc_zome_profiles_coordinator_types",
  "hc_zome_profiles_integrity",
@@ -1736,7 +1735,6 @@ dependencies = [
 name = "hc_zome_profiles_integrity"
 version = "0.0.1"
 dependencies = [
- "chrono",
  "derive_more",
  "hc_zome_profiles_integrity_types",
  "hdi",
