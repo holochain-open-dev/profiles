@@ -2,7 +2,7 @@
 authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
 description = "Integrity types for the hc_zome_profiles zome"
 documentation = "https://holochain-open-dev.github.io/profiles"
-edition = "2018"
+edition = "2021"
 homepage = "https://docs.rs/hc_zome_profiles_integrity_types"
 license = "MIT"
 name = "hc_zome_profiles_integrity_types"
@@ -17,4 +17,4 @@ name = "hc_zome_profiles_integrity_types"
 derive_more = "0"
 serde = "1"
 chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
-hdi = "0.0.18"
+hdi = "0.0.19"

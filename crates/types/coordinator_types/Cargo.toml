@@ -2,7 +2,7 @@
 authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
 description = "Coordinator types for the hc_zome_profiles zome"
 documentation = "https://holochain-open-dev.github.io/profiles"
-edition = "2018"
+edition = "2021"
 homepage = "https://docs.rs/hc_zome_profiles_coordinator_types"
 license = "MIT"
 name = "hc_zome_profiles_coordinator_types"

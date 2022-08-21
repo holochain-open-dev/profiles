@@ -9,7 +9,7 @@ crate-type = ["cdylib", "rlib"]
 name = "profiles_integrity"
 
 [dependencies]
-hc_zome_profiles_integrity = {git = "https://github.com/holochain-open-dev/profiles", tag = "for-hdk-v0.0.146", package = "hc_zome_profiles_integrity"}
+hc_zome_profiles_integrity = {git = "https://github.com/holochain-open-dev/profiles", tag = "for-hdk-v0.0.147", package = "hc_zome_profiles_integrity"}
 ```
 
 Replace the `rev` field with the holochain version you are using. See [which tags are available](https://github.com/holochain-open-dev/profiles/tags).
@@ -29,7 +29,7 @@ crate-type = ["cdylib", "rlib"]
 name = "profiles"
 
 [dependencies]
-hc_zome_profiles_coordinator = {git = "https://github.com/holochain-open-dev/profiles", tag = "for-hdk-v0.0.146", package = "hc_zome_profiles_coordinator"}
+hc_zome_profiles_coordinator = {git = "https://github.com/holochain-open-dev/profiles", tag = "for-hdk-v0.0.147", package = "hc_zome_profiles_coordinator"}
 ```
 
 6.  Replace the contents of the `lib.rs` with this content:
@@ -43,14 +43,14 @@ extern crate hc_zome_profiles_coordinator;
 
 ```yaml
 integrity:
-  zomes: 
+  zomes:
     - name: profiles_integrity
       bundled: ../../target/wasm32-unknown-unknown/release/profiles_integrity.wasm
 
 ...
 
 coordinator:
-  zomes: 
+  zomes:
     - name: profiles
       bundled: ../../target/wasm32-unknown-unknown/release/profiles.wasm
       dependencies:

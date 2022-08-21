@@ -2,7 +2,7 @@
 authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
 description = "Profiles zome for any Holochain app"
 documentation = "https://holochain-open-dev.github.io/profiles"
-edition = "2018"
+edition = "2021"
 homepage = "https://docs.rs/hc_zome_profiles"
 license = "MIT"
 name = "hc_zome_profiles_coordinator"
@@ -20,4 +20,4 @@ chrono = { version = "=0.4.22", default-features = false, features = ["clock", "
 hc_zome_profiles_coordinator_types = {path = "../types/coordinator_types"}
 hc_zome_profiles_integrity_types = {path = "../types/integrity_types"}
 hc_zome_profiles_integrity = {path = "../integrity"}
-hdk = "0.0.146"
+hdk = "0.0.147"
