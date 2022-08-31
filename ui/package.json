@@ -9,6 +9,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./locales/es-419": "./locales/es-419.js",
+    "./locales/fr-fr": "./locales/fr-fr.js",
     "./profiles-context": "./dist/definitions/profiles-context.js",
     "./create-profile": "./dist/definitions/create-profile.js",
     "./update-profile": "./dist/definitions/update-profile.js",
