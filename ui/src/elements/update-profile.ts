@@ -58,6 +58,7 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`,
       complete: profile => html` <edit-profile
+        allowCancel
         .profile=${profile}
         .save-profile-label=${msg('Update Profile')}
         @save-profile=${(e: CustomEvent) =>

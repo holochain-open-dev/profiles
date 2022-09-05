@@ -34,6 +34,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
     if (this._editing)
       return html`<update-profile
         @profile-updated=${() => (this._editing = false)}
+        @cancel-edit-profile=${() => (this._editing = false)}
       ></update-profile>`;
 
     return html`
