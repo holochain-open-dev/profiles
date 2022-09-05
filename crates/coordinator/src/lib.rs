@@ -56,9 +56,7 @@ pub fn get_agents_profiles(agent_pub_keys: Vec<AgentPubKey>) -> ExternResult<Vec
 /// Gets the profile for the agent calling this function, if they have created it.
 #[hdk_extern]
 pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
-    let agent_info = agent_info()?;
-
-    let agent_profile = handlers::get_agent_profile(agent_info.agent_initial_pubkey)?;
+    let agent_profile = handlers::get_my_profile(())?;
 
     Ok(agent_profile)
 }
