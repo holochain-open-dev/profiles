@@ -49,6 +49,19 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
     Ok(record)
 }
 
+pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
+    let profile_entry_type: EntryType = UnitEntryTypes::Profile.try_into()?;
+    let filter = ChainQueryFilter::new()
+        .entry_type(profile_entry_type)
+        .include_entries(true);
+    let all_my_profiles = query(filter)?;
+
+    match all_my_profiles.last() {
+        Some(record) => Ok(Some(record.to_owned())),
+        None => Ok(None)
+    }
+}
+
 pub fn search_profiles(nickname_prefix: String) -> ExternResult<Vec<Record>> {
     if nickname_prefix.len() < 3 {
         return Err(wasm_error!(WasmErrorInner::Guest(
