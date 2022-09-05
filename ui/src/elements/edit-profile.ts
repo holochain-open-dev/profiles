@@ -46,7 +46,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   store!: ProfilesStore;
 
   @property({ type: Boolean })
-  allowCancel: boolean = false;
+  allowCancel = false;
 
   /** Private properties */
 
