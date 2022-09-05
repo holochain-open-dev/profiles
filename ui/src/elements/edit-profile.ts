@@ -45,6 +45,9 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
+  @property({ type: Boolean })
+  allowCancel = false;
+
   /** Private properties */
 
   @query('#nickname-field')
@@ -205,6 +208,15 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     );
   }
 
+  fireCancel() {
+    this.dispatchEvent(
+      new CustomEvent('cancel-edit-profile', {
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   renderField(fieldName: string) {
     return html`
       <mwc-textfield
@@ -255,13 +267,30 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
             this.renderField(field)
           )}
 
-          <mwc-button
-            raised
-            style="margin-top: 8px;"
-            .disabled=${!this.shouldSaveButtonBeEnabled()}
-            .label=${this.saveProfileLabel ?? msg('Save Profile')}
-            @click=${() => this.fireSaveProfile()}
-          ></mwc-button>
+
+          <div class="row" style="margin-top: 8px;">
+
+            ${this.allowCancel
+              ? html`
+              <mwc-button
+                style="flex: 1; margin-right: 6px;"
+                .label=${'Cancel'}
+                @click=${() => this.fireCancel()}
+              ></mwc-button>
+              `
+              : html``
+            }
+
+            <mwc-button
+              style="flex: 1;"
+              raised
+              .disabled=${!this.shouldSaveButtonBeEnabled()}
+              .label=${this.saveProfileLabel ?? msg('Save Profile')}
+              @click=${() => this.fireSaveProfile()}
+            ></mwc-button>
+
+          </div>
+
         </div>
       </mwc-card>
     `;
