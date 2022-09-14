@@ -19,4 +19,4 @@ serde = "1"
 chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
 
 hc_zome_profiles_integrity_types = {path = "../types/integrity_types"}
-hdi = "0.1.1"
+hdi = "0.1.2"

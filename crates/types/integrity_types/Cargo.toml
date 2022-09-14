@@ -17,4 +17,4 @@ name = "hc_zome_profiles_integrity_types"
 derive_more = "0"
 serde = "1"
 chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
-hdi = "0.1.1"
+hdi = "0.1.2"
