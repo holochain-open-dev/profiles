@@ -1,0 +1,36 @@
+html {
+  --primary-color: #3f51b5;
+  --primary-color-accent: #ff5252;
+}
+
+html {
+  --mdc-theme-primary: var(--primary-color, #3f51b5);
+  --mdc-theme-secondary: var(--primary-color-accent, #ff5252);
+  --primary-color-lighter: var(--primary-color, #3f51b5);
+  --primary-color-darker: #a22831;
+  --primary-color-accent: #ff5252;
+  --primary-text-color: #2c3e50;
+  --primary-lines-color: #ccc;
+
+  /* Contrast colors */
+  --contrast-color-light: #fff;
+  --contrast-color-dark: #1d3557;
+
+  /* background-colors */
+  --page-background: white;
+  --footer-background: rgba(0, 0, 0, 0.1);
+
+}
+
+h1 {
+  font-size: 50px;
+}
+
+.logo > path {
+  fill: var(--primary-color);
+}
+.logo-link > .logo {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}

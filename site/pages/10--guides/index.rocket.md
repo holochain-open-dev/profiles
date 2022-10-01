@@ -15,13 +15,9 @@ export async function registerCustomElements() {
 }
 export const needsLoader = true;
 /* END - Rocket auto generated - do not touch */
-
-import { pageTree } from '#src/layouts/layoutData.js';
-import { ChildListMenu } from '@rocket/engine';
-
-export const menuLinkText = 'Guides';
-export const subTitle = 'From zero to hero';
 ```
+
+
 
 # Guides
 

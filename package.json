@@ -14,25 +14,33 @@
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
     "playground": "run-singleton \"holochain-playground\"",
-    "docs:setup": "npm run -w @holochain-open-dev/profiles build && npm run -w @holochain-open-dev/profiles analyze && cp ui/custom-elements.json docs/_assets/_static",
-    "docs:start": "npm run docs:setup && rocket start",
+    "docs:setup": "npm run -w @holochain-open-dev/profiles build && npm run -w @holochain-open-dev/profiles analyze && cp ui/custom-elements.json site/public",
+    "docs:start": " npm run docs:setup && NODE_DEBUG=engine:rendering rocket start --open",
+    "docs:preview": "npm run docs:setup && rocket build && rocket preview --open",
     "docs:publish": "npm run docs:setup && rocket build && gh-pages --dotfiles -d ./_site -b gh-pages"
   },
   "devDependencies": {
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "@holochain-playground/cli": "^0.0.11",
-    "@rocket/cli": "^0.10.0",
-    "@rocket/launch": "^0.6.0",
+    "@rocket/cli": "^0.20.0",
+    "@rocket/engine": "^0.2.0",
+    "@rocket/launch": "^0.21.0",
+    "@rocket/search": "^0.7.0",
     "@rollup/plugin-commonjs": "18.0.0",
     "@rollup/plugin-replace": "^3.0.1",
     "@scoped-elements/markdown-renderer": "^0.0.3",
+    "@webcomponents/scoped-custom-element-registry": "^0.0.5",
     "api-viewer-element": "^1.0.0-pre.4",
     "concurrently": "^6.2.1",
     "concurrently-repeat": "^0.0.1",
     "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
+    "lit": "^2.3.0",
     "new-port-cli": "^1.0.0",
     "run-singleton-cli": "^0.0.7"
+  },
+  "imports": {
+    "#src/*": "./site/src/*"
   },
   "type": "module"
 }
