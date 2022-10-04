@@ -20,4 +20,4 @@ chrono = { version = "=0.4.22", default-features = false, features = ["clock", "
 hc_zome_profiles_coordinator_types = {path = "../types/coordinator_types"}
 hc_zome_profiles_integrity_types = {path = "../types/integrity_types"}
 hc_zome_profiles_integrity = {path = "../integrity"}
-hdk = "0.0.152"
+hdk = "0.0.154"
