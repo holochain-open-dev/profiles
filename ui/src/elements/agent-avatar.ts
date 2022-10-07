@@ -1,5 +1,6 @@
 import { contextProvided } from '@lit-labs/context';
-import { deserializeHash, HoloIdenticon } from '@holochain-open-dev/utils';
+import { deserializeHash } from '@holochain-open-dev/utils';
+import { HoloIdenticon } from '@holochain-open-dev/elements';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
