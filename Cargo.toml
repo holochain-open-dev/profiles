@@ -1,11 +1,12 @@
 [workspace]
-members = [
-  "crates/types/*",
-  "crates/*",
-  "tests",
-]
-exclude = [ "crates/types" ]
+members = ["crates/*", "tests"]
 resolver = "2"
+
+[workspace.dependencies]
+hdi = "0.1"
+hdk = "0.0.161"
+serde = "1"
+holochain = "0.0.173"
 
 [profile.dev]
 opt-level = "z"

@@ -1,18 +1,18 @@
 import { contextProvided } from '@lit-labs/context';
+import { AgentPubKey } from '@holochain/client';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { html, LitElement } from 'lit';
 import { TaskSubscriber } from 'lit-svelte-stores';
 import { property } from 'lit/decorators.js';
 import { SlSkeleton } from '@scoped-elements/shoelace';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
 import { msg } from '@lit/localize';
+import { hashProperty } from '@holochain-open-dev/elements';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
 import { sharedStyles } from './utils/shared-styles';
 import { AgentAvatar } from './agent-avatar';
 import { Profile } from '../types';
-import { deserializeHash, serializeHash } from '@holochain-open-dev/utils';
 
 /**
  * @element profile-detail
@@ -23,11 +23,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property({
-    type: String,
-    attribute: 'agent-pub-key',
-  })
-  agentPubKey!: AgentPubKeyB64;
+  @property(hashProperty('agent-pub-key'))
+  agentPubKey!: AgentPubKey;
 
   /** Dependencies */
 
@@ -43,7 +40,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   private _agentProfileTask = new TaskSubscriber(
     this,
-    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),
+    () => this.store.fetchAgentProfile(this.agentPubKey),
     () => [this.store, this.agentPubKey]
   );
 
@@ -95,8 +92,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         </div>
 
         ${Object.entries(this.getAdditionalFields()).map(([key, value]) =>
-          this.renderAdditionalField(key, value)
-        )}
+      this.renderAdditionalField(key, value)
+    )}
       </div>
     `;
   }
@@ -119,13 +116,13 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
           </div>
 
           ${this.store.config.additionalFields.map(
-            () => html`
+        () => html`
               <sl-skeleton
                 effect="pulse"
                 style="width: 200px; margin-top: 16px;"
               ></sl-skeleton>
             `
-          )}
+      )}
         </div>
       `,
       complete: profile => this.renderProfile(profile),

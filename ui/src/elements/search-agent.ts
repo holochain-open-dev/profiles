@@ -152,29 +152,29 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         </mwc-textfield>
         <mwc-menu-surface absolute id="overlay" x="4" y="28">
           ${this._filteredAgents.length > 0
-            ? html`
+        ? html`
                 <mwc-list
                   style="min-width: 80px;"
                   @selected=${(e: CustomEvent) =>
-                    this.onUsernameSelected(
-                      this._filteredAgents[e.detail.index]
-                    )}
+            this.onUsernameSelected(
+              this._filteredAgents[e.detail.index]
+            )}
                 >
                   ${this._filteredAgents.map(
-                    ([pubkey, profile]) => html` <mwc-list-item
+              ([pubkey, profile]) => html` <mwc-list-item
                       graphic="avatar"
                       style="--mdc-list-item-graphic-size: 32px;"
                     >
                       <agent-avatar
                         slot="graphic"
-                        .agentPubKey=${serializeHash(pubkey)}
+                        .agentPubKey=${pubkey}
                       ></agent-avatar>
                       <span style="margin-left: 8px;">${profile.nickname}</span>
                     </mwc-list-item>`
-                  )}
+            )}
                 </mwc-list>
               `
-            : html`<mwc-list-item
+        : html`<mwc-list-item
                 >${msg('No agents match the filter')}</mwc-list-item
               >`}
         </mwc-menu-surface>

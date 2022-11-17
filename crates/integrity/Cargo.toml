@@ -1,5 +1,9 @@
 [package]
-authors = ["guillem.cordoba@gmail.com", "eric@harris-braun.com", "tatsuya.g.sato@yumeville.com"]
+authors = [
+  "guillem.cordoba@gmail.com",
+  "eric@harris-braun.com",
+  "tatsuya.g.sato@yumeville.com",
+]
 description = "Profiles zome for any Holochain app"
 documentation = "https://holochain-open-dev.github.io/profiles"
 edition = "2021"
@@ -16,7 +20,11 @@ name = "hc_zome_profiles_integrity"
 [dependencies]
 derive_more = "0"
 serde = "1"
-chrono = { version = "=0.4.22", default-features = false, features = ["clock", "std", "oldtime", "serde"], optional = true }
+chrono = { version = "=0.4.22", default-features = false, features = [
+  "clock",
+  "std",
+  "oldtime",
+  "serde",
+], optional = true }
 
-hc_zome_profiles_integrity_types = {path = "../types/integrity_types"}
-hdi = "=0.1.3"
+hdi = { workspace = true }

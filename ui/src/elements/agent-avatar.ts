@@ -1,13 +1,12 @@
 import { contextProvided } from '@lit-labs/context';
-import { deserializeHash } from '@holochain-open-dev/utils';
-import { HoloIdenticon } from '@holochain-open-dev/elements';
+import { HoloIdenticon, hashProperty } from '@holochain-open-dev/elements';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { css, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit-html/directives/style-map.js';
 import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
 import { TaskSubscriber } from 'lit-svelte-stores';
-import { AgentPubKeyB64 } from '@holochain-open-dev/core-types';
+import { AgentPubKey } from '@holochain/client';
 
 import { profilesStoreContext } from '../context';
 import { ProfilesStore } from '../profiles-store';
@@ -20,11 +19,8 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. The public key identifying the agent whose profile is going to be shown.
    */
-  @property({
-    type: String,
-    attribute: 'agent-pub-key'
-  })
-  agentPubKey!: AgentPubKeyB64;
+  @property(hashProperty('agent-pub-key'))
+  agentPubKey!: AgentPubKey;
 
   /**
    * Size of the avatar image in pixels.
@@ -44,17 +40,17 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
 
   private _profileTask = new TaskSubscriber(
     this,
-    () => this.store.fetchAgentProfile(deserializeHash(this.agentPubKey)),
+    () => this.store.fetchAgentProfile(this.agentPubKey),
     () => [this.store, this.agentPubKey]
   );
 
   renderIdenticon() {
     return html` <div
       style=${styleMap({
-        position: 'relative',
-        height: `${this.size}px`,
-        width: `${this.size}px`,
-      })}
+      position: 'relative',
+      height: `${this.size}px`,
+      width: `${this.size}px`,
+    })}
     >
       <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
       </holo-identicon>
@@ -68,10 +64,10 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     return html`
       <div
         style=${styleMap({
-          position: 'relative',
-          height: `${this.size}px`,
-          width: `${this.size}px`,
-        })}
+      position: 'relative',
+      height: `${this.size}px`,
+      width: `${this.size}px`,
+    })}
       >
         <sl-avatar
           .image=${profile.fields.avatar}

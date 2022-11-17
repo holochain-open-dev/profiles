@@ -1,4 +1,3 @@
-use hc_zome_profiles_integrity_types::*;
 use hc_zome_profiles_integrity::*;
 use hdk::{hash_path::path::TypedPath, prelude::*};
 
@@ -58,7 +57,7 @@ pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
 
     match all_my_profiles.last() {
         Some(record) => Ok(Some(record.to_owned())),
-        None => Ok(None)
+        None => Ok(None),
     }
 }
 

@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use hc_zome_profiles_integrity_types::*;
+use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
 use holochain::test_utils::consistency_10s;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
@@ -27,8 +27,6 @@ async fn create_and_get() {
     let record_1: Option<Record> = conductors[0].call(&alice_zome, "get_my_profile", ()).await;
     assert_eq!(record_1, None);
 
-
-
     // Create profile for alice and try to get it via get_my_profile() as well as get_agent_profile()
     let profile = Profile {
         nickname: String::from("alice"),
@@ -39,7 +37,7 @@ async fn create_and_get() {
         .call(&alice_zome, "create_profile", profile)
         .await;
 
-    consistency_10s(&[&alice, &bobbo]).await;
+    consistency_10s([&alice, &bobbo]).await;
 
     let record_2: Option<Record> = conductors[0].call(&alice_zome, "get_my_profile", ()).await;
 
@@ -51,7 +49,6 @@ async fn create_and_get() {
 
     assert_eq!(record_1, record_2.unwrap());
 
-
     // Update alice's profile and again try to get it via get_my_profile() as well as get_agent_profile()
     let profile = Profile {
         nickname: String::from("alice2"),
@@ -62,7 +59,7 @@ async fn create_and_get() {
         .call(&alice_zome, "update_profile", profile.clone())
         .await;
 
-    consistency_10s(&[&alice, &bobbo]).await;
+    consistency_10s([&alice, &bobbo]).await;
 
     // ---> get it over the DHT though get_agent_profile()
     let alices_profile: Option<Record> = conductors[1]
@@ -81,9 +78,8 @@ async fn create_and_get() {
     }
 
     // ---> get it from alice's source chain through get_my_profile()
-    let alices_profile_from_source_chain: Option<Record> = conductors[0]
-        .call(&alice_zome, "get_my_profile", ())
-        .await;
+    let alices_profile_from_source_chain: Option<Record> =
+        conductors[0].call(&alice_zome, "get_my_profile", ()).await;
 
     if let Some(Record {
         entry: RecordEntry::Present(entry),
@@ -95,7 +91,6 @@ async fn create_and_get() {
     } else {
         panic!("Bad record");
     }
-
 
     // Create another profile for bob as well and call get_all_profiles() to check whether we get all two profiles
     let _bobs_profile: Record = conductors[1]

@@ -1,9 +1,9 @@
-//! ## hc_zome_profiles
+//! ## hc_zome_profiles_coordinator
 //!
 //! Profiles zome for any Holochain app.
 //!
 //! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
-//! you can directly include this zome in your DNA.
+//! you can directly include this zome and its integrity counterpart "hc_zome_profiles_integrity" in your DNA.
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
@@ -11,8 +11,7 @@ use hdk::prelude::*;
 
 mod handlers;
 
-use hc_zome_profiles_coordinator_types::*;
-use hc_zome_profiles_integrity_types::*;
+use hc_zome_profiles_integrity::*;
 
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
@@ -26,6 +25,13 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
     handlers::update_profile(profile)
 }
 
+/// Input for the `search_profiles` zome function.
+///
+/// The nickname prefix must be of at least 3 characters.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SearchProfilesInput {
+    pub nickname_prefix: String,
+}
 /// From a search input of at least 3 characters, returns all the agents whose nickname starts with that prefix.
 #[hdk_extern]
 pub fn search_profiles(search_profiles_input: SearchProfilesInput) -> ExternResult<Vec<Record>> {

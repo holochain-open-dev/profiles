@@ -57,7 +57,7 @@ export class ProfilesStore {
   ): Promise<Readable<Profile | undefined>> {
     // For now, optimistic return of the cached profile
     // TODO: implement cache invalidation
-
+    console.log(agentPubKey)
     const knownProfiles = get(this._knownProfilesStore);
 
     if (!knownProfiles.get(agentPubKey)) {
