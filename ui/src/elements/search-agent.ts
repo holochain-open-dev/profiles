@@ -20,7 +20,7 @@ import { AgentAvatar } from './agent-avatar';
 
 /**
  * @element search-agent
- * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }
+ * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: Uint8Array }
  */
 export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Public attributes */

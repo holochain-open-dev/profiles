@@ -21,4 +21,5 @@ name = "hc_zome_profiles_coordinator"
 derive_more = "0"
 serde = "1"
 hc_zome_profiles_integrity = { path = "../integrity" }
+
 hdk = { workspace = true }
