@@ -20,7 +20,7 @@ export class ProfilesZomeMock extends CellClient {
         deserializeHash('uhC0kkSpFl08_2D0Pvw2vEVEkfSgDVZCkyOf1je6qIdClO1o'),
         deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI'),
       ],
-      role_id: 'profiles',
+      role_name: 'profiles',
     });
   }
 
