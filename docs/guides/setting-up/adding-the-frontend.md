@@ -7,13 +7,13 @@
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client  @holochain/client
+npm install @holochain-open-dev/profiles  @holochain/client
 ```
 
 Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the RAD tools:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain-open-dev/cell-client @holochain/client -w ui
+npm install @holochain-open-dev/profiles @holochain/client -w ui
 ```
 
 2. [Choose which elements you need](../frontend/elements.md) and import them:
@@ -49,12 +49,11 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 }
 ```
 
-3. Connect to Holochain with the `HolochainClient`, and create the `ProfilesStore` with it:
+3. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
 
 ```js
 import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
-import { AppWebsocket } from "@holochain/client";
-import { HolochainClient } from "@holochain-open-dev/cell-client";
+import { AppWebsocket, AppAgentClient } from "@holochain/client";
 
 async function setupProfilesStore() {
   // TODO: change this to the port where holochain is listening,

@@ -23,7 +23,7 @@ export class ProfilesStore {
     config: Partial<ProfilesConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this.myAgentPubKey = service.cellClient.cell.cell_id[1];
+    this.myAgentPubKey = service.myAgentPubKey();
   }
 
   /** Actions */

@@ -41,10 +41,9 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain/client": "^0.10.2",
-    "@holochain-open-dev/cell-client": "^0.9.1",
-    "@holochain-open-dev/utils": "^0.6.2",
-    "@holochain-open-dev/elements": "^0.0.7",
+    "@holochain/client": "^0.11.1",
+    "@holochain-open-dev/utils": "^0.7.0",
+    "@holochain-open-dev/elements": "^0.1.0",
     "@lit-labs/context": "^0.1.2",
     "@lit/localize": "^0.11.2",
     "@msgpack/msgpack": "^2.7.2",

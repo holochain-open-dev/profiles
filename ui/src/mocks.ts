@@ -1,36 +1,34 @@
-import { CellClient } from '@holochain-open-dev/cell-client';
 import {
   AgentPubKeyMap,
   deserializeHash,
   fakeRecord,
 } from '@holochain-open-dev/utils';
-import { AgentPubKey, AppSignalCb, Record } from '@holochain/client';
+import { AgentPubKey, AppAgentWebsocket, AppSignalCb, CallZomeRequest, Record } from '@holochain/client';
 import { encode } from '@msgpack/msgpack';
 import { Profile } from './types';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
 
-export class ProfilesZomeMock extends CellClient {
+export class ProfilesZomeMock extends AppAgentWebsocket {
+
   constructor(
     protected agents: AgentPubKeyMap<Profile> = new AgentPubKeyMap(),
     protected latency: number = 500
   ) {
-    super(null as any, {
-      cell_id: [
-        deserializeHash('uhC0kkSpFl08_2D0Pvw2vEVEkfSgDVZCkyOf1je6qIdClO1o'),
-        deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI'),
-      ],
-      role_name: 'profiles',
-    });
+    super(null as any, 'profiles-app');
   }
 
-  get myPubKey() {
-    return this.cell.cell_id[1];
+  async myPubKey(): Promise<AgentPubKey> {
+    return deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI');
+  }
+
+  myPubKeySync(): AgentPubKey {
+    return deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI');
   }
 
   create_profile({ nickname }: { nickname: string }): Record {
     const profile = { nickname, fields: {} };
-    this.agents.put(this.myPubKey, profile);
+    this.agents.put(this.myPubKeySync(), profile);
 
     return fakeRecord({
       entry: encode(profile),
@@ -45,7 +43,7 @@ export class ProfilesZomeMock extends CellClient {
   }
 
   get_my_profile() {
-    return this.agents.get(this.myPubKey);
+    return this.agents.get(this.myPubKeySync());
   }
 
   get_agent_profile(agent_address: AgentPubKey) {
@@ -60,14 +58,9 @@ export class ProfilesZomeMock extends CellClient {
       );
   }
 
-  async callZome(
-    zomeName: string,
-    fnName: string,
-    payload: any,
-    timeout?: number
-  ): Promise<any> {
+  async callZome(req: CallZomeRequest): Promise<any> {
     await sleep(this.latency);
-    return (this as any)[fnName](payload);
+    return (this as any)[req.fn_name](req.payload);
   }
   addSignalHandler(signalHandler: AppSignalCb): { unsubscribe: () => void } {
     throw new Error('Method not implemented.');

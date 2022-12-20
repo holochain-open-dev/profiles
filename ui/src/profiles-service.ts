@@ -1,9 +1,8 @@
-import { CellClient } from '@holochain-open-dev/cell-client';
-import { AgentPubKey, Record } from '@holochain/client';
+import { AgentPubKey, Record, AppAgentWebsocket } from '@holochain/client';
 import { Profile } from './types';
 
 export class ProfilesService {
-  constructor(public cellClient: CellClient, public zomeName = 'profiles') {}
+  constructor(public client: AppAgentWebsocket, public zomeName = 'profiles', public roleName = 'profiles') {}
 
   /**
    * Get my profile, if it has been created
@@ -75,6 +74,10 @@ export class ProfilesService {
   }
 
   private callZome(fn_name: string, payload: any) {
-    return this.cellClient.callZome(this.zomeName, fn_name, payload);
+    return this.client.callZome({
+      role_name: this.roleName,
+      zome_name: this.zomeName,
+      fn_name,
+      payload});
   }
 }

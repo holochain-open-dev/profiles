@@ -36,11 +36,7 @@
         ListProfiles,
         ProfilesService
       } from '../dist';
-      import {
-        HolochainClient,
-        CellClient,
-      } from '@holochain-open-dev/cell-client';
-      import { AppWebsocket } from '@holochain/client';
+      import { AppWebsocket, AppAgentClient } from '@holochain/client';
       import {serializeHash} from '@holochain-open-dev/utils';
       import { LitElement, html } from 'lit';
       import { ScopedElementsMixin } from '@open-wc/scoped-elements';
@@ -60,16 +56,9 @@
             `ws://localhost:${process.env.HC_PORT}`
           );
 
-          const appInfo = await appWs.appInfo({
-            installed_app_id: 'test-app',
-          });
-          const cell = appInfo.cell_data.find(c => c.role_id === 'profiles');
+          const client = new AppAgentWebsocket(appWs, 'test-app')
 
-          const client = new HolochainClient(appWs);
-
-          const cellClient = new CellClient(client, cell);
-
-          this.store = new ProfilesStore(new ProfilesService(cellClient), {
+          this.store = new ProfilesStore(new ProfilesService(client, 'profiles', 'profiles'), {
             additionalFields: ['Bio', 'Location'],
           });
           this.loaded = true;

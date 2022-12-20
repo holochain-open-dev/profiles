@@ -9,10 +9,10 @@ const config = {
   avatarMode: "identicon",
   additionalFields: ["Location", "Bio"], // Custom app level profile fields
 };
-const store = new ProfilesStore(new ProfilesService(cellClient), config);
+const store = new ProfilesStore(new ProfilesService(appAgentClient), config);
 ```
 
-> Learn how to setup the `CellClient` object [here](https://www.npmjs.com/package/@holochain-open-dev/cell-client).
+> Learn how to setup the `AppAgentClient` object [here](https://www.npmjs.com/package/@holochain/client).
 
 The config for the `ProfilesStore` has these options:
 
