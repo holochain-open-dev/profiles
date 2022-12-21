@@ -1,8 +1,27 @@
-import { AgentPubKey, Record, AppAgentWebsocket } from '@holochain/client';
+import { AgentPubKey, Record, AppAgentWebsocket, AppAgentCallZomeRequest } from '@holochain/client';
+import { Agent } from 'http';
 import { Profile } from './types';
 
 export class ProfilesService {
+  public myAgentPubKey: AgentPubKey | undefined
   constructor(public client: AppAgentWebsocket, public zomeName = 'profiles', public roleName = 'profiles') {}
+
+
+  /**
+   * Get my agentkey, if it has been created
+   * @returns my AgentPubKey
+   */
+  getMyAgentPubKey(): AgentPubKey {
+    if (this.myAgentPubKey === undefined) {
+      throw 'not initialized'
+    } else {
+      return this.myAgentPubKey
+    }
+  }
+
+  async initialize(): Promise<void> {
+    this.myAgentPubKey = await this.client.myPubKey()
+  }
 
   /**
    * Get my profile, if it has been created
@@ -74,10 +93,13 @@ export class ProfilesService {
   }
 
   private callZome(fn_name: string, payload: any) {
-    return this.client.callZome({
+    // @ts-ignore
+    const req: AppAgentCallZomeRequest = {
       role_name: this.roleName,
       zome_name: this.zomeName,
       fn_name,
-      payload});
+      payload
+    }
+    return this.client.callZome(req);
   }
 }
