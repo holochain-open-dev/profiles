@@ -3,32 +3,60 @@ import {
   deserializeHash,
   fakeRecord,
 } from '@holochain-open-dev/utils';
-import { AgentPubKey, AppAgentWebsocket, AppSignalCb, CallZomeRequest, Record } from '@holochain/client';
+import { AppInfo, InstalledCell } from '@holochain/client';
+import { AgentPubKey, AppAgentClient, AppCreateCloneCellRequest, AppSignalCb, CallZomeRequest, Record } from '@holochain/client';
 import { encode } from '@msgpack/msgpack';
 import { Profile } from './types';
 
 const sleep = (ms: number) => new Promise(r => setTimeout(() => r(null), ms));
 
-export class ProfilesZomeMock extends AppAgentWebsocket {
+//@ts-ignore
+export class ProfilesZomeMock implements AppAgentClient {
 
+  appInfo(): Promise<AppInfo> {
+    throw new Error('Method not implemented.');
+  }
+  createCloneCell(args: AppCreateCloneCellRequest): Promise<InstalledCell> {
+    throw new Error('Method not implemented.');
+  }
+  debug: any;
+  events<Name extends PropertyKey>(eventName: Name | readonly Name[]): AsyncIterableIterator<globalThis.Record<PropertyKey, any>[Name]> {
+    throw new Error('Method not implemented.');
+  }
+ // emit<Name extends PropertyKey>(eventName: Name, eventData: globalThis.Record<PropertyKey, any>[Name]): Promise<void>;
+  emit(eventName: unknown, eventData?: unknown): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+ // emitSerial<Name extends PropertyKey>(eventName: Name, eventData: globalThis.Record<PropertyKey, any>[Name]): Promise<void>;
+  emitSerial(eventName: unknown, eventData?: unknown): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  anyEvent(): AsyncIterableIterator<[PropertyKey, any]> {
+    throw new Error('Method not implemented.');
+  }
+  offAny(listener: (eventName: PropertyKey, eventData: any) => void | Promise<void>): void {
+    throw new Error('Method not implemented.');
+  }
+  clearListeners<Name extends PropertyKey>(eventName?: Name | readonly Name[] | undefined): void {
+    throw new Error('Method not implemented.');
+  }
+  listenerCount<Name extends PropertyKey>(eventName?: Name | readonly Name[] | undefined): number {
+    throw new Error('Method not implemented.');
+  }
+  bindMethods(target: globalThis.Record<string, unknown>, methodNames?: readonly string[] | undefined): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public myPubKey = deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI')
   constructor(
     protected agents: AgentPubKeyMap<Profile> = new AgentPubKeyMap(),
     protected latency: number = 500
   ) {
-    super(null as any, 'profiles-app');
-  }
-
-  async myPubKey(): Promise<AgentPubKey> {
-    return deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI');
-  }
-
-  myPubKeySync(): AgentPubKey {
-    return deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI');
   }
 
   create_profile({ nickname }: { nickname: string }): Record {
     const profile = { nickname, fields: {} };
-    this.agents.put(this.myPubKeySync(), profile);
+    this.agents.put(this.myPubKey, profile);
 
     return fakeRecord({
       entry: encode(profile),
@@ -43,7 +71,7 @@ export class ProfilesZomeMock extends AppAgentWebsocket {
   }
 
   get_my_profile() {
-    return this.agents.get(this.myPubKeySync());
+    return this.agents.get(this.myPubKey);
   }
 
   get_agent_profile(agent_address: AgentPubKey) {
