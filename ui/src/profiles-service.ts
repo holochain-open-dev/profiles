@@ -83,7 +83,6 @@ export class ProfilesService {
   }
 
   private callZome(fn_name: string, payload: any) {
-    // @ts-ignore
     const req: AppAgentCallZomeRequest = {
       role_name: this.roleName,
       zome_name: this.zomeName,
