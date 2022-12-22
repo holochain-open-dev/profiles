@@ -5,11 +5,11 @@
     "ui"
   ],
   "scripts": {
-    "start": "npm run network 2",
-    "network": "hc s clean && npm run build:happ && concurrently-repeat \"npm run start:agent\"",
+    "start": "AGENTS=2 npm run network",
+    "network": "hc s clean && npm run build:happ && concurrently \"npm run build:watch -w ui\" \"npm run launch:happ\" \"npm run playground\"",
     "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run start:happ\"",
     "test": "npm run build:happ && CARGO_TARGET_DIR=target/test cargo test -- --nocapture",
-    "start:happ": "RUST_LOG=warn echo \"pass\" | hc launch --piped ./workdir/happ/profiles-test.happ --ui-path /home/eric/code/metacurrency/holochain/profiles/ui/dist network mdns",
+    "launch:happ": "RUST_LOG=warn echo \"pass\" | hc launch --piped -n $AGENTS ./workdir/happ/profiles-test.happ -w --ui-path ui/dist network mdns",
     "build:happ": "npm run build:dna && hc app pack workdir/happ",
     "build:dna": "npm run build:zome && hc dna pack workdir/dna",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",

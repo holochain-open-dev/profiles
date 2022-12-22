@@ -35,7 +35,7 @@
         SearchAgent,
         ListProfiles,
         ProfilesService
-      } from '../dist';
+      } from '../src';
       import { AppWebsocket, AppAgentClient } from '@holochain/client';
       import {serializeHash} from '@holochain-open-dev/utils';
       import { LitElement, html } from 'lit';
@@ -53,7 +53,7 @@
 
         async firstUpdated() {
           const appWs = await AppWebsocket.connect(
-            `ws://localhost:${process.env.HC_PORT}`
+            undefined // js-client will ignore url in launcher environment
           );
 
           const client = new AppAgentWebsocket(appWs, 'test-app')
