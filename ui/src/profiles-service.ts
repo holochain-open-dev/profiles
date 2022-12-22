@@ -1,5 +1,4 @@
 import { AgentPubKey, Record, AppAgentClient, AppAgentCallZomeRequest } from '@holochain/client';
-import { Agent } from 'http';
 import { Profile } from './types';
 
 export class ProfilesService {

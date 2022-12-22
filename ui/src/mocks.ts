@@ -16,36 +16,6 @@ export class ProfilesZomeMock implements AppAgentClient {
   appInfo(): Promise<AppInfo> {
     throw new Error('Method not implemented.');
   }
-  createCloneCell(args: AppCreateCloneCellRequest): Promise<InstalledCell> {
-    throw new Error('Method not implemented.');
-  }
-  debug: any;
-  events<Name extends PropertyKey>(eventName: Name | readonly Name[]): AsyncIterableIterator<globalThis.Record<PropertyKey, any>[Name]> {
-    throw new Error('Method not implemented.');
-  }
- // emit<Name extends PropertyKey>(eventName: Name, eventData: globalThis.Record<PropertyKey, any>[Name]): Promise<void>;
-  emit(eventName: unknown, eventData?: unknown): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
- // emitSerial<Name extends PropertyKey>(eventName: Name, eventData: globalThis.Record<PropertyKey, any>[Name]): Promise<void>;
-  emitSerial(eventName: unknown, eventData?: unknown): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-  anyEvent(): AsyncIterableIterator<[PropertyKey, any]> {
-    throw new Error('Method not implemented.');
-  }
-  offAny(listener: (eventName: PropertyKey, eventData: any) => void | Promise<void>): void {
-    throw new Error('Method not implemented.');
-  }
-  clearListeners<Name extends PropertyKey>(eventName?: Name | readonly Name[] | undefined): void {
-    throw new Error('Method not implemented.');
-  }
-  listenerCount<Name extends PropertyKey>(eventName?: Name | readonly Name[] | undefined): number {
-    throw new Error('Method not implemented.');
-  }
-  bindMethods(target: globalThis.Record<string, unknown>, methodNames?: readonly string[] | undefined): void {
-    throw new Error('Method not implemented.');
-  }
 
   public myPubKey = deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI')
   constructor(
