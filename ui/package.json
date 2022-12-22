@@ -6,6 +6,10 @@
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holochain-open-dev/profiles.git"
+  },
   "exports": {
     ".": "./dist/index.js",
     "./locales/es-419": "./locales/es-419.js",
