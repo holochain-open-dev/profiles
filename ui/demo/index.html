@@ -55,8 +55,7 @@
           const appWs = await AppWebsocket.connect(
             undefined // js-client will ignore url in launcher environment
           );
-
-          const client = new AppAgentWebsocket(appWs, 'test-app')
+          const client = await AppAgentWebsocket.connect(appWs, 'test-app')
 
           const service = new ProfilesService(client, 'profiles', 'profiles')
 

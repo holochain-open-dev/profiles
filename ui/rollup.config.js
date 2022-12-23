@@ -14,7 +14,7 @@ export default {
     chunkFileNames: '[hash].js',
     assetFileNames: '[hash][extname]',
     format: 'es',
-    dir: 'dist',
+    dir: 'demo/dist',
   },
   preserveEntrySignatures: false,
 
@@ -37,6 +37,7 @@ export default {
     typescript({
       sourceMap: !production,
       inlineSources: !production,
+      outDir: "demo/dist",
     }),
     /** Minify JS */
     production && terser(),
