@@ -3,7 +3,7 @@ manifest_version: "1"
 name: profiles-test
 description: ~
 roles:
-  - name: profiles
+  - name: profiles-test
     provisioning:
       strategy: create
       deferred: false

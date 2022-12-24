@@ -1,8 +1,8 @@
-import { AgentPubKey, Record, AppAgentClient, AppAgentCallZomeRequest } from '@holochain/client';
+import { AgentPubKey, Record, AppAgentClient, AppAgentCallZomeRequest, RoleName } from '@holochain/client';
 import { Profile } from './types';
 
 export class ProfilesService {
-  constructor(public client: AppAgentClient, public zomeName = 'profiles', public roleName = 'profiles') {}
+  constructor(public client: AppAgentClient, public roleName: RoleName, public zomeName = 'profiles') {}
 
 
   /**

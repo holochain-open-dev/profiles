@@ -9,7 +9,7 @@ const config = {
   avatarMode: "identicon",
   additionalFields: ["Location", "Bio"], // Custom app level profile fields
 };
-const store = new ProfilesStore(new ProfilesService(appAgentClient), config);
+const store = new ProfilesStore(new ProfilesService(appAgentClient, 'my-role-name'), config);
 ```
 
 > Learn how to setup the `AppAgentClient` object [here](https://www.npmjs.com/package/@holochain/client).

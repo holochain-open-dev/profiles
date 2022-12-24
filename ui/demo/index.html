@@ -57,7 +57,7 @@
           );
           const client = await AppAgentWebsocket.connect(appWs, 'test-app')
 
-          const service = new ProfilesService(client, 'profiles', 'profiles')
+          const service = new ProfilesService(client, 'profiles-test')
 
           this.store = new ProfilesStore(service, {
             additionalFields: ['Bio', 'Location'],
