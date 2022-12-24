@@ -53,7 +53,7 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 
 ```js
 import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
-import { AppWebsocket, AppAgentClient } from "@holochain/client";
+import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
 
 async function setupProfilesStore() {
   // TODO: change this to the port where holochain is listening,
@@ -63,21 +63,10 @@ async function setupProfilesStore() {
   );
 
   // TODO: change "MY_APP_ID" for the installed_app_id of your application
-  const appInfo = await appWs.appInfo({
-    installed_app_id: <MY_APP_ID>,
-  });
-  // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
-  const cell = appInfo.cell_data.find((c) => c.role_id === <MY_CELL_ROLE>);
+  const client = await AppAgentWebsocket.connect(appWs, '<MY_APP_ID>')
 
-  if (!cell) {
-    throw new Error('There are no cells with the given role id in this app');
-  }
-
-  const client = new HolochainClient(appWs);
-
-  const cellClient = new CellClient(client, cell);
-
-  const profilesStore = new ProfilesStore(new ProfilesService(cellClient), {
+// TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
+  const profilesStore = new ProfilesStore(new ProfilesService(client, '<MY_CELL_ROLE>'), {
     avatarMode: "avatar-optional",
   });
   return profilesStore;

@@ -5,7 +5,7 @@ The `ProfilesService` is a state-less class that provides typings wrapping the z
 ```js
 import { ProfilesService } from '@holochain-open-dev/profiles';
 
-const service = new ProfilesService(cellClient);
+const service = new ProfilesService(client);
 
 service.getMyProfile().then(myProfile => console.log(myProfile));
 ```
