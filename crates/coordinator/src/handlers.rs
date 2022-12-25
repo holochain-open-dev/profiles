@@ -36,7 +36,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         "I haven't created a profile yet".into(),
     )))?;
 
-    let action_hash = update_entry(my_profile.action_address().clone(), &profile)?;
+    let action_hash = update_entry(my_profile.action_address().clone(), EntryTypes::Profile(profile.clone()))?;
 
     let path = prefix_path(profile.nickname.clone())?;
 
@@ -83,7 +83,7 @@ pub fn get_all_profiles() -> ExternResult<Vec<Record>> {
         .map(|path| {
             Ok(GetLinksInput::new(
                 path.path_entry_hash()?.into(),
-                LinkTypes::PathToProfile.try_into_filter()?,
+                LinkTypes::PathToProfile.try_into()?,
                 None,
             ))
         })
@@ -139,7 +139,7 @@ pub fn get_agents_profiles(agent_pub_keys: Vec<AgentPubKey>) -> ExternResult<Vec
         .map(|agent_pub_key| {
             Ok(GetLinksInput::new(
                 agent_pub_key.into(),
-                LinkTypes::AgentToProfile.try_into_filter()?,
+                LinkTypes::AgentToProfile.try_into()?,
                 None,
             ))
         })
