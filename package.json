@@ -21,7 +21,7 @@
   "devDependencies": {
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "@holochain-playground/cli": "^0.0.11",
-    "@rocket/cli": "^0.10.0",
+    "@rocket/cli": "^0.20.4",
     "@rocket/launch": "^0.6.0",
     "@rollup/plugin-commonjs": "18.0.0",
     "@rollup/plugin-replace": "^3.0.1",
