@@ -3,13 +3,13 @@
 The `ProfilesStore` is a JS class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements.
 
 ```js
-import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
+import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const config = {
   avatarMode: "identicon",
   additionalFields: ["Location", "Bio"], // Custom app level profile fields
 };
-const store = new ProfilesStore(new ProfilesService(appAgentClient, 'my-role-name'), config);
+const store = new ProfilesStore(new ProfilesClient(appAgentClient, 'my-role-name'), config);
 ```
 
 > Learn how to setup the `AppAgentClient` object [here](https://www.npmjs.com/package/@holochain/client).

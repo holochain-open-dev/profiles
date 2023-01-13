@@ -34,7 +34,7 @@
         ProfilesContext,
         SearchAgent,
         ListProfiles,
-        ProfilesService
+        ProfilesClient
       } from '../src';
       import { AppWebsocket, AppAgentWebsocket } from '@holochain/client';
       import {serializeHash} from '@holochain-open-dev/utils';
@@ -57,7 +57,7 @@
           );
           const client = await AppAgentWebsocket.connect(appWs, 'test-app')
 
-          const service = new ProfilesService(client, 'profiles-test')
+          const service = new ProfilesClient(client, 'profiles-test')
 
           this.store = new ProfilesStore(service, {
             additionalFields: ['Bio', 'Location'],

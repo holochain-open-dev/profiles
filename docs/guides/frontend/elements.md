@@ -25,10 +25,10 @@ import "@holochain-open-dev/profiles/agent-avatar";
 import "@holochain-open-dev/profiles/profile-prompt";
 import "@holochain-open-dev/profiles/profiles-context";
 import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
-import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
+import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const store = new ProfilesStore(
-  new ProfilesService(
+  new ProfilesClient(
     new ProfilesZomeMock([
       {
         agentPubKey: "uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww",

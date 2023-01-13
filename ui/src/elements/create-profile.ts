@@ -1,15 +1,15 @@
-import { html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-import { contextProvided } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { Card } from '@scoped-elements/material-web';
+import { html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
+import { consume } from "@lit-labs/context";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { Card } from "@scoped-elements/material-web";
 
-import { sharedStyles } from './utils/shared-styles';
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { EditProfile } from './edit-profile';
-import { Profile } from '../types';
-import { localized, msg } from '@lit/localize';
+import { sharedStyles } from "./utils/shared-styles";
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { EditProfile } from "./edit-profile";
+import { Profile } from "../types";
+import { localized, msg } from "@lit/localize";
 
 /**
  * A custom element that fires event on value change.
@@ -25,17 +25,17 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
   /** Private properties */
 
   async createProfile(profile: Profile) {
-    await this.store.createProfile(profile);
+    await this.store.client.createProfile(profile);
 
     this.dispatchEvent(
-      new CustomEvent('profile-created', {
+      new CustomEvent("profile-created", {
         detail: {
           profile,
         },
@@ -52,10 +52,10 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
           <span
             class="title"
             style="margin-bottom: 24px; align-self: flex-start"
-            >${msg('Create Profile')}</span
+            >${msg("Create Profile")}</span
           >
           <edit-profile
-            .saveProfileLabel=${msg('Create Profile')}
+            .saveProfileLabel=${msg("Create Profile")}
             @save-profile=${(e: CustomEvent) =>
               this.createProfile(e.detail.profile)}
           ></edit-profile></div
@@ -68,8 +68,8 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'edit-profile': EditProfile,
-      'mwc-card': Card,
+      "edit-profile": EditProfile,
+      "mwc-card": Card,
     };
   }
   static get styles() {

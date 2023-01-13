@@ -52,7 +52,7 @@ export class ProfilesTest extends ScopedElementsMixin(LitElement) {
 3. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
 
 ```js
-import { ProfilesStore, ProfilesService } from "@holochain-open-dev/profiles";
+import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
 
 async function setupProfilesStore() {
@@ -66,7 +66,7 @@ async function setupProfilesStore() {
   const client = await AppAgentWebsocket.connect(appWs, '<MY_APP_ID>')
 
 // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
-  const profilesStore = new ProfilesStore(new ProfilesService(client, '<MY_CELL_ROLE>'), {
+  const profilesStore = new ProfilesStore(new ProfilesClient(client, '<MY_CELL_ROLE>'), {
     avatarMode: "avatar-optional",
   });
   return profilesStore;

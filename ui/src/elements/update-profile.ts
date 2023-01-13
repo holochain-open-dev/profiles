@@ -1,16 +1,16 @@
-import { html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-import { contextProvided } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { Card, CircularProgress } from '@scoped-elements/material-web';
-import { msg } from '@lit/localize';
-import { TaskSubscriber } from 'lit-svelte-stores';
+import { html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
+import { consume } from "@lit-labs/context";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { Card, CircularProgress } from "@scoped-elements/material-web";
+import { msg } from "@lit/localize";
+import { StoreSubscriber } from "lit-svelte-stores";
 
-import { sharedStyles } from './utils/shared-styles';
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { EditProfile } from './edit-profile';
-import { Profile } from '../types';
+import { sharedStyles } from "./utils/shared-styles";
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { EditProfile } from "./edit-profile";
+import { Profile } from "../types";
 
 /**
  * @element update-profile
@@ -23,23 +23,22 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
   /** Private properties */
 
-  private _myProfileTask = new TaskSubscriber(
+  private _myProfileTask = new StoreSubscriber(
     this,
-    () => this.store.fetchMyProfile(),
-    () => [this.store]
+    () => this.store.myProfile
   );
 
   async updateProfile(profile: Profile) {
-    await this.store.updateProfile(profile);
+    await this.store.client.updateProfile(profile);
 
     this.dispatchEvent(
-      new CustomEvent('profile-updated', {
+      new CustomEvent("profile-updated", {
         detail: {
           profile,
         },
@@ -57,10 +56,10 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
       >
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`,
-      complete: profile => html` <edit-profile
+      complete: (profile) => html` <edit-profile
         allowCancel
         .profile=${profile}
-        .save-profile-label=${msg('Update Profile')}
+        .save-profile-label=${msg("Update Profile")}
         @save-profile=${(e: CustomEvent) =>
           this.updateProfile(e.detail.profile)}
       ></edit-profile>`,
@@ -72,9 +71,9 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-circular-progress': CircularProgress,
-      'edit-profile': EditProfile,
-      'mwc-card': Card,
+      "mwc-circular-progress": CircularProgress,
+      "edit-profile": EditProfile,
+      "mwc-card": Card,
     };
   }
   static get styles() {

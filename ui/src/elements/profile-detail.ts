@@ -1,18 +1,18 @@
-import { contextProvided } from '@lit-labs/context';
-import { AgentPubKey } from '@holochain/client';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement } from 'lit';
-import { TaskSubscriber } from 'lit-svelte-stores';
-import { property } from 'lit/decorators.js';
-import { SlSkeleton } from '@scoped-elements/shoelace';
-import { msg } from '@lit/localize';
-import { hashProperty } from '@holochain-open-dev/elements';
+import { consume } from "@lit-labs/context";
+import { AgentPubKey } from "@holochain/client";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { html, LitElement } from "lit";
+import { TaskSubscriber } from "lit-svelte-stores";
+import { property } from "lit/decorators.js";
+import { SlSkeleton } from "@scoped-elements/shoelace";
+import { msg } from "@lit/localize";
+import { hashProperty } from "@holochain-open-dev/elements";
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { sharedStyles } from './utils/shared-styles';
-import { AgentAvatar } from './agent-avatar';
-import { Profile } from '../types';
+import { profilesStoreContext } from "../context";
+import { ProfilesStore } from "../profiles-store";
+import { sharedStyles } from "./utils/shared-styles";
+import { AgentAvatar } from "./agent-avatar";
+import { Profile } from "../types";
 
 /**
  * @element profile-detail
@@ -23,7 +23,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property(hashProperty('agent-pub-key'))
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
   /** Dependencies */
@@ -32,7 +32,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
@@ -50,7 +50,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
     for (const [key, value] of Object.entries(
       this._agentProfileTask.value!.fields
     )) {
-      if (key !== 'avatar') {
+      if (key !== "avatar") {
         fields[key] = value;
       }
     }
@@ -92,8 +92,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         </div>
 
         ${Object.entries(this.getAdditionalFields()).map(([key, value]) =>
-      this.renderAdditionalField(key, value)
-    )}
+          this.renderAdditionalField(key, value)
+        )}
       </div>
     `;
   }
@@ -116,16 +116,16 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
           </div>
 
           ${this.store.config.additionalFields.map(
-        () => html`
+            () => html`
               <sl-skeleton
                 effect="pulse"
                 style="width: 200px; margin-top: 16px;"
               ></sl-skeleton>
             `
-      )}
+          )}
         </div>
       `,
-      complete: profile => this.renderProfile(profile),
+      complete: (profile) => this.renderProfile(profile),
     });
   }
 
@@ -134,8 +134,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'agent-avatar': AgentAvatar,
-      'sl-skeleton': SlSkeleton,
+      "agent-avatar": AgentAvatar,
+      "sl-skeleton": SlSkeleton,
     };
   }
 

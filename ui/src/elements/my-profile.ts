@@ -1,14 +1,14 @@
-import { contextProvided } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { consume } from "@lit-labs/context";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { html, LitElement } from "lit";
+import { property, state } from "lit/decorators.js";
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { sharedStyles } from './utils/shared-styles';
-import { ProfileDetail } from './profile-detail';
-import { IconButton } from '@scoped-elements/material-web';
-import { UpdateProfile } from './update-profile';
+import { profilesStoreContext } from "../context";
+import { ProfilesStore } from "../profiles-store";
+import { sharedStyles } from "./utils/shared-styles";
+import { ProfileDetail } from "./profile-detail";
+import { IconButton } from "@scoped-elements/material-web";
+import { UpdateProfile } from "./update-profile";
 
 /**
  * @element profile-detail
@@ -20,7 +20,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
@@ -52,9 +52,9 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-icon-button': IconButton,
-      'profile-detail': ProfileDetail,
-      'update-profile': UpdateProfile,
+      "mwc-icon-button": IconButton,
+      "profile-detail": ProfileDetail,
+      "update-profile": UpdateProfile,
     };
   }
 

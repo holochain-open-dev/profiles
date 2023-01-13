@@ -329,7 +329,7 @@
         {
           "kind": "class",
           "description": "",
-          "name": "ProfilesService",
+          "name": "ProfilesClient",
           "members": [
             {
               "kind": "method",
@@ -471,9 +471,9 @@
       "exports": [
         {
           "kind": "js",
-          "name": "ProfilesService",
+          "name": "ProfilesClient",
           "declaration": {
-            "name": "ProfilesService",
+            "name": "ProfilesClient",
             "module": "src/profiles-service.ts"
           }
         }

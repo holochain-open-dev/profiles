@@ -1,11 +1,11 @@
-# Frontend Docs >> ProfilesService ||30
+# Frontend Docs >> ProfilesClient ||30
 
-The `ProfilesService` is a state-less class that provides typings wrapping the zome calls that can be made to `hc_zome_profiles`.
+The `ProfilesClient` is a state-less class that provides typings wrapping the zome calls that can be made to `hc_zome_profiles`.
 
 ```js
-import { ProfilesService } from '@holochain-open-dev/profiles';
+import { ProfilesClient } from '@holochain-open-dev/profiles';
 
-const service = new ProfilesService(client, 'my-role-name');
+const service = new ProfilesClient(client, 'my-role-name');
 
 service.getMyProfile().then(myProfile => console.log(myProfile));
 ```

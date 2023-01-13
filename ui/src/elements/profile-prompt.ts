@@ -1,20 +1,20 @@
-import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { css, html, LitElement } from "lit";
+import { property } from "lit/decorators.js";
 
 import {
   Button,
   CircularProgress,
   TextField,
-} from '@scoped-elements/material-web';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
-import { TaskSubscriber } from 'lit-svelte-stores';
+} from "@scoped-elements/material-web";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { consume } from "@lit-labs/context";
+import { StoreSubscriber } from "lit-svelte-stores";
 
-import { sharedStyles } from './utils/shared-styles';
-import { CreateProfile } from './create-profile';
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { Profile } from '../types';
+import { sharedStyles } from "./utils/shared-styles";
+import { CreateProfile } from "./create-profile";
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { Profile } from "../types";
 
 /**
  * @element profile-prompt
@@ -29,16 +29,15 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
   /** Private properties */
 
-  private _myProfileTask = new TaskSubscriber(
+  private _myProfileTask = new StoreSubscriber(
     this,
-    () => this.store.fetchMyProfile(),
-    () => [this.store]
+    () => this.store.myProfile
   );
 
   renderPrompt(myProfile: Profile | undefined) {
@@ -65,7 +64,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
       >
         <mwc-circular-progress indeterminate></mwc-circular-progress>
       </div>`,
-      complete: profile => this.renderPrompt(profile),
+      complete: (profile) => this.renderPrompt(profile),
     });
   }
 
@@ -74,10 +73,10 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-textfield': TextField,
-      'mwc-button': Button,
-      'mwc-circular-progress': CircularProgress,
-      'create-profile': CreateProfile,
+      "mwc-textfield": TextField,
+      "mwc-button": Button,
+      "mwc-circular-progress": CircularProgress,
+      "create-profile": CreateProfile,
     };
   }
 

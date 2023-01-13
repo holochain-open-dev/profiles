@@ -1,21 +1,20 @@
-import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-
-import { TaskSubscriber } from 'lit-svelte-stores';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
+import { css, html, LitElement } from "lit";
+import { AgentPubKeyMap } from "@holochain-open-dev/utils";
+import { property } from "lit/decorators.js";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { consume } from "@lit-labs/context";
 import {
   CircularProgress,
   ListItem,
   List,
-} from '@scoped-elements/material-web';
+} from "@scoped-elements/material-web";
+import { StoreSubscriber } from "lit-svelte-stores";
 
-import { sharedStyles } from './utils/shared-styles';
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { AgentAvatar } from './agent-avatar';
-import { Profile } from '../types';
-import { AgentPubKeyMap } from '@holochain-open-dev/utils';
+import { sharedStyles } from "./utils/shared-styles";
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { AgentAvatar } from "./agent-avatar";
+import { Profile } from "../types";
 
 /**
  * @element list-profiles
@@ -28,31 +27,30 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
    * `ProfilesStore` that is requested via context.
    * Only set this property if you want to override the store requested via context.
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
+  @consume({ context: profilesStoreContext, subscribe: true })
   @property({ type: Object })
   store!: ProfilesStore;
 
   /** Private properties */
 
-  private _allProfilesTask = new TaskSubscriber(
+  private _allProfiles = new StoreSubscriber(
     this,
-    () => this.store.fetchAllProfiles(),
-    () => [this.store]
+    () => this.store.allProfiles
   );
 
   initials(nickname: string): string {
     return nickname
-      .split(' ')
-      .map(name => name[0])
-      .join('');
+      .split(" ")
+      .map((name) => name[0])
+      .join("");
   }
 
-  fireAgentSelected(index: number) {
-    const agentPubKey = this._allProfilesTask.value?.keys()[index];
+  fireAgentSelected(profiles: AgentPubKeyMap<Profile>, index: number) {
+    const agentPubKey = profiles.keys()[index];
 
     if (agentPubKey) {
       this.dispatchEvent(
-        new CustomEvent('agent-selected', {
+        new CustomEvent("agent-selected", {
           bubbles: true,
           composed: true,
           detail: {
@@ -72,7 +70,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     return html`
       <mwc-list
         style="min-width: 80px; flex: 1;"
-        @selected=${(e: CustomEvent) => this.fireAgentSelected(e.detail.index)}
+        @selected=${(e: CustomEvent) =>
+          this.fireAgentSelected(profiles, e.detail.index)}
       >
         ${profiles.entries().map(
           ([agent_pub_key, profile]) => html`
@@ -92,12 +91,19 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    return this._allProfilesTask.render({
-      pending: () => html`<div class="fill center-content">
-        <mwc-circular-progress indeterminate></mwc-circular-progress>
-      </div>`,
-      complete: profiles => this.renderList(profiles),
-    });
+    switch (this._allProfiles.value.status) {
+      case "pending":
+        return html`<div class="fill center-content">
+          <mwc-circular-progress indeterminate></mwc-circular-progress>
+        </div>`;
+      case "error":
+        return html`<span
+          >There was an error loading the profiles:
+          ${this._allProfiles.value.error}<span></span
+        ></span>`;
+      case "complete":
+        return this.renderList(this._allProfiles.value.value);
+    }
   }
 
   static styles = [
@@ -114,10 +120,10 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'agent-avatar': AgentAvatar,
-      'mwc-circular-progress': CircularProgress,
-      'mwc-list': List,
-      'mwc-list-item': ListItem,
+      "agent-avatar": AgentAvatar,
+      "mwc-circular-progress": CircularProgress,
+      "mwc-list": List,
+      "mwc-list-item": ListItem,
     };
   }
 }
