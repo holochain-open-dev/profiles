@@ -10,7 +10,7 @@ import { contextProvided } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { msg } from '@lit/localize';
 import { isEqual } from 'lodash-es';
-import { AgentPubKeyMap, serializeHash } from '@holochain-open-dev/utils';
+import { AgentPubKeyMap } from '@holochain-open-dev/utils';
 
 import { Profile } from '../types';
 import { sharedStyles } from './utils/shared-styles';

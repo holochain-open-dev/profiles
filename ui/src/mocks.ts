@@ -1,10 +1,10 @@
 import {
   AgentPubKeyMap,
-  deserializeHash,
+  fakeCreateAction,
   fakeRecord,
 } from '@holochain-open-dev/utils';
-import { AppInfo, InstalledCell } from '@holochain/client';
-import { AgentPubKey, AppAgentClient, AppCreateCloneCellRequest, AppSignalCb, CallZomeRequest, Record } from '@holochain/client';
+import { AppInfo } from '@holochain/client';
+import { AgentPubKey, AppAgentClient, AppCreateCloneCellRequest, AppSignalCb, CallZomeRequest, Record, decodeHashFromBase64} from '@holochain/client';
 import { encode } from '@msgpack/msgpack';
 import { Profile } from './types';
 
@@ -17,21 +17,24 @@ export class ProfilesZomeMock implements AppAgentClient {
     throw new Error('Method not implemented.');
   }
 
-  public myPubKey = deserializeHash('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI')
+  public myPubKey = decodeHashFromBase64('uhCAk6oBoqygFqkDreZ0V0bH4R9cTN1OkcEG78OLxVptLWOI')
   constructor(
     protected agents: AgentPubKeyMap<Profile> = new AgentPubKeyMap(),
     protected latency: number = 500
   ) {
   }
 
-  create_profile({ nickname }: { nickname: string }): Record {
+  async create_profile({ nickname }: { nickname: string }): Promise<Record> {
     const profile = { nickname, fields: {} };
     this.agents.put(this.myPubKey, profile);
 
-    return fakeRecord({
-      entry: encode(profile),
-      entry_type: 'App',
-    });
+    return await fakeRecord(
+      {
+        entry: encode(profile),
+        entry_type: 'App',
+      },
+      await fakeCreateAction()
+      );
   }
 
   search_profiles({ nickname_prefix }: { nickname_prefix: string }) {
@@ -52,7 +55,8 @@ export class ProfilesZomeMock implements AppAgentClient {
     return this.agents
       .values()
       .map(profile =>
-        fakeRecord({ entry: encode(profile), entry_type: 'App' })
+        //@ts-ignore
+        fakeRecord({ entry: encode(profile), entry_type: 'App' }, fakeCreateAction())
       );
   }
 
