@@ -29,7 +29,7 @@ export class ProfilesClient {
   ) {
     this.client.on("signal", async (signal) => {
       if (isSignalFromCellWithRole(client, roleName, signal)) {
-        this.emitter.emit("ProfileCreated", signal.data.payload);
+        this.emitter.emit("ProfileCreated", signal.payload);
       }
     });
   }

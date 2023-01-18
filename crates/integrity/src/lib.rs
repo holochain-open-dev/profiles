@@ -31,6 +31,6 @@ pub enum EntryTypes {
 #[hdk_link_types]
 pub enum LinkTypes {
     PrefixPath,
-    PathToProfile,
+    PathToAgent,
     AgentToProfile,
 }

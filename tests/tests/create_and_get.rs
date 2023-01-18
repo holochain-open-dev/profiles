@@ -23,8 +23,12 @@ async fn create_and_get() {
     let alice_zome = alice.zome("profiles");
     let bob_zome = bobbo.zome("profiles");
 
+    let alice_pub_key = alice.agent_pubkey();
+
     // Try to get my profile before creating one. Should return None.
-    let record_1: Option<Record> = conductors[0].call(&alice_zome, "get_my_profile", ()).await;
+    let record_1: Option<Record> = conductors[0]
+        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .await;
     assert_eq!(record_1, None);
 
     // Create profile for alice and try to get it via get_my_profile() as well as get_agent_profile()
@@ -39,7 +43,9 @@ async fn create_and_get() {
 
     consistency_10s([&alice, &bobbo]).await;
 
-    let record_2: Option<Record> = conductors[0].call(&alice_zome, "get_my_profile", ()).await;
+    let record_2: Option<Record> = conductors[0]
+        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .await;
 
     assert_eq!(record_1, record_2.unwrap());
 
@@ -78,8 +84,9 @@ async fn create_and_get() {
     }
 
     // ---> get it from alice's source chain through get_my_profile()
-    let alices_profile_from_source_chain: Option<Record> =
-        conductors[0].call(&alice_zome, "get_my_profile", ()).await;
+    let alices_profile_from_source_chain: Option<Record> = conductors[0]
+        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .await;
 
     if let Some(Record {
         entry: RecordEntry::Present(entry),
@@ -104,7 +111,7 @@ async fn create_and_get() {
         )
         .await;
 
-    let all_profiles: Vec<Record> = conductors[1].call(&bob_zome, "get_all_profiles", ()).await;
+    let all_agents: Vec<AgentPubKey> = conductors[1].call(&bob_zome, "get_all_agents", ()).await;
 
-    assert_eq!(all_profiles.len(), 2);
+    assert_eq!(all_agents.len(), 2);
 }
