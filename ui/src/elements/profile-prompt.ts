@@ -7,6 +7,7 @@ import {
   TextField,
 } from "@scoped-elements/material-web";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { localized, msg } from "@lit/localize";
 import { consume } from "@lit-labs/context";
 import { StoreSubscriber } from "lit-svelte-stores";
 
@@ -20,6 +21,7 @@ import { Profile } from "../types";
  * @element profile-prompt
  * @slot hero - Will be displayed above the create-profile form when the user is prompted with it
  */
+@localized()
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
@@ -35,10 +37,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _myProfileTask = new StoreSubscriber(
-    this,
-    () => this.store.myProfile
-  );
+  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
 
   renderPrompt(myProfile: Profile | undefined) {
     if (myProfile) return html`<slot></slot>`;
@@ -57,15 +56,21 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    return this._myProfileTask.render({
-      pending: () => html` <div
-        class="column"
-        style="align-items: center; justify-content: center; flex: 1;"
-      >
-        <mwc-circular-progress indeterminate></mwc-circular-progress>
-      </div>`,
-      complete: (profile) => this.renderPrompt(profile),
-    });
+    switch (this._myProfile.value.status) {
+      case "pending":
+        return html` <div
+          class="column"
+          style="align-items: center; justify-content: center; flex: 1;"
+        >
+          <mwc-circular-progress indeterminate></mwc-circular-progress>
+        </div>`;
+      case "complete":
+        return this.renderPrompt(this._myProfile.value.value);
+      case "error":
+        return html`<span
+          >${msg("There was an error while fetching your profile")}</span
+        >`;
+    }
   }
 
   /**

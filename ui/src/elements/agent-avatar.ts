@@ -7,12 +7,15 @@ import { styleMap } from "lit-html/directives/style-map.js";
 import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
 import { StoreSubscriber } from "lit-svelte-stores";
 import { AgentPubKey } from "@holochain/client";
+import { Icon } from "@scoped-elements/material-web";
+import { localized } from "@lit/localize";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
 import { sharedStyles } from "./utils/shared-styles";
 import { Profile } from "../types";
 
+@localized()
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 
@@ -38,7 +41,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  private _profileTask = new StoreSubscriber(this, () =>
+  private _agentProfile = new StoreSubscriber(this, () =>
     this.store.agentsProfiles.get(this.agentPubKey)
   );
 
@@ -81,13 +84,20 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     if (this.store.config.avatarMode === "identicon")
       return this.renderIdenticon();
 
-    return this._profileTask.render({
-      complete: (profile) => this.renderProfile(profile),
-      pending: () => html`<sl-skeleton
-        effect="pulse"
-        style="height: ${this.size}px; width: ${this.size}px"
-      ></sl-skeleton>`,
-    });
+    switch (this._agentProfile.value.status) {
+      case "pending":
+        return html`<sl-skeleton
+          effect="pulse"
+          style="height: ${this.size}px; width: ${this.size}px"
+        ></sl-skeleton>`;
+      case "complete":
+        return this.renderProfile(this._agentProfile.value.value);
+      case "error":
+        return html`<mwc-icon
+          style="height: ${this.size}px; width: ${this.size}px"
+          >error</mwc-icon
+        >`;
+    }
   }
 
   /**
@@ -98,6 +108,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       "holo-identicon": HoloIdenticon,
       "sl-avatar": SlAvatar,
       "sl-skeleton": SlSkeleton,
+      "mwc-icon": Icon,
     };
   }
 

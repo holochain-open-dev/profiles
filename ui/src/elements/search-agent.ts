@@ -10,8 +10,6 @@ import {
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { msg } from "@lit/localize";
-import { isEqual } from "lodash-es";
-import { AgentPubKeyMap } from "@holochain-open-dev/utils";
 
 import { Profile } from "../types";
 import { sharedStyles } from "./utils/shared-styles";
@@ -114,7 +112,8 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         ></mwc-circular-progress>`;
       case "error":
         return html`<span
-          >Error fetching the agents: ${this.searchProfiles.value.error}</span
+          >${msg("There was an error while fetching the agents:")}
+          ${this.searchProfiles.value.error}</span
         >`;
       case "complete": {
         const agents = this.searchProfiles.value.value;

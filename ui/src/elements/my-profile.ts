@@ -37,7 +37,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.myAgentPubKey}>
+      <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
         <mwc-icon-button
           slot="action"
           icon="edit"

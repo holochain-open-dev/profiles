@@ -2,7 +2,7 @@ import { consume } from "@lit-labs/context";
 import { AgentPubKey } from "@holochain/client";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { TaskSubscriber } from "lit-svelte-stores";
+import { StoreSubscriber, TaskSubscriber } from "lit-svelte-stores";
 import { property } from "lit/decorators.js";
 import { SlSkeleton } from "@scoped-elements/shoelace";
 import { msg } from "@lit/localize";
@@ -38,18 +38,14 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   /** Private properties */
 
-  private _agentProfileTask = new TaskSubscriber(
-    this,
-    () => this.store.fetchAgentProfile(this.agentPubKey),
-    () => [this.store, this.agentPubKey]
+  private _agentProfile = new StoreSubscriber(this, () =>
+    this.store.agentsProfiles.get(this.agentPubKey)
   );
 
-  getAdditionalFields(): Record<string, string> {
+  getAdditionalFields(profile: Profile): Record<string, string> {
     const fields: Record<string, string> = {};
 
-    for (const [key, value] of Object.entries(
-      this._agentProfileTask.value!.fields
-    )) {
+    for (const [key, value] of Object.entries(profile.fields)) {
       if (key !== "avatar") {
         fields[key] = value;
       }
@@ -91,42 +87,50 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
           <slot name="action"></slot>
         </div>
 
-        ${Object.entries(this.getAdditionalFields()).map(([key, value]) =>
-          this.renderAdditionalField(key, value)
+        ${Object.entries(this.getAdditionalFields(profile)).map(
+          ([key, value]) => this.renderAdditionalField(key, value)
         )}
       </div>
     `;
   }
 
   render() {
-    return this._agentProfileTask.render({
-      pending: () => html`
-        <div class="column">
-          <div class="row" style="align-items: center">
-            <sl-skeleton
-              effect="pulse"
-              style="height: 32px; width: 32px; border-radius: 50%;"
-            ></sl-skeleton>
-            <div>
+    switch (this._agentProfile.value.status) {
+      case "pending":
+        return html`
+          <div class="column">
+            <div class="row" style="align-items: center">
               <sl-skeleton
                 effect="pulse"
-                style="width: 122px; margin-left: 8px;"
+                style="height: 32px; width: 32px; border-radius: 50%;"
               ></sl-skeleton>
+              <div>
+                <sl-skeleton
+                  effect="pulse"
+                  style="width: 122px; margin-left: 8px;"
+                ></sl-skeleton>
+              </div>
             </div>
-          </div>
 
-          ${this.store.config.additionalFields.map(
-            () => html`
-              <sl-skeleton
-                effect="pulse"
-                style="width: 200px; margin-top: 16px;"
-              ></sl-skeleton>
-            `
-          )}
-        </div>
-      `,
-      complete: (profile) => this.renderProfile(profile),
-    });
+            ${this.store.config.additionalFields.map(
+              () => html`
+                <sl-skeleton
+                  effect="pulse"
+                  style="width: 200px; margin-top: 16px;"
+                ></sl-skeleton>
+              `
+            )}
+          </div>
+        `;
+      case "complete":
+        return this.renderProfile(this._agentProfile.value.value);
+      case "error":
+        return html`<span
+          >${msg(
+            "There was an error while fetching the profile for this agent"
+          )}</span
+        >`;
+    }
   }
 
   /**

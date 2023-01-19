@@ -36,8 +36,12 @@ export class ProfilesStore {
    *
    * This will get slower as the number of agents in the DHT increases
    */
-  allProfiles = asyncDeriveStore([this.allAgents], ([agentsPubKeys]) =>
-    joinMap(this.agentsProfiles.select(agentsPubKeys))
+  allProfiles = asyncDeriveStore(
+    [this.allAgents],
+    ([agentsPubKeys]) =>
+      joinMap(this.agentsProfiles.select(agentsPubKeys)) as AsyncReadable<
+        ReadHoloHashMap<AgentPubKey, Profile>
+      >
   );
 
   agentsProfiles = new LazyHoloHashMap((agent: AgentPubKey) =>
