@@ -50,7 +50,7 @@ async fn create_and_get() {
             &bob_zome,
             "search_agents",
             SearchProfilesInput {
-                nickname_prefix: "ali".into(),
+                nickname_filter: "ali".into(),
             },
         )
         .await;
@@ -63,7 +63,19 @@ async fn create_and_get() {
             &bob_zome,
             "search_agents",
             SearchProfilesInput {
-                nickname_prefix: "BoB".into(),
+                nickname_filter: "alii".into(),
+            },
+        )
+        .await;
+
+    assert_eq!(agents_searched.len(), 0);
+
+    let agents_searched: Vec<AgentPubKey> = conductors[1]
+        .call(
+            &bob_zome,
+            "search_agents",
+            SearchProfilesInput {
+                nickname_filter: "BoB".into(),
             },
         )
         .await;
@@ -76,7 +88,7 @@ async fn create_and_get() {
             &bob_zome,
             "search_agents",
             SearchProfilesInput {
-                nickname_prefix: "asde".into(),
+                nickname_filter: "asde".into(),
             },
         )
         .await;

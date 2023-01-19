@@ -61,12 +61,12 @@ export class ProfilesClient {
   /**
    * Search profiles that start with nicknamePrefix
    *
-   * @param nicknamePrefix must be of at least 3 characters
+   * @param nicknameFilter must be of at least 3 characters
    * @returns the profiles with the nickname starting with nicknamePrefix
    */
-  async searchAgents(nicknamePrefix: string): Promise<AgentPubKey[]> {
+  async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
     return this.callZome("search_agents", {
-      nickname_prefix: nicknamePrefix,
+      nickname_filter: nicknameFilter,
     });
   }
 

@@ -17,6 +17,7 @@ import { sharedStyles } from "./utils/shared-styles";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
+import { StoreSubscriber } from "lit-svelte-stores";
 
 /**
  * @element search-agent
@@ -56,10 +57,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  /** Private properties */
-
-  private _knownProfiles: AgentPubKeyMap<Profile> = new AgentPubKeyMap();
-
   private get _filteredAgents() {
     const profiles = this._knownProfiles.pickBy(
       (value, key) =>
@@ -77,6 +74,12 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   @state()
   private _currentFilter: string | undefined = undefined;
+
+  searchProfiles = new StoreSubscriber(this, () =>
+    this._currentFilter
+      ? this.store.searchProfiles(this._currentFilter)
+      : undefined
+  );
 
   private _lastSearchedPrefix: string | undefined = undefined;
 
@@ -135,6 +138,8 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       this._overlay.close();
     }
   }
+
+  renderAgentList() {}
 
   render() {
     return html`

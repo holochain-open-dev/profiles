@@ -28,7 +28,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
         path.path_entry_hash()?,
         agent_address.clone(),
         LinkTypes::PathToAgent,
-        profile.nickname.as_bytes().to_vec(),
+        LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
     )?;
     create_link(
         agent_address,
@@ -84,7 +84,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             path.path_entry_hash()?,
             my_pub_key,
             LinkTypes::PathToAgent,
-            profile.nickname.as_bytes().to_vec(),
+            LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
         )?;
     }
 
@@ -99,19 +99,29 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
 /// The nickname prefix must be of at least 3 characters.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchProfilesInput {
-    pub nickname_prefix: String,
+    pub nickname_filter: String,
 }
 /// From a search input of at least 3 characters, returns all the agents whose nickname starts with that prefix.
 #[hdk_extern]
 pub fn search_agents(search_profiles_input: SearchProfilesInput) -> ExternResult<Vec<AgentPubKey>> {
-    if search_profiles_input.nickname_prefix.len() < 3 {
+    if search_profiles_input.nickname_filter.len() < 3 {
         return Err(wasm_error!(WasmErrorInner::Guest(
             "Cannot search with a prefix less than 3 characters".into(),
         )));
     }
 
-    let prefix_path = prefix_path(search_profiles_input.nickname_prefix)?;
-    let links = get_links(prefix_path.path_entry_hash()?, LinkTypes::PathToAgent, None)?;
+    let prefix_path = prefix_path(search_profiles_input.nickname_filter.clone())?;
+    let links = get_links(
+        prefix_path.path_entry_hash()?,
+        LinkTypes::PathToAgent,
+        Some(LinkTag::new(
+            search_profiles_input
+                .nickname_filter
+                .to_lowercase()
+                .as_bytes()
+                .to_vec(),
+        )),
+    )?;
 
     let agents = links
         .into_iter()
