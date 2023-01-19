@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   TextField,
+  CircularProgress,
 } from "@scoped-elements/material-web";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
@@ -18,6 +19,7 @@ import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
 import { StoreSubscriber } from "lit-svelte-stores";
+import { AgentPubKey } from "@holochain/client";
 
 /**
  * @element search-agent
@@ -57,21 +59,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   @property({ type: Object })
   store!: ProfilesStore;
 
-  private get _filteredAgents() {
-    const profiles = this._knownProfiles.pickBy(
-      (value, key) =>
-        !isEqual(key, this.store.client.client.myPubKey) || this.includeMyself
-    );
-
-    return profiles
-      .pickBy((profile, key) =>
-        profile.nickname
-          .toLowerCase()
-          .startsWith(this._currentFilter?.toLowerCase() as string)
-      )
-      .entries();
-  }
-
   @state()
   private _currentFilter: string | undefined = undefined;
 
@@ -80,8 +67,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       ? this.store.searchProfiles(this._currentFilter)
       : undefined
   );
-
-  private _lastSearchedPrefix: string | undefined = undefined;
 
   @query("#textfield")
   private _textField!: TextField;
@@ -92,54 +77,75 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     this.addEventListener("blur", () => this._overlay.close());
   }
 
-  async searchAgents(nicknamePrefix: string): Promise<void> {
-    this._lastSearchedPrefix = nicknamePrefix;
-    const profiles = await this.store.searchProfiles(nicknamePrefix);
-
-    this._knownProfiles = new AgentPubKeyMap([
-      ...this._knownProfiles.entries(),
-      ...profiles.entries(),
-    ]);
-
-    this.requestUpdate();
-  }
-
   onFilterChange() {
     if (this._textField.value.length < 3) return;
 
     this._overlay.show();
 
     this._currentFilter = this._textField.value;
-
-    const filterPrefix = this._currentFilter.slice(0, 3);
-    if (filterPrefix !== this._lastSearchedPrefix) {
-      this.searchAgents(filterPrefix);
-    }
   }
 
-  onUsernameSelected(agent: any) {
-    // If nickname matches agent, user has selected it
-    if (agent) {
-      this.dispatchEvent(
-        new CustomEvent("agent-selected", {
-          detail: {
-            agentPubKey: agent[0],
-          },
-        })
-      );
+  onUsernameSelected([agentPubKey, profile]: [AgentPubKey, Profile]) {
+    this.dispatchEvent(
+      new CustomEvent("agent-selected", {
+        detail: {
+          agentPubKey,
+        },
+      })
+    );
 
-      // If the consumer says so, clear the field
-      if (this.clearOnSelect) {
-        this._textField.value = "";
-        this._currentFilter = undefined;
-      } else {
-        this._textField.value = agent[1].nickname;
+    // If the consumer says so, clear the field
+    if (this.clearOnSelect) {
+      this._textField.value = "";
+      this._currentFilter = undefined;
+    } else {
+      this._textField.value = profile.nickname;
+    }
+    this._overlay.close();
+  }
+
+  renderAgentList() {
+    if (this.searchProfiles.value === undefined) return html``;
+
+    switch (this.searchProfiles.value.status) {
+      case "pending":
+        return html`<mwc-circular-progress
+          indeterminate
+        ></mwc-circular-progress>`;
+      case "error":
+        return html`<span
+          >Error fetching the agents: ${this.searchProfiles.value.error}</span
+        >`;
+      case "complete": {
+        const agents = this.searchProfiles.value.value;
+        if (agents.keys().length === 0)
+          return html`<mwc-list-item
+            >${msg("No agents match the filter")}</mwc-list-item
+          >`;
+
+        return html`
+          <mwc-list
+            style="min-width: 80px;"
+            @selected=${(e: CustomEvent) =>
+              this.onUsernameSelected(agents.entries()[e.detail.index])}
+          >
+            ${agents.entries().map(
+              ([pubkey, profile]) => html` <mwc-list-item
+                graphic="avatar"
+                style="--mdc-list-item-graphic-size: 32px;"
+              >
+                <agent-avatar
+                  slot="graphic"
+                  .agentPubKey=${pubkey}
+                ></agent-avatar>
+                <span style="margin-left: 8px;">${profile.nickname}</span>
+              </mwc-list-item>`
+            )}
+          </mwc-list>
+        `;
       }
-      this._overlay.close();
     }
   }
-
-  renderAgentList() {}
 
   render() {
     return html`
@@ -155,34 +161,9 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
           @focus=${() => this._currentFilter && this._overlay.show()}
         >
         </mwc-textfield>
-        <mwc-menu-surface absolute id="overlay" x="4" y="28">
-          ${this._filteredAgents.length > 0
-            ? html`
-                <mwc-list
-                  style="min-width: 80px;"
-                  @selected=${(e: CustomEvent) =>
-                    this.onUsernameSelected(
-                      this._filteredAgents[e.detail.index]
-                    )}
-                >
-                  ${this._filteredAgents.map(
-                    ([pubkey, profile]) => html` <mwc-list-item
-                      graphic="avatar"
-                      style="--mdc-list-item-graphic-size: 32px;"
-                    >
-                      <agent-avatar
-                        slot="graphic"
-                        .agentPubKey=${pubkey}
-                      ></agent-avatar>
-                      <span style="margin-left: 8px;">${profile.nickname}</span>
-                    </mwc-list-item>`
-                  )}
-                </mwc-list>
-              `
-            : html`<mwc-list-item
-                >${msg("No agents match the filter")}</mwc-list-item
-              >`}
-        </mwc-menu-surface>
+        <mwc-menu-surface id="overlay" absolute x="4" y="28"
+          >${this.renderAgentList()}</mwc-menu-surface
+        >
       </div>
     `;
   }
@@ -211,6 +192,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       "mwc-textfield": TextField,
       "mwc-menu-surface": MenuSurface,
       "mwc-list": List,
+      "mwc-circular-progress": CircularProgress,
       "mwc-list-item": ListItem,
     };
   }
