@@ -26,7 +26,7 @@ export class ProfilesClient {
   ) {
     this.client.on("signal", async (signal) => {
       if (
-        isSignalFromCellWithRole(client, roleName, signal) &&
+        (await isSignalFromCellWithRole(client, roleName, signal)) &&
         zomeName === signal.zome_name
       ) {
         const payload: any = signal.payload;

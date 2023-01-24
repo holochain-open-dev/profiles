@@ -5,21 +5,20 @@ import {
   List,
   ListItem,
   TextField,
-  CircularProgress,
 } from "@scoped-elements/material-web";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
+import { AsyncStatus } from "@holochain-open-dev/stores";
+import { SlSkeleton } from "@scoped-elements/shoelace";
+import { StoreSubscriber } from "lit-svelte-stores";
 
 import { Profile } from "../types";
 import { sharedStyles } from "./utils/shared-styles";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
-import { StoreSubscriber } from "lit-svelte-stores";
-import { AsyncReadable, AsyncStatus } from "@holochain-open-dev/stores";
-import { SlSkeleton } from "@scoped-elements/shoelace";
 
 /**
  * @element search-agent
@@ -108,7 +107,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
     switch (this.searchProfiles.value.status) {
       case "pending":
-        return Array(3).map(
+        return [0, 0, 0].map(
           () => html`<sl-skeleton></sl-skeleton><sl-skeleton> </sl-skeleton>`
         );
       case "error":

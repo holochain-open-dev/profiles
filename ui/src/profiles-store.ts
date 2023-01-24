@@ -1,6 +1,5 @@
 import { LazyHoloHashMap, pickBy, slice } from "@holochain-open-dev/utils";
 import {
-  asyncDerived,
   asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
@@ -10,9 +9,9 @@ import {
 import merge from "lodash-es/merge";
 import { AgentPubKey } from "@holochain/client";
 
-import { ProfilesClient } from "./profiles-client";
-import { Profile } from "./types";
-import { defaultConfig, ProfilesConfig } from "./config";
+import { ProfilesClient } from "./profiles-client.js";
+import { Profile } from "./types.js";
+import { defaultConfig, ProfilesConfig } from "./config.js";
 
 export class ProfilesStore {
   config: ProfilesConfig;
