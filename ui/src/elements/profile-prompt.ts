@@ -68,7 +68,8 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
         return this.renderPrompt(this._myProfile.value.value);
       case "error":
         return html`<span
-          >${msg("There was an error while fetching your profile")}</span
+          >${msg("There was an error while fetching your profile: ")}${this
+            ._myProfile.value.error}</span
         >`;
     }
   }

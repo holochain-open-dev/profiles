@@ -1,9 +1,6 @@
 import {
-  AgentPubKeyMap,
   decodeEntry,
-  EntryRecord,
   isSignalFromCellWithRole,
-  RecordBag,
 } from "@holochain-open-dev/utils";
 import {
   AgentPubKey,
@@ -16,7 +13,7 @@ import Emittery, { UnsubscribeFunction } from "emittery";
 import { Profile } from "./types";
 
 export interface ProfilesEvents {
-  ProfileCreated: Profile;
+  ["profile-created"]: Profile;
 }
 
 export class ProfilesClient {
@@ -28,8 +25,16 @@ export class ProfilesClient {
     public zomeName = "profiles"
   ) {
     this.client.on("signal", async (signal) => {
-      if (isSignalFromCellWithRole(client, roleName, signal)) {
-        this.emitter.emit("ProfileCreated", signal.payload);
+      if (
+        isSignalFromCellWithRole(client, roleName, signal) &&
+        zomeName === signal.zome_name
+      ) {
+        const payload: any = signal.payload;
+        if (payload.type === "EntryCreated" && "Profile" in payload.app_entry)
+          this.emitter.emit(
+            "profile-created",
+            payload.app_entry["Profile"] as Profile
+          );
       }
     });
   }
@@ -45,7 +50,7 @@ export class ProfilesClient {
    * Get the profile for the given agent, if they have created it
    *
    * @param agentPubKey the agent to get the profile for
-   * @returns the profile of the agent
+   * @returns the profile of the agent, if they have created one
    */
   async getAgentProfile(
     agentPubKey: AgentPubKey
@@ -59,10 +64,10 @@ export class ProfilesClient {
   }
 
   /**
-   * Search profiles that start with nicknamePrefix
+   * Search profiles that start with nicknameFilter
    *
    * @param nicknameFilter must be of at least 3 characters
-   * @returns the profiles with the nickname starting with nicknamePrefix
+   * @returns the agents with the nickname starting with nicknameFilter
    */
   async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
     return this.callZome("search_agents", {
@@ -71,9 +76,9 @@ export class ProfilesClient {
   }
 
   /**
-   * Get the profiles for all the agents in the DHT
+   * Get all the agents in the DHT that have created a profile
    *
-   * @returns the profiles for all the agents in the DHT
+   * @returns the agent public keys of all agents that have created a profile
    */
   async getAllAgents(): Promise<AgentPubKey[]> {
     return this.callZome("get_all_agents", null);
@@ -83,7 +88,6 @@ export class ProfilesClient {
    * Create my profile
    *
    * @param profile the profile to create
-   * @returns my profile with my agentPubKey
    */
   async createProfile(profile: Profile): Promise<void> {
     return this.callZome("create_profile", profile);
@@ -93,7 +97,6 @@ export class ProfilesClient {
    * Update my profile
    *
    * @param profile the profile to create
-   * @returns my profile with my agentPubKey
    */
   async updateProfile(profile: Profile): Promise<void> {
     return this.callZome("update_profile", profile);

@@ -10,6 +10,7 @@ import {
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { msg } from "@lit/localize";
+import { AgentPubKey } from "@holochain/client";
 
 import { Profile } from "../types";
 import { sharedStyles } from "./utils/shared-styles";
@@ -17,7 +18,8 @@ import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
 import { StoreSubscriber } from "lit-svelte-stores";
-import { AgentPubKey } from "@holochain/client";
+import { AsyncReadable, AsyncStatus } from "@holochain-open-dev/stores";
+import { SlSkeleton } from "@scoped-elements/shoelace";
 
 /**
  * @element search-agent
@@ -58,13 +60,9 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   store!: ProfilesStore;
 
   @state()
-  private _currentFilter: string | undefined = undefined;
-
-  searchProfiles = new StoreSubscriber(this, () =>
-    this._currentFilter
-      ? this.store.searchProfiles(this._currentFilter)
-      : undefined
-  );
+  searchProfiles:
+    | StoreSubscriber<AsyncStatus<ReadonlyMap<AgentPubKey, Profile>>>
+    | undefined;
 
   @query("#textfield")
   private _textField!: TextField;
@@ -76,11 +74,14 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   onFilterChange() {
-    if (this._textField.value.length < 3) return;
+    if (this._textField.value.length < 3) {
+      this.searchProfiles = undefined;
+      return;
+    }
 
     this._overlay.show();
-
-    this._currentFilter = this._textField.value;
+    const store = this.store.searchProfiles(this._textField.value);
+    this.searchProfiles = new StoreSubscriber(this, () => store);
   }
 
   onUsernameSelected([agentPubKey, profile]: [AgentPubKey, Profile]) {
@@ -95,7 +96,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     // If the consumer says so, clear the field
     if (this.clearOnSelect) {
       this._textField.value = "";
-      this._currentFilter = undefined;
+      this.searchProfiles = undefined;
     } else {
       this._textField.value = profile.nickname;
     }
@@ -103,13 +104,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   renderAgentList() {
-    if (this.searchProfiles.value === undefined) return html``;
+    if (this.searchProfiles === undefined) return html``;
 
     switch (this.searchProfiles.value.status) {
       case "pending":
-        return html`<mwc-circular-progress
-          indeterminate
-        ></mwc-circular-progress>`;
+        return Array(3).map(
+          () => html`<sl-skeleton></sl-skeleton><sl-skeleton> </sl-skeleton>`
+        );
       case "error":
         return html`<span
           >${msg("There was an error while fetching the agents:")}
@@ -117,7 +118,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
         >`;
       case "complete": {
         const agents = this.searchProfiles.value.value;
-        if (agents.keys().length === 0)
+        if (agents.size === 0)
           return html`<mwc-list-item
             >${msg("No agents match the filter")}</mwc-list-item
           >`;
@@ -126,9 +127,11 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
           <mwc-list
             style="min-width: 80px;"
             @selected=${(e: CustomEvent) =>
-              this.onUsernameSelected(agents.entries()[e.detail.index])}
+              this.onUsernameSelected(
+                Array.from(agents.entries())[e.detail.index]
+              )}
           >
-            ${agents.entries().map(
+            ${Array.from(agents.entries()).map(
               ([pubkey, profile]) => html` <mwc-list-item
                 graphic="avatar"
                 style="--mdc-list-item-graphic-size: 32px;"
@@ -157,7 +160,6 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
           .placeholder=${msg("At least 3 chars...")}
           outlined
           @input=${() => this.onFilterChange()}
-          @focus=${() => this._currentFilter && this._overlay.show()}
         >
         </mwc-textfield>
         <mwc-menu-surface id="overlay" absolute x="4" y="28"
@@ -187,11 +189,11 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
+      "sl-skeleton": SlSkeleton,
       "agent-avatar": AgentAvatar,
       "mwc-textfield": TextField,
       "mwc-menu-surface": MenuSurface,
       "mwc-list": List,
-      "mwc-circular-progress": CircularProgress,
       "mwc-list-item": ListItem,
     };
   }

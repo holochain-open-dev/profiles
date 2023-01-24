@@ -22,12 +22,14 @@ pub struct Profile {
     pub fields: BTreeMap<String, String>,
 }
 
+#[derive(Serialize, Deserialize)]
 #[hdk_entry_defs]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
     Profile(Profile),
 }
 
+#[derive(Serialize, Deserialize)]
 #[hdk_link_types]
 pub enum LinkTypes {
     PrefixPath,

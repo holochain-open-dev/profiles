@@ -1,5 +1,6 @@
-import { LazyHoloHashMap, ReadHoloHashMap } from "@holochain-open-dev/utils";
+import { LazyHoloHashMap, pickBy, slice } from "@holochain-open-dev/utils";
 import {
+  asyncDerived,
   asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
@@ -26,10 +27,7 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  allAgents = asyncReadable<AgentPubKey[]>(async (set) => {
-    const allAgents = await this.client.getAllAgents();
-    set(allAgents);
-  });
+  allAgents = lazyLoad(() => this.client.getAllAgents());
 
   /**
    * Fetches the profiles for all agents in the DHT
@@ -39,8 +37,8 @@ export class ProfilesStore {
   allProfiles = asyncDeriveStore(
     [this.allAgents],
     ([agentsPubKeys]) =>
-      joinMap(this.agentsProfiles.select(agentsPubKeys)) as AsyncReadable<
-        ReadHoloHashMap<AgentPubKey, Profile>
+      joinMap(slice(this.agentsProfiles, agentsPubKeys)) as AsyncReadable<
+        ReadonlyMap<AgentPubKey, Profile>
       >
   );
 
@@ -49,8 +47,9 @@ export class ProfilesStore {
       const profile = await this.client.getAgentProfile(agent);
       set(profile);
 
-      return this.client.on("ProfileCreated", (profile) => {
+      return this.client.on("profile-created", (profile) => {
         if (this.client.client.myPubKey.toString() === agent.toString()) {
+          console.log(profile);
           set(profile);
         }
       });
@@ -62,17 +61,17 @@ export class ProfilesStore {
   /**
    * Search the profiles for the agent with nicknames starting with the given nicknamePrefix
    *
-   * @param nicknamePrefix must be of at least 3 characters
-   * @returns the profiles with the nickname starting with nicknamePrefix
+   * @param nicknameFilter must be of at least 3 characters
+   * @returns the profiles with the nickname starting with nicknameFilter
    */
   searchProfiles(
-    nicknamePrefix: string
-  ): AsyncReadable<ReadHoloHashMap<AgentPubKey, Profile>> {
+    nicknameFilter: string
+  ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile>> {
     const searchAgents = lazyLoad(() =>
-      this.client.searchAgents(nicknamePrefix)
+      this.client.searchAgents(nicknameFilter)
     );
     return asyncDeriveStore([searchAgents], ([agentsPubKeys]) =>
-      joinMap(this.agentsProfiles.select(agentsPubKeys))
-    ) as AsyncReadable<ReadHoloHashMap<AgentPubKey, Profile>>;
+      joinMap(slice(this.agentsProfiles, agentsPubKeys))
+    ) as AsyncReadable<ReadonlyMap<AgentPubKey, Profile>>;
   }
 }

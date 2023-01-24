@@ -25,26 +25,24 @@
     "./list-profiles": "./dist/definitions/list-profiles.js",
     "./mocks": "./dist/mocks.js"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
     "build": "rimraf dist && npm run lint && tsc",
     "test": "npm run build && web-test-runner --coverage",
     "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
     "test-watch": "web-test-runner --watch",
-    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore",
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore vite.config.ts",
     "analyze": "cem analyze --litelement --exclude dist",
-    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore",
+    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore,vite.config.ts",
     "localize:extract": "lit-localize extract",
     "localize:build": "lit-localize build"
   },
   "dependencies": {
     "@holochain-open-dev/elements": "^0.1.4",
-    "@holochain-open-dev/stores": "^0.1.6",
-    "@holochain-open-dev/utils": "^0.9.4",
-    "@holochain/client": "^0.11.13",
+    "@holochain-open-dev/stores": "^0.1.7",
+    "@holochain-open-dev/utils": "^0.9.6",
+    "@holochain/client": "^0.11.15",
     "@lit-labs/context": "^0.2.0",
     "@lit/localize": "^0.11.2",
     "@msgpack/msgpack": "^2.7.2",
@@ -80,10 +78,7 @@
     "vite-plugin-checker": "^0.5.3"
   },
   "eslintConfig": {
-    "extends": [
-      "@open-wc/eslint-config",
-      "eslint-config-prettier"
-    ]
+    "extends": ["@open-wc/eslint-config", "eslint-config-prettier"]
   },
   "publishConfig": {
     "access": "public"

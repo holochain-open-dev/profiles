@@ -1,8 +1,9 @@
-import { AgentPubKeyMap, fakeRecord } from "@holochain-open-dev/utils";
+import { AgentPubKeyMap, fakeRecord, pickBy } from "@holochain-open-dev/utils";
 import {
   AppInfo,
   InstalledCell,
   decodeHashFromBase64,
+  fakeAgentPubKey,
 } from "@holochain/client";
 import {
   AgentPubKey,
@@ -31,9 +32,9 @@ export class ProfilesZomeMock implements AppAgentClient {
     protected latency: number = 500
   ) {}
 
-  create_profile({ nickname }: { nickname: string }): Record {
+  async create_profile({ nickname }: { nickname: string }): Promise<Record> {
     const profile = { nickname, fields: {} };
-    this.agents.put(this.myPubKey, profile);
+    this.agents.set(this.myPubKey, profile);
 
     return fakeRecord({
       entry: encode(profile),
@@ -41,9 +42,9 @@ export class ProfilesZomeMock implements AppAgentClient {
     });
   }
 
-  search_profiles({ nickname_prefix }: { nickname_prefix: string }) {
-    return this.agents.pickBy((profile) =>
-      profile.nickname.startsWith(nickname_prefix.slice(0, 3))
+  search_agents({ nickname_filter }: { nickname_filter: string }) {
+    return pickBy(this.agents, (profile) =>
+      profile.nickname.startsWith(nickname_filter.slice(0, 3))
     );
   }
 
@@ -55,19 +56,12 @@ export class ProfilesZomeMock implements AppAgentClient {
     return this.agents.get(agent_address);
   }
 
-  get_all_profiles() {
-    return this.agents
-      .values()
-      .map((profile) =>
-        fakeRecord({ entry: encode(profile), entry_type: "App" })
-      );
+  get_all_agents() {
+    return Array.from(this.agents.keys());
   }
 
   async callZome(req: CallZomeRequest): Promise<any> {
     await sleep(this.latency);
     return (this as any)[req.fn_name](req.payload);
-  }
-  addSignalHandler(signalHandler: AppSignalCb): { unsubscribe: () => void } {
-    throw new Error("Method not implemented.");
   }
 }

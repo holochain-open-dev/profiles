@@ -1,6 +1,5 @@
 import { css, html, LitElement } from "lit";
 import { AgentPubKey } from "@holochain/client";
-import { ReadHoloHashMap } from "@holochain-open-dev/utils";
 import { property } from "lit/decorators.js";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
@@ -60,8 +59,8 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     }
   }
 
-  renderList(profiles: ReadHoloHashMap<AgentPubKey, Profile>) {
-    if (profiles.keys().length === 0)
+  renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
+    if (profiles.size === 0)
       return html`<mwc-list-item
         >There are no created profiles yet</mwc-list-item
       >`;
@@ -70,13 +69,12 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
       <mwc-list
         style="min-width: 80px; flex: 1;"
         @selected=${(e: CustomEvent) =>
-          this.fireAgentSelected(profiles.keys()[e.detail.index])}
+          this.fireAgentSelected(Array.from(profiles.keys())[e.detail.index])}
       >
-        ${profiles.entries().map(
+        ${Array.from(profiles.entries()).map(
           ([agent_pub_key, profile]) => html`
             <mwc-list-item
               graphic="avatar"
-              .value=${agent_pub_key.toString()}
               style="--mdc-list-item-graphic-size: 32px;"
             >
               <agent-avatar slot="graphic" .agentPubKey=${agent_pub_key}>
