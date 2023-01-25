@@ -111,7 +111,9 @@ async fn create_and_get() {
         )
         .await;
 
-    let all_agents: Vec<AgentPubKey> = conductors[1].call(&bob_zome, "get_all_agents", ()).await;
+    let all_agents: Vec<AgentPubKey> = conductors[1]
+        .call(&bob_zome, "get_agents_with_profile", ())
+        .await;
 
     assert_eq!(all_agents.len(), 2);
 }

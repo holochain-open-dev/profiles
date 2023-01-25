@@ -1,4 +1,10 @@
-# Setting Up >> Adding the Frontend ||20
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="Frontend/Setting up the frontend" />
+
+# Seting Up the Frontend
+
+> It's much much easier to set up the frontend by using the [holochain-open-dev template](https://github.com/holochain-open-dev/templates). Only follow this guide if you can't use the template.
 
 > This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
 
@@ -7,16 +13,16 @@
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/profiles  @holochain/client
+npm install @holochain-open-dev/profiles
 ```
 
-Careful! If you are using NPM workspaces (which is the case for the apps generated with the Holochain scaffolding and RAD tools), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the RAD tools:
+Careful! If you are using NPM workspaces (which is the case for the apps generated with the holochain scaffolding tool (`hc scaffold`), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the scaffolding tool:
 
 ```bash
-npm install @holochain-open-dev/profiles @holochain/client -w ui
+npm install @holochain-open-dev/profiles -w ui
 ```
 
-2. [Choose which elements you need](../frontend/elements.md) and import them:
+2. [Choose which elements you need](?path=/docs/frontend-elements-create-profile--docs) and import them:
 
 **If you are developing a web-app SPA** (and not a library of elements):
 
@@ -56,14 +62,7 @@ import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
 
 async function setupProfilesStore() {
-  // TODO: change this to the port where holochain is listening,
-  // or keep `ws://localhost:${process.env.HC_PORT}` if you used the scaffolding tooling to bootstrap the application
-  const appWs = await AppWebsocket.connect(
-    `ws://localhost:${process.env.HC_PORT}`
-  );
-
-  // TODO: change "MY_APP_ID" for the installed_app_id of your application
-  const client = await AppAgentWebsocket.connect(appWs, '<MY_APP_ID>')
+  const client = await AppAgentWebsocket.connect('', '')
 
 // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
   const profilesStore = new ProfilesStore(new ProfilesClient(client, '<MY_CELL_ROLE>'), {
@@ -139,4 +138,4 @@ contextElement.store = store;
 
 You can see a full working example of the UI working in [here](https://github.com/holochain-open-dev/profiles/blob/main/ui/demo/index.html).
 
-That's it! You can spend some time now to take a look at [which elements are available for you to reuse](../frontend/elements.md).
+That's it! You can spend some time now to take a look at [which elements are available for you to reuse](?path=/docs/frontend-elements-create-profile--docs).

@@ -36,6 +36,12 @@ npm install
 npm start
 ```
 
+Or if you want more than 2 agents:
+
+```bash
+AGENTS=3 npm run network
+```
+
 ## Building
 
 ```bash

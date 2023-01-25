@@ -2,8 +2,8 @@ import { consume } from "@lit-labs/context";
 import { AgentPubKey } from "@holochain/client";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { StoreSubscriber, TaskSubscriber } from "lit-svelte-stores";
-import { property } from "lit/decorators.js";
+import { StoreSubscriber } from "lit-svelte-stores";
+import { state, property } from "lit/decorators.js";
 import { SlSkeleton } from "@scoped-elements/shoelace";
 import { msg } from "@lit/localize";
 import { hashProperty } from "@holochain-open-dev/elements";
@@ -13,6 +13,7 @@ import { ProfilesStore } from "../profiles-store";
 import { sharedStyles } from "./utils/shared-styles";
 import { AgentAvatar } from "./agent-avatar";
 import { Profile } from "../types";
+import { camelCase } from "lodash-es";
 
 /**
  * @element profile-detail
@@ -26,20 +27,20 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
+  /**
+   * @internal
+   */
   private _agentProfile = new StoreSubscriber(this, () =>
-    this.store.agentsProfiles.get(this.agentPubKey)
+    this._store.agentsProfiles.get(this.agentPubKey)
   );
 
   getAdditionalFields(profile: Profile): Record<string, string> {
@@ -57,7 +58,13 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   renderAdditionalField(fieldId: string, fieldValue: string) {
     return html`
       <div class="row" style="margin-top: 16px">
-        <span style="margin-right: 16px; "> <strong>${fieldId}</strong></span>
+        <span style="margin-right: 16px; ">
+          <strong
+            >${fieldId.substring(0, 1).toUpperCase()}${fieldId.substring(
+              1
+            )}</strong
+          ></span
+        >
         <span>${fieldValue}</span>
       </div>
     `;
@@ -112,7 +119,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
               </div>
             </div>
 
-            ${this.store.config.additionalFields.map(
+            ${this._store.config.additionalFields.map(
               () => html`
                 <sl-skeleton
                   effect="pulse"

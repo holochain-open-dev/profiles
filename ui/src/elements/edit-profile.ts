@@ -38,26 +38,37 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   @property({ type: Boolean })
   allowCancel = false;
 
   /** Private properties */
 
+  /**
+   * @internal
+   */
   @query("#nickname-field")
   private _nicknameField!: TextField;
 
+  /**
+   * @internal
+   */
   private _existingUsernames: { [key: string]: boolean } = {};
 
+  /**
+   * @internal
+   */
   @query("#avatar-file-picker")
   private _avatarFilePicker!: HTMLInputElement;
 
+  /**
+   * @internal
+   */
   @state()
   private _avatar: string | undefined;
 
@@ -66,7 +77,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
     this._nicknameField.validityTransform = (newValue: string) => {
       this.requestUpdate();
-      if (newValue.length < this.store.config.minNicknameLength) {
+      if (newValue.length < this._store.config.minNicknameLength) {
         this._nicknameField.setCustomValidity(msg(`Nickname is too short`));
         return {
           valid: false,
@@ -102,8 +113,8 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   avatarMode() {
     return (
-      this.store.config.avatarMode === "avatar-required" ||
-      this.store.config.avatarMode === "avatar-optional"
+      this._store.config.avatarMode === "avatar-required" ||
+      this._store.config.avatarMode === "avatar-optional"
     );
   }
 
@@ -146,7 +157,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   shouldSaveButtonBeEnabled() {
     if (!this._nicknameField) return false;
     if (!this._nicknameField.validity.valid) return false;
-    if (this.store.config.avatarMode === "avatar-required" && !this._avatar)
+    if (this._store.config.avatarMode === "avatar-required" && !this._avatar)
       return false;
     if (
       Object.values(this.getAdditionalTextFields()).find(
@@ -258,14 +269,14 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
               .label=${msg("Nickname")}
               .value=${this.profile?.nickname || ""}
               .helper=${msg(
-                str`Min. ${this.store.config.minNicknameLength} characters`
+                str`Min. ${this._store.config.minNicknameLength} characters`
               )}
               @input=${() => this._nicknameField.reportValidity()}
               style="margin-left: 8px;"
             ></mwc-textfield>
           </div>
 
-          ${this.store.config.additionalFields.map((field) =>
+          ${this._store.config.additionalFields.map((field) =>
             this.renderField(field)
           )}
 

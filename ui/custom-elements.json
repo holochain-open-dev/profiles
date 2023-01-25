@@ -170,6 +170,15 @@
       "path": "src/mocks.ts",
       "declarations": [
         {
+          "kind": "function",
+          "name": "demoProfiles",
+          "return": {
+            "type": {
+              "text": "AgentPubKeyMap<Record>"
+            }
+          }
+        },
+        {
           "kind": "class",
           "description": "",
           "name": "ProfilesZomeMock",
@@ -184,9 +193,26 @@
               },
               "parameters": [
                 {
-                  "name": "{ nickname }",
+                  "name": "profile",
                   "type": {
-                    "text": "{ nickname: string }"
+                    "text": "Profile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "update_profile",
+              "return": {
+                "type": {
+                  "text": "Promise<Record>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
                   }
                 }
               ]
@@ -205,10 +231,6 @@
             },
             {
               "kind": "method",
-              "name": "get_my_profile"
-            },
-            {
-              "kind": "method",
               "name": "get_agent_profile",
               "parameters": [
                 {
@@ -221,140 +243,24 @@
             },
             {
               "kind": "method",
-              "name": "get_all_agents"
-            },
-            {
-              "kind": "method",
-              "name": "appInfo",
-              "return": {
-                "type": {
-                  "text": "Promise<AppInfo>"
-                }
-              },
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "createCloneCell",
-              "return": {
-                "type": {
-                  "text": "Promise<ClonedCell>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "_args",
-                  "type": {
-                    "text": "AppCreateCloneCellRequest"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "enableCloneCell",
-              "return": {
-                "type": {
-                  "text": "Promise<EnableCloneCellResponse>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "_args",
-                  "type": {
-                    "text": "EnableCloneCellRequest"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "disableCloneCell",
-              "return": {
-                "type": {
-                  "text": "Promise<DisableCloneCellResponse>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "_args",
-                  "type": {
-                    "text": "DisableCloneCellRequest"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "callZome",
-              "return": {
-                "type": {
-                  "text": "Promise<any>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "req",
-                  "type": {
-                    "text": "CallZomeRequest"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "on",
-              "return": {
-                "type": {
-                  "text": "UnsubscribeFunction"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "_eventName",
-                  "type": {
-                    "text": "Name | readonly Name[]"
-                  }
-                },
-                {
-                  "name": "_listener",
-                  "type": {
-                    "text": "AppSignalCb"
-                  }
-                }
-              ],
-              "inheritedFrom": {
-                "name": "ZomeMock",
-                "module": "src/mocks.ts"
-              }
+              "name": "get_agents_with_profile"
             }
           ],
           "superclass": {
             "name": "ZomeMock",
-            "module": "src/mocks.ts"
+            "package": "@holochain-open-dev/utils"
           }
         }
       ],
       "exports": [
+        {
+          "kind": "js",
+          "name": "demoProfiles",
+          "declaration": {
+            "name": "demoProfiles",
+            "module": "src/mocks.ts"
+          }
+        },
         {
           "kind": "js",
           "name": "ProfilesZomeMock",
@@ -445,7 +351,7 @@
             },
             {
               "kind": "method",
-              "name": "getAllAgents",
+              "name": "getAgentsWithProfile",
               "return": {
                 "type": {
                   "text": ""
@@ -542,7 +448,7 @@
             },
             {
               "kind": "field",
-              "name": "allAgents",
+              "name": "agentsWithProfile",
               "description": "Fetches all the agents that have created a profile in the DHT"
             },
             {
@@ -553,7 +459,7 @@
             {
               "kind": "field",
               "name": "agentsProfiles",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"profile-created\", (profile) => {\n        if (this.client.client.myPubKey.toString() === agent.toString()) {\n          console.log(profile);\n          set(profile);\n        }\n      });\n    })\n  )"
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"profile-created\", (profile) => {\n        if (this.client.client.myPubKey.toString() === agent.toString()) {\n          set(profile);\n        }\n      });\n    })\n  )"
             },
             {
               "kind": "field",
@@ -637,18 +543,6 @@
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
               }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "AgentAvatar",
-                "module": "src/elements/agent-avatar.ts"
-              }
             }
           ],
           "members": [
@@ -681,22 +575,9 @@
             },
             {
               "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "AgentAvatar",
-                "module": "src/elements/agent-avatar.ts"
-              }
-            },
-            {
-              "kind": "field",
               "name": "_agentProfile",
               "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsProfiles.get(this.agentPubKey)\n  )",
+              "default": "new StoreSubscriber(this, () =>\n    this._store.agentsProfiles.get(this.agentPubKey)\n  )",
               "inheritedFrom": {
                 "name": "AgentAvatar",
                 "module": "src/elements/agent-avatar.ts"
@@ -754,34 +635,7 @@
           },
           "tagName": "create-profile",
           "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "CreateProfile",
-                "module": "src/elements/create-profile.ts"
-              }
-            }
-          ],
           "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "CreateProfile",
-                "module": "src/elements/create-profile.ts"
-              }
-            },
             {
               "kind": "method",
               "name": "createProfile",
@@ -840,45 +694,7 @@
           },
           "tagName": "list-profiles",
           "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "ListProfiles",
-                "module": "src/elements/list-profiles.ts"
-              }
-            }
-          ],
           "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "ListProfiles",
-                "module": "src/elements/list-profiles.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_allProfiles",
-              "privacy": "private",
-              "default": "new StoreSubscriber(\n    this,\n    () => this.store.allProfiles\n  )",
-              "description": "Private properties",
-              "inheritedFrom": {
-                "name": "ListProfiles",
-                "module": "src/elements/list-profiles.ts"
-              }
-            },
             {
               "kind": "method",
               "name": "initials",
@@ -939,7 +755,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }",
+              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }",
               "inheritedFrom": {
                 "name": "ListProfiles",
                 "module": "src/elements/list-profiles.ts"
@@ -972,50 +788,7 @@
             "module": "/src/elements/my-profile"
           },
           "tagName": "my-profile",
-          "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "MyProfile",
-                "module": "src/elements/my-profile.ts"
-              }
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "MyProfile",
-                "module": "src/elements/my-profile.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_editing",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Private properties",
-              "inheritedFrom": {
-                "name": "MyProfile",
-                "module": "src/elements/my-profile.ts"
-              }
-            }
-          ]
+          "customElement": true
         }
       ],
       "exports": [
@@ -1055,18 +828,6 @@
                 "name": "ProfileDetail",
                 "module": "src/elements/profile-detail.ts"
               }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "ProfileDetail",
-                "module": "src/elements/profile-detail.ts"
-              }
             }
           ],
           "members": [
@@ -1078,30 +839,6 @@
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "attribute": "agentPubKey",
-              "inheritedFrom": {
-                "name": "ProfileDetail",
-                "module": "src/elements/profile-detail.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "ProfileDetail",
-                "module": "src/elements/profile-detail.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_agentProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsProfiles.get(this.agentPubKey)\n  )",
-              "description": "Private properties",
               "inheritedFrom": {
                 "name": "ProfileDetail",
                 "module": "src/elements/profile-detail.ts"
@@ -1194,45 +931,7 @@
           },
           "tagName": "profile-prompt",
           "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "ProfilePrompt",
-                "module": "src/elements/profile-prompt.ts"
-              }
-            }
-          ],
           "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "ProfilePrompt",
-                "module": "src/elements/profile-prompt.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_myProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () => this.store.myProfile)",
-              "description": "Private properties",
-              "inheritedFrom": {
-                "name": "ProfilePrompt",
-                "module": "src/elements/profile-prompt.ts"
-              }
-            },
             {
               "kind": "method",
               "name": "renderPrompt",
@@ -1363,23 +1062,11 @@
             {
               "name": "field-label",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
               "description": "Label for the agent searching field.",
               "fieldName": "fieldLabel",
               "attribute": "field-label",
-              "inheritedFrom": {
-                "name": "SearchAgent",
-                "module": "src/elements/search-agent.ts"
-              }
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
               "inheritedFrom": {
                 "name": "SearchAgent",
                 "module": "src/elements/search-agent.ts"
@@ -1419,58 +1106,10 @@
               "kind": "field",
               "name": "fieldLabel",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
               "description": "Label for the agent searching field.",
               "attribute": "field-label",
-              "inheritedFrom": {
-                "name": "SearchAgent",
-                "module": "src/elements/search-agent.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "SearchAgent",
-                "module": "src/elements/search-agent.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "searchProfiles",
-              "type": {
-                "text": "| StoreSubscriber<AsyncStatus<ReadonlyMap<AgentPubKey, Profile>>>\n    | undefined"
-              },
-              "inheritedFrom": {
-                "name": "SearchAgent",
-                "module": "src/elements/search-agent.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_textField",
-              "type": {
-                "text": "TextField"
-              },
-              "privacy": "private",
-              "inheritedFrom": {
-                "name": "SearchAgent",
-                "module": "src/elements/search-agent.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_overlay",
-              "type": {
-                "text": "MenuSurface"
-              },
-              "privacy": "private",
               "inheritedFrom": {
                 "name": "SearchAgent",
                 "module": "src/elements/search-agent.ts"
@@ -1515,7 +1154,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: Uint8Array }",
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }",
               "inheritedFrom": {
                 "name": "SearchAgent",
                 "module": "src/elements/search-agent.ts"
@@ -1549,45 +1188,7 @@
           },
           "tagName": "update-profile",
           "customElement": true,
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store",
-              "inheritedFrom": {
-                "name": "UpdateProfile",
-                "module": "src/elements/update-profile.ts"
-              }
-            }
-          ],
           "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store",
-              "inheritedFrom": {
-                "name": "UpdateProfile",
-                "module": "src/elements/update-profile.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_myProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () => this.store.myProfile)",
-              "description": "Private properties",
-              "inheritedFrom": {
-                "name": "UpdateProfile",
-                "module": "src/elements/update-profile.ts"
-              }
-            },
             {
               "kind": "method",
               "name": "updateProfile",
@@ -1661,18 +1262,9 @@
             },
             {
               "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
               "name": "_agentProfile",
               "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsProfiles.get(this.agentPubKey)\n  )"
+              "default": "new StoreSubscriber(this, () =>\n    this._store.agentsProfiles.get(this.agentPubKey)\n  )"
             },
             {
               "kind": "method",
@@ -1708,14 +1300,6 @@
               "default": "32",
               "description": "Size of the avatar image in pixels.",
               "fieldName": "size"
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -1752,15 +1336,6 @@
           "name": "CreateProfile",
           "members": [
             {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
               "kind": "method",
               "name": "createProfile",
               "parameters": [
@@ -1781,16 +1356,6 @@
                 "text": "CustomEvent"
               },
               "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -1847,55 +1412,12 @@
             },
             {
               "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
               "name": "allowCancel",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
               "attribute": "allowCancel"
-            },
-            {
-              "kind": "field",
-              "name": "_nicknameField",
-              "type": {
-                "text": "TextField"
-              },
-              "privacy": "private",
-              "description": "Private properties"
-            },
-            {
-              "kind": "field",
-              "name": "_existingUsernames",
-              "type": {
-                "text": "{ [key: string]: boolean }"
-              },
-              "privacy": "private",
-              "default": "{}"
-            },
-            {
-              "kind": "field",
-              "name": "_avatarFilePicker",
-              "type": {
-                "text": "HTMLInputElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_avatar",
-              "type": {
-                "text": "string | undefined"
-              },
-              "privacy": "private"
             },
             {
               "kind": "method",
@@ -2002,14 +1524,6 @@
               "fieldName": "saveProfileLabel"
             },
             {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
-            },
-            {
               "name": "allowCancel",
               "type": {
                 "text": "boolean"
@@ -2052,22 +1566,6 @@
           "description": "",
           "name": "ListProfiles",
           "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_allProfiles",
-              "privacy": "private",
-              "default": "new StoreSubscriber(\n    this,\n    () => this.store.allProfiles\n  )",
-              "description": "Private properties"
-            },
             {
               "kind": "method",
               "name": "initials",
@@ -2116,17 +1614,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
+              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }"
             }
           ],
           "mixins": [
@@ -2162,37 +1650,7 @@
           "kind": "class",
           "description": "",
           "name": "MyProfile",
-          "members": [
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_editing",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Private properties"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
-            }
-          ],
+          "members": [],
           "mixins": [
             {
               "name": "ScopedElementsMixin",
@@ -2235,22 +1693,6 @@
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "attribute": "agentPubKey"
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_agentProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () =>\n    this.store.agentsProfiles.get(this.agentPubKey)\n  )",
-              "description": "Private properties"
             },
             {
               "kind": "method",
@@ -2308,14 +1750,6 @@
               },
               "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
               "fieldName": "agentPubKey"
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -2359,22 +1793,6 @@
           ],
           "members": [
             {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_myProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () => this.store.myProfile)",
-              "description": "Private properties"
-            },
-            {
               "kind": "method",
               "name": "renderPrompt",
               "parameters": [
@@ -2385,16 +1803,6 @@
                   }
                 }
               ]
-            }
-          ],
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -2500,42 +1908,10 @@
               "kind": "field",
               "name": "fieldLabel",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
               "description": "Label for the agent searching field.",
               "attribute": "field-label"
-            },
-            {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "searchProfiles",
-              "type": {
-                "text": "| StoreSubscriber<AsyncStatus<ReadonlyMap<AgentPubKey, Profile>>>\n    | undefined"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "_textField",
-              "type": {
-                "text": "TextField"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_overlay",
-              "type": {
-                "text": "MenuSurface"
-              },
-              "privacy": "private"
             },
             {
               "kind": "method",
@@ -2564,7 +1940,7 @@
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: Uint8Array }"
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }"
             }
           ],
           "attributes": [
@@ -2591,19 +1967,11 @@
             {
               "name": "field-label",
               "type": {
-                "text": "string | undefined"
+                "text": "string"
               },
               "description": "Label for the agent searching field.",
               "fieldName": "fieldLabel",
               "attribute": "field-label"
-            },
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [
@@ -2641,22 +2009,6 @@
           "name": "UpdateProfile",
           "members": [
             {
-              "kind": "field",
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "attribute": "store"
-            },
-            {
-              "kind": "field",
-              "name": "_myProfile",
-              "privacy": "private",
-              "default": "new StoreSubscriber(this, () => this.store.myProfile)",
-              "description": "Private properties"
-            },
-            {
               "kind": "method",
               "name": "updateProfile",
               "parameters": [
@@ -2676,16 +2028,6 @@
                 "text": "CustomEvent"
               },
               "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }"
-            }
-          ],
-          "attributes": [
-            {
-              "name": "store",
-              "type": {
-                "text": "ProfilesStore"
-              },
-              "description": "`ProfilesStore` that is requested via context.\nOnly set this property if you want to override the store requested via context.",
-              "fieldName": "store"
             }
           ],
           "mixins": [

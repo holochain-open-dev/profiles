@@ -26,7 +26,7 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  allAgents = lazyLoad(() => this.client.getAllAgents());
+  agentsWithProfile = lazyLoad(() => this.client.getAgentsWithProfile());
 
   /**
    * Fetches the profiles for all agents in the DHT
@@ -34,7 +34,7 @@ export class ProfilesStore {
    * This will get slower as the number of agents in the DHT increases
    */
   allProfiles = asyncDeriveStore(
-    [this.allAgents],
+    [this.agentsWithProfile],
     ([agentsPubKeys]) =>
       joinMap(slice(this.agentsProfiles, agentsPubKeys)) as AsyncReadable<
         ReadonlyMap<AgentPubKey, Profile>
@@ -48,7 +48,6 @@ export class ProfilesStore {
 
       return this.client.on("profile-created", (profile) => {
         if (this.client.client.myPubKey.toString() === agent.toString()) {
-          console.log(profile);
           set(profile);
         }
       });

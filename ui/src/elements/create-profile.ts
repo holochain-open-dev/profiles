@@ -1,5 +1,5 @@
 import { html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { Card } from "@scoped-elements/material-web";
@@ -19,20 +19,17 @@ import { localized, msg } from "@lit/localize";
  */
 @localized()
 export class CreateProfile extends ScopedElementsMixin(LitElement) {
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
   async createProfile(profile: Profile) {
-    await this.store.client.createProfile(profile);
+    await this._store.client.createProfile(profile);
 
     this.dispatchEvent(
       new CustomEvent("profile-created", {

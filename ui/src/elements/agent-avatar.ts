@@ -2,7 +2,7 @@ import { consume } from "@lit-labs/context";
 import { HoloIdenticon, hashProperty } from "@holochain-open-dev/elements";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { css, html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { state, property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
 import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
 import { StoreSubscriber } from "lit-svelte-stores";
@@ -34,15 +34,14 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   private _agentProfile = new StoreSubscriber(this, () =>
-    this.store.agentsProfiles.get(this.agentPubKey)
+    this._store.agentsProfiles.get(this.agentPubKey)
   );
 
   renderIdenticon() {
@@ -81,7 +80,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this.store.config.avatarMode === "identicon")
+    if (this._store.config.avatarMode === "identicon")
       return this.renderIdenticon();
 
     switch (this._agentProfile.value.status) {

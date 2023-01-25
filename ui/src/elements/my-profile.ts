@@ -1,7 +1,7 @@
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { property, state } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
@@ -17,15 +17,17 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
+  /**
+   * @internal
+   */
   @state()
   private _editing = false;
 
@@ -37,7 +39,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
+      <profile-detail .agentPubKey=${this._store.client.client.myPubKey}>
         <mwc-icon-button
           slot="action"
           icon="edit"

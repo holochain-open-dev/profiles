@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { AgentPubKey } from "@holochain/client";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
 import {
@@ -18,24 +18,24 @@ import { Profile } from "../types";
 
 /**
  * @element list-profiles
- * @fires agent-selected - Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: 'uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU' }
+ * @fires agent-selected - Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }
  */
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
+  /**
+   * @internal
+   */
   private _allProfiles = new StoreSubscriber(
     this,
-    () => this.store.allProfiles
+    () => this._store.allProfiles
   );
 
   initials(nickname: string): string {

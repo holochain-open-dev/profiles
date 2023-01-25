@@ -163,12 +163,9 @@ fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
     }
 }
 
-/// Gets all the profiles that have been created in the network.
-///
-/// Careful! This will not be very performant in large networks.
-/// In the future a cursor type functionality will be added to make this function performant.
+/// Gets all the agents that have created a profile in this DHT.
 #[hdk_extern]
-pub fn get_all_agents(_: ()) -> ExternResult<Vec<AgentPubKey>> {
+pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
     let path = Path::from("all_profiles").typed(LinkTypes::PrefixPath)?;
 
     let children = path.children_paths()?;

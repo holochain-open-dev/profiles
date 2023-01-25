@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 
 import {
   Button,
@@ -23,21 +23,19 @@ import { Profile } from "../types";
  */
 @localized()
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
-  /** Public attributes */
-
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+  /**
+   * @internal
+   */
+  private _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
 
   renderPrompt(myProfile: Profile | undefined) {
     if (myProfile) return html`<slot></slot>`;
@@ -56,6 +54,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
+    console.log(this._myProfile.value);
     switch (this._myProfile.value.status) {
       case "pending":
         return html` <div

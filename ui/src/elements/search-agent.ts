@@ -22,7 +22,7 @@ import { AgentAvatar } from "./agent-avatar";
 
 /**
  * @element search-agent
- * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: Uint8Array }
+ * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
  */
 export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
@@ -46,25 +46,32 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
    * @attr field-label
    */
   @property({ type: String, attribute: "field-label" })
-  fieldLabel: string | undefined;
-
-  /** Dependencies */
+  fieldLabel!: string;
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
-
   @state()
-  searchProfiles:
+  _store!: ProfilesStore;
+
+  /**
+   * @internal
+   */
+  @state()
+  private _searchProfiles:
     | StoreSubscriber<AsyncStatus<ReadonlyMap<AgentPubKey, Profile>>>
     | undefined;
 
+  /**
+   * @internal
+   */
   @query("#textfield")
   private _textField!: TextField;
+
+  /**
+   * @internal
+   */
   @query("#overlay")
   private _overlay!: MenuSurface;
 
@@ -74,13 +81,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
   onFilterChange() {
     if (this._textField.value.length < 3) {
-      this.searchProfiles = undefined;
+      this._searchProfiles = undefined;
       return;
     }
 
     this._overlay.show();
-    const store = this.store.searchProfiles(this._textField.value);
-    this.searchProfiles = new StoreSubscriber(this, () => store);
+    const store = this._store.searchProfiles(this._textField.value);
+    this._searchProfiles = new StoreSubscriber(this, () => store);
   }
 
   onUsernameSelected([agentPubKey, profile]: [AgentPubKey, Profile]) {
@@ -95,7 +102,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     // If the consumer says so, clear the field
     if (this.clearOnSelect) {
       this._textField.value = "";
-      this.searchProfiles = undefined;
+      this._searchProfiles = undefined;
     } else {
       this._textField.value = profile.nickname;
     }
@@ -103,20 +110,30 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   }
 
   renderAgentList() {
-    if (this.searchProfiles === undefined) return html``;
-
-    switch (this.searchProfiles.value.status) {
+    if (this._searchProfiles === undefined) return html``;
+    switch (this._searchProfiles.value.status) {
       case "pending":
         return [0, 0, 0].map(
-          () => html`<sl-skeleton></sl-skeleton><sl-skeleton> </sl-skeleton>`
+          () =>
+            html`<div class="row" style="align-items: center; width: 150px">
+              <sl-skeleton
+                effect="sheen"
+                style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
+              ></sl-skeleton
+              ><sl-skeleton
+                effect="sheen"
+                style="flex: 1; margin: 8px; border-radius: 12px"
+              >
+              </sl-skeleton>
+            </div>`
         );
       case "error":
         return html`<span
           >${msg("There was an error while fetching the agents:")}
-          ${this.searchProfiles.value.error}</span
+          ${this._searchProfiles.value.error}</span
         >`;
       case "complete": {
-        const agents = this.searchProfiles.value.value;
+        const agents = this._searchProfiles.value.value;
         if (agents.size === 0)
           return html`<mwc-list-item
             >${msg("No agents match the filter")}</mwc-list-item

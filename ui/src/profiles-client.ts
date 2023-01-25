@@ -80,8 +80,8 @@ export class ProfilesClient {
    *
    * @returns the agent public keys of all agents that have created a profile
    */
-  async getAllAgents(): Promise<AgentPubKey[]> {
-    return this.callZome("get_all_agents", null);
+  async getAgentsWithProfile(): Promise<AgentPubKey[]> {
+    return this.callZome("get_agents_with_profile", null);
   }
 
   /**

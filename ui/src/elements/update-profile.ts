@@ -1,5 +1,5 @@
 import { html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { state } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { Card, CircularProgress } from "@scoped-elements/material-web";
@@ -18,22 +18,22 @@ import { Profile } from "../types";
  */
 @localized()
 export class UpdateProfile extends ScopedElementsMixin(LitElement) {
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+  /**
+   * @internal
+   */
+  private _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
 
   async updateProfile(profile: Profile) {
-    await this.store.client.updateProfile(profile);
+    await this._store.client.updateProfile(profile);
 
     this.dispatchEvent(
       new CustomEvent("profile-updated", {
