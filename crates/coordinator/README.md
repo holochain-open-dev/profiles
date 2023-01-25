@@ -1,4 +1,4 @@
-# hc_zome_profiles
+# hc_zome_profiles_coordinator
 
 Profiles zome for any Holochain app.
 
