@@ -1,7 +1,6 @@
 import {
   AgentPubKeyMap,
   decodeEntry,
-  fakeCreateAction,
   fakeEntry,
   fakeRecord,
   pickBy,
@@ -13,7 +12,6 @@ import {
   AppAgentClient,
   Record,
 } from "@holochain/client";
-import { encode } from "@msgpack/msgpack";
 import { Profile } from "./types";
 
 export function demoProfiles(): AgentPubKeyMap<Record> {
