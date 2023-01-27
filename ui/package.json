@@ -42,7 +42,7 @@
   "dependencies": {
     "@holochain-open-dev/elements": "^0.2.2",
     "@holochain-open-dev/stores": "^0.1.9",
-    "@holochain-open-dev/utils": "^0.9.9",
+    "@holochain-open-dev/utils": "^0.10.0",
     "@holochain/client": "^0.11.16",
     "@lit-labs/context": "^0.2.0",
     "@lit/localize": "^0.11.2",
