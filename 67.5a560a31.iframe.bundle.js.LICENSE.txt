@@ -1,11 +1,5 @@
 /**
  * @license
- * Copyright 2014 Travis Webb
- * SPDX-License-Identifier: MIT
- */
-
-/**
- * @license
  * Copyright 2016 Google Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -211,16 +205,4 @@
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
- */
-
-/**
- * @license
- * Copyright 2021 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
-/**
- * @license
- * Copyright 2022 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
  */
