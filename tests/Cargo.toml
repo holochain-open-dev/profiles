@@ -6,7 +6,7 @@ version = "0.0.1"
 [dependencies]
 
 [dev-dependencies]
-fixt = "0.0.14"
+fixt = "0.1.0"
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
 holochain = { workspace = true, default-features = false, features = [

@@ -1,21 +1,21 @@
-import { contextProvided } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import {
   Button,
   Fab,
   IconButton,
   TextField,
-} from '@scoped-elements/material-web';
-import { SlAvatar } from '@scoped-elements/shoelace';
-import { html, LitElement } from 'lit';
-import { property, query, state } from 'lit/decorators.js';
-import { localized, msg, str } from '@lit/localize';
+} from "@scoped-elements/material-web";
+import { SlAvatar } from "@scoped-elements/shoelace";
+import { html, LitElement } from "lit";
+import { property, query, state } from "lit/decorators.js";
+import { localized, msg, str } from "@lit/localize";
+import { consume } from "@lit-labs/context";
 
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { Profile } from '../types';
-import { resizeAndExport } from './utils/image';
-import { sharedStyles } from './utils/shared-styles';
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { Profile } from "../types";
+import { resizeAndExport } from "./utils/image";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * @element edit-profile
@@ -32,48 +32,59 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   /**
    * Label for the save profile button.
    */
-  @property({ type: String, attribute: 'save-profile-label' })
+  @property({ type: String, attribute: "save-profile-label" })
   saveProfileLabel: string | undefined;
 
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @consume({ context: profilesStoreContext, subscribe: true })
+  @state()
+  _store!: ProfilesStore;
 
   @property({ type: Boolean })
   allowCancel = false;
 
   /** Private properties */
 
-  @query('#nickname-field')
+  /**
+   * @internal
+   */
+  @query("#nickname-field")
   private _nicknameField!: TextField;
 
+  /**
+   * @internal
+   */
   private _existingUsernames: { [key: string]: boolean } = {};
 
-  @query('#avatar-file-picker')
+  /**
+   * @internal
+   */
+  @query("#avatar-file-picker")
   private _avatarFilePicker!: HTMLInputElement;
 
+  /**
+   * @internal
+   */
   @state()
   private _avatar: string | undefined;
 
   firstUpdated() {
-    this._avatar = this.profile?.fields['avatar'];
+    this._avatar = this.profile?.fields["avatar"];
 
     this._nicknameField.validityTransform = (newValue: string) => {
       this.requestUpdate();
-      if (newValue.length < this.store.config.minNicknameLength) {
+      if (newValue.length < this._store.config.minNicknameLength) {
         this._nicknameField.setCustomValidity(msg(`Nickname is too short`));
         return {
           valid: false,
         };
       } else if (this._existingUsernames[newValue]) {
         this._nicknameField.setCustomValidity(
-          msg('This nickname already exists')
+          msg("This nickname already exists")
         );
         return { valid: false };
       }
@@ -87,12 +98,12 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   onAvatarUploaded() {
     if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
       const reader = new FileReader();
-      reader.onload = e => {
+      reader.onload = (e) => {
         const img = new Image();
-        img.crossOrigin = 'anonymous';
+        img.crossOrigin = "anonymous";
         img.onload = () => {
           this._avatar = resizeAndExport(img);
-          this._avatarFilePicker.value = '';
+          this._avatarFilePicker.value = "";
         };
         img.src = e.target?.result as string;
       };
@@ -102,8 +113,8 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   avatarMode() {
     return (
-      this.store.config.avatarMode === 'avatar-required' ||
-      this.store.config.avatarMode === 'avatar-optional'
+      this._store.config.avatarMode === "avatar-required" ||
+      this._store.config.avatarMode === "avatar-optional"
     );
   }
 
@@ -127,7 +138,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
                   class="placeholder label"
                   style="cursor: pointer;   text-decoration: underline;"
                   @click=${() => (this._avatar = undefined)}
-                  >${msg('Clear')}</span
+                  >${msg("Clear")}</span
                 >
               </div>
             `
@@ -146,10 +157,12 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   shouldSaveButtonBeEnabled() {
     if (!this._nicknameField) return false;
     if (!this._nicknameField.validity.valid) return false;
-    if (this.store.config.avatarMode === 'avatar-required' && !this._avatar)
+    if (this._store.config.avatarMode === "avatar-required" && !this._avatar)
       return false;
     if (
-      Object.values(this.getAdditionalTextFields()).find(t => !t.validity.valid)
+      Object.values(this.getAdditionalTextFields()).find(
+        (t) => !t.validity.valid
+      )
     )
       return false;
 
@@ -157,7 +170,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   }
 
   textfieldToFieldId(field: TextField): string {
-    return field.id.split('-')[2];
+    return field.id.split("-")[2];
   }
 
   getAdditionalFieldsValues(): Record<string, string> {
@@ -173,8 +186,8 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   getAdditionalTextFields(): Record<string, TextField> {
     const textfields = Array.from(
-      this.shadowRoot!.querySelectorAll('mwc-textfield')
-    ).filter(f => f.id !== 'nickname-field') as TextField[];
+      this.shadowRoot!.querySelectorAll("mwc-textfield")
+    ).filter((f) => f.id !== "nickname-field") as TextField[];
 
     const fields: Record<string, TextField> = {};
     for (const field of textfields) {
@@ -189,7 +202,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
     const fields: Record<string, string> = this.getAdditionalFieldsValues();
     if (this._avatar) {
-      fields['avatar'] = this._avatar;
+      fields["avatar"] = this._avatar;
     }
 
     const profile: Profile = {
@@ -198,7 +211,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     };
 
     this.dispatchEvent(
-      new CustomEvent('save-profile', {
+      new CustomEvent("save-profile", {
         detail: {
           profile,
         },
@@ -210,7 +223,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   fireCancel() {
     this.dispatchEvent(
-      new CustomEvent('cancel-edit-profile', {
+      new CustomEvent("cancel-edit-profile", {
         bubbles: true,
         composed: true,
       })
@@ -224,9 +237,9 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
         outlined
         required
         autoValidate
-        .validationMessage=${msg('This field is required')}
+        .validationMessage=${msg("This field is required")}
         .label=${fieldName}
-        .value=${this.profile?.fields[fieldName] || ''}
+        .value=${this.profile?.fields[fieldName] || ""}
         @input=${() => this.requestUpdate()}
         style="margin-top: 8px;"
       ></mwc-textfield>
@@ -253,39 +266,40 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
             <mwc-textfield
               id="nickname-field"
               outlined
-              .label=${msg('Nickname')}
-              .value=${this.profile?.nickname || ''}
+              .label=${msg("Nickname")}
+              .value=${this.profile?.nickname || ""}
               .helper=${msg(
-                str`Min. ${this.store.config.minNicknameLength} characters`
+                str`Min. ${this._store.config.minNicknameLength} characters`
               )}
               @input=${() => this._nicknameField.reportValidity()}
               style="margin-left: 8px;"
             ></mwc-textfield>
           </div>
 
-          ${this.store.config.additionalFields.map(field =>
+          ${this._store.config.additionalFields.map((field) =>
             this.renderField(field)
           )}
 
 
           <div class="row" style="margin-top: 8px;">
 
-            ${this.allowCancel
-              ? html`
-              <mwc-button
-                style="flex: 1; margin-right: 6px;"
-                .label=${'Cancel'}
-                @click=${() => this.fireCancel()}
-              ></mwc-button>
-              `
-              : html``
+            ${
+              this.allowCancel
+                ? html`
+                    <mwc-button
+                      style="flex: 1; margin-right: 6px;"
+                      .label=${"Cancel"}
+                      @click=${() => this.fireCancel()}
+                    ></mwc-button>
+                  `
+                : html``
             }
 
             <mwc-button
               style="flex: 1;"
               raised
               .disabled=${!this.shouldSaveButtonBeEnabled()}
-              .label=${this.saveProfileLabel ?? msg('Save Profile')}
+              .label=${this.saveProfileLabel ?? msg("Save Profile")}
               @click=${() => this.fireSaveProfile()}
             ></mwc-button>
 
@@ -301,11 +315,11 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-textfield': TextField,
-      'mwc-button': Button,
-      'mwc-fab': Fab,
-      'mwc-icon-button': IconButton,
-      'sl-avatar': SlAvatar,
+      "mwc-textfield": TextField,
+      "mwc-button": Button,
+      "mwc-fab": Fab,
+      "mwc-icon-button": IconButton,
+      "sl-avatar": SlAvatar,
     };
   }
 

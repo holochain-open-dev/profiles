@@ -1,56 +1,52 @@
-import { contextProvided } from '@lit-labs/context';
-import { AgentPubKey } from '@holochain/client';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement } from 'lit';
-import { TaskSubscriber } from 'lit-svelte-stores';
-import { property } from 'lit/decorators.js';
-import { SlSkeleton } from '@scoped-elements/shoelace';
-import { msg } from '@lit/localize';
-import { hashProperty } from '@holochain-open-dev/elements';
+import { consume } from "@lit-labs/context";
+import { AgentPubKey } from "@holochain/client";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { html, LitElement } from "lit";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { state, property } from "lit/decorators.js";
+import { SlSkeleton } from "@scoped-elements/shoelace";
+import { localized, msg } from "@lit/localize";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { sharedStyles } from './utils/shared-styles';
-import { AgentAvatar } from './agent-avatar';
-import { Profile } from '../types';
+import { profilesStoreContext } from "../context";
+import { ProfilesStore } from "../profiles-store";
+import { AgentAvatar } from "./agent-avatar";
+import { Profile } from "../types";
 
 /**
  * @element profile-detail
  */
+@localized()
 export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property(hashProperty('agent-pub-key'))
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @consume({ context: profilesStoreContext, subscribe: true })
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
-  private _agentProfileTask = new TaskSubscriber(
-    this,
-    () => this.store.fetchAgentProfile(this.agentPubKey),
-    () => [this.store, this.agentPubKey]
+  /**
+   * @internal
+   */
+  private _agentProfile = new StoreSubscriber(this, () =>
+    this._store.agentsProfiles.get(this.agentPubKey)
   );
 
-  getAdditionalFields(): Record<string, string> {
+  getAdditionalFields(profile: Profile): Record<string, string> {
     const fields: Record<string, string> = {};
 
-    for (const [key, value] of Object.entries(
-      this._agentProfileTask.value!.fields
-    )) {
-      if (key !== 'avatar') {
+    for (const [key, value] of Object.entries(profile.fields)) {
+      if (key !== "avatar") {
         fields[key] = value;
       }
     }
@@ -61,7 +57,13 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   renderAdditionalField(fieldId: string, fieldValue: string) {
     return html`
       <div class="row" style="margin-top: 16px">
-        <span style="margin-right: 16px; "> <strong>${fieldId}</strong></span>
+        <span style="margin-right: 16px; ">
+          <strong
+            >${fieldId.substring(0, 1).toUpperCase()}${fieldId.substring(
+              1
+            )}</strong
+          ></span
+        >
         <span>${fieldValue}</span>
       </div>
     `;
@@ -91,42 +93,50 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
           <slot name="action"></slot>
         </div>
 
-        ${Object.entries(this.getAdditionalFields()).map(([key, value]) =>
-      this.renderAdditionalField(key, value)
-    )}
+        ${Object.entries(this.getAdditionalFields(profile)).map(
+          ([key, value]) => this.renderAdditionalField(key, value)
+        )}
       </div>
     `;
   }
 
   render() {
-    return this._agentProfileTask.render({
-      pending: () => html`
-        <div class="column">
-          <div class="row" style="align-items: center">
-            <sl-skeleton
-              effect="pulse"
-              style="height: 32px; width: 32px; border-radius: 50%;"
-            ></sl-skeleton>
-            <div>
+    switch (this._agentProfile.value.status) {
+      case "pending":
+        return html`
+          <div class="column">
+            <div class="row" style="align-items: center">
               <sl-skeleton
                 effect="pulse"
-                style="width: 122px; margin-left: 8px;"
+                style="height: 32px; width: 32px; border-radius: 50%;"
               ></sl-skeleton>
+              <div>
+                <sl-skeleton
+                  effect="pulse"
+                  style="width: 122px; margin-left: 8px;"
+                ></sl-skeleton>
+              </div>
             </div>
-          </div>
 
-          ${this.store.config.additionalFields.map(
-        () => html`
-              <sl-skeleton
-                effect="pulse"
-                style="width: 200px; margin-top: 16px;"
-              ></sl-skeleton>
-            `
-      )}
-        </div>
-      `,
-      complete: profile => this.renderProfile(profile),
-    });
+            ${this._store.config.additionalFields.map(
+              () => html`
+                <sl-skeleton
+                  effect="pulse"
+                  style="width: 200px; margin-top: 16px;"
+                ></sl-skeleton>
+              `
+            )}
+          </div>
+        `;
+      case "complete":
+        return this.renderProfile(this._agentProfile.value.value);
+      case "error":
+        return html`<span
+          >${msg(
+            "There was an error while fetching the profile for this agent"
+          )}</span
+        >`;
+    }
   }
 
   /**
@@ -134,8 +144,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'agent-avatar': AgentAvatar,
-      'sl-skeleton': SlSkeleton,
+      "agent-avatar": AgentAvatar,
+      "sl-skeleton": SlSkeleton,
     };
   }
 

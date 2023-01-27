@@ -3,77 +3,326 @@
 //! Profiles zome for any Holochain app.
 //!
 //! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
-//! you can directly include this zome and its integrity counterpart "hc_zome_profiles_integrity" in your DNA.
+//! you can directly include this zome and its integrity counterpart [hc_zome_profiles_integrity](https://docs.rs/hc_zome_profiles_integrity) in your DNA.
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
 use hdk::prelude::*;
-
-mod handlers;
 
 use hc_zome_profiles_integrity::*;
 
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn create_profile(profile: Profile) -> ExternResult<Record> {
-    handlers::create_profile(profile)
+    let agent_info = agent_info()?;
+
+    let action_hash = create_entry(EntryTypes::Profile(profile.clone()))?;
+
+    let path = prefix_path(profile.nickname.clone())?;
+
+    path.ensure()?;
+
+    let agent_address = agent_info.agent_initial_pubkey.clone();
+
+    create_link(
+        path.path_entry_hash()?,
+        agent_address.clone(),
+        LinkTypes::PathToAgent,
+        LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
+    )?;
+    create_link(
+        agent_address,
+        action_hash.clone(),
+        LinkTypes::AgentToProfile,
+        (),
+    )?;
+
+    let record = get(action_hash, GetOptions::default())?
+        .ok_or(wasm_error!(WasmErrorInner::Guest("Unreachable".into())))?;
+
+    Ok(record)
 }
 
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn update_profile(profile: Profile) -> ExternResult<Record> {
-    handlers::update_profile(profile)
+    let previous_profile_record = crate::get_agent_profile(agent_info()?.agent_latest_pubkey)?
+        .ok_or(wasm_error!(WasmErrorInner::Guest(
+            "I haven't created a profile yet".into(),
+        )))?;
+
+    let action_hash = update_entry(previous_profile_record.action_address().clone(), &profile)?;
+    let my_pub_key = agent_info()?.agent_latest_pubkey;
+
+    // If we have changed the nickname, remove the previous nickname link and add a new one
+    let previous_profile: Profile = previous_profile_record
+        .entry()
+        .to_app_option()
+        .map_err(|e| wasm_error!(e))?
+        .ok_or(wasm_error!(WasmErrorInner::Guest(
+            "Previous profile is malformed".to_string()
+        )))?;
+    if previous_profile.nickname.ne(&profile.nickname) {
+        let previous_prefix_path = prefix_path(previous_profile.nickname)?;
+        let links = get_links(
+            previous_prefix_path.path_entry_hash()?,
+            LinkTypes::PathToAgent,
+            None,
+        )?;
+
+        for l in links {
+            if my_pub_key.eq(&AgentPubKey::from(EntryHash::from(l.target))) {
+                delete_link(l.create_link_hash)?;
+            }
+        }
+
+        let path = prefix_path(profile.nickname.clone())?;
+
+        path.ensure()?;
+
+        create_link(
+            path.path_entry_hash()?,
+            my_pub_key,
+            LinkTypes::PathToAgent,
+            LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
+        )?;
+    }
+
+    let record = get(action_hash, GetOptions::default())?
+        .ok_or(wasm_error!(WasmErrorInner::Guest("Unreachable".into())))?;
+
+    Ok(record)
 }
 
-/// Input for the `search_profiles` zome function.
-///
-/// The nickname prefix must be of at least 3 characters.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SearchProfilesInput {
-    pub nickname_prefix: String,
-}
-/// From a search input of at least 3 characters, returns all the agents whose nickname starts with that prefix.
+/// From a nickname filter of at least 3 characters, returns all the agents whose nickname starts with that prefix
+/// Ignores the nickname case, will return upper or lower case nicknames that match
 #[hdk_extern]
-pub fn search_profiles(search_profiles_input: SearchProfilesInput) -> ExternResult<Vec<Record>> {
-    let agent_profiles = handlers::search_profiles(search_profiles_input.nickname_prefix)?;
+pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> {
+    if nickname_filter.len() < 3 {
+        return Err(wasm_error!(WasmErrorInner::Guest(
+            "Cannot search with a prefix less than 3 characters".into(),
+        )));
+    }
 
-    Ok(agent_profiles)
+    let prefix_path = prefix_path(nickname_filter.clone())?;
+    let links = get_links(
+        prefix_path.path_entry_hash()?,
+        LinkTypes::PathToAgent,
+        Some(LinkTag::new(
+            nickname_filter.to_lowercase().as_bytes().to_vec(),
+        )),
+    )?;
+
+    let agents = links
+        .into_iter()
+        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
+        .collect();
+
+    Ok(agents)
 }
 
 /// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
 pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Record>> {
-    let agent_profile = handlers::get_agent_profile(agent_pub_key)?;
+    let links = get_links(agent_pub_key, LinkTypes::AgentToProfile, None)?;
 
-    Ok(agent_profile)
+    if links.len() == 0 {
+        return Ok(None);
+    }
+
+    let link = links[0].clone();
+
+    let profile = get_latest(link.target.into())?;
+
+    Ok(Some(profile))
 }
 
-/// Returns the profiles for the given agents if they have created them.
-///
-/// Use this function if you need to get the profile for multiple agents at the same time,
-/// as it will be more performant than doing multiple `get_agent_profile`.
-#[hdk_extern]
-pub fn get_agents_profiles(agent_pub_keys: Vec<AgentPubKey>) -> ExternResult<Vec<Record>> {
-    let agent_profiles = handlers::get_agents_profiles(agent_pub_keys)?;
+fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
+    let details = get_details(action_hash, GetOptions::default())?.ok_or(wasm_error!(
+        WasmErrorInner::Guest("Profile not found".into())
+    ))?;
 
-    Ok(agent_profiles)
+    match details {
+        Details::Entry(_) => Err(wasm_error!(WasmErrorInner::Guest(
+            "Malformed details".into()
+        ))),
+        Details::Record(element_details) => match element_details.updates.last() {
+            Some(update) => get_latest(update.action_address().clone()),
+            None => Ok(element_details.record),
+        },
+    }
 }
 
-/// Gets the profile for the agent calling this function, if they have created it.
+/// Gets all the agents that have created a profile in this DHT.
 #[hdk_extern]
-pub fn get_my_profile(_: ()) -> ExternResult<Option<Record>> {
-    let agent_profile = handlers::get_my_profile(())?;
+pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
+    let path = Path::from("all_profiles").typed(LinkTypes::PrefixPath)?;
 
-    Ok(agent_profile)
+    let children = path.children_paths()?;
+
+    let get_links_input: Vec<GetLinksInput> = children
+        .into_iter()
+        .map(|path| {
+            Ok(GetLinksInput::new(
+                path.path_entry_hash()?.into(),
+                LinkTypes::PathToAgent.try_into_filter()?,
+                None,
+            ))
+        })
+        .collect::<ExternResult<Vec<GetLinksInput>>>()?;
+
+    let links = HDK
+        .with(|h| h.borrow().get_links(get_links_input))?
+        .into_iter()
+        .flatten()
+        .collect::<Vec<Link>>();
+
+    let agents = links
+        .into_iter()
+        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
+        .collect();
+
+    Ok(agents)
 }
 
-/// Gets all the profiles that have been created in the network.
-///
-/// Careful! This will not be very performant in large networks.
-/// In the future a cursor type functionality will be added to make this function performant.
-#[hdk_extern]
-pub fn get_all_profiles(_: ()) -> ExternResult<Vec<Record>> {
-    let agent_profiles = handlers::get_all_profiles()?;
+/** Helpers*/
 
-    Ok(agent_profiles)
+fn prefix_path(nickname: String) -> ExternResult<TypedPath> {
+    // conver to lowercase for path for ease of search
+    let lower_nickname = nickname.to_lowercase();
+    let (prefix, _) = lower_nickname.as_str().split_at(3);
+
+    Path::from(format!("all_profiles.{}", prefix)).typed(LinkTypes::PrefixPath)
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(tag = "type")]
+pub enum Signal {
+    LinkCreated {
+        action: SignedActionHashed,
+        link_type: LinkTypes,
+    },
+    LinkDeleted {
+        action: SignedActionHashed,
+        link_type: LinkTypes,
+    },
+    EntryCreated {
+        action: SignedActionHashed,
+        app_entry: EntryTypes,
+    },
+    EntryUpdated {
+        action: SignedActionHashed,
+        app_entry: EntryTypes,
+        original_app_entry: EntryTypes,
+    },
+    EntryDeleted {
+        action: SignedActionHashed,
+        original_app_entry: EntryTypes,
+    },
+}
+#[hdk_extern(infallible)]
+pub fn post_commit(committed_actions: Vec<SignedActionHashed>) {
+    for action in committed_actions {
+        if let Err(err) = signal_action(action) {
+            error!("Error signaling new action: {:?}", err);
+        }
+    }
+}
+fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
+    match action.hashed.content.clone() {
+        Action::CreateLink(create_link) => {
+            let link_type = LinkTypes::from_type(create_link.zome_index, create_link.link_type)?
+                .ok_or(wasm_error!(WasmErrorInner::Guest(
+                    "Link type should be exist".to_string()
+                )))?;
+            emit_signal(Signal::LinkCreated { action, link_type })?;
+            Ok(())
+        }
+        Action::DeleteLink(delete_link) => {
+            let record = get(delete_link.link_add_address.clone(), GetOptions::default())?.ok_or(
+                wasm_error!(WasmErrorInner::Guest(
+                    "Create Link should exist".to_string()
+                )),
+            )?;
+            match record.action() {
+                Action::CreateLink(create_link) => {
+                    let link_type =
+                        LinkTypes::from_type(create_link.zome_index, create_link.link_type)?
+                            .ok_or(wasm_error!(WasmErrorInner::Guest(
+                                "Link type should be exist".to_string()
+                            )))?;
+                    emit_signal(Signal::LinkDeleted { action, link_type })?;
+                    Ok(())
+                }
+                _ => {
+                    return Err(wasm_error!(WasmErrorInner::Guest(
+                        "Create Link should exist".to_string()
+                    )));
+                }
+            }
+        }
+        Action::Create(_create) => {
+            let app_entry = get_entry_for_action(&action.hashed.hash)?.ok_or(wasm_error!(
+                WasmErrorInner::Guest("Create should carry an entry".to_string())
+            ))?;
+            emit_signal(Signal::EntryCreated { action, app_entry })?;
+            Ok(())
+        }
+        Action::Update(update) => {
+            let app_entry = get_entry_for_action(&action.hashed.hash)?.ok_or(wasm_error!(
+                WasmErrorInner::Guest("Update should carry an entry".to_string())
+            ))?;
+            let original_app_entry =
+                get_entry_for_action(&update.original_action_address)?.ok_or(wasm_error!(
+                    WasmErrorInner::Guest("Updated action should carry an entry".to_string())
+                ))?;
+            emit_signal(Signal::EntryUpdated {
+                action,
+                app_entry,
+                original_app_entry,
+            })?;
+            Ok(())
+        }
+        Action::Delete(delete) => {
+            let original_app_entry =
+                get_entry_for_action(&delete.deletes_address)?.ok_or(wasm_error!(
+                    WasmErrorInner::Guest("Deleted action should carry an entry".to_string())
+                ))?;
+            emit_signal(Signal::EntryDeleted {
+                action,
+                original_app_entry,
+            })?;
+            Ok(())
+        }
+        _ => Ok(()),
+    }
+}
+fn get_entry_for_action(action_hash: &ActionHash) -> ExternResult<Option<EntryTypes>> {
+    let record = match get_details(action_hash.clone(), GetOptions::default())? {
+        Some(Details::Record(record_details)) => record_details.record,
+        _ => {
+            return Ok(None);
+        }
+    };
+    let entry = match record.entry().as_option() {
+        Some(entry) => entry,
+        None => {
+            return Ok(None);
+        }
+    };
+    let (zome_index, entry_index) = match record.action().entry_type() {
+        Some(EntryType::App(AppEntryDef {
+            zome_index,
+            entry_index,
+            ..
+        })) => (zome_index, entry_index),
+        _ => {
+            return Ok(None);
+        }
+    };
+    Ok(EntryTypes::deserialize_from_type(
+        zome_index.clone(),
+        entry_index.clone(),
+        entry,
+    )?)
 }

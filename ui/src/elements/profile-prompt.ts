@@ -1,45 +1,42 @@
-import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { css, html, LitElement } from "lit";
+import { state } from "lit/decorators.js";
 
 import {
   Button,
   CircularProgress,
+  Icon,
   TextField,
-} from '@scoped-elements/material-web';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { contextProvided } from '@lit-labs/context';
-import { TaskSubscriber } from 'lit-svelte-stores';
+} from "@scoped-elements/material-web";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { localized, msg } from "@lit/localize";
+import { consume } from "@lit-labs/context";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 
-import { sharedStyles } from './utils/shared-styles';
-import { CreateProfile } from './create-profile';
-import { ProfilesStore } from '../profiles-store';
-import { profilesStoreContext } from '../context';
-import { Profile } from '../types';
+import { CreateProfile } from "./create-profile";
+import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context";
+import { Profile } from "../types";
 
 /**
  * @element profile-prompt
  * @slot hero - Will be displayed above the create-profile form when the user is prompted with it
  */
+@localized()
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
-  /** Public attributes */
-
-  /** Dependencies */
-
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @consume({ context: profilesStoreContext, subscribe: true })
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
-  private _myProfileTask = new TaskSubscriber(
-    this,
-    () => this.store.fetchMyProfile(),
-    () => [this.store]
-  );
+  /**
+   * @internal
+   */
+  private _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
 
   renderPrompt(myProfile: Profile | undefined) {
     if (myProfile) return html`<slot></slot>`;
@@ -58,15 +55,21 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    return this._myProfileTask.render({
-      pending: () => html` <div
-        class="column"
-        style="align-items: center; justify-content: center; flex: 1;"
-      >
-        <mwc-circular-progress indeterminate></mwc-circular-progress>
-      </div>`,
-      complete: profile => this.renderPrompt(profile),
-    });
+    switch (this._myProfile.value.status) {
+      case "pending":
+        return html` <div
+          class="column"
+          style="align-items: center; justify-content: center; flex: 1;"
+        >
+          <mwc-circular-progress indeterminate></mwc-circular-progress>
+        </div>`;
+      case "complete":
+        return this.renderPrompt(this._myProfile.value.value);
+      case "error":
+        return html`<display-error
+          .error=${this._myProfile.value.error}
+        ></display-error> `;
+    }
   }
 
   /**
@@ -74,10 +77,11 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-textfield': TextField,
-      'mwc-button': Button,
-      'mwc-circular-progress': CircularProgress,
-      'create-profile': CreateProfile,
+      "mwc-textfield": TextField,
+      "mwc-button": Button,
+      "display-error": DisplayError,
+      "mwc-circular-progress": CircularProgress,
+      "create-profile": CreateProfile,
     };
   }
 

@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 
-use hc_zome_profiles_coordinator::*;
 use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
 use holochain::test_utils::consistency_10s;
@@ -29,10 +28,10 @@ async fn create_and_get() {
         fields: BTreeMap::from([(String::from("avatar"), String::from("aliceavatar"))]),
     };
 
-    let alice_profile: Record = conductors[0]
+    let _alice_profile: Record = conductors[0]
         .call(&alice_zome, "create_profile", profile)
         .await;
-    let bobs_profile: Record = conductors[1]
+    let _bobs_profile: Record = conductors[1]
         .call(
             &bob_zome,
             "create_profile",
@@ -45,41 +44,29 @@ async fn create_and_get() {
 
     consistency_10s([&alice, &bobbo]).await;
 
-    let profiles_searched: Vec<Record> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_profiles",
-            SearchProfilesInput {
-                nickname_prefix: "ali".into(),
-            },
-        )
+    let agents_searched: Vec<AgentPubKey> = conductors[1]
+        .call(&bob_zome, "search_agents", String::from("ali"))
         .await;
 
-    assert_eq!(profiles_searched.len(), 1);
-    assert_eq!(profiles_searched[0], alice_profile);
+    assert_eq!(agents_searched.len(), 1);
+    assert_eq!(agents_searched[0], alice.agent_pubkey().clone());
 
-    let profiles_searched: Vec<Record> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_profiles",
-            SearchProfilesInput {
-                nickname_prefix: "BoB".into(),
-            },
-        )
+    let agents_searched: Vec<AgentPubKey> = conductors[1]
+        .call(&bob_zome, "search_agents", String::from("alii"))
         .await;
 
-    assert_eq!(profiles_searched.len(), 1);
-    assert_eq!(profiles_searched[0], bobs_profile);
+    assert_eq!(agents_searched.len(), 0);
 
-    let profiles_searched: Vec<Record> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_profiles",
-            SearchProfilesInput {
-                nickname_prefix: "asde".into(),
-            },
-        )
+    let agents_searched: Vec<AgentPubKey> = conductors[1]
+        .call(&bob_zome, "search_agents", String::from("BoB"))
         .await;
 
-    assert_eq!(profiles_searched.len(), 0);
+    assert_eq!(agents_searched.len(), 1);
+    assert_eq!(agents_searched[0], bobbo.agent_pubkey().clone());
+
+    let agents_searched: Vec<AgentPubKey> = conductors[1]
+        .call(&bob_zome, "search_agents", String::from("asde"))
+        .await;
+
+    assert_eq!(agents_searched.len(), 0);
 }

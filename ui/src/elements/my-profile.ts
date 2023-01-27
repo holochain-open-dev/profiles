@@ -1,14 +1,14 @@
-import { contextProvided } from '@lit-labs/context';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { consume } from "@lit-labs/context";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { html, LitElement } from "lit";
+import { state } from "lit/decorators.js";
+import { IconButton } from "@scoped-elements/material-web";
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { sharedStyles } from './utils/shared-styles';
-import { ProfileDetail } from './profile-detail';
-import { IconButton } from '@scoped-elements/material-web';
-import { UpdateProfile } from './update-profile';
+import { profilesStoreContext } from "../context";
+import { ProfilesStore } from "../profiles-store";
+import { ProfileDetail } from "./profile-detail";
+import { UpdateProfile } from "./update-profile";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * @element profile-detail
@@ -17,15 +17,17 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @consume({ context: profilesStoreContext, subscribe: true })
+  @state()
+  _store!: ProfilesStore;
 
   /** Private properties */
 
+  /**
+   * @internal
+   */
   @state()
   private _editing = false;
 
@@ -37,7 +39,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.myAgentPubKey}>
+      <profile-detail .agentPubKey=${this._store.client.client.myPubKey}>
         <mwc-icon-button
           slot="action"
           icon="edit"
@@ -52,9 +54,9 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'mwc-icon-button': IconButton,
-      'profile-detail': ProfileDetail,
-      'update-profile': UpdateProfile,
+      "mwc-icon-button": IconButton,
+      "profile-detail": ProfileDetail,
+      "update-profile": UpdateProfile,
     };
   }
 

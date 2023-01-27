@@ -1,38 +1,31 @@
 {
   "name": "@holochain-open-dev/profiles-dev",
   "private": true,
-  "workspaces": [
-    "ui"
-  ],
+  "workspaces": ["ui"],
   "scripts": {
     "start": "AGENTS=2 npm run network",
-    "network": "hc s clean && npm run build:happ && concurrently \"npm run build:watch -w ui\" \"npm run launch:happ\" \"npm run playground\"",
-    "start:agent": "cross-env HC_PORT=$(port) concurrently \"npm run start:happ\"",
+    "network": "hc s clean && npm run build:happ && UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run launch:happ\" \"holochain-playground\"",
     "test": "npm run build:happ && CARGO_TARGET_DIR=target/test cargo test -- --nocapture",
-    "launch:happ": "RUST_LOG=warn echo \"pass\" | WEBKIT_DISABLE_COMPOSITING_MODE=1 hc launch --piped -n $AGENTS ./workdir/happ/profiles-test.happ -w --ui-path ui/demo/dist network mdns",
-    "build:happ": "npm run build:dna && hc app pack workdir/happ",
-    "build:dna": "npm run build:zome && hc dna pack workdir/dna",
+    "launch:happ": "echo \"pass\" | hc launch --piped -n $AGENTS ./workdir/happ/profiles-test.happ --ui-port $UI_PORT network mdns",
+    "build:happ": "npm run build:zome && hc app pack workdir/happ --recursive",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
-    "playground": "run-singleton \"holochain-playground\"",
-    "docs:setup": "npm run -w @holochain-open-dev/profiles build && npm run -w @holochain-open-dev/profiles analyze && cp ui/custom-elements.json docs/_assets/_static",
-    "docs:start": "npm run docs:setup && rocket start",
-    "docs:publish": "npm run docs:setup && rocket build && gh-pages --dotfiles -d ./_site -b gh-pages"
+    "docs:start": "npm run docs:setup && storybook dev -p 6006",
+    "docs:publish": "npm run docs:setup && storybook build && gh-pages -d ./storybook-static -b gh-pages",
+    "docs:setup": "npm run build -w @holochain-open-dev/profiles && npm run analyze -w @holochain-open-dev/profiles"
   },
   "devDependencies": {
-    "@custom-elements-manifest/to-markdown": "^0.1.0",
-    "@holochain-playground/cli": "^0.0.11",
-    "@rocket/cli": "^0.10.0",
-    "@rocket/launch": "^0.6.0",
-    "@rollup/plugin-commonjs": "18.0.0",
-    "@rollup/plugin-replace": "^3.0.1",
-    "@scoped-elements/markdown-renderer": "^0.0.3",
-    "api-viewer-element": "^1.0.0-pre.4",
+    "@holochain-playground/cli": "^0.1.0",
+    "@storybook/addon-essentials": "^7.0.0-beta.33",
+    "@storybook/addon-links": "^7.0.0-beta.33",
+    "@storybook/blocks": "^7.0.0-beta.33",
+    "@storybook/web-components": "^7.0.0-beta.33",
+    "@storybook/web-components-webpack5": "^7.0.0-beta.33",
     "concurrently": "^6.2.1",
-    "concurrently-repeat": "^0.0.1",
-    "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
-    "new-port-cli": "^1.0.0",
-    "run-singleton-cli": "^0.0.7"
+    "lit-html": "^2.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.0.0-beta.33"
   },
   "type": "module"
 }

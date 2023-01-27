@@ -1,199 +1,85 @@
-import { AgentPubKeyMap } from '@holochain-open-dev/utils';
-import merge from 'lodash-es/merge';
-import isEqual from 'lodash-es/isEqual';
-import { writable, Writable, derived, Readable, get } from 'svelte/store';
-import { AgentPubKey } from '@holochain/client';
-import { decode } from '@msgpack/msgpack';
+import { LazyHoloHashMap, pickBy, slice } from "@holochain-open-dev/utils";
+import {
+  asyncDeriveStore,
+  AsyncReadable,
+  asyncReadable,
+  joinMap,
+  lazyLoad,
+} from "@holochain-open-dev/stores";
+import merge from "lodash-es/merge";
+import { AgentPubKey } from "@holochain/client";
 
-import { ProfilesService } from './profiles-service';
-import { Profile } from './types';
-import { defaultConfig, ProfilesConfig } from './config';
+import { ProfilesClient } from "./profiles-client.js";
+import { Profile } from "./types.js";
+import { defaultConfig, ProfilesConfig } from "./config.js";
 
 export class ProfilesStore {
-  /** Private */
-  private _knownProfilesStore: Writable<AgentPubKeyMap<Profile>> = writable(new AgentPubKeyMap());
-
-  /** Static info */
-  public myAgentPubKey: AgentPubKey;
-
   config: ProfilesConfig;
 
   constructor(
-    protected service: ProfilesService,
+    public client: ProfilesClient,
     config: Partial<ProfilesConfig> = {}
   ) {
     this.config = merge(defaultConfig, config);
-    this.myAgentPubKey = service.myPubKey();
   }
 
-  /** Actions */
+  /**
+   * Fetches all the agents that have created a profile in the DHT
+   */
+  agentsWithProfile = asyncReadable<AgentPubKey[]>(async (set) => {
+    const agents = await this.client.getAgentsWithProfile();
+    set(agents);
+
+    return this.client.on("signal", (signal) => {
+      if (signal.type === "EntryCreated") {
+        set([...agents, this.client.client.myPubKey]);
+      }
+    });
+  });
 
   /**
    * Fetches the profiles for all agents in the DHT
    *
-   * Warning! Can be very slow
+   * This will get slower as the number of agents in the DHT increases
    */
-  async fetchAllProfiles(): Promise<Readable<AgentPubKeyMap<Profile>>> {
-    const allProfiles = await this.service.getAllProfiles();
+  allProfiles = asyncDeriveStore(
+    [this.agentsWithProfile],
+    ([agentsPubKeys]) =>
+      joinMap(slice(this.agentsProfiles, agentsPubKeys)) as AsyncReadable<
+        ReadonlyMap<AgentPubKey, Profile>
+      >
+  );
 
-    this._knownProfilesStore.update(profiles => {
-      for (const record of allProfiles) {
-        profiles.put(
-          record.signed_action.hashed.content.author,
-          decode((record.entry as any).Present.entry) as Profile
-        );
-      }
-      return profiles;
-    });
+  agentsProfiles = new LazyHoloHashMap((agent: AgentPubKey) =>
+    asyncReadable<Profile | undefined>(async (set) => {
+      const profile = await this.client.getAgentProfile(agent);
+      set(profile);
 
-    return derived(this._knownProfilesStore, i => i);
-  }
-
-  /**
-   * Fetches the profile for the given agent
-   */
-  async fetchAgentProfile(
-    agentPubKey: AgentPubKey
-  ): Promise<Readable<Profile | undefined>> {
-    // For now, optimistic return of the cached profile
-    // TODO: implement cache invalidation
-    const knownProfiles = get(this._knownProfilesStore);
-
-    if (!knownProfiles.get(agentPubKey)) {
-      const record = await this.service.getAgentProfile(agentPubKey);
-
-      if (record) {
-        this._knownProfilesStore.update(profiles => {
-          profiles.put(
-            record.signed_action.hashed.content.author,
-            decode((record.entry as any).Present.entry) as Profile
-          );
-          return profiles;
-        });
-      }
-    }
-
-    return derived(this._knownProfilesStore, profiles =>
-      profiles.get(agentPubKey)
-    );
-  }
-
-  /**
-   * Fetches the profiles for the given agents in the DHT
-   *
-   * You can subscribe to knowProfiles to get updated with all the profiles when this call is done
-   *
-   * Use this over `fetchAgentProfile` when fetching multiple profiles, as it will be more performant
-   */
-  async fetchAgentsProfiles(
-    agentPubKeys: AgentPubKey[]
-  ): Promise<Readable<AgentPubKeyMap<Profile>>> {
-    // For now, optimistic return of the cached profile
-    // TODO: implement cache invalidation
-
-    const knownProfiles = get(this._knownProfilesStore);
-
-    const profilesToFetch = agentPubKeys.filter(
-      pubKey => !knownProfiles.has(pubKey)
-    );
-
-    if (profilesToFetch.length > 0) {
-      const fetchedProfiles = await this.service.getAgentsProfiles(
-        profilesToFetch
-      );
-
-      this._knownProfilesStore.update(profiles => {
-        for (const fetchedProfile of fetchedProfiles) {
-          profiles.put(
-            fetchedProfile.signed_action.hashed.content.author,
-            decode((fetchedProfile.entry as any).Present.entry) as Profile
-          );
-        }
-        return profiles;
+      return this.client.on("signal", (signal) => {
+        if (this.client.client.myPubKey.toString() !== agent.toString()) return;
+        if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
+          return;
+        set(signal.app_entry);
       });
-    }
+    })
+  );
 
-    return derived(this._knownProfilesStore, knownProfiles =>
-      knownProfiles.pick(a => !!agentPubKeys.find(pubkey => isEqual(pubkey, a)))
-    );
-  }
-
-  /**
-   * Fetch my profile
-   *
-   * You can subscribe to `myProfile` to get updated with my profile
-   */
-  async fetchMyProfile(): Promise<Readable<Profile | undefined>> {
-    const profile = await this.service.getMyProfile();
-    if (profile) {
-      this._knownProfilesStore.update(profiles => {
-        profiles.put(
-          profile.signed_action.hashed.content.author,
-          decode((profile.entry as any).Present.entry) as Profile
-        );
-        return profiles;
-      });
-    }
-
-    return derived(
-      this._knownProfilesStore,
-      s => s.get(this.myAgentPubKey)
-    );
-  }
+  myProfile = this.agentsProfiles.get(this.client.client.myPubKey);
 
   /**
    * Search the profiles for the agent with nicknames starting with the given nicknamePrefix
    *
-   * @param nicknamePrefix must be of at least 3 characters
-   * @returns the profiles with the nickname starting with nicknamePrefix
+   * @param nicknameFilter must be of at least 3 characters
+   * @returns the profiles with the nickname starting with nicknameFilter
    */
-  async searchProfiles(nicknamePrefix: string): Promise<AgentPubKeyMap<Profile>> {
-    const searchedProfiles = await this.service.searchProfiles(nicknamePrefix);
-    const byPubKey: AgentPubKeyMap<Profile> = new AgentPubKeyMap();
-    this._knownProfilesStore.update(profiles => {
-      for (const profile of searchedProfiles) {
-        byPubKey.put(
-          profile.signed_action.hashed.content.author,
-          decode((profile.entry as any).Present.entry) as Profile
-        );
-        profiles.put(
-          profile.signed_action.hashed.content.author,
-          decode((profile.entry as any).Present.entry) as Profile
-        );
-      }
-      return profiles;
-    });
-
-    return byPubKey;
-  }
-
-  /**
-   * Create my profile
-   *
-   * Note that there is no guarantee on nickname uniqness
-   *
-   * @param profile profile to be created
-   */
-  async createProfile(profile: Profile): Promise<void> {
-    await this.service.createProfile(profile);
-
-    this._knownProfilesStore.update(profiles => {
-      profiles.put(this.myAgentPubKey, profile);
-      return profiles;
-    });
-  }
-
-  /**
-   * Update my profile
-   *
-   * @param profile profile to be created
-   */
-  async updateProfile(profile: Profile): Promise<void> {
-    await this.service.updateProfile(profile);
-
-    this._knownProfilesStore.update(profiles => {
-      profiles.put(this.myAgentPubKey, profile);
-      return profiles;
-    });
+  searchProfiles(
+    nicknameFilter: string
+  ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile>> {
+    const searchAgents = lazyLoad(() =>
+      this.client.searchAgents(nicknameFilter)
+    );
+    return asyncDeriveStore([searchAgents], ([agentsPubKeys]) =>
+      joinMap(slice(this.agentsProfiles, agentsPubKeys))
+    ) as AsyncReadable<ReadonlyMap<AgentPubKey, Profile>>;
   }
 }

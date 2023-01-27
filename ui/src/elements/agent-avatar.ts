@@ -1,25 +1,31 @@
-import { contextProvided } from '@lit-labs/context';
-import { HoloIdenticon, hashProperty } from '@holochain-open-dev/elements';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements';
-import { css, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
-import { styleMap } from 'lit-html/directives/style-map.js';
-import { SlAvatar, SlSkeleton } from '@scoped-elements/shoelace';
-import { TaskSubscriber } from 'lit-svelte-stores';
-import { AgentPubKey } from '@holochain/client';
+import { consume } from "@lit-labs/context";
+import {
+  HoloIdenticon,
+  hashProperty,
+  sharedStyles,
+  DisplayError,
+} from "@holochain-open-dev/elements";
+import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { css, html, LitElement } from "lit";
+import { state, property } from "lit/decorators.js";
+import { styleMap } from "lit-html/directives/style-map.js";
+import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
+import { AgentPubKey } from "@holochain/client";
+import { localized } from "@lit/localize";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { sharedStyles } from './utils/shared-styles';
-import { Profile } from '../types';
+import { profilesStoreContext } from "../context";
+import { ProfilesStore } from "../profiles-store";
+import { Profile } from "../types";
 
+@localized()
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 
   /**
    * REQUIRED. The public key identifying the agent whose profile is going to be shown.
    */
-  @property(hashProperty('agent-pub-key'))
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
   /**
@@ -31,26 +37,23 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * `ProfilesStore` that is requested via context.
-   * Only set this property if you want to override the store requested via context.
+   * @internal
    */
-  @contextProvided({ context: profilesStoreContext, subscribe: true })
-  @property({ type: Object })
-  store!: ProfilesStore;
+  @consume({ context: profilesStoreContext, subscribe: true })
+  @state()
+  _store!: ProfilesStore;
 
-  private _profileTask = new TaskSubscriber(
-    this,
-    () => this.store.fetchAgentProfile(this.agentPubKey),
-    () => [this.store, this.agentPubKey]
+  private _agentProfile = new StoreSubscriber(this, () =>
+    this._store.agentsProfiles.get(this.agentPubKey)
   );
 
   renderIdenticon() {
     return html` <div
       style=${styleMap({
-      position: 'relative',
-      height: `${this.size}px`,
-      width: `${this.size}px`,
-    })}
+        position: "relative",
+        height: `${this.size}px`,
+        width: `${this.size}px`,
+      })}
     >
       <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
       </holo-identicon>
@@ -64,10 +67,10 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
     return html`
       <div
         style=${styleMap({
-      position: 'relative',
-      height: `${this.size}px`,
-      width: `${this.size}px`,
-    })}
+          position: "relative",
+          height: `${this.size}px`,
+          width: `${this.size}px`,
+        })}
       >
         <sl-avatar
           .image=${profile.fields.avatar}
@@ -80,16 +83,24 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this.store.config.avatarMode === 'identicon')
+    if (this._store.config.avatarMode === "identicon")
       return this.renderIdenticon();
 
-    return this._profileTask.render({
-      complete: profile => this.renderProfile(profile),
-      pending: () => html`<sl-skeleton
-        effect="pulse"
-        style="height: ${this.size}px; width: ${this.size}px"
-      ></sl-skeleton>`,
-    });
+    switch (this._agentProfile.value.status) {
+      case "pending":
+        return html`<sl-skeleton
+          effect="pulse"
+          style="height: ${this.size}px; width: ${this.size}px"
+        ></sl-skeleton>`;
+      case "complete":
+        return this.renderProfile(this._agentProfile.value.value);
+      case "error":
+        return html`
+          <display-error
+            .error=${this._agentProfile.value.error.data.data}
+          ></display-error>
+        `;
+    }
   }
 
   /**
@@ -97,9 +108,10 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      'holo-identicon': HoloIdenticon,
-      'sl-avatar': SlAvatar,
-      'sl-skeleton': SlSkeleton,
+      "holo-identicon": HoloIdenticon,
+      "sl-avatar": SlAvatar,
+      "sl-skeleton": SlSkeleton,
+      "display-error": DisplayError,
     };
   }
 
