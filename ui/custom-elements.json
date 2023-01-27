@@ -459,7 +459,7 @@
             {
               "kind": "field",
               "name": "agentsProfiles",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      throw new Error(\"hey\");\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"signal\", (signal) => {\n        if (this.client.client.myPubKey.toString() !== agent.toString()) return;\n        if (!(signal.type === \"EntryCreated\" || signal.type === \"EntryUpdated\"))\n          return;\n        set(signal.app_entry);\n      });\n    })\n  )"
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"signal\", (signal) => {\n        if (this.client.client.myPubKey.toString() !== agent.toString()) return;\n        if (!(signal.type === \"EntryCreated\" || signal.type === \"EntryUpdated\"))\n          return;\n        set(signal.app_entry);\n      });\n    })\n  )"
             },
             {
               "kind": "field",
@@ -2242,27 +2242,6 @@
           "declaration": {
             "name": "resizeAndExport",
             "module": "src/elements/utils/image.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/elements/utils/shared-styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sharedStyles",
-          "default": "css`\n  .row {\n    display: flex;\n    flex-direction: row;\n  }\n  .column {\n    display: flex;\n    flex-direction: column;\n  }\n  .small-margin {\n    margin-top: 6px;\n  }\n  .big-margin {\n    margin-top: 23px;\n  }\n\n  .fill {\n    flex: 1;\n    height: 100%;\n  }\n\n  .title {\n    font-size: 20px;\n  }\n\n  .center-content {\n    align-items: center;\n    justify-content: center;\n  }\n\n  .placeholder {\n    color: rgba(0, 0, 0, 0.7);\n  }\n\n  .label {\n    color: var(--mdc-text-field-label-ink-color, rgba(0, 0, 0, 0.6));\n    font-family: var(\n      --mdc-typography-caption-font-family,\n      var(--mdc-typography-font-family, Roboto, sans-serif)\n    );\n    font-size: var(--mdc-typography-caption-font-size, 0.79rem);\n    font-weight: var(--mdc-typography-caption-font-weight, 400);\n  }\n\n  .flex-scrollable-parent {\n    position: relative;\n    display: flex;\n    flex: 1;\n  }\n\n  .flex-scrollable-container {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    bottom: 0;\n  }\n\n  .flex-scrollable-x {\n    max-width: 100%;\n    overflow-x: auto;\n  }\n  .flex-scrollable-y {\n    max-height: 100%;\n    overflow-y: auto;\n  }\n`"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sharedStyles",
-          "declaration": {
-            "name": "sharedStyles",
-            "module": "src/elements/utils/shared-styles.ts"
           }
         }
       ]

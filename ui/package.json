@@ -1,7 +1,7 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.9.2",
-  "description": "Frontend module for the Holochain hc_zome_profiles zome",
+  "version": "0.10.0",
+  "description": "Frontend module for the Holochain hc_zome_profiles pair zome",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
   "main": "dist/index.js",
@@ -40,7 +40,7 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.2.0",
+    "@holochain-open-dev/elements": "^0.2.2",
     "@holochain-open-dev/stores": "^0.1.9",
     "@holochain-open-dev/utils": "^0.9.9",
     "@holochain/client": "^0.11.16",

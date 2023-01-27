@@ -61,9 +61,7 @@ export class ProfilesClient {
    * @returns the agents with the nickname starting with nicknameFilter
    */
   async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
-    return this.callZome("search_agents", {
-      nickname_filter: nicknameFilter,
-    });
+    return this.callZome("search_agents", nicknameFilter);
   }
 
   /**

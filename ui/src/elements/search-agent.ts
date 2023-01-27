@@ -18,7 +18,7 @@ import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
 import { ProfileListItemSkeleton } from "./profile-list-item-skeleton";
-import { sharedStyles } from "@holochain-open-dev/elements";
+import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * @element search-agent
@@ -114,17 +114,19 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     if (this._searchProfiles === undefined) return html``;
     switch (this._searchProfiles.value.status) {
       case "pending":
-        return;
-        html`
+        return html`
           <profile-list-item-skeleton></profile-list-item-skeleton>
           <profile-list-item-skeleton></profile-list-item-skeleton>
           <profile-list-item-skeleton></profile-list-item-skeleton>
         `;
       case "error":
-        return html`<span
-          >${msg("There was an error while fetching the agents:")}
-          ${this._searchProfiles.value.error}</span
-        >`;
+        return html`
+          <display-error
+            style="flex: 1; display:flex"
+            tooltip
+            .error=${this._searchProfiles.value.error.data.data}
+          ></display-error>
+        `;
       case "complete": {
         const agents = this._searchProfiles.value.value;
         if (agents.size === 0)
@@ -203,6 +205,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       "mwc-textfield": TextField,
       "mwc-menu-surface": MenuSurface,
       "mwc-list": List,
+      "display-error": DisplayError,
       "mwc-list-item": ListItem,
       "profile-list-item-skeleton": ProfileListItemSkeleton,
     };

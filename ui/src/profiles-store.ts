@@ -31,7 +31,10 @@ export class ProfilesStore {
     set(agents);
 
     return this.client.on("signal", (signal) => {
-      if (signal.type === "EntryCreated") {
+      if (
+        signal.type === "EntryCreated" &&
+        signal.app_entry.type === "Profile"
+      ) {
         set([...agents, this.client.client.myPubKey]);
       }
     });
