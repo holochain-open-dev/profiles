@@ -3,7 +3,7 @@
 //! Profiles zome for any Holochain app.
 //!
 //! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
-//! you can directly include this zome and its integrity counterpart "hc_zome_profiles_integrity" in your DNA.
+//! you can directly include this zome and its integrity counterpart [hc_zome_profiles_integrity](https://docs.rs/hc_zome_profiles_integrity) in your DNA.
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
@@ -94,32 +94,22 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
     Ok(record)
 }
 
-/// Input for the `search_agents` zome function.
-///
-/// The nickname prefix must be of at least 3 characters.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SearchProfilesInput {
-    pub nickname_filter: String,
-}
-/// From a search input of at least 3 characters, returns all the agents whose nickname starts with that prefix.
+/// From a nickname filter of at least 3 characters, returns all the agents whose nickname starts with that prefix
+/// Ignores the nickname case, will return upper or lower case nicknames that match
 #[hdk_extern]
-pub fn search_agents(search_profiles_input: SearchProfilesInput) -> ExternResult<Vec<AgentPubKey>> {
-    if search_profiles_input.nickname_filter.len() < 3 {
+pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> {
+    if nickname_filter.len() < 3 {
         return Err(wasm_error!(WasmErrorInner::Guest(
             "Cannot search with a prefix less than 3 characters".into(),
         )));
     }
 
-    let prefix_path = prefix_path(search_profiles_input.nickname_filter.clone())?;
+    let prefix_path = prefix_path(nickname_filter.clone())?;
     let links = get_links(
         prefix_path.path_entry_hash()?,
         LinkTypes::PathToAgent,
         Some(LinkTag::new(
-            search_profiles_input
-                .nickname_filter
-                .to_lowercase()
-                .as_bytes()
-                .to_vec(),
+            nickname_filter.to_lowercase().as_bytes().to_vec(),
         )),
     )?;
 

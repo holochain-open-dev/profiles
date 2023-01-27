@@ -9,41 +9,32 @@ import {
   AppAgentCallZomeRequest,
   RoleName,
 } from "@holochain/client";
-import Emittery, { UnsubscribeFunction } from "emittery";
-import { Profile } from "./types";
+import { UnsubscribeFunction } from "emittery";
+import { Profile, ProfilesSignal } from "./types";
 
 export interface ProfilesEvents {
-  ["profile-created"]: Profile;
+  ["signal"]: ProfilesSignal;
 }
 
 export class ProfilesClient {
-  readonly emitter: Emittery<ProfilesEvents> = new Emittery();
-
   constructor(
     public client: AppAgentClient,
     public roleName: RoleName,
     public zomeName = "profiles"
-  ) {
-    this.client.on("signal", async (signal) => {
-      if (
-        (await isSignalFromCellWithRole(client, roleName, signal)) &&
-        zomeName === signal.zome_name
-      ) {
-        const payload: any = signal.payload;
-        if (payload.type === "EntryCreated" && "Profile" in payload.app_entry)
-          this.emitter.emit(
-            "profile-created",
-            payload.app_entry["Profile"] as Profile
-          );
-      }
-    });
-  }
+  ) {}
 
   on<Name extends keyof ProfilesEvents>(
     eventName: Name | readonly Name[],
     listener: (eventData: ProfilesEvents[Name]) => void | Promise<void>
   ): UnsubscribeFunction {
-    return this.emitter.on(eventName, listener);
+    return this.client.on(eventName, async (signal) => {
+      if (
+        (await isSignalFromCellWithRole(this.client, this.roleName, signal)) &&
+        this.zomeName === signal.zome_name
+      ) {
+        listener(signal.payload as ProfilesSignal);
+      }
+    });
   }
 
   /**

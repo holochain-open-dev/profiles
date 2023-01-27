@@ -26,7 +26,16 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile = lazyLoad(() => this.client.getAgentsWithProfile());
+  agentsWithProfile = asyncReadable<AgentPubKey[]>(async (set) => {
+    const agents = await this.client.getAgentsWithProfile();
+    set(agents);
+
+    return this.client.on("signal", (signal) => {
+      if (signal.type === "EntryCreated") {
+        set([...agents, this.client.client.myPubKey]);
+      }
+    });
+  });
 
   /**
    * Fetches the profiles for all agents in the DHT
@@ -46,10 +55,11 @@ export class ProfilesStore {
       const profile = await this.client.getAgentProfile(agent);
       set(profile);
 
-      return this.client.on("profile-created", (profile) => {
-        if (this.client.client.myPubKey.toString() === agent.toString()) {
-          set(profile);
-        }
+      return this.client.on("signal", (signal) => {
+        if (this.client.client.myPubKey.toString() !== agent.toString()) return;
+        if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
+          return;
+        set(signal.app_entry);
       });
     })
   );

@@ -1,18 +1,21 @@
 import { consume } from "@lit-labs/context";
-import { HoloIdenticon, hashProperty } from "@holochain-open-dev/elements";
+import {
+  HoloIdenticon,
+  hashProperty,
+  sharedStyles,
+  DisplayError,
+} from "@holochain-open-dev/elements";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { css, html, LitElement } from "lit";
 import { state, property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
 import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
-import { StoreSubscriber } from "lit-svelte-stores";
 import { AgentPubKey } from "@holochain/client";
-import { Icon } from "@scoped-elements/material-web";
 import { localized } from "@lit/localize";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
-import { sharedStyles } from "./utils/shared-styles";
 import { Profile } from "../types";
 
 @localized()
@@ -92,10 +95,11 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       case "complete":
         return this.renderProfile(this._agentProfile.value.value);
       case "error":
-        return html`<mwc-icon
-          style="height: ${this.size}px; width: ${this.size}px"
-          >error</mwc-icon
-        >`;
+        return html`
+          <display-error
+            .error=${this._agentProfile.value.error.data.data}
+          ></display-error>
+        `;
     }
   }
 
@@ -107,7 +111,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       "holo-identicon": HoloIdenticon,
       "sl-avatar": SlAvatar,
       "sl-skeleton": SlSkeleton,
-      "mwc-icon": Icon,
+      "display-error": DisplayError,
     };
   }
 

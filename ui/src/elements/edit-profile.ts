@@ -15,7 +15,7 @@ import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { Profile } from "../types";
 import { resizeAndExport } from "./utils/image";
-import { sharedStyles } from "./utils/shared-styles";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * @element edit-profile

@@ -3,7 +3,7 @@
 //! Profiles zome for any Holochain app.
 //!
 //! If you need to manage profiles (nickname, name, avatar, age and other useful personal information)
-//! you can directly include this zome and its coordinator counterpart "hc_zome_profiles_coordinator" in your DNA.
+//! you can directly include this zome and its coordinator counterpart [hc_zome_profiles_coordinator](https://docs.rs/hc_zome_profiles_coordinator) in your DNA.
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
@@ -23,6 +23,7 @@ pub struct Profile {
 }
 
 #[derive(Serialize, Deserialize)]
+#[serde(tag = "type")]
 #[hdk_entry_defs]
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {

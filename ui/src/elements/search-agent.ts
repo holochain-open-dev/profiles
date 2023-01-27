@@ -8,22 +8,23 @@ import {
 } from "@scoped-elements/material-web";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { msg } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
-import { AsyncStatus } from "@holochain-open-dev/stores";
+import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
 import { SlSkeleton } from "@scoped-elements/shoelace";
-import { StoreSubscriber } from "lit-svelte-stores";
 
 import { Profile } from "../types";
-import { sharedStyles } from "./utils/shared-styles";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
+import { ProfileListItemSkeleton } from "./profile-list-item-skeleton";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
  */
+@localized()
 export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /** Public attributes */
 
@@ -113,20 +114,12 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     if (this._searchProfiles === undefined) return html``;
     switch (this._searchProfiles.value.status) {
       case "pending":
-        return [0, 0, 0].map(
-          () =>
-            html`<div class="row" style="align-items: center; width: 150px">
-              <sl-skeleton
-                effect="sheen"
-                style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
-              ></sl-skeleton
-              ><sl-skeleton
-                effect="sheen"
-                style="flex: 1; margin: 8px; border-radius: 12px"
-              >
-              </sl-skeleton>
-            </div>`
-        );
+        return;
+        html`
+          <profile-list-item-skeleton></profile-list-item-skeleton>
+          <profile-list-item-skeleton></profile-list-item-skeleton>
+          <profile-list-item-skeleton></profile-list-item-skeleton>
+        `;
       case "error":
         return html`<span
           >${msg("There was an error while fetching the agents:")}
@@ -211,6 +204,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       "mwc-menu-surface": MenuSurface,
       "mwc-list": List,
       "mwc-list-item": ListItem,
+      "profile-list-item-skeleton": ProfileListItemSkeleton,
     };
   }
 }

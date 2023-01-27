@@ -1,6 +1,5 @@
 use std::collections::BTreeMap;
 
-use hc_zome_profiles_coordinator::*;
 use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
 use holochain::test_utils::consistency_10s;
@@ -46,51 +45,27 @@ async fn create_and_get() {
     consistency_10s([&alice, &bobbo]).await;
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_agents",
-            SearchProfilesInput {
-                nickname_filter: "ali".into(),
-            },
-        )
+        .call(&bob_zome, "search_agents", String::from("ali"))
         .await;
 
     assert_eq!(agents_searched.len(), 1);
     assert_eq!(agents_searched[0], alice.agent_pubkey().clone());
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_agents",
-            SearchProfilesInput {
-                nickname_filter: "alii".into(),
-            },
-        )
+        .call(&bob_zome, "search_agents", String::from("alii"))
         .await;
 
     assert_eq!(agents_searched.len(), 0);
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_agents",
-            SearchProfilesInput {
-                nickname_filter: "BoB".into(),
-            },
-        )
+        .call(&bob_zome, "search_agents", String::from("BoB"))
         .await;
 
     assert_eq!(agents_searched.len(), 1);
     assert_eq!(agents_searched[0], bobbo.agent_pubkey().clone());
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(
-            &bob_zome,
-            "search_agents",
-            SearchProfilesInput {
-                nickname_filter: "asde".into(),
-            },
-        )
+        .call(&bob_zome, "search_agents", String::from("asde"))
         .await;
 
     assert_eq!(agents_searched.len(), 0);

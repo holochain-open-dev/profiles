@@ -16,6 +16,7 @@
     "./locales/fr-fr": "./locales/fr-fr.js",
     "./profiles-context": "./dist/definitions/profiles-context.js",
     "./create-profile": "./dist/definitions/create-profile.js",
+    "./profile-list-item-skeleton": "./dist/definitions/profile-list-item-skeleton.js",
     "./update-profile": "./dist/definitions/update-profile.js",
     "./my-profile": "./dist/definitions/my-profile.js",
     "./profile-detail": "./dist/definitions/profile-detail.js",
@@ -39,8 +40,8 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.1.4",
-    "@holochain-open-dev/stores": "^0.1.8",
+    "@holochain-open-dev/elements": "^0.2.0",
+    "@holochain-open-dev/stores": "^0.1.9",
     "@holochain-open-dev/utils": "^0.9.9",
     "@holochain/client": "^0.11.16",
     "@lit-labs/context": "^0.2.0",
@@ -49,7 +50,6 @@
     "@scoped-elements/material-web": "0.0.19",
     "@scoped-elements/shoelace": "0.0.8",
     "emittery": "^1.0.1",
-    "lit-svelte-stores": "^0.2.0",
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {

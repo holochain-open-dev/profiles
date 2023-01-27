@@ -3,23 +3,22 @@ import { AgentPubKey } from "@holochain/client";
 import { state } from "lit/decorators.js";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
-import {
-  CircularProgress,
-  ListItem,
-  List,
-} from "@scoped-elements/material-web";
-import { StoreSubscriber } from "lit-svelte-stores";
+import { ListItem, List } from "@scoped-elements/material-web";
+import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { localized, msg } from "@lit/localize";
 
-import { sharedStyles } from "./utils/shared-styles";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { AgentAvatar } from "./agent-avatar";
+import { ProfileListItemSkeleton } from "./profile-list-item-skeleton";
 import { Profile } from "../types";
 
 /**
  * @element list-profiles
  * @fires agent-selected - Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }
  */
+@localized()
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
   /**
    * @internal
@@ -62,7 +61,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
     if (profiles.size === 0)
       return html`<mwc-list-item
-        >There are no created profiles yet</mwc-list-item
+        >${msg("There are no created profiles yet")}</mwc-list-item
       >`;
 
     return html`
@@ -90,14 +89,15 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   render() {
     switch (this._allProfiles.value.status) {
       case "pending":
-        return html`<div class="fill center-content">
-          <mwc-circular-progress indeterminate></mwc-circular-progress>
+        return html`<div class="column center-content">
+          <profile-list-item-skeleton> </profile-list-item-skeleton>
+          <profile-list-item-skeleton> </profile-list-item-skeleton>
+          <profile-list-item-skeleton> </profile-list-item-skeleton>
         </div>`;
       case "error":
-        return html`<span
-          >There was an error loading the profiles:
-          ${this._allProfiles.value.error}<span></span
-        ></span>`;
+        return html`<display-error
+          .error=${this._allProfiles.value.error.data.data}
+        ></display-error>`;
       case "complete":
         return this.renderList(this._allProfiles.value.value);
     }
@@ -118,8 +118,9 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
   static get scopedElements() {
     return {
       "agent-avatar": AgentAvatar,
-      "mwc-circular-progress": CircularProgress,
+      "profile-list-item-skeleton": ProfileListItemSkeleton,
       "mwc-list": List,
+      "display-error": DisplayError,
       "mwc-list-item": ListItem,
     };
   }

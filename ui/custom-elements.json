@@ -144,6 +144,14 @@
           "name": "*",
           "declaration": {
             "name": "*",
+            "package": "\"./elements/profile-list-item-skeleton\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
             "package": "\"./profiles-client\""
           }
         },
@@ -280,14 +288,6 @@
           "description": "",
           "name": "ProfilesClient",
           "members": [
-            {
-              "kind": "field",
-              "name": "emitter",
-              "type": {
-                "text": "Emittery<ProfilesEvents>"
-              },
-              "default": "new Emittery()"
-            },
             {
               "kind": "method",
               "name": "on",
@@ -459,7 +459,7 @@
             {
               "kind": "field",
               "name": "agentsProfiles",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"profile-created\", (profile) => {\n        if (this.client.client.myPubKey.toString() === agent.toString()) {\n          set(profile);\n        }\n      });\n    })\n  )"
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<Profile | undefined>(async (set) => {\n      throw new Error(\"hey\");\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.on(\"signal\", (signal) => {\n        if (this.client.client.myPubKey.toString() !== agent.toString()) return;\n        if (!(signal.type === \"EntryCreated\" || signal.type === \"EntryUpdated\"))\n          return;\n        set(signal.app_entry);\n      });\n    })\n  )"
             },
             {
               "kind": "field",
@@ -913,6 +913,33 @@
           "declaration": {
             "name": "PD",
             "module": "src/definitions/profile-detail.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/definitions/profile-list-item-skeleton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PLIS",
+          "superclass": {
+            "name": "ProfileListItemSkeleton",
+            "module": "/src/elements/profile-list-item-skeleton"
+          },
+          "tagName": "profile-list-item-skeleton",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-list-item-skeleton",
+          "declaration": {
+            "name": "PLIS",
+            "module": "src/definitions/profile-list-item-skeleton.ts"
           }
         }
       ]
@@ -1773,6 +1800,40 @@
           "declaration": {
             "name": "ProfileDetail",
             "module": "src/elements/profile-detail.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-list-item-skeleton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfileListItemSkeleton",
+          "members": [],
+          "mixins": [
+            {
+              "name": "ScopedElementsMixin",
+              "package": "@open-wc/scoped-elements"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-list-item-skeleton",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfileListItemSkeleton",
+          "declaration": {
+            "name": "ProfileListItemSkeleton",
+            "module": "src/elements/profile-list-item-skeleton.ts"
           }
         }
       ]

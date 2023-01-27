@@ -4,12 +4,12 @@ import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { Card } from "@scoped-elements/material-web";
 
-import { sharedStyles } from "./utils/shared-styles";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { EditProfile } from "./edit-profile";
 import { Profile } from "../types";
 import { localized, msg } from "@lit/localize";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
 /**
  * A custom element that fires event on value change.

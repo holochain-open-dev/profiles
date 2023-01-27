@@ -4,14 +4,15 @@ import { state } from "lit/decorators.js";
 import {
   Button,
   CircularProgress,
+  Icon,
   TextField,
 } from "@scoped-elements/material-web";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit-labs/context";
-import { StoreSubscriber } from "lit-svelte-stores";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 
-import { sharedStyles } from "./utils/shared-styles";
 import { CreateProfile } from "./create-profile";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
@@ -54,7 +55,6 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    console.log(this._myProfile.value);
     switch (this._myProfile.value.status) {
       case "pending":
         return html` <div
@@ -66,10 +66,9 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
       case "complete":
         return this.renderPrompt(this._myProfile.value.value);
       case "error":
-        return html`<span
-          >${msg("There was an error while fetching your profile: ")}${this
-            ._myProfile.value.error}</span
-        >`;
+        return html`<display-error
+          .error=${this._myProfile.value.error}
+        ></display-error> `;
     }
   }
 
@@ -80,6 +79,7 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
     return {
       "mwc-textfield": TextField,
       "mwc-button": Button,
+      "display-error": DisplayError,
       "mwc-circular-progress": CircularProgress,
       "create-profile": CreateProfile,
     };

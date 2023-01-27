@@ -2,22 +2,21 @@ import { consume } from "@lit-labs/context";
 import { AgentPubKey } from "@holochain/client";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { StoreSubscriber } from "lit-svelte-stores";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { state, property } from "lit/decorators.js";
 import { SlSkeleton } from "@scoped-elements/shoelace";
-import { msg } from "@lit/localize";
-import { hashProperty } from "@holochain-open-dev/elements";
+import { localized, msg } from "@lit/localize";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
-import { sharedStyles } from "./utils/shared-styles";
 import { AgentAvatar } from "./agent-avatar";
 import { Profile } from "../types";
-import { camelCase } from "lodash-es";
 
 /**
  * @element profile-detail
  */
+@localized()
 export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   /** Public properties */
 

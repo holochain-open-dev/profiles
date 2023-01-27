@@ -9,6 +9,7 @@ export * from "./elements/profile-prompt";
 export * from "./elements/list-profiles";
 export * from "./elements/agent-avatar";
 export * from "./elements/profile-detail";
+export * from "./elements/profile-list-item-skeleton";
 export * from "./profiles-client";
 export * from "./profiles-store";
 export * from "./config";
