@@ -6,7 +6,11 @@ import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { state, property } from "lit/decorators.js";
 import { SlSkeleton } from "@scoped-elements/shoelace";
 import { localized, msg } from "@lit/localize";
-import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
+import {
+  DisplayError,
+  hashProperty,
+  sharedStyles,
+} from "@holochain-open-dev/elements";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
@@ -131,11 +135,9 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
       case "complete":
         return this.renderProfile(this._agentProfile.value.value);
       case "error":
-        return html`<span
-          >${msg(
-            "There was an error while fetching the profile for this agent"
-          )}</span
-        >`;
+        return html`<display-error
+          .error=${this._agentProfile.value.error.data.data}
+        ></display-error>`;
     }
   }
 
@@ -144,6 +146,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
+      "display-error": DisplayError,
       "agent-avatar": AgentAvatar,
       "sl-skeleton": SlSkeleton,
     };

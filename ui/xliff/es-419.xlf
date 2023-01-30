@@ -23,8 +23,8 @@
   <target>Nombre de usuario</target>
 </trans-unit>
 <trans-unit id="s3798c0344c399eb7">
-  <source>Min. <x id="0" equiv-text="${this.store.config.minNicknameLength}"/> characters</source>
-  <target>Min. <x id="0" equiv-text="${this.store.config.minNicknameLength}"/> caracteres</target>
+  <source>Min. <x id="0" equiv-text="${this._store.config.minNicknameLength}"/> characters</source>
+  <target>Min. <x id="0" equiv-text="${this._store.config.minNicknameLength}"/> caracteres</target>
 </trans-unit>
 <trans-unit id="sc93a9aa3e5bcbf5d">
   <source>Save Profile</source>
@@ -42,6 +42,10 @@
   <source>This agent hasn't created a profile yet</source>
   <target>Este agente no ha creado su perfil todavía</target>
 </trans-unit>
+<trans-unit id="s6068cc1885ea6494">
+  <source>No agents match the filter</source>
+  <target>No se ha encontrado ningún agente</target>
+</trans-unit>
 <trans-unit id="sfbf76da07548a998">
   <source>Search agent</source>
   <target>Buscar agente</target>
@@ -50,9 +54,9 @@
   <source>At least 3 chars...</source>
   <target>Al menos 3 caracteres...</target>
 </trans-unit>
-<trans-unit id="s6068cc1885ea6494">
-  <source>No agents match the filter</source>
-  <target>No se ha encontrado ningún agente</target>
+<trans-unit id="s1d96e130c0544d92">
+  <source>There are no created profiles yet</source>
+  <target>Aún no se ha creado ningún perfil</target>
 </trans-unit>
 </body>
 </file>

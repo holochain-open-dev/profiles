@@ -6,6 +6,7 @@
   "output": {
     "mode": "runtime",
     "outputDir": "./locales",
+    "localeCodesModule": "./locales/locales.js",
     "language": "js"
   },
   "interchange": {

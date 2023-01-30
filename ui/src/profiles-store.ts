@@ -53,7 +53,7 @@ export class ProfilesStore {
       >
   );
 
-  // Fetches the profile for the given agents
+  // Fetches the profile for the given agent
   agentsProfiles = new LazyHoloHashMap((agent: AgentPubKey) =>
     asyncReadable<Profile | undefined>(async (set) => {
       const profile = await this.client.getAgentProfile(agent);
@@ -68,6 +68,7 @@ export class ProfilesStore {
     })
   );
 
+  // Fetches your profile
   myProfile = this.agentsProfiles.get(this.client.client.myPubKey);
 
   /**
