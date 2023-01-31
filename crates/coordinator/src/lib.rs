@@ -231,13 +231,9 @@ pub fn post_commit(committed_actions: Vec<SignedActionHashed>) {
 fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
     match action.hashed.content.clone() {
         Action::CreateLink(create_link) => {
-            if create_link.zome_index == zome_info()?.id {
-                let link_type =
-                    LinkTypes::from_type(create_link.zome_index, create_link.link_type)?.ok_or(
-                        wasm_error!(WasmErrorInner::Guest(
-                            "Link type should be exist".to_string()
-                        )),
-                    )?;
+            if let Ok(Some(link_type)) =
+                LinkTypes::from_type(create_link.zome_index, create_link.link_type)
+            {
                 emit_signal(Signal::LinkCreated { action, link_type })?;
             }
             Ok(())
@@ -245,17 +241,14 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
         Action::DeleteLink(delete_link) => {
             let record = get(delete_link.link_add_address.clone(), GetOptions::default())?.ok_or(
                 wasm_error!(WasmErrorInner::Guest(
-                    "Create Link should exist".to_string()
+                    "Failed to fetch CreateLink action".to_string()
                 )),
             )?;
             match record.action() {
                 Action::CreateLink(create_link) => {
-                    if create_link.zome_index == zome_info()?.id {
-                        let link_type =
-                            LinkTypes::from_type(create_link.zome_index, create_link.link_type)?
-                                .ok_or(wasm_error!(WasmErrorInner::Guest(
-                                    "Link type should be exist".to_string()
-                                )))?;
+                    if let Ok(Some(link_type)) =
+                        LinkTypes::from_type(create_link.zome_index, create_link.link_type)
+                    {
                         emit_signal(Signal::LinkDeleted { action, link_type })?;
                     }
                     Ok(())
@@ -267,29 +260,17 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                 }
             }
         }
-        Action::Create(create) => {
-            if let EntryType::App(app_entry_def) = create.entry_type {
-                if app_entry_def.zome_index == zome_info()?.id {
-                    let app_entry =
-                        get_entry_for_action(&action.hashed.hash)?.ok_or(wasm_error!(
-                            WasmErrorInner::Guest("Create should carry an entry".to_string())
-                        ))?;
-                    emit_signal(Signal::EntryCreated { action, app_entry })?;
-                }
+        Action::Create(_create) => {
+            if let Ok(Some(app_entry)) = get_entry_for_action(&action.hashed.hash) {
+                emit_signal(Signal::EntryCreated { action, app_entry })?;
             }
             Ok(())
         }
         Action::Update(update) => {
-            if let EntryType::App(app_entry_def) = update.entry_type {
-                if app_entry_def.zome_index == zome_info()?.id {
-                    let app_entry =
-                        get_entry_for_action(&action.hashed.hash)?.ok_or(wasm_error!(
-                            WasmErrorInner::Guest("Update should carry an entry".to_string())
-                        ))?;
-                    let original_app_entry = get_entry_for_action(&update.original_action_address)?
-                        .ok_or(wasm_error!(WasmErrorInner::Guest(
-                            "Updated action should carry an entry".to_string()
-                        )))?;
+            if let Ok(Some(app_entry)) = get_entry_for_action(&action.hashed.hash) {
+                if let Ok(Some(original_app_entry)) =
+                    get_entry_for_action(&update.original_action_address)
+                {
                     emit_signal(Signal::EntryUpdated {
                         action,
                         app_entry,
@@ -300,22 +281,11 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
             Ok(())
         }
         Action::Delete(delete) => {
-            let record =
-                get(delete.deletes_address.clone(), GetOptions::default())?.ok_or(wasm_error!(
-                    WasmErrorInner::Guest("Deleted action should exist".to_string())
-                ))?;
-            if let Some(EntryType::App(app_entry_def)) = record.action().entry_type() {
-                if app_entry_def.zome_index == zome_info()?.id {
-                    let original_app_entry = get_entry_for_action(&delete.deletes_address)?.ok_or(
-                        wasm_error!(WasmErrorInner::Guest(
-                            "Deleted action should carry an entry".to_string()
-                        )),
-                    )?;
-                    emit_signal(Signal::EntryDeleted {
-                        action,
-                        original_app_entry,
-                    })?;
-                }
+            if let Ok(Some(original_app_entry)) = get_entry_for_action(&delete.deletes_address) {
+                emit_signal(Signal::EntryDeleted {
+                    action,
+                    original_app_entry,
+                })?;
             }
             Ok(())
         }
