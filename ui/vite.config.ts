@@ -1,7 +1,15 @@
-// vite.config.js
+import { defineConfig } from "vite";
 import checker from "vite-plugin-checker";
 
-export default {
-  root: "./demo",
-  plugins: [checker({ typescript: true })], // e.g. use TypeScript check
-};
+// https://vitejs.dev/config/
+export default defineConfig({
+  root: './demo',
+  plugins: [
+    checker({
+      typescript: true,
+      eslint: {
+        lintCommand: "eslint --ext .ts,.html .",
+      },
+    }),
+  ],
+});

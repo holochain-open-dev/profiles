@@ -5,6 +5,7 @@ import {
   asyncReadable,
   joinMap,
   lazyLoad,
+  lazyLoadAndPoll,
 } from "@holochain-open-dev/stores";
 import merge from "lodash-es/merge";
 import { AgentPubKey } from "@holochain/client";
@@ -26,19 +27,10 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile = asyncReadable<AgentPubKey[]>(async (set) => {
-    const agents = await this.client.getAgentsWithProfile();
-    set(agents);
-
-    return this.client.on("signal", (signal) => {
-      if (
-        signal.type === "EntryCreated" &&
-        signal.app_entry.type === "Profile"
-      ) {
-        set([...agents, this.client.client.myPubKey]);
-      }
-    });
-  });
+  agentsWithProfile = lazyLoadAndPoll(
+    () => this.client.getAgentsWithProfile(),
+    100
+  );
 
   /**
    * Fetches the profiles for all agents in the DHT

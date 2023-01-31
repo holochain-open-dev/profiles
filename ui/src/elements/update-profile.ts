@@ -25,8 +25,6 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   @state()
   _store!: ProfilesStore;
 
-  /** Private properties */
-
   /**
    * @internal
    */
