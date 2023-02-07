@@ -10,7 +10,13 @@ import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { localized, msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
-import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
+import {
+  asyncDeriveStore,
+  AsyncReadable,
+  AsyncStatus,
+  lazyLoad,
+  StoreSubscriber,
+} from "@holochain-open-dev/stores";
 import { SlSkeleton } from "@scoped-elements/shoelace";
 
 import { Profile } from "../types";
@@ -87,7 +93,17 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
 
     this._overlay.show();
-    const store = this._store.searchProfiles(this._textField.value);
+    const store = asyncDeriveStore(
+      [
+        lazyLoad(async () =>
+          this._store.client.searchAgents(this._textField.value)
+        ),
+      ],
+      ([agents]) =>
+        this._store.agentsProfiles(agents) as AsyncReadable<
+          ReadonlyMap<AgentPubKey, Profile>
+        >
+    );
     this._searchProfiles = new StoreSubscriber(this, () => store);
   }
 

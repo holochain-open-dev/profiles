@@ -44,7 +44,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   _store!: ProfilesStore;
 
   private _agentProfile = new StoreSubscriber(this, () =>
-    this._store.agentsProfiles.get(this.agentPubKey)
+    this._store.profiles.get(this.agentPubKey)
   );
 
   renderIdenticon() {

@@ -43,7 +43,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    * @internal
    */
   private _agentProfile = new StoreSubscriber(this, () =>
-    this._store.agentsProfiles.get(this.agentPubKey)
+    this._store.profiles.get(this.agentPubKey)
   );
 
   getAdditionalFields(profile: Profile): Record<string, string> {
