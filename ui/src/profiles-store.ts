@@ -1,15 +1,9 @@
-import {
-  AgentPubKeyMap,
-  LazyHoloHashMap,
-  pickBy,
-  slice,
-} from "@holochain-open-dev/utils";
+import { LazyHoloHashMap, slice } from "@holochain-open-dev/utils";
 import {
   asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
   joinMap,
-  lazyLoad,
   lazyLoadAndPoll,
 } from "@holochain-open-dev/stores";
 import merge from "lodash-es/merge";
