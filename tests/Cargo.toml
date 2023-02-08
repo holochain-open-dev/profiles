@@ -12,7 +12,7 @@ hdk = { workspace = true, features = ["encoding", "test_utils"] }
 holochain = { workspace = true, default-features = false, features = [
   "test_utils",
 ] }
-tokio = { version = "1.23", features = ["full"] }
+tokio = { version = "1.24", features = ["full"] }
 
 hc_zome_profiles_coordinator = { path = "../crates/coordinator" }
 hc_zome_profiles_integrity = { path = "../crates/integrity" }
