@@ -69,4 +69,10 @@ async fn create_and_get() {
         .await;
 
     assert_eq!(agents_searched.len(), 0);
+
+    let profiles_searched: Vec<Record> = conductors[1]
+        .call(&bob_zome, "search_agents", String::from("سعيدة"))
+        .await;
+
+    assert_eq!(profiles_searched.len(), 0);
 }

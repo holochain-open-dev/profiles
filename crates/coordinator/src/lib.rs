@@ -190,7 +190,7 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
 fn prefix_path(nickname: String) -> ExternResult<TypedPath> {
     // conver to lowercase for path for ease of search
     let lower_nickname = nickname.to_lowercase();
-    let (prefix, _) = lower_nickname.as_str().split_at(3);
+    let prefix: String = lower_nickname.chars().take(3).collect();
 
     Path::from(format!("all_profiles.{}", prefix)).typed(LinkTypes::PrefixPath)
 }

@@ -11,7 +11,7 @@ homepage = "https://docs.rs/hc_zome_profiles"
 license = "MIT"
 name = "hc_zome_profiles_coordinator"
 repository = "https://github.com/holochain-open-dev/profiles"
-version = "0.1.1"
+version = "0.1.2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
