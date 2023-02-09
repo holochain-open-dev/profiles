@@ -15,7 +15,20 @@ import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const config = {
   avatarMode: "identicon",
-  additionalFields: ["Location", "Bio"], // Custom app level profile fields
+
+  // Custom app level profile fields
+  additionalFields: [
+    {
+      name: "location",
+      label: "Location",
+      required: true, 
+    },
+    {
+      name: "bio",
+      label: "Bio",
+      required: false,
+    }
+  ], 
 };
 const store = new ProfilesStore(new ProfilesClient(appAgentClient, 'my-role-name'), config);
 ```
@@ -27,8 +40,18 @@ The config for the `ProfilesStore` has these options:
 ```ts
 export interface ProfilesConfig {
   avatarMode: "identicon" | "avatar-required" | "avatar-optional"; // default: 'avatar-optional'
-  additionalFields: string[]; // default: []
+  additionalFields: FieldConfig[]; // default: []
   minNicknameLength: number; // default: 3
+}
+```
+
+The `FieldConfig` has these options:
+
+```ts
+export interface FieldConfig {
+  name: string,
+  label: string,
+  required: boolean,
 }
 ```
 

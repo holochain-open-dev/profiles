@@ -16,6 +16,7 @@ import { profilesStoreContext } from "../context";
 import { Profile } from "../types";
 import { resizeAndExport } from "./utils/image";
 import { sharedStyles } from "@holochain-open-dev/elements";
+import { FieldConfig } from "../config";
 
 /**
  * @element edit-profile
@@ -230,16 +231,16 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     );
   }
 
-  renderField(fieldName: string) {
+  renderField(fieldConfig: FieldConfig) {
     return html`
       <mwc-textfield
-        id="profile-field-${fieldName}"
+        id="profile-field-${fieldConfig.name}"
         outlined
-        required
+        .required=${fieldConfig.required}
         autoValidate
-        .validationMessage=${msg("This field is required")}
-        .label=${fieldName}
-        .value=${this.profile?.fields[fieldName] || ""}
+        .validationMessage=${fieldConfig.required ? msg("This field is required") : null}
+        .label=${fieldConfig.label}
+        .value=${this.profile?.fields[fieldConfig.name] || ""}
         @input=${() => this.requestUpdate()}
         style="margin-top: 8px;"
       ></mwc-textfield>

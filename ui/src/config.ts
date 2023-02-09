@@ -1,6 +1,12 @@
+export interface FieldConfig {
+  name: string;
+  label: string;
+  required: boolean;
+}
+
 export interface ProfilesConfig {
   avatarMode: 'identicon' | 'avatar-required' | 'avatar-optional';
-  additionalFields: string[];
+  additionalFields: FieldConfig[];
   minNicknameLength: number;
 }
 
