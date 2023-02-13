@@ -3,7 +3,7 @@ import {
   asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
-  joinMap,
+  asyncJoinMap,
   lazyLoadAndPoll,
 } from "@holochain-open-dev/stores";
 import merge from "lodash-es/merge";
@@ -66,6 +66,6 @@ export class ProfilesStore {
   agentsProfiles(
     agents: Array<AgentPubKey>
   ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile | undefined>> {
-    return joinMap(slice(this.profiles, agents));
+    return asyncJoinMap(slice(this.profiles, agents));
   }
 }
