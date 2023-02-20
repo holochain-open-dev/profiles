@@ -2,7 +2,7 @@ import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
 import { state } from "lit/decorators.js";
-import { IconButton } from "@scoped-elements/material-web";
+import { MdStandardIconButton } from "@scoped-elements/material-web";
 
 import { profilesStoreContext } from "../context";
 import { ProfilesStore } from "../profiles-store";
@@ -40,11 +40,11 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
 
     return html`
       <profile-detail .agentPubKey=${this._store.client.client.myPubKey}>
-        <mwc-icon-button
+        <md-standard-icon-button
           slot="action"
-          icon="edit"
           @click=${() => (this._editing = true)}
-        ></mwc-icon-button>
+          >edit</md-standard-icon-button
+        >
       </profile-detail>
     `;
   }
@@ -54,7 +54,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      "mwc-icon-button": IconButton,
+      "md-standard-icon-button": MdStandardIconButton,
       "profile-detail": ProfileDetail,
       "update-profile": UpdateProfile,
     };

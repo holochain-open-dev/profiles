@@ -66,7 +66,7 @@
           if (!this.loaded) return html`<span>Loading...</span>`;
           return html`
             <profiles-context .store=${this.store}>
-              <profile-prompt>
+              <profile-prompt style="align-items: start">
                 <list-profiles></list-profiles>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
                 <search-agent include-myself></search-agent>
