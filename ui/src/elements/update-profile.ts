@@ -1,4 +1,4 @@
-import { html, LitElement } from "lit";
+import { html, css, LitElement } from "lit";
 import { state } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
@@ -56,8 +56,9 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
       case "complete":
         return html` <edit-profile
           allowCancel
+          style="margin-top: 16px; flex: 1"
           .profile=${this._myProfile.value.value}
-          .save-profile-label=${msg("Update Profile")}
+          .saveProfileLabel=${msg("Update Profile")}
           @save-profile=${(e: CustomEvent) =>
             this.updateProfile(e.detail.profile)}
         ></edit-profile>`;
@@ -80,6 +81,13 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
     };
   }
   static get styles() {
-    return [sharedStyles];
+    return [
+      sharedStyles,
+      css`
+        :host {
+          display: flex;
+        }
+      `,
+    ];
   }
 }

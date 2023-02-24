@@ -3,8 +3,8 @@ import {
   asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
-  joinMap,
   lazyLoadAndPoll,
+  joinAsyncMap,
 } from "@holochain-open-dev/stores";
 import merge from "lodash-es/merge";
 import { AgentPubKey } from "@holochain/client";
@@ -28,7 +28,7 @@ export class ProfilesStore {
    */
   agentsWithProfile = lazyLoadAndPoll(
     () => this.client.getAgentsWithProfile(),
-    100
+    1000
   );
 
   /**
@@ -37,8 +37,8 @@ export class ProfilesStore {
    * This will get slower as the number of agents in the DHT increases
    */
   allProfiles = asyncDeriveStore(
-    [this.agentsWithProfile],
-    ([agents]) =>
+    this.agentsWithProfile,
+    (agents) =>
       this.agentsProfiles(agents) as AsyncReadable<
         ReadonlyMap<AgentPubKey, Profile>
       >
@@ -66,6 +66,6 @@ export class ProfilesStore {
   agentsProfiles(
     agents: Array<AgentPubKey>
   ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile | undefined>> {
-    return joinMap(slice(this.profiles, agents));
+    return joinAsyncMap(slice(this.profiles, agents));
   }
 }

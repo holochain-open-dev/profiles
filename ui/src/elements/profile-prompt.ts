@@ -1,12 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { state } from "lit/decorators.js";
 
-import {
-  Button,
-  CircularProgress,
-  Icon,
-  TextField,
-} from "@scoped-elements/material-web";
+import { CircularProgress } from "@scoped-elements/material-web";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit-labs/context";
@@ -77,8 +72,6 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
    */
   static get scopedElements() {
     return {
-      "mwc-textfield": TextField,
-      "mwc-button": Button,
       "display-error": DisplayError,
       "mwc-circular-progress": CircularProgress,
       "create-profile": CreateProfile,

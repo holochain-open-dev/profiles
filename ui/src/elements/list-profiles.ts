@@ -3,7 +3,7 @@ import { AgentPubKey } from "@holochain/client";
 import { state } from "lit/decorators.js";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
-import { ListItem, List } from "@scoped-elements/material-web";
+import { MdListItem, MdList } from "@scoped-elements/material-web";
 import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { localized, msg } from "@lit/localize";
@@ -60,29 +60,25 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
   renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
     if (profiles.size === 0)
-      return html`<mwc-list-item
-        >${msg("There are no created profiles yet")}</mwc-list-item
-      >`;
+      return html`<md-list-item
+        .headline=${msg("There are no created profiles yet")}
+      ></md-list-item>`;
 
     return html`
-      <mwc-list
+      <md-list
         style="min-width: 80px; flex: 1;"
         @selected=${(e: CustomEvent) =>
           this.fireAgentSelected(Array.from(profiles.keys())[e.detail.index])}
       >
         ${Array.from(profiles.entries()).map(
           ([agent_pub_key, profile]) => html`
-            <mwc-list-item
-              graphic="avatar"
-              style="--mdc-list-item-graphic-size: 32px;"
-            >
-              <agent-avatar slot="graphic" .agentPubKey=${agent_pub_key}>
+            <md-list-item .headline=${profile.nickname}>
+              <agent-avatar slot="start" .agentPubKey=${agent_pub_key}>
               </agent-avatar>
-              <span>${profile.nickname}</span>
-            </mwc-list-item>
+            </md-list-item>
           `
         )}
-      </mwc-list>
+      </md-list>
     `;
   }
 
@@ -119,9 +115,9 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
     return {
       "agent-avatar": AgentAvatar,
       "profile-list-item-skeleton": ProfileListItemSkeleton,
-      "mwc-list": List,
+      "md-list": MdList,
       "display-error": DisplayError,
-      "mwc-list-item": ListItem,
+      "md-list-item": MdListItem,
     };
   }
 }

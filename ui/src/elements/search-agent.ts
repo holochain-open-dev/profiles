@@ -1,10 +1,10 @@
 import { property, state, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import {
-  MenuSurface,
-  List,
-  ListItem,
-  TextField,
+  MdMenuSurface,
+  MdList,
+  MdListItem,
+  MdOutlinedTextField,
 } from "@scoped-elements/material-web";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
@@ -74,32 +74,32 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
    * @internal
    */
   @query("#textfield")
-  private _textField!: TextField;
+  private _textField!: MdOutlinedTextField;
 
   /**
    * @internal
    */
   @query("#overlay")
-  private _overlay!: MenuSurface;
+  private _overlay!: MdMenuSurface;
 
   firstUpdated() {
-    this.addEventListener("blur", () => this._overlay.close());
+    this.addEventListener("blur", () => {
+      (this._overlay as any).open = true;
+    });
   }
 
   onFilterChange() {
-    if (this._textField.value.length < 3) {
+    if ((this._textField as any).value.length < 3) {
       this._searchProfiles = undefined;
       return;
     }
 
-    this._overlay.show();
+    (this._overlay as any).open = true;
     const store = asyncDeriveStore(
-      [
-        lazyLoad(async () =>
-          this._store.client.searchAgents(this._textField.value)
-        ),
-      ],
-      ([agents]) =>
+      lazyLoad(async () =>
+        this._store.client.searchAgents((this._textField as any).value)
+      ),
+      (agents) =>
         this._store.agentsProfiles(agents) as AsyncReadable<
           ReadonlyMap<AgentPubKey, Profile>
         >
@@ -118,12 +118,12 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
 
     // If the consumer says so, clear the field
     if (this.clearOnSelect) {
-      this._textField.value = "";
+      (this._textField as any).value = "";
       this._searchProfiles = undefined;
     } else {
-      this._textField.value = profile.nickname;
+      (this._textField as any).value = profile.nickname;
     }
-    this._overlay.close();
+    (this._overlay as any).open = false;
   }
 
   renderAgentList() {
@@ -146,31 +146,24 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
       case "complete": {
         const agents = this._searchProfiles.value.value;
         if (agents.size === 0)
-          return html`<mwc-list-item
-            >${msg("No agents match the filter")}</mwc-list-item
-          >`;
+          return html`<md-list-item
+            .headline=${msg("No agents match the filter")}
+          ></md-list-item>`;
 
         return html`
-          <mwc-list
-            style="min-width: 80px;"
-            @selected=${(e: CustomEvent) =>
-              this.onUsernameSelected(
-                Array.from(agents.entries())[e.detail.index]
-              )}
-          >
+          <md-list style="min-width: 80px;">
             ${Array.from(agents.entries()).map(
-              ([pubkey, profile]) => html` <mwc-list-item
-                graphic="avatar"
-                style="--mdc-list-item-graphic-size: 32px;"
+              ([pubkey, profile]) => html` <md-list-item
+                .headline=${profile.nickname}
+                @click=${() => this.onUsernameSelected([pubkey, profile])}
               >
                 <agent-avatar
-                  slot="graphic"
+                  slot="start"
                   .agentPubKey=${pubkey}
                 ></agent-avatar>
-                <span style="margin-left: 8px;">${profile.nickname}</span>
-              </mwc-list-item>`
+              </md-list-item>`
             )}
-          </mwc-list>
+          </md-list>
         `;
       }
     }
@@ -179,18 +172,17 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   render() {
     return html`
       <div style="position: relative; flex: 1; display: flex;">
-        <mwc-textfield
+        <md-outlined-text-field
           id="textfield"
           style="flex: 1;"
           class="input"
           .label=${this.fieldLabel ?? msg("Search agent")}
           .placeholder=${msg("At least 3 chars...")}
-          outlined
           @input=${() => this.onFilterChange()}
         >
-        </mwc-textfield>
-        <mwc-menu-surface id="overlay" absolute x="4" y="28"
-          >${this.renderAgentList()}</mwc-menu-surface
+        </md-outlined-text-field>
+        <md-menu-surface id="overlay" absolute x="4" y="28"
+          >${this.renderAgentList()}</md-menu-surface
         >
       </div>
     `;
@@ -218,11 +210,11 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     return {
       "sl-skeleton": SlSkeleton,
       "agent-avatar": AgentAvatar,
-      "mwc-textfield": TextField,
-      "mwc-menu-surface": MenuSurface,
-      "mwc-list": List,
+      "md-outlined-text-field": MdOutlinedTextField,
+      "md-menu-surface": MdMenuSurface,
+      "md-list": MdList,
       "display-error": DisplayError,
-      "mwc-list-item": ListItem,
+      "md-list-item": MdListItem,
       "profile-list-item-skeleton": ProfileListItemSkeleton,
     };
   }
