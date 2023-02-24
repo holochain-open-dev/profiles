@@ -216,8 +216,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
       <md-outlined-text-field
         id="profile-field-${fieldConfig.name}"
         .required=${fieldConfig.required}
-        autoValidate
-        .validationMessage=${fieldConfig.required ? msg("This field is required") : null}
+        .errorMessage=${fieldConfig.required ? msg("This field is required") : null}
         .label=${fieldConfig.name}
         .value=${this.profile?.fields[fieldConfig.name] || ""}
         @input=${() => this.requestUpdate()}
