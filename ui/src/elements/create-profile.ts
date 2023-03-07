@@ -53,6 +53,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
           >
           <edit-profile
             .saveProfileLabel=${msg("Create Profile")}
+            ._store=${this._store}
             @save-profile=${(e: CustomEvent) =>
               this.createProfile(e.detail.profile)}
           ></edit-profile></div
