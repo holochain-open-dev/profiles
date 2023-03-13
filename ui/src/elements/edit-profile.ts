@@ -3,22 +3,20 @@ import {
   MdFilledButton,
   MdOutlinedButton,
   MdFab,
-  MdStandardIconButton,
   MdOutlinedTextField,
-  Card,
 } from "@scoped-elements/material-web";
 import { SlAvatar } from "@scoped-elements/shoelace";
 import { html, LitElement } from "lit";
 import { property, query, state } from "lit/decorators.js";
 import { localized, msg, str } from "@lit/localize";
 import { consume } from "@lit-labs/context";
-
-import { ProfilesStore } from "../profiles-store";
-import { profilesStoreContext } from "../context";
-import { Profile } from "../types";
-import { resizeAndExport } from "./utils/image";
 import { sharedStyles } from "@holochain-open-dev/elements";
-import { FieldConfig } from "../config";
+
+import { ProfilesStore } from "../profiles-store.js";
+import { profilesStoreContext } from "../context.js";
+import { Profile } from "../types.js";
+import { resizeAndExport } from "./utils/image.js";
+import { FieldConfig } from "../config.js";
 
 /**
  * @element edit-profile
@@ -38,14 +36,12 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   @property({ type: String, attribute: "save-profile-label" })
   saveProfileLabel: string | undefined;
 
-  /** Dependencies */
-
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   @property({ type: Boolean })
   allowCancel = false;
@@ -94,8 +90,8 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   avatarMode() {
     return (
-      this._store.config.avatarMode === "avatar-required" ||
-      this._store.config.avatarMode === "avatar-optional"
+      this.store.config.avatarMode === "avatar-required" ||
+      this.store.config.avatarMode === "avatar-optional"
     );
   }
 
@@ -138,7 +134,7 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   shouldSaveButtonBeEnabled() {
     if (!this._nicknameField) return false;
     if (!(this._nicknameField as any).validity.valid) return false;
-    if (this._store.config.avatarMode === "avatar-required" && !this._avatar)
+    if (this.store.config.avatarMode === "avatar-required" && !this._avatar)
       return false;
     if (
       Object.values(this.getAdditionalTextFields()).find(
@@ -216,7 +212,9 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
       <md-outlined-text-field
         id="profile-field-${fieldConfig.name}"
         .required=${fieldConfig.required}
-        .errorMessage=${fieldConfig.required ? msg("This field is required") : null}
+        .errorMessage=${fieldConfig.required
+          ? msg("This field is required")
+          : null}
         .label=${fieldConfig.name}
         .value=${this.profile?.fields[fieldConfig.name] || ""}
         @input=${() => this.requestUpdate()}
@@ -244,18 +242,18 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
               id="nickname-field"
               .label=${msg("Nickname")}
               required
-              .minLength=${this._store.config.minNicknameLength}
+              .minLength=${this.store.config.minNicknameLength}
               .errorText=${msg("Nickname is too short")}
               .value=${this.profile?.nickname || ""}
               .helper=${msg(
-                str`Min. ${this._store.config.minNicknameLength} characters`
+                str`Min. ${this.store.config.minNicknameLength} characters`
               )}
               style="margin-left: 8px;"
             ></md-outlined-text-field>
           </div>
         </div>
 
-        ${this._store.config.additionalFields.map((field) =>
+        ${this.store.config.additionalFields.map((field) =>
           this.renderField(field)
         )}
 

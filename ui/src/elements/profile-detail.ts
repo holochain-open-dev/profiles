@@ -3,7 +3,7 @@ import { AgentPubKey } from "@holochain/client";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { state, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { SlSkeleton } from "@scoped-elements/shoelace";
 import { localized, msg } from "@lit/localize";
 import {
@@ -12,10 +12,10 @@ import {
   sharedStyles,
 } from "@holochain-open-dev/elements";
 
-import { profilesStoreContext } from "../context";
-import { ProfilesStore } from "../profiles-store";
-import { AgentAvatar } from "./agent-avatar";
-import { Profile } from "../types";
+import { profilesStoreContext } from "../context.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { AgentAvatar } from "./agent-avatar.js";
+import { Profile } from "../types.js";
 
 /**
  * @element profile-detail
@@ -31,11 +31,11 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
   agentPubKey!: AgentPubKey;
 
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /** Private properties */
 
@@ -43,7 +43,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
    * @internal
    */
   private _agentProfile = new StoreSubscriber(this, () =>
-    this._store.profiles.get(this.agentPubKey)
+    this.store.profiles.get(this.agentPubKey)
   );
 
   getAdditionalFields(profile: Profile): Record<string, string> {
@@ -98,9 +98,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         </div>
 
         ${Object.entries(this.getAdditionalFields(profile))
-            .filter(([, value]) => value !== "")
-            .map(([key, value]) => this.renderAdditionalField(key, value)
-        )}
+          .filter(([, value]) => value !== "")
+          .map(([key, value]) => this.renderAdditionalField(key, value))}
       </div>
     `;
   }
@@ -123,7 +122,7 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
               </div>
             </div>
 
-            ${this._store.config.additionalFields.map(
+            ${this.store.config.additionalFields.map(
               () => html`
                 <sl-skeleton
                   effect="pulse"

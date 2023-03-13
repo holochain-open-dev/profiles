@@ -1,27 +1,25 @@
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { state } from "lit/decorators.js";
+import { property, state } from "lit/decorators.js";
 import { MdStandardIconButton } from "@scoped-elements/material-web";
-
-import { profilesStoreContext } from "../context";
-import { ProfilesStore } from "../profiles-store";
-import { ProfileDetail } from "./profile-detail";
-import { UpdateProfile } from "./update-profile";
 import { sharedStyles } from "@holochain-open-dev/elements";
+
+import { profilesStoreContext } from "../context.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { ProfileDetail } from "./profile-detail.js";
+import { UpdateProfile } from "./update-profile.js";
 
 /**
  * @element profile-detail
  */
 export class MyProfile extends ScopedElementsMixin(LitElement) {
-  /** Dependencies */
-
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /** Private properties */
 
@@ -39,7 +37,7 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this._store.client.client.myPubKey}>
+      <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
         <md-standard-icon-button
           slot="action"
           @click=${() => (this._editing = true)}

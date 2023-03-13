@@ -1,6 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { AgentPubKey } from "@holochain/client";
-import { state } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
 import { MdListItem, MdList } from "@scoped-elements/material-web";
@@ -21,11 +21,11 @@ import { Profile } from "../types";
 @localized()
 export class ListProfiles extends ScopedElementsMixin(LitElement) {
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /** Private properties */
 
@@ -34,7 +34,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
    */
   private _allProfiles = new StoreSubscriber(
     this,
-    () => this._store.allProfiles
+    () => this.store.allProfiles
   );
 
   initials(nickname: string): string {

@@ -1,5 +1,5 @@
 import { html, css, LitElement } from "lit";
-import { state } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { Card, CircularProgress } from "@scoped-elements/material-web";
@@ -7,10 +7,10 @@ import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 
-import { ProfilesStore } from "../profiles-store";
-import { profilesStoreContext } from "../context";
-import { EditProfile } from "./edit-profile";
-import { Profile } from "../types";
+import { ProfilesStore } from "../profiles-store.js";
+import { profilesStoreContext } from "../context.js";
+import { EditProfile } from "./edit-profile.js";
+import { Profile } from "../types.js";
 
 /**
  * @element update-profile
@@ -19,19 +19,19 @@ import { Profile } from "../types";
 @localized()
 export class UpdateProfile extends ScopedElementsMixin(LitElement) {
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
+  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
 
   async updateProfile(profile: Profile) {
-    await this._store.client.updateProfile(profile);
+    await this.store.client.updateProfile(profile);
 
     this.dispatchEvent(
       new CustomEvent("profile-updated", {

@@ -10,21 +10,15 @@ import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { localized, msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
-import {
-  asyncDeriveStore,
-  AsyncReadable,
-  AsyncStatus,
-  lazyLoad,
-  StoreSubscriber,
-} from "@holochain-open-dev/stores";
+import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
 import { SlSkeleton } from "@scoped-elements/shoelace";
-
-import { Profile } from "../types";
-import { ProfilesStore } from "../profiles-store";
-import { profilesStoreContext } from "../context";
-import { AgentAvatar } from "./agent-avatar";
-import { ProfileListItemSkeleton } from "./profile-list-item-skeleton";
 import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+
+import { Profile } from "../types.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { profilesStoreContext } from "../context.js";
+import { AgentAvatar } from "./agent-avatar.js";
+import { ProfileListItemSkeleton } from "./profile-list-item-skeleton.js";
 
 /**
  * @element search-agent
@@ -56,11 +50,11 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   fieldLabel!: string;
 
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /**
    * @internal
@@ -95,15 +89,7 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
     }
 
     (this._overlay as any).open = true;
-    const store = asyncDeriveStore(
-      lazyLoad(async () =>
-        this._store.client.searchAgents((this._textField as any).value)
-      ),
-      (agents) =>
-        this._store.agentsProfiles(agents) as AsyncReadable<
-          ReadonlyMap<AgentPubKey, Profile>
-        >
-    );
+    const store = this.store.searchProfiles((this._textField as any).value);
     this._searchProfiles = new StoreSubscriber(this, () => store);
   }
 

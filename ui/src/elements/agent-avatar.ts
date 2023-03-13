@@ -7,16 +7,16 @@ import {
 } from "@holochain-open-dev/elements";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { css, html, LitElement } from "lit";
-import { state, property } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
 import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
 import { AgentPubKey } from "@holochain/client";
 import { localized } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 
-import { profilesStoreContext } from "../context";
-import { ProfilesStore } from "../profiles-store";
-import { Profile } from "../types";
+import { profilesStoreContext } from "../context.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { Profile } from "../types.js";
 
 @localized()
 export class AgentAvatar extends ScopedElementsMixin(LitElement) {
@@ -37,14 +37,14 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   /** Dependencies */
 
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   private _agentProfile = new StoreSubscriber(this, () =>
-    this._store.profiles.get(this.agentPubKey)
+    this.store.profiles.get(this.agentPubKey)
   );
 
   renderIdenticon() {
@@ -83,7 +83,7 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
   }
 
   render() {
-    if (this._store.config.avatarMode === "identicon")
+    if (this.store.config.avatarMode === "identicon")
       return this.renderIdenticon();
 
     switch (this._agentProfile.value.status) {

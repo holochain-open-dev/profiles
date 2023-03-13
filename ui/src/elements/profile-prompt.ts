@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit";
-import { state } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 
 import { CircularProgress } from "@scoped-elements/material-web";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
@@ -8,10 +8,10 @@ import { consume } from "@lit-labs/context";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
 
-import { CreateProfile } from "./create-profile";
-import { ProfilesStore } from "../profiles-store";
-import { profilesStoreContext } from "../context";
-import { Profile } from "../types";
+import { CreateProfile } from "./create-profile.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { profilesStoreContext } from "../context.js";
+import { Profile } from "../types.js";
 
 /**
  * @element profile-prompt
@@ -20,18 +20,18 @@ import { Profile } from "../types";
 @localized()
 export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /** Private properties */
 
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this._store.myProfile);
+  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
 
   renderPrompt(myProfile: Profile | undefined) {
     if (myProfile) return html`<slot></slot>`;

@@ -1,15 +1,15 @@
 import { html, LitElement } from "lit";
-import { state } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { Card } from "@scoped-elements/material-web";
 import { localized, msg } from "@lit/localize";
 import { sharedStyles } from "@holochain-open-dev/elements";
 
-import { ProfilesStore } from "../profiles-store";
-import { profilesStoreContext } from "../context";
-import { EditProfile } from "./edit-profile";
-import { Profile } from "../types";
+import { ProfilesStore } from "../profiles-store.js";
+import { profilesStoreContext } from "../context.js";
+import { EditProfile } from "./edit-profile.js";
+import { Profile } from "../types.js";
 
 /**
  * A custom element that fires event on value change.
@@ -20,16 +20,16 @@ import { Profile } from "../types";
 @localized()
 export class CreateProfile extends ScopedElementsMixin(LitElement) {
   /**
-   * @internal
+   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
-  @state()
-  _store!: ProfilesStore;
+  @property()
+  store!: ProfilesStore;
 
   /** Private properties */
 
   async createProfile(profile: Profile) {
-    await this._store.client.createProfile(profile);
+    await this.store.client.createProfile(profile);
 
     this.dispatchEvent(
       new CustomEvent("profile-created", {
@@ -53,6 +53,7 @@ export class CreateProfile extends ScopedElementsMixin(LitElement) {
           >
           <edit-profile
             .saveProfileLabel=${msg("Create Profile")}
+            .store=${this.store}
             @save-profile=${(e: CustomEvent) =>
               this.createProfile(e.detail.profile)}
           ></edit-profile></div
