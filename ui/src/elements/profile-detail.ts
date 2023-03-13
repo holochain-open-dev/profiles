@@ -97,8 +97,9 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
           <slot name="action"></slot>
         </div>
 
-        ${Object.entries(this.getAdditionalFields(profile)).map(
-          ([key, value]) => this.renderAdditionalField(key, value)
+        ${Object.entries(this.getAdditionalFields(profile))
+            .filter(([, value]) => value !== "")
+            .map(([key, value]) => this.renderAdditionalField(key, value)
         )}
       </div>
     `;

@@ -57,7 +57,18 @@
           const service = new ProfilesClient(client, "profiles-test");
 
           this.store = new ProfilesStore(service, {
-            additionalFields: ["Bio", "Location"],
+            additionalFields: [
+              {
+                name: "location",
+                label: "Location", 
+                required: true
+              },
+              {
+                name: "bio",
+                label: "Bio",
+                required: false,
+              },
+            ],
           });
           this.loaded = true;
         }
