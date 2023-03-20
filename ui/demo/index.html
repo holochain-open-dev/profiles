@@ -30,6 +30,7 @@
       import "../src/elements/agent-avatar.ts";
       import "../src/elements/my-profile.ts";
       import "../src/elements/list-profiles.ts";
+      import "../src/elements/search-agent.ts";
       // import "@holochain-open-dev/profiles/definitions/agent-avatar.js";
       // import "@holochain-open-dev/profiles/definitions/my-profile.js";
       // import "@holochain-open-dev/profiles/definitions/search-agent.js";
@@ -74,7 +75,7 @@
               <profile-prompt style="align-items: start">
                 <list-profiles></list-profiles>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
-                <search-agent include-myself></search-agent>
+                <search-agent required include-myself></search-agent>
                 <agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
                   <div
                     style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
