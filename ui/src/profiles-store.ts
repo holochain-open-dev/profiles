@@ -7,7 +7,6 @@ import {
   joinAsyncMap,
   lazyLoad,
 } from "@holochain-open-dev/stores";
-import merge from "lodash-es/merge";
 import { AgentPubKey } from "@holochain/client";
 
 import { ProfilesClient } from "./profiles-client.js";
@@ -21,7 +20,7 @@ export class ProfilesStore {
     public client: ProfilesClient,
     config: Partial<ProfilesConfig> = {}
   ) {
-    this.config = merge(defaultConfig, config);
+    this.config = { ...defaultConfig, ...config };
   }
 
   /**

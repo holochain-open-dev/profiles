@@ -1,19 +1,22 @@
 import { consume } from "@lit-labs/context";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
-import { property, state } from "lit/decorators.js";
-import { MdStandardIconButton } from "@scoped-elements/material-web";
-import { sharedStyles } from "@holochain-open-dev/elements";
+import { property, state, customElement } from "lit/decorators.js";
+import { sharedStyles, wrapPathInSvg } from "@holochain-open-dev/elements";
+import { mdiPencil } from "@mdi/js";
+
+import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
 
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
-import { ProfileDetail } from "./profile-detail.js";
-import { UpdateProfile } from "./update-profile.js";
+
+import "./update-profile.js";
+import "./profile-detail.js";
 
 /**
- * @element profile-detail
+ * @element my-profile
  */
-export class MyProfile extends ScopedElementsMixin(LitElement) {
+@customElement("my-profile")
+export class MyProfile extends LitElement {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
@@ -38,24 +41,13 @@ export class MyProfile extends ScopedElementsMixin(LitElement) {
 
     return html`
       <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
-        <md-standard-icon-button
+        <sl-icon-button
+          src="${wrapPathInSvg(mdiPencil)}"
           slot="action"
           @click=${() => (this._editing = true)}
-          >edit</md-standard-icon-button
-        >
+        ></sl-icon-button>
       </profile-detail>
     `;
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "md-standard-icon-button": MdStandardIconButton,
-      "profile-detail": ProfileDetail,
-      "update-profile": UpdateProfile,
-    };
   }
 
   static styles = [sharedStyles];

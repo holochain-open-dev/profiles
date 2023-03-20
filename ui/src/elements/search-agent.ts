@@ -1,31 +1,28 @@
-import { property, state, query } from "lit/decorators.js";
+import { customElement, property, state, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
-import {
-  MdMenuSurface,
-  MdList,
-  MdListItem,
-  MdOutlinedTextField,
-} from "@scoped-elements/material-web";
 import { consume } from "@lit-labs/context";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { localized, msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
 import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
-import { SlSkeleton } from "@scoped-elements/shoelace";
-import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles } from "@holochain-open-dev/elements";
+
+import "@holochain-open-dev/elements/elements/display-error.js";
+import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 
 import { Profile } from "../types.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import { AgentAvatar } from "./agent-avatar.js";
-import { ProfileListItemSkeleton } from "./profile-list-item-skeleton.js";
+import "./agent-avatar.js";
+import "./profile-list-item-skeleton.js";
+import SlInput from "@shoelace-style/shoelace/dist/components/input/input";
 
 /**
  * @element search-agent
  * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
  */
 @localized()
-export class SearchAgent extends ScopedElementsMixin(LitElement) {
+@customElement("search-agent")
+export class SearchAgent extends LitElement {
   /** Public attributes */
 
   /**
@@ -68,13 +65,13 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
    * @internal
    */
   @query("#textfield")
-  private _textField!: MdOutlinedTextField;
+  private _textField!: SlInput;
 
   /**
    * @internal
    */
   @query("#overlay")
-  private _overlay!: MdMenuSurface;
+  private _overlay!: any;
 
   firstUpdated() {
     this.addEventListener("blur", () => {
@@ -192,16 +189,16 @@ export class SearchAgent extends ScopedElementsMixin(LitElement) {
   /**
    * @ignore
    */
-  static get scopedElements() {
-    return {
-      "sl-skeleton": SlSkeleton,
-      "agent-avatar": AgentAvatar,
-      "md-outlined-text-field": MdOutlinedTextField,
-      "md-menu-surface": MdMenuSurface,
-      "md-list": MdList,
-      "display-error": DisplayError,
-      "md-list-item": MdListItem,
-      "profile-list-item-skeleton": ProfileListItemSkeleton,
-    };
-  }
+  // static get scopedElements() {
+  //   return {
+  //     "sl-skeleton": SlSkeleton,
+  //     "agent-avatar": AgentAvatar,
+  //     "md-outlined-text-field": MdOutlinedTextField,
+  //     "md-menu-surface": MdMenuSurface,
+  //     "md-list": MdList,
+  //     "display-error": DisplayError,
+  //     "md-list-item": MdListItem,
+  //     "profile-list-item-skeleton": ProfileListItemSkeleton,
+  //   };
+  // }
 }

@@ -1,14 +1,15 @@
 import { css, html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
-
-import { CircularProgress } from "@scoped-elements/material-web";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit-labs/context";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles } from "@holochain-open-dev/elements";
 
-import { CreateProfile } from "./create-profile.js";
+import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
+import "@holochain-open-dev/elements/elements/display-error.js";
+
+import "./create-profile.js";
+
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
@@ -18,7 +19,8 @@ import { Profile } from "../types.js";
  * @slot hero - Will be displayed above the create-profile form when the user is prompted with it
  */
 @localized()
-export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
+@customElement("profile-prompt")
+export class ProfilePrompt extends LitElement {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
@@ -56,26 +58,16 @@ export class ProfilePrompt extends ScopedElementsMixin(LitElement) {
           class="column"
           style="align-items: center; justify-content: center; flex: 1;"
         >
-          <mwc-circular-progress indeterminate></mwc-circular-progress>
+          <sl-spinner style="font-size: 2rem;"></sl-spinner>
         </div>`;
       case "complete":
         return this.renderPrompt(this._myProfile.value.value);
       case "error":
         return html`<display-error
+          .headline=${msg("Error fetching your profile")}
           .error=${this._myProfile.value.error}
         ></display-error> `;
     }
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "display-error": DisplayError,
-      "mwc-circular-progress": CircularProgress,
-      "create-profile": CreateProfile,
-    };
   }
 
   static get styles() {

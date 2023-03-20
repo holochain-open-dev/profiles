@@ -14,16 +14,7 @@
     ".": "./dist/index.js",
     "./locales/es-419": "./locales/es-419.js",
     "./locales/fr-fr": "./locales/fr-fr.js",
-    "./profiles-context": "./dist/definitions/profiles-context.js",
-    "./create-profile": "./dist/definitions/create-profile.js",
-    "./profile-list-item-skeleton": "./dist/definitions/profile-list-item-skeleton.js",
-    "./update-profile": "./dist/definitions/update-profile.js",
-    "./my-profile": "./dist/definitions/my-profile.js",
-    "./profile-detail": "./dist/definitions/profile-detail.js",
-    "./profile-prompt": "./dist/definitions/profile-prompt.js",
-    "./search-agent": "./dist/definitions/search-agent.js",
-    "./agent-avatar": "./dist/definitions/agent-avatar.js",
-    "./list-profiles": "./dist/definitions/list-profiles.js",
+    "./elements/*": "./dist/elements/*",
     "./mocks": "./dist/mocks.js"
   },
   "files": ["dist"],
@@ -31,8 +22,6 @@
     "start": "vite --clearScreen false --port $UI_PORT",
     "build": "npm run lint && tsc",
     "test": "npm run build && web-test-runner --coverage",
-    "test-debug": "npm run build && DEBUG=true web-test-runner --coverage",
-    "test-watch": "web-test-runner --watch",
     "lint": "eslint --ext .ts,.html src --ignore-path .gitignore",
     "analyze": "cem analyze --litelement --exclude dist",
     "format": "eslint --ext .ts,.html src --fix --ignore-path .gitignore",
@@ -40,40 +29,31 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.2.5",
+    "@holochain-open-dev/elements": "^0.3.6",
     "@holochain-open-dev/stores": "^0.4.2",
-    "@holochain-open-dev/utils": "^0.12.0",
+    "@holochain-open-dev/utils": "^0.12.1",
     "@holochain/client": "^0.12.0",
     "@lit-labs/context": "^0.2.0",
     "@lit/localize": "^0.11.2",
-    "@open-wc/scoped-elements": "^2.1.1",
-    "@scoped-elements/material-web": "^0.1.1",
-    "@scoped-elements/shoelace": "^0.1.0",
-    "emittery": "^1.0.1",
-    "lodash-es": "^4.17.21"
+    "@mdi/js": "^7.1.96",
+    "@shoelace-style/shoelace": "^2.3.0"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.5.7",
     "@lit/localize-tools": "^0.6.3",
     "@open-wc/eslint-config": "^2.0.0",
-    "@types/lodash-es": "^4.17.5",
     "@types/node": "14.11.1",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
-    "@webcomponents/scoped-custom-element-registry": "^0.0.5",
     "concurrently": "^5.1.0",
     "deepmerge": "^3.2.0",
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "prettier": "^2.0.4",
-    "rimraf": "^3.0.2",
     "tslib": "^2.0.0",
     "typescript": "^4.9.0",
     "vite": "^4.0.4",
     "vite-plugin-checker": "^0.5.3"
-  },
-  "eslintConfig": {
-    "extends": ["@open-wc/eslint-config", "eslint-config-prettier"]
   },
   "publishConfig": {
     "access": "public"

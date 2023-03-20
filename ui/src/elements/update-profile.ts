@@ -1,15 +1,17 @@
 import { html, css, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { Card, CircularProgress } from "@scoped-elements/material-web";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles } from "@holochain-open-dev/elements";
+
+import "@holochain-open-dev/elements/elements/display-error.js";
+import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
+
+import "./edit-profile.js";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import { EditProfile } from "./edit-profile.js";
 import { Profile } from "../types.js";
 
 /**
@@ -17,7 +19,8 @@ import { Profile } from "../types.js";
  * @fires profile-updated - Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }
  */
 @localized()
-export class UpdateProfile extends ScopedElementsMixin(LitElement) {
+@customElement("update-profile")
+export class UpdateProfile extends LitElement {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
@@ -51,11 +54,11 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
           class="column"
           style="align-items: center; justify-content: center; flex: 1;"
         >
-          <mwc-circular-progress indeterminate></mwc-circular-progress>
+          <sl-spinner></sl-spinner>
         </div>`;
       case "complete":
         return html` <edit-profile
-          allowCancel
+          .allowCancel=${true}
           style="margin-top: 16px; flex: 1"
           .profile=${this._myProfile.value.value}
           .saveProfileLabel=${msg("Update Profile")}
@@ -64,22 +67,12 @@ export class UpdateProfile extends ScopedElementsMixin(LitElement) {
         ></edit-profile>`;
       case "error":
         return html`<display-error
+          .headline=${msg("Error fetching your profile")}
           .error=${this._myProfile.value.error.data.data}
         ></display-error>`;
     }
   }
 
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "display-error": DisplayError,
-      "mwc-circular-progress": CircularProgress,
-      "edit-profile": EditProfile,
-      "mwc-card": Card,
-    };
-  }
   static get styles() {
     return [
       sharedStyles,

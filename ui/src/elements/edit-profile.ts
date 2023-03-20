@@ -1,21 +1,18 @@
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import {
-  MdFilledButton,
-  MdOutlinedButton,
-  MdFab,
-  MdOutlinedTextField,
-} from "@scoped-elements/material-web";
-import { SlAvatar } from "@scoped-elements/shoelace";
 import { html, LitElement } from "lit";
-import { property, query, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { localized, msg, str } from "@lit/localize";
 import { consume } from "@lit-labs/context";
-import { sharedStyles } from "@holochain-open-dev/elements";
+import { onSubmit, sharedStyles } from "@holochain-open-dev/elements";
+
+import "@shoelace-style/shoelace/dist/components/avatar/avatar.js";
+import "@shoelace-style/shoelace/dist/components/button/button.js";
+import "@shoelace-style/shoelace/dist/components/input/input.js";
+import "@shoelace-style/shoelace/dist/components/icon/icon.js";
+import "@holochain-open-dev/elements/elements/select-avatar.js";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
-import { resizeAndExport } from "./utils/image.js";
 import { FieldConfig } from "../config.js";
 
 /**
@@ -23,7 +20,8 @@ import { FieldConfig } from "../config.js";
  * @fires save-profile - Fired when the save profile button is clicked
  */
 @localized()
-export class EditProfile extends ScopedElementsMixin(LitElement) {
+@customElement("edit-profile")
+export class EditProfile extends LitElement {
   /**
    * The profile to be edited.
    */
@@ -43,50 +41,10 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
   @property()
   store!: ProfilesStore;
 
-  @property({ type: Boolean })
+  @property({ type: Boolean, attribute: "allow-cancel" })
   allowCancel = false;
 
   /** Private properties */
-
-  /**
-   * @internal
-   */
-  @query("#nickname-field")
-  private _nicknameField!: MdOutlinedTextField;
-
-  /**
-   * @internal
-   */
-  @query("#avatar-file-picker")
-  private _avatarFilePicker!: HTMLInputElement;
-
-  /**
-   * @internal
-   */
-  @state()
-  private _avatar: string | undefined;
-
-  firstUpdated() {
-    this._avatar = this.profile?.fields["avatar"];
-    // TODO: figure out why this is necessary to enable the update profile button and fix it
-    setTimeout(() => this.requestUpdate());
-  }
-
-  onAvatarUploaded() {
-    if (this._avatarFilePicker.files && this._avatarFilePicker.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => {
-          this._avatar = resizeAndExport(img);
-          this._avatarFilePicker.value = "";
-        };
-        img.src = e.target?.result as string;
-      };
-      reader.readAsDataURL(this._avatarFilePicker.files[0]);
-    }
-  }
 
   avatarMode() {
     return (
@@ -95,92 +53,9 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
     );
   }
 
-  renderAvatar() {
-    if (!this.avatarMode()) return html``;
-    return html`
-      <div
-        style="width: 80px; height: 80px; justify-content: center;"
-        class="row"
-      >
-        ${this._avatar
-          ? html`
-              <div class="column" style="align-items: center; ">
-                <sl-avatar
-                  image="${this._avatar}"
-                  alt="Avatar"
-                  style="margin-bottom: 4px; --size: 3.5rem;"
-                  initials=""
-                ></sl-avatar>
-                <span
-                  class="placeholder label"
-                  style="cursor: pointer;   text-decoration: underline;"
-                  @click=${() => (this._avatar = undefined)}
-                  >${msg("Clear")}</span
-                >
-              </div>
-            `
-          : html` <div class="column" style="align-items: center;">
-              <md-fab
-                icon="add"
-                @click=${() => this._avatarFilePicker.click()}
-                style="margin-bottom: 4px;"
-              ></md-fab>
-              <span class="placeholder label">${msg("Avatar")}</span>
-            </div>`}
-      </div>
-    `;
-  }
-
-  shouldSaveButtonBeEnabled() {
-    if (!this._nicknameField) return false;
-    if (!(this._nicknameField as any).validity.valid) return false;
-    if (this.store.config.avatarMode === "avatar-required" && !this._avatar)
-      return false;
-    if (
-      Object.values(this.getAdditionalTextFields()).find(
-        (t) => !(t as any).validity.valid
-      )
-    )
-      return false;
-
-    return true;
-  }
-
-  textfieldToFieldId(field: MdOutlinedTextField): string {
-    return field.id.split("-")[2];
-  }
-
-  getAdditionalFieldsValues(): Record<string, string> {
-    const textfields = this.getAdditionalTextFields();
-
-    const values: Record<string, string> = {};
-    for (const [id, textfield] of Object.entries(textfields)) {
-      values[id] = (textfield as any).value;
-    }
-
-    return values;
-  }
-
-  getAdditionalTextFields(): Record<string, MdOutlinedTextField> {
-    const textfields = Array.from(
-      this.shadowRoot!.querySelectorAll("md-outlined-text-field")
-    ).filter((f) => f.id !== "nickname-field") as MdOutlinedTextField[];
-
-    const fields: Record<string, MdOutlinedTextField> = {};
-    for (const field of textfields) {
-      const id = this.textfieldToFieldId(field);
-      fields[id] = field;
-    }
-    return fields;
-  }
-
-  fireSaveProfile() {
-    const nickname = (this._nicknameField as any).value;
-
-    const fields: Record<string, string> = this.getAdditionalFieldsValues();
-    if (this._avatar) {
-      fields["avatar"] = this._avatar;
-    }
+  fireSaveProfile(fields: Record<string, string>) {
+    const nickname = fields["nickname"];
+    delete fields["nickname"];
 
     const profile: Profile = {
       fields,
@@ -209,48 +84,47 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
 
   renderField(fieldConfig: FieldConfig) {
     return html`
-      <md-outlined-text-field
-        id="profile-field-${fieldConfig.name}"
+      <sl-input
+        name="${fieldConfig.name}"
         .required=${fieldConfig.required}
-        .errorMessage=${fieldConfig.required
-          ? msg("This field is required")
-          : null}
-        .label=${fieldConfig.name}
+        .label=${fieldConfig.label}
         .value=${this.profile?.fields[fieldConfig.name] || ""}
-        @input=${() => this.requestUpdate()}
-        style="margin-bottom: 8px; margin-top: 8px"
-      ></md-outlined-text-field>
+        style="margin-bottom: 16px;"
+      ></sl-input>
     `;
   }
 
   render() {
+    console.log(this.store.config.avatarMode === "avatar-required");
     return html`
-      ${this.avatarMode()
-        ? html`<input
-            type="file"
-            id="avatar-file-picker"
-            style="display: none;"
-            @change=${this.onAvatarUploaded}
-          />`
-        : html``}
-      <div class="column">
-        <div class="row" style="justify-content: center; align-self: start;">
-          ${this.renderAvatar()}
+      <form
+        id="profile-form"
+        class="column"
+        ${onSubmit((fields) => this.fireSaveProfile(fields))}
+      >
+        <div
+          class="row"
+          style="justify-content: center; align-self: start; margin-bottom: 16px"
+        >
+          ${this.avatarMode()
+            ? html` <select-avatar
+                name="avatar"
+                .value=${this.profile?.fields["avatar"] || undefined}
+                .required=${this.store.config.avatarMode === "avatar-required"}
+              ></select-avatar>`
+            : html``}
 
-          <div>
-            <md-outlined-text-field
-              id="nickname-field"
-              .label=${msg("Nickname")}
-              required
-              .minLength=${this.store.config.minNicknameLength}
-              .errorText=${msg("Nickname is too short")}
-              .value=${this.profile?.nickname || ""}
-              .helper=${msg(
-                str`Min. ${this.store.config.minNicknameLength} characters`
-              )}
-              style="margin-left: 8px;"
-            ></md-outlined-text-field>
-          </div>
+          <sl-input
+            name="nickname"
+            .label=${msg("Nickname")}
+            required
+            minLength="${this.store.config.minNicknameLength}"
+            .value=${this.profile?.nickname || ""}
+            .helpText=${msg(
+              str`Min. ${this.store.config.minNicknameLength} characters`
+            )}
+            style="margin-left: 16px;"
+          ></sl-input>
         </div>
 
         ${this.store.config.additionalFields.map((field) =>
@@ -260,36 +134,21 @@ export class EditProfile extends ScopedElementsMixin(LitElement) {
         <div class="row" style="margin-top: 8px;">
           ${this.allowCancel
             ? html`
-                <md-outlined-button
+                <sl-button
                   style="flex: 1; margin-right: 6px;"
-                  .label=${msg("Cancel")}
                   @click=${() => this.fireCancel()}
-                ></md-outlined-button>
+                >
+                  ${msg("Cancel")}
+                </sl-button>
               `
             : html``}
 
-          <md-filled-button
-            style="flex: 1;"
-            .disabled=${!this.shouldSaveButtonBeEnabled()}
-            .label=${this.saveProfileLabel ?? msg("Save Profile")}
-            @click=${() => this.fireSaveProfile()}
-          ></md-filled-button>
+          <sl-button style="flex: 1;" variant="primary" type="submit"
+            >${this.saveProfileLabel ?? msg("Save Profile")}
+          </sl-button>
         </div>
-      </div>
+      </form>
     `;
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "md-outlined-text-field": MdOutlinedTextField,
-      "md-filled-button": MdFilledButton,
-      "md-outlined-button": MdOutlinedButton,
-      "md-fab": MdFab,
-      "sl-avatar": SlAvatar,
-    };
   }
 
   static styles = [sharedStyles];

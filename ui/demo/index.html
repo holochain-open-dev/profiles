@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <style>
       body {
-        background: #fafafa;
+        background: black;
         font-family: Arial, Helvetica, sans-serif;
       }
       html,
@@ -14,35 +14,28 @@
         margin: 0;
       }
     </style>
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Material+Icons&display=block"
-      rel="stylesheet"
-    />
   </head>
-  <body>
+  <body class="sl-theme-dark">
     <profiles-test style="height: 100%; display: flex"></profiles-test>
 
     <script type="module">
-      import {
-        ProfilePrompt,
-        AgentAvatar,
-        ProfilesStore,
-        MyProfile,
-        ProfilesContext,
-        SearchAgent,
-        ListProfiles,
-        ProfilesClient,
-      } from "../src";
+      import "@shoelace-style/shoelace/dist/themes/dark.css";
+
       import { AppAgentWebsocket } from "@holochain/client";
       import { LitElement, html } from "lit";
-      import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-      import { SlBadge } from "@scoped-elements/shoelace";
+      import { ProfilesStore, ProfilesClient } from "../src/index.ts";
 
-      class ProfilesTest extends ScopedElementsMixin(LitElement) {
+      import "../src/elements/profiles-context.ts";
+      import "../src/elements/profile-prompt.ts";
+      import "../src/elements/agent-avatar.ts";
+      import "../src/elements/my-profile.ts";
+      import "../src/elements/list-profiles.ts";
+      // import "@holochain-open-dev/profiles/definitions/agent-avatar.js";
+      // import "@holochain-open-dev/profiles/definitions/my-profile.js";
+      // import "@holochain-open-dev/profiles/definitions/search-agent.js";
+      // import "@holochain-open-dev/profiles/definitions/list-profiles.js";
+
+      class ProfilesTest extends LitElement {
         static get properties() {
           return {
             loaded: {
@@ -57,6 +50,7 @@
           const service = new ProfilesClient(client, "profiles-test");
 
           this.store = new ProfilesStore(service, {
+            avatarMode: "avatar-required",
             additionalFields: [
               {
                 name: "location",
@@ -90,18 +84,6 @@
               </profile-prompt>
             </profiles-context>
           `;
-        }
-
-        static get scopedElements() {
-          return {
-            "profile-prompt": ProfilePrompt,
-            "search-agent": SearchAgent,
-            "my-profile": MyProfile,
-            "list-profiles": ListProfiles,
-            "profiles-context": ProfilesContext,
-            "agent-avatar": AgentAvatar,
-            "sl-badge": SlBadge,
-          };
         }
       }
 

@@ -1,25 +1,24 @@
 import { consume } from "@lit-labs/context";
-import {
-  HoloIdenticon,
-  hashProperty,
-  sharedStyles,
-  DisplayError,
-} from "@holochain-open-dev/elements";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
-import { property } from "lit/decorators.js";
+import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { SlAvatar, SlSkeleton } from "@scoped-elements/shoelace";
 import { AgentPubKey } from "@holochain/client";
-import { localized } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
+
+import "@holochain-open-dev/elements/elements/display-error.js";
+import "@holochain-open-dev/elements/elements/holo-identicon.js";
+import "@shoelace-style/shoelace/dist/components/avatar/avatar.js";
+import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
 
 @localized()
-export class AgentAvatar extends ScopedElementsMixin(LitElement) {
+@customElement("agent-avatar")
+export class AgentAvatar extends LitElement {
   /** Public properties */
 
   /**
@@ -97,22 +96,12 @@ export class AgentAvatar extends ScopedElementsMixin(LitElement) {
       case "error":
         return html`
           <display-error
+            tooltip
+            .headline=${msg("Error fetching the agent's avatar")}
             .error=${this._agentProfile.value.error.data.data}
           ></display-error>
         `;
     }
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "holo-identicon": HoloIdenticon,
-      "sl-avatar": SlAvatar,
-      "sl-skeleton": SlSkeleton,
-      "display-error": DisplayError,
-    };
   }
 
   static styles = [

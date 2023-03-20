@@ -1,17 +1,17 @@
 import { css, html, LitElement } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { AgentPubKey } from "@holochain/client";
-import { property } from "lit/decorators.js";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { consume } from "@lit-labs/context";
-import { MdListItem, MdList } from "@scoped-elements/material-web";
-import { DisplayError, sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles } from "@holochain-open-dev/elements";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { localized, msg } from "@lit/localize";
 
+import "@holochain-open-dev/elements/elements/display-error.js";
+import "./agent-avatar.js";
+import "./profile-list-item-skeleton.js";
+
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
-import { AgentAvatar } from "./agent-avatar";
-import { ProfileListItemSkeleton } from "./profile-list-item-skeleton";
 import { Profile } from "../types";
 
 /**
@@ -19,7 +19,8 @@ import { Profile } from "../types";
  * @fires agent-selected - Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }
  */
 @localized()
-export class ListProfiles extends ScopedElementsMixin(LitElement) {
+@customElement("list-profiles")
+export class ListProfiles extends LitElement {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
@@ -60,25 +61,24 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
 
   renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
     if (profiles.size === 0)
-      return html`<md-list-item
-        .headline=${msg("There are no created profiles yet")}
-      ></md-list-item>`;
+      return html`<span>${msg("There are no created profiles yet")} ></span>`;
 
     return html`
-      <md-list
-        style="min-width: 80px; flex: 1;"
-        @selected=${(e: CustomEvent) =>
-          this.fireAgentSelected(Array.from(profiles.keys())[e.detail.index])}
-      >
+      <div style="min-width: 80px; flex: 1;" }>
         ${Array.from(profiles.entries()).map(
           ([agent_pub_key, profile]) => html`
-            <md-list-item .headline=${profile.nickname}>
-              <agent-avatar slot="start" .agentPubKey=${agent_pub_key}>
-              </agent-avatar>
-            </md-list-item>
+            <div class="row" style="align-items: center">
+              <agent-avatar
+                style="margin-right: 8px;"
+                .agentPubKey=${agent_pub_key}
+                @click=${() => this.fireAgentSelected(agent_pub_key)}
+              >
+              </agent-avatar
+              ><span> ${profile.nickname}</span>
+            </div>
           `
         )}
-      </md-list>
+      </div>
     `;
   }
 
@@ -92,6 +92,7 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
         </div>`;
       case "error":
         return html`<display-error
+          .headline=${msg("Error fetching the profiles for all agents")}
           .error=${this._allProfiles.value.error.data.data}
         ></display-error>`;
       case "complete":
@@ -107,17 +108,4 @@ export class ListProfiles extends ScopedElementsMixin(LitElement) {
       }
     `,
   ];
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "agent-avatar": AgentAvatar,
-      "profile-list-item-skeleton": ProfileListItemSkeleton,
-      "md-list": MdList,
-      "display-error": DisplayError,
-      "md-list-item": MdListItem,
-    };
-  }
 }

@@ -1,10 +1,11 @@
 import { css, html, LitElement } from "lit";
 import { provide } from "@lit-labs/context";
-import { property } from "lit/decorators.js";
+import { property, customElement } from "lit/decorators.js";
 
-import { profilesStoreContext } from "../context";
-import { ProfilesStore } from "../profiles-store";
+import { profilesStoreContext } from "../context.js";
+import { ProfilesStore } from "../profiles-store.js";
 
+@customElement("profiles-context")
 export class ProfilesContext extends LitElement {
   @provide({ context: profilesStoreContext })
   @property({ type: Object })

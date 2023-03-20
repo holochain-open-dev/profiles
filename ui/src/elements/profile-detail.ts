@@ -1,27 +1,25 @@
 import { consume } from "@lit-labs/context";
 import { AgentPubKey } from "@holochain/client";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
 import { html, LitElement } from "lit";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { property } from "lit/decorators.js";
-import { SlSkeleton } from "@scoped-elements/shoelace";
+import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
-import {
-  DisplayError,
-  hashProperty,
-  sharedStyles,
-} from "@holochain-open-dev/elements";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
+
+import "@holochain-open-dev/elements/elements/display-error.js";
+import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
+import "./agent-avatar.js";
 
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
-import { AgentAvatar } from "./agent-avatar.js";
 import { Profile } from "../types.js";
 
 /**
  * @element profile-detail
  */
 @localized()
-export class ProfileDetail extends ScopedElementsMixin(LitElement) {
+@customElement("profile-detail")
+export class ProfileDetail extends LitElement {
   /** Public properties */
 
   /**
@@ -60,8 +58,8 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
 
   renderAdditionalField(fieldId: string, fieldValue: string) {
     return html`
-      <div class="row" style="margin-top: 16px">
-        <span style="margin-right: 16px; ">
+      <div class="column" style="margin-top: 16px">
+        <span style="margin-bottom: 8px; ">
           <strong
             >${fieldId.substring(0, 1).toUpperCase()}${fieldId.substring(
               1
@@ -136,20 +134,10 @@ export class ProfileDetail extends ScopedElementsMixin(LitElement) {
         return this.renderProfile(this._agentProfile.value.value);
       case "error":
         return html`<display-error
+          .headline=${msg("Error fetching the profile")}
           .error=${this._agentProfile.value.error.data.data}
         ></display-error>`;
     }
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "display-error": DisplayError,
-      "agent-avatar": AgentAvatar,
-      "sl-skeleton": SlSkeleton,
-    };
   }
 
   static styles = [sharedStyles];

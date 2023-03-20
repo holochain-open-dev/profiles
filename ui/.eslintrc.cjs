@@ -22,5 +22,6 @@ module.exports = {
     'import/extensions': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
     'no-undef': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 };

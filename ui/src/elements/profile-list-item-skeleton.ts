@@ -1,12 +1,14 @@
 import { css, html, LitElement } from "lit";
-import { ScopedElementsMixin } from "@open-wc/scoped-elements";
-import { SlSkeleton } from "@scoped-elements/shoelace";
+import { customElement } from "lit/decorators.js";
 import { sharedStyles } from "@holochain-open-dev/elements";
+
+import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 
 /**
  * @element profile-list-item-skeleton
  */
-export class ProfileListItemSkeleton extends ScopedElementsMixin(LitElement) {
+@customElement("profile-list-item-skeleton")
+export class ProfileListItemSkeleton extends LitElement {
   render() {
     return html`<div class="row" style="align-items: center; width: 150px">
       <sl-skeleton
@@ -30,14 +32,5 @@ export class ProfileListItemSkeleton extends ScopedElementsMixin(LitElement) {
         }
       `,
     ];
-  }
-
-  /**
-   * @ignore
-   */
-  static get scopedElements() {
-    return {
-      "sl-skeleton": SlSkeleton,
-    };
   }
 }
