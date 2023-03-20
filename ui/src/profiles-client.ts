@@ -1,6 +1,7 @@
 import {
   decodeEntry,
   isSignalFromCellWithRole,
+  ZomeClient,
 } from "@holochain-open-dev/utils";
 import {
   AgentPubKey,
@@ -9,32 +10,15 @@ import {
   AppAgentCallZomeRequest,
   RoleName,
 } from "@holochain/client";
-import { UnsubscribeFunction } from "emittery";
 import { Profile, ProfilesSignal } from "./types";
 
-export interface ProfilesEvents {
-  ["signal"]: ProfilesSignal;
-}
-
-export class ProfilesClient {
+export class ProfilesClient extends ZomeClient<ProfilesSignal> {
   constructor(
     public client: AppAgentClient,
     public roleName: RoleName,
     public zomeName = "profiles"
-  ) {}
-
-  on<Name extends keyof ProfilesEvents>(
-    eventName: Name | readonly Name[],
-    listener: (eventData: ProfilesEvents[Name]) => void | Promise<void>
-  ): UnsubscribeFunction {
-    return this.client.on(eventName, async (signal) => {
-      if (
-        (await isSignalFromCellWithRole(this.client, this.roleName, signal)) &&
-        this.zomeName === signal.zome_name
-      ) {
-        listener(signal.payload as ProfilesSignal);
-      }
-    });
+  ) {
+    super(client, roleName, zomeName);
   }
 
   /**
@@ -89,15 +73,5 @@ export class ProfilesClient {
    */
   async updateProfile(profile: Profile): Promise<void> {
     return this.callZome("update_profile", profile);
-  }
-
-  private callZome(fn_name: string, payload: any) {
-    const req: AppAgentCallZomeRequest = {
-      role_name: this.roleName,
-      zome_name: this.zomeName,
-      fn_name,
-      payload,
-    };
-    return this.client.callZome(req);
   }
 }

@@ -1,13 +1,8 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/search-agent";
-import "@holochain-open-dev/profiles/profiles-context";
+import "@holochain-open-dev/profiles/elements/search-agent.js";
+import "@holochain-open-dev/profiles/elements/profiles-context.js";
 import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
-import {
-  ProfilesStore,
-  ProfilesClient,
-  ProfilePrompt,
-  SearchAgent,
-} from "@holochain-open-dev/profiles";
+import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/web-components/writing-stories/introduction
 export default {

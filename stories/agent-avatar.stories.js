@@ -1,6 +1,6 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/agent-avatar";
-import "@holochain-open-dev/profiles/profiles-context";
+import "@holochain-open-dev/profiles/elements/agent-avatar.js";
+import "@holochain-open-dev/profiles/elements/profiles-context.js";
 import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 

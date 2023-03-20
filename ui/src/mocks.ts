@@ -71,7 +71,7 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
     return this.create_profile(profile);
   }
 
-  search_agents({ nickname_filter }: { nickname_filter: string }) {
+  search_agents(nickname_filter: string) {
     return Array.from(
       pickBy(this.agentsProfiles, (profile) =>
         (decodeEntry(profile) as Profile).nickname

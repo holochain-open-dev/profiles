@@ -95,7 +95,6 @@ export class EditProfile extends LitElement {
   }
 
   render() {
-    console.log(this.store.config.avatarMode === "avatar-required");
     return html`
       <form
         id="profile-form"

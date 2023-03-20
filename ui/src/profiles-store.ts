@@ -50,7 +50,7 @@ export class ProfilesStore {
       const profile = await this.client.getAgentProfile(agent);
       set(profile);
 
-      return this.client.on("signal", (signal) => {
+      return this.client.onSignal((signal) => {
         if (this.client.client.myPubKey.toString() !== agent.toString()) return;
         if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
           return;

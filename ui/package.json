@@ -29,9 +29,9 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.3.6",
+    "@holochain-open-dev/elements": "^0.3.7",
     "@holochain-open-dev/stores": "^0.4.2",
-    "@holochain-open-dev/utils": "^0.12.1",
+    "@holochain-open-dev/utils": "^0.12.2",
     "@holochain/client": "^0.12.0",
     "@lit-labs/context": "^0.2.0",
     "@lit/localize": "^0.11.2",

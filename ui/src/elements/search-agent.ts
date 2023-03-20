@@ -45,13 +45,13 @@ export class SearchAgent extends LitElement implements FormField {
    * Whether this field is required if this element is used inside a form
    */
   @property()
-  required: boolean = false;
+  required = false;
 
   /**
    * Whether this field is disabled if this element is used inside a form
    */
   @property()
-  disabled: boolean = false;
+  disabled = false;
 
   /** Public attributes */
 
@@ -150,6 +150,9 @@ export class SearchAgent extends LitElement implements FormField {
     if (this.clearOnSelect) {
       this._textField.value = "";
       this._searchProfiles = undefined;
+    } else if (this._searchProfiles?.value.status === "complete") {
+      this._textField.value =
+        this._searchProfiles.value.value.get(agentPubKey)!.nickname;
     }
     this.dropdown.hide();
   }
@@ -158,41 +161,21 @@ export class SearchAgent extends LitElement implements FormField {
     if (this._searchProfiles === undefined) return html``;
     switch (this._searchProfiles.value.status) {
       case "pending":
-        return html`
-          <sl-menu-item>
-            <sl-skeleton
-              effect="sheen"
-              slot="prefix"
-              style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
-            ></sl-skeleton>
-            <sl-skeleton
-              effect="sheen"
-              style="flex: 1; margin: 8px; border-radius: 12px"
-            ></sl-skeleton>
-          </sl-menu-item>
-          <sl-menu-item>
-            <sl-skeleton
-              effect="sheen"
-              slot="prefix"
-              style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
-            ></sl-skeleton>
-            <sl-skeleton
-              effect="sheen"
-              style="flex: 1; margin: 8px; border-radius: 12px"
-            ></sl-skeleton>
-          </sl-menu-item>
-          <sl-menu-item>
-            <sl-skeleton
-              effect="sheen"
-              slot="prefix"
-              style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
-            ></sl-skeleton>
-            <sl-skeleton
-              effect="sheen"
-              style="flex: 1; margin: 8px; border-radius: 12px"
-            ></sl-skeleton>
-          </sl-menu-item>
-        `;
+        return Array(3).map(
+          () => html`
+            <sl-menu-item>
+              <sl-skeleton
+                effect="sheen"
+                slot="prefix"
+                style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
+              ></sl-skeleton>
+              <sl-skeleton
+                effect="sheen"
+                style="width: 100px; margin: 8px; border-radius: 12px"
+              ></sl-skeleton>
+            </sl-menu-item>
+          `
+        );
       case "error":
         return html`
           <display-error
@@ -227,6 +210,9 @@ export class SearchAgent extends LitElement implements FormField {
     }
   }
 
+  /**
+   * @internal
+   */
   get _label() {
     let l = this.fieldLabel ? this.fieldLabel : msg("Search Agent");
 

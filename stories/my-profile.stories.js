@@ -1,11 +1,18 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/my-profile";
-import "@holochain-open-dev/profiles/profile-prompt";
-import "@holochain-open-dev/profiles/profiles-context";
-import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
+import "@holochain-open-dev/profiles/elements/my-profile.js";
+import "@holochain-open-dev/profiles/elements/profile-prompt.js";
+import "@holochain-open-dev/profiles/elements/profiles-context.js";
+import { decodeHashFromBase64 } from "@holochain/client";
+import {
+  ProfilesZomeMock,
+  demoProfiles,
+} from "@holochain-open-dev/profiles/mocks";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
-const mock = new ProfilesZomeMock();
+const mock = new ProfilesZomeMock(
+  demoProfiles(),
+  decodeHashFromBase64("uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww")
+);
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/web-components/writing-stories/introduction
 export default {
@@ -16,7 +23,7 @@ export default {
     html` <profiles-context
       .store=${new ProfilesStore(new ProfilesClient(mock))}
     >
-      <profile-prompt> <my-profile /></profile-prompt>
+      <my-profile></my-profile>
     </profiles-context>`,
 };
 

@@ -67,7 +67,7 @@ export class ListProfiles extends LitElement {
       <div style="min-width: 80px; flex: 1;" }>
         ${Array.from(profiles.entries()).map(
           ([agent_pub_key, profile]) => html`
-            <div class="row" style="align-items: center">
+            <div class="row" style="align-items: center; margin-bottom: 16px;">
               <agent-avatar
                 style="margin-right: 8px;"
                 .agentPubKey=${agent_pub_key}
