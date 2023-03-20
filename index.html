@@ -7,13 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     
-      <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     
+    <link
+      rel="prefetch"
+      href="./sb-common-assets/nunito-sans-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="prefetch"
+      href="./sb-common-assets/nunito-sans-bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./sb-common-assets/fonts.css" />
 
-      
+    <link href="./sb-manager/runtime.mjs" rel="modulepreload" />
+
+    
+    <link href="./sb-addons/links-0/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-controls-1/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-actions-2/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-backgrounds-3/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-viewport-4/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-toolbars-5/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-measure-6/manager-bundle.mjs" rel="modulepreload" />
+    
+    <link href="./sb-addons/essentials-outline-7/manager-bundle.mjs" rel="modulepreload" />
+       
 
     <style>
-      #storybook-root[hidden]{
+      #storybook-root[hidden] {
         display: none !important;
       }
     </style>
@@ -32,8 +65,8 @@
   "buildStoriesJson": false,
   "storyStoreV7": true,
   "breakingChangesV7": true,
-  "interactionsDebugger": false,
-  "argTypeTargetsV7": true
+  "argTypeTargetsV7": true,
+  "legacyDecoratorFileOrder": false
 };
         
       
@@ -47,7 +80,6 @@
       
         
           window['DOCS_OPTIONS'] = {
-  "disable": false,
   "defaultName": "Docs",
   "autodocs": "tag"
 };
@@ -87,9 +119,9 @@
       import './sb-addons/essentials-measure-6/manager-bundle.mjs';
       
       import './sb-addons/essentials-outline-7/manager-bundle.mjs';
-           
-    </script>    
+      
+    </script>
 
-    <link href="./sb-preview/runtime.mjs" rel="preload" as="script">
+    <link href="./sb-preview/runtime.mjs" rel="prefetch" as="script" />
   </body>
 </html>
