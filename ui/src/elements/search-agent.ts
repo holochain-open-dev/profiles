@@ -8,7 +8,12 @@ import {
   encodeHashToBase64,
 } from "@holochain/client";
 import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
-import { FormField, sharedStyles } from "@holochain-open-dev/elements";
+import {
+  FormField,
+  FormFieldController,
+  hashProperty,
+  sharedStyles,
+} from "@holochain-open-dev/elements";
 
 import "@holochain-open-dev/elements/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
@@ -40,6 +45,12 @@ export class SearchAgent extends LitElement implements FormField {
    */
   @property()
   name!: string;
+
+  /**
+   * The default value of the field if this element is used inside a form
+   */
+  @property(hashProperty("default-value"))
+  defaultValue: AgentPubKey | undefined;
 
   /**
    * Whether this field is required if this element is used inside a form
@@ -89,6 +100,11 @@ export class SearchAgent extends LitElement implements FormField {
   @state()
   value!: AgentPubKey | undefined;
 
+  /**
+   * @internal
+   */
+  _controller = new FormFieldController(this);
+
   reportValidity() {
     const invalid = this.required !== false && this.value === undefined;
 
@@ -100,9 +116,16 @@ export class SearchAgent extends LitElement implements FormField {
     return invalid;
   }
 
-  reset() {
-    this.value = undefined;
-    this._textField.value = "";
+  async reset() {
+    this.value = this.defaultValue;
+    if (this.defaultValue) {
+      const profile = await this.store.client.getAgentProfile(
+        this.defaultValue
+      );
+      this._textField.value = profile?.nickname || "";
+    } else {
+      this._textField.value = "";
+    }
   }
 
   /**

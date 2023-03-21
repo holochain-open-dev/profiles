@@ -6,16 +6,17 @@ import { styleMap } from "lit-html/directives/style-map.js";
 import { AgentPubKey, encodeHashToBase64 } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { SlTooltip } from "@shoelace-style/shoelace";
 
 import "@holochain-open-dev/elements/elements/display-error.js";
 import "@holochain-open-dev/elements/elements/holo-identicon.js";
 import "@shoelace-style/shoelace/dist/components/avatar/avatar.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
+import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
-import { SlTooltip } from "@shoelace-style/shoelace";
 
 @localized()
 @customElement("agent-avatar")
