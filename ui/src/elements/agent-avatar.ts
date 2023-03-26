@@ -45,7 +45,7 @@ export class AgentAvatar extends LitElement {
    * Show tooltip on hover with truncated AgentPubKey
    */
   @property({ type: Boolean })
-  showAgentPubKeyOnHover = true;
+  showOnHover = true;
 
   /** Dependencies */
 
@@ -121,7 +121,7 @@ export class AgentAvatar extends LitElement {
       </div>
     `;
 
-    return this.showAgentPubKeyOnHover ?
+    return this.showOnHover ?
       html`
         <sl-tooltip
           id="tooltip"
