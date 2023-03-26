@@ -437,18 +437,18 @@
                 "text": "boolean"
               },
               "default": "true",
-              "description": "Enable copying of AgentPubKey to clipboard on click",
+              "description": "Copy AgentPubKey to clipboard on click",
               "attribute": "copyOnClick"
             },
             {
               "kind": "field",
-              "name": "showAgentPubKeyOnHover",
+              "name": "showOnHover",
               "type": {
                 "text": "boolean"
               },
               "default": "true",
-              "description": "Enable showing AgentPubKey in tooltip on hover",
-              "attribute": "showAgentPubKeyOnHover"
+              "description": "Show tooltip on hover with truncated AgentPubKey",
+              "attribute": "showOnHover"
             },
             {
               "kind": "field",
@@ -519,17 +519,17 @@
                 "text": "boolean"
               },
               "default": "true",
-              "description": "Enable copying of AgentPubKey to clipboard on click",
+              "description": "Copy AgentPubKey to clipboard on click",
               "fieldName": "copyOnClick"
             },
             {
-              "name": "showAgentPubKeyOnHover",
+              "name": "showOnHover",
               "type": {
                 "text": "boolean"
               },
               "default": "true",
-              "description": "Enable showing AgentPubKey in tooltip on hover",
-              "fieldName": "showAgentPubKeyOnHover"
+              "description": "Show tooltip on hover with truncated AgentPubKey",
+              "fieldName": "showOnHover"
             },
             {
               "name": "store",
