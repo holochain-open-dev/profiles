@@ -4,110 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "locales/es-419.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "templates",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n      's13f20cb257e12fac': `Campo obligatorio`,\n's1d96e130c0544d92': `Aún no se ha creado ningún perfil`,\n's3798c0344c399eb7': str`Min. ${0} caracteres`,\n's39aca5bd9eed9271': `Este agente no ha creado su perfil todavía`,\n's3fa309bef44c54e9': `Al menos 3 caracteres...`,\n's6068cc1885ea6494': `No se ha encontrado ningún agente`,\n's639c68c3284a2269': `Actualizar Perfil`,\n's7892d152096ebca9': `El nombre de usuario ya existe`,\n'sb4f1dffbb6be6302': `Borrar`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'se9f30e4492cee2cd': `Nombre de usuario`,\n'sf58564266e0fc01f': `Nombre demasiado corto`,\n'sfbf76da07548a998': `Buscar agente`,\n    }"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "templates",
-          "declaration": {
-            "name": "templates",
-            "module": "locales/es-419.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "locales/fr-fr.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "templates",
-          "type": {
-            "text": "object"
-          },
-          "default": "{\n      's13f20cb257e12fac': `Ce champs est obligatoire`,\n's1d96e130c0544d92': `Il n'y a pas encore de profils créés`,\n's3798c0344c399eb7': str`Min. ${0} caractères`,\n's39aca5bd9eed9271': `Cet utilisateur n'a pas encore créé de profil`,\n's3fa309bef44c54e9': `Au moins 3 caractères...`,\n's6068cc1885ea6494': `Aucun agent ne corresponds au filtre`,\n's639c68c3284a2269': `Mettre à jour Profil`,\n's7892d152096ebca9': `Le surnom est déjà pris`,\n'sb4f1dffbb6be6302': `Effacer`,\n'sbe57083b4c785878': `Créer Profil`,\n'sc93a9aa3e5bcbf5d': `Enregistrer Profil`,\n'se9f30e4492cee2cd': `Surnom`,\n'sf58564266e0fc01f': `Le surnom est trop court`,\n'sfbf76da07548a998': `Rechercher utilisateur`,\n    }"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "templates",
-          "declaration": {
-            "name": "templates",
-            "module": "locales/fr-fr.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "locales/locales.js",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sourceLocale",
-          "default": "`en`",
-          "description": "The locale code that templates in this source code are written in."
-        },
-        {
-          "kind": "variable",
-          "name": "targetLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  `es-419`,\n  `fr-fr`,\n]",
-          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
-        },
-        {
-          "kind": "variable",
-          "name": "allLocales",
-          "type": {
-            "text": "array"
-          },
-          "default": "[\n  `en`,\n  `es-419`,\n  `fr-fr`,\n]",
-          "description": "All valid project locale codes. Sorted lexicographically."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sourceLocale",
-          "declaration": {
-            "name": "sourceLocale",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "targetLocales",
-          "declaration": {
-            "name": "targetLocales",
-            "module": "locales/locales.js"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "allLocales",
-          "declaration": {
-            "name": "allLocales",
-            "module": "locales/locales.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/config.ts",
       "declarations": [
         {
@@ -536,6 +432,26 @@
             },
             {
               "kind": "field",
+              "name": "copyOnClick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Enable copying of AgentPubKey to clipboard on click",
+              "attribute": "copyOnClick"
+            },
+            {
+              "kind": "field",
+              "name": "showAgentPubKeyOnHover",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Enable showing AgentPubKey in tooltip on hover",
+              "attribute": "showAgentPubKeyOnHover"
+            },
+            {
+              "kind": "field",
               "name": "store",
               "type": {
                 "text": "ProfilesStore"
@@ -596,6 +512,24 @@
               "default": "32",
               "description": "Size of the avatar image in pixels.",
               "fieldName": "size"
+            },
+            {
+              "name": "copyOnClick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Enable copying of AgentPubKey to clipboard on click",
+              "fieldName": "copyOnClick"
+            },
+            {
+              "name": "showAgentPubKeyOnHover",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Enable showing AgentPubKey in tooltip on hover",
+              "fieldName": "showAgentPubKeyOnHover"
             },
             {
               "name": "store",
@@ -1332,6 +1266,15 @@
             },
             {
               "kind": "field",
+              "name": "defaultValue",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "The default value of the field if this element is used inside a form",
+              "attribute": "defaultValue"
+            },
+            {
+              "kind": "field",
               "name": "required",
               "type": {
                 "text": "boolean"
@@ -1463,6 +1406,14 @@
               },
               "description": "The name of the field if this element is used inside a form\nRequired only if the element is used inside a form",
               "fieldName": "name"
+            },
+            {
+              "name": "defaultValue",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "The default value of the field if this element is used inside a form",
+              "fieldName": "defaultValue"
             },
             {
               "name": "required",
