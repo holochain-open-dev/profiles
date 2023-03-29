@@ -1,26 +1,26 @@
-import { html, LitElement } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
-import { localized, msg, str } from "@lit/localize";
-import { consume } from "@lit-labs/context";
-import { onSubmit, sharedStyles } from "@holochain-open-dev/elements";
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { localized, msg, str } from '@lit/localize';
+import { consume } from '@lit-labs/context';
+import { onSubmit, sharedStyles } from '@holochain-open-dev/elements';
 
-import "@shoelace-style/shoelace/dist/components/avatar/avatar.js";
-import "@shoelace-style/shoelace/dist/components/button/button.js";
-import "@shoelace-style/shoelace/dist/components/input/input.js";
-import "@shoelace-style/shoelace/dist/components/icon/icon.js";
-import "@holochain-open-dev/elements/elements/select-avatar.js";
+import '@shoelace-style/shoelace/dist/components/avatar/avatar.js';
+import '@shoelace-style/shoelace/dist/components/button/button.js';
+import '@shoelace-style/shoelace/dist/components/input/input.js';
+import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+import '@holochain-open-dev/elements/elements/select-avatar.js';
 
-import { ProfilesStore } from "../profiles-store.js";
-import { profilesStoreContext } from "../context.js";
-import { Profile } from "../types.js";
-import { FieldConfig } from "../config.js";
+import { ProfilesStore } from '../profiles-store.js';
+import { profilesStoreContext } from '../context.js';
+import { Profile } from '../types.js';
+import { FieldConfig } from '../config.js';
 
 /**
  * @element edit-profile
  * @fires save-profile - Fired when the save profile button is clicked
  */
 @localized()
-@customElement("edit-profile")
+@customElement('edit-profile')
 export class EditProfile extends LitElement {
   /**
    * The profile to be edited.
@@ -31,7 +31,7 @@ export class EditProfile extends LitElement {
   /**
    * Label for the save profile button.
    */
-  @property({ type: String, attribute: "save-profile-label" })
+  @property({ type: String, attribute: 'save-profile-label' })
   saveProfileLabel: string | undefined;
 
   /**
@@ -41,21 +41,21 @@ export class EditProfile extends LitElement {
   @property()
   store!: ProfilesStore;
 
-  @property({ type: Boolean, attribute: "allow-cancel" })
+  @property({ type: Boolean, attribute: 'allow-cancel' })
   allowCancel = false;
 
   /** Private properties */
 
   avatarMode() {
     return (
-      this.store.config.avatarMode === "avatar-required" ||
-      this.store.config.avatarMode === "avatar-optional"
+      this.store.config.avatarMode === 'avatar-required' ||
+      this.store.config.avatarMode === 'avatar-optional'
     );
   }
 
   fireSaveProfile(fields: Record<string, string>) {
-    const nickname = fields["nickname"];
-    delete fields["nickname"];
+    const nickname = fields['nickname'];
+    delete fields['nickname'];
 
     const profile: Profile = {
       fields,
@@ -63,7 +63,7 @@ export class EditProfile extends LitElement {
     };
 
     this.dispatchEvent(
-      new CustomEvent("save-profile", {
+      new CustomEvent('save-profile', {
         detail: {
           profile,
         },
@@ -75,7 +75,7 @@ export class EditProfile extends LitElement {
 
   fireCancel() {
     this.dispatchEvent(
-      new CustomEvent("cancel-edit-profile", {
+      new CustomEvent('cancel-edit-profile', {
         bubbles: true,
         composed: true,
       })
@@ -88,7 +88,7 @@ export class EditProfile extends LitElement {
         name="${fieldConfig.name}"
         .required=${fieldConfig.required}
         .label=${fieldConfig.label}
-        .value=${this.profile?.fields[fieldConfig.name] || ""}
+        .value=${this.profile?.fields[fieldConfig.name] || ''}
         style="margin-bottom: 16px;"
       ></sl-input>
     `;
@@ -99,7 +99,7 @@ export class EditProfile extends LitElement {
       <form
         id="profile-form"
         class="column"
-        ${onSubmit((fields) => this.fireSaveProfile(fields))}
+        ${onSubmit(fields => this.fireSaveProfile(fields))}
       >
         <div
           class="row"
@@ -108,17 +108,17 @@ export class EditProfile extends LitElement {
           ${this.avatarMode()
             ? html` <select-avatar
                 name="avatar"
-                .value=${this.profile?.fields["avatar"] || undefined}
-                .required=${this.store.config.avatarMode === "avatar-required"}
+                .value=${this.profile?.fields['avatar'] || undefined}
+                .required=${this.store.config.avatarMode === 'avatar-required'}
               ></select-avatar>`
             : html``}
 
           <sl-input
             name="nickname"
-            .label=${msg("Nickname")}
+            .label=${msg('Nickname')}
             required
             minLength="${this.store.config.minNicknameLength}"
-            .value=${this.profile?.nickname || ""}
+            .value=${this.profile?.nickname || ''}
             .helpText=${msg(
               str`Min. ${this.store.config.minNicknameLength} characters`
             )}
@@ -126,7 +126,7 @@ export class EditProfile extends LitElement {
           ></sl-input>
         </div>
 
-        ${this.store.config.additionalFields.map((field) =>
+        ${this.store.config.additionalFields.map(field =>
           this.renderField(field)
         )}
 
@@ -137,13 +137,13 @@ export class EditProfile extends LitElement {
                   style="flex: 1; margin-right: 6px;"
                   @click=${() => this.fireCancel()}
                 >
-                  ${msg("Cancel")}
+                  ${msg('Cancel')}
                 </sl-button>
               `
             : html``}
 
           <sl-button style="flex: 1;" variant="primary" type="submit"
-            >${this.saveProfileLabel ?? msg("Save Profile")}
+            >${this.saveProfileLabel ?? msg('Save Profile')}
           </sl-button>
         </div>
       </form>

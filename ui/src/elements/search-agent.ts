@@ -20,7 +20,9 @@ import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
+import "@shoelace-style/shoelace/dist/components/input/input.js";
 import SlInput from "@shoelace-style/shoelace/dist/components/input/input";
+import SlDropdown from "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
@@ -28,7 +30,6 @@ import "./profile-list-item-skeleton.js";
 import { Profile } from "../types.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import SlDropdown from "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 
 /**
  * @element search-agent

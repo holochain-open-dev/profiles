@@ -1,22 +1,17 @@
-import {
-  decodeEntry,
-  isSignalFromCellWithRole,
-  ZomeClient,
-} from "@holochain-open-dev/utils";
+import { decodeEntry, ZomeClient } from '@holochain-open-dev/utils';
 import {
   AgentPubKey,
   Record,
   AppAgentClient,
-  AppAgentCallZomeRequest,
   RoleName,
-} from "@holochain/client";
-import { Profile, ProfilesSignal } from "./types";
+} from '@holochain/client';
+import { Profile, ProfilesSignal } from './types';
 
 export class ProfilesClient extends ZomeClient<ProfilesSignal> {
   constructor(
     public client: AppAgentClient,
     public roleName: RoleName,
-    public zomeName = "profiles"
+    public zomeName = 'profiles'
   ) {
     super(client, roleName, zomeName);
   }
@@ -31,7 +26,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
     agentPubKey: AgentPubKey
   ): Promise<Profile | undefined> {
     const record: Record | undefined = await this.callZome(
-      "get_agent_profile",
+      'get_agent_profile',
       agentPubKey
     );
 
@@ -45,7 +40,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @returns the agents with the nickname starting with nicknameFilter
    */
   async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
-    return this.callZome("search_agents", nicknameFilter);
+    return this.callZome('search_agents', nicknameFilter);
   }
 
   /**
@@ -54,7 +49,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @returns the agent public keys of all agents that have created a profile
    */
   async getAgentsWithProfile(): Promise<AgentPubKey[]> {
-    return this.callZome("get_agents_with_profile", null);
+    return this.callZome('get_agents_with_profile', null);
   }
 
   /**
@@ -63,7 +58,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @param profile the profile to create
    */
   async createProfile(profile: Profile): Promise<void> {
-    return this.callZome("create_profile", profile);
+    return this.callZome('create_profile', profile);
   }
 
   /**
@@ -72,6 +67,6 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @param profile the profile to create
    */
   async updateProfile(profile: Profile): Promise<void> {
-    return this.callZome("update_profile", profile);
+    return this.callZome('update_profile', profile);
   }
 }

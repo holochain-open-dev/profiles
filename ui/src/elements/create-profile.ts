@@ -2,8 +2,9 @@ import { html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { consume } from "@lit-labs/context";
 import { localized, msg } from "@lit/localize";
-import { sharedStyles } from "@holochain-open-dev/elements";
+import { sharedStyles, notifyError } from "@holochain-open-dev/elements";
 
+import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 import "@shoelace-style/shoelace/dist/components/card/card.js";
 import "./edit-profile.js";
 
@@ -30,17 +31,22 @@ export class CreateProfile extends LitElement {
   /** Private properties */
 
   async createProfile(profile: Profile) {
-    await this.store.client.createProfile(profile);
+    try {
+      await this.store.client.createProfile(profile);
 
-    this.dispatchEvent(
-      new CustomEvent("profile-created", {
-        detail: {
-          profile,
-        },
-        bubbles: true,
-        composed: true,
-      })
-    );
+      this.dispatchEvent(
+        new CustomEvent("profile-created", {
+          detail: {
+            profile,
+          },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (e) {
+      console.error(e);
+      notifyError(msg("Error creating the profile"));
+    }
   }
 
   render() {
