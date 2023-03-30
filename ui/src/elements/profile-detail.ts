@@ -85,7 +85,7 @@ export class ProfileDetail extends LitElement {
     return html`
       <div class="column">
         <div class="row" style="align-items: center">
-          <agent-avatar .agentPubKey=${this.agentPubKey}></agent-avatar>
+          <agent-avatar .agentPubKey=${this.agentPubKey} showOnHover copyOnClick></agent-avatar>
           <span style="font-size: 16px; margin-left: 8px;"
             >${profile.nickname}</span
           >

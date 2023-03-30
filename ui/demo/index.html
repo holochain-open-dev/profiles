@@ -76,13 +76,13 @@
                 <list-profiles></list-profiles>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
                 <search-agent required include-myself></search-agent>
-                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
+                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey} showOnHover copyOnClick>
                   <div
                     style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
                     slot="badge"
                   ></div>
                 </agent-avatar>
-                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey} .showOnHover=${false} .copyOnClick=${false}>
+                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
                 </agent-avatar>
               </profile-prompt>
             </profiles-context>
