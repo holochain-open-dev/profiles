@@ -39,13 +39,13 @@ export class AgentAvatar extends LitElement {
    * Copy AgentPubKey to clipboard on click
    */
   @property({ type: Boolean })
-  copyOnClick = true;
+  copyOnClick = false;
 
   /**
    * Show tooltip on hover with truncated AgentPubKey
    */
   @property({ type: Boolean })
-  showOnHover = true;
+  showOnHover = false;
 
   /** Dependencies */
 
