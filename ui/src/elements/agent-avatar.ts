@@ -35,6 +35,18 @@ export class AgentAvatar extends LitElement {
   @property({ type: Number })
   size = 32;
 
+  /**
+   * Copy AgentPubKey to clipboard on click
+   */
+  @property({ type: Boolean })
+  copyOnClick = true;
+
+  /**
+   * Show tooltip on hover with truncated AgentPubKey
+   */
+  @property({ type: Boolean })
+  showOnHover = true;
+
   /** Dependencies */
 
   /**
@@ -89,32 +101,41 @@ export class AgentAvatar extends LitElement {
   renderProfile(profile: Profile | undefined) {
     if (!profile || !profile.fields.avatar) return this.renderIdenticon();
 
-    return html`
-      <sl-tooltip
-        id="tooltip"
-        placement="top"
-        .content=${this.justCopiedHash
-          ? msg("Copied!")
-          : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
-        .trigger=${this.justCopiedHash ? "manual" : "hover focus"}
-        hoist
+    const contents = html`
+      <div
+        @click=${() => {
+          if (this.copyOnClick) this.copyHash();
+        }}
+        style=${styleMap({
+          position: "relative",
+          height: `${this.size}px`,
+          width: `${this.size}px`,
+        })}
       >
-        <div
-          @click=${() => this.copyHash()}
-          style=${styleMap({
-            position: "relative",
-            height: `${this.size}px`,
-            width: `${this.size}px`,
-          })}
+        <sl-avatar
+          .image=${profile.fields.avatar}
+          style="--size: ${this.size}px;"
         >
-          <sl-avatar
-            .image=${profile.fields.avatar}
-            style="--size: ${this.size}px;"
-          >
-          </sl-avatar>
-          <div class="badge"><slot name="badge"></slot></div></div
-      ></sl-tooltip>
+        </sl-avatar>
+        <div class="badge"><slot name="badge"></slot></div>
+      </div>
     `;
+
+    return this.showOnHover ?
+      html`
+        <sl-tooltip
+          id="tooltip"
+          placement="top"
+          .content=${this.justCopiedHash
+            ? msg("Copied!")
+            : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
+          .trigger=${this.justCopiedHash ? "manual" : "hover focus"}
+          hoist
+        >
+          ${contents}
+        </sl-tooltip>
+      ` : 
+      contents;
   }
 
   render() {
