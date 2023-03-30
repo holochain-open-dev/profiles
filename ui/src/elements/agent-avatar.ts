@@ -36,16 +36,16 @@ export class AgentAvatar extends LitElement {
   size = 32;
 
   /**
-   * Copy AgentPubKey to clipboard on click
+   * Disables showing the tooltip for the public key
    */
-  @property({ type: Boolean })
-  copyOnClick = true;
+  @property({ type: Boolean, attribute: "disable-tooltip" })
+  disableTooltip = false;
 
   /**
-   * Show tooltip on hover with truncated AgentPubKey
+   * Disable copying of the public key on click
    */
-  @property({ type: Boolean })
-  showOnHover = true;
+  @property({ type: Boolean, attribute: "disable-copy" })
+  disableCopy = false;
 
   /** Dependencies */
 
@@ -71,15 +71,26 @@ export class AgentAvatar extends LitElement {
         width: `${this.size}px`,
       })}
     >
-      <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
+      <holo-identicon
+        .disableCopy=${this.disableCopy}
+        .disableTooltip=${this.disableTooltip}
+        .hash=${this.agentPubKey}
+        .size=${this.size}
+      >
       </holo-identicon>
       <div class="badge"><slot name="badge"></slot></div>
     </div>`;
   }
 
+  /**
+   * @internal
+   */
   @state()
   justCopiedHash = false;
 
+  /**
+   * @internal
+   */
   timeout: any;
 
   async copyHash() {
@@ -104,9 +115,10 @@ export class AgentAvatar extends LitElement {
     const contents = html`
       <div
         @click=${() => {
-          if (this.copyOnClick) this.copyHash();
+          if (!this.disableCopy) this.copyHash();
         }}
         style=${styleMap({
+          cursor: this.disableCopy ? "" : "pointer",
           position: "relative",
           height: `${this.size}px`,
           width: `${this.size}px`,
@@ -121,27 +133,26 @@ export class AgentAvatar extends LitElement {
       </div>
     `;
 
-    return this.showOnHover ?
-      html`
-        <sl-tooltip
-          id="tooltip"
-          placement="top"
-          .content=${this.justCopiedHash
-            ? msg("Copied!")
-            : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
-          .trigger=${this.justCopiedHash ? "manual" : "hover focus"}
-          hoist
-        >
-          ${contents}
-        </sl-tooltip>
-      ` : 
-      contents;
+    return html`
+      <sl-tooltip
+        id="tooltip"
+        placement="top"
+        .content=${this.justCopiedHash || this.disableTooltip
+          ? msg("Copied!")
+          : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
+        .trigger=${this.disableTooltip || this.justCopiedHash
+          ? "manual"
+          : "hover focus"}
+        hoist
+      >
+        ${contents}
+      </sl-tooltip>
+    `;
   }
 
   render() {
     if (this.store.config.avatarMode === "identicon")
       return this.renderIdenticon();
-
     switch (this._agentProfile.value.status) {
       case "pending":
         return html`<sl-skeleton

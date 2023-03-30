@@ -1,6 +1,7 @@
 import {
   AgentPubKeyMap,
   decodeEntry,
+  fakeCreateAction,
   fakeEntry,
   fakeRecord,
   pickBy,
@@ -19,6 +20,7 @@ export function demoProfiles(): AgentPubKeyMap<Record> {
   map.set(
     decodeHashFromBase64("uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww"),
     fakeRecord(
+      fakeCreateAction(),
       fakeEntry({
         nickname: "Alice",
         fields: {
@@ -32,6 +34,7 @@ export function demoProfiles(): AgentPubKeyMap<Record> {
   map.set(
     decodeHashFromBase64("uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU"),
     fakeRecord(
+      fakeCreateAction(),
       fakeEntry({
         nickname: "Bob",
         fields: {
@@ -54,7 +57,7 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
   }
 
   async create_profile(profile: Profile): Promise<Record> {
-    const record = fakeRecord(fakeEntry(profile));
+    const record = fakeRecord(fakeCreateAction(), fakeEntry(profile));
     this.agentsProfiles.set(this.myPubKey, record);
     setTimeout(() =>
       this.emitSignal({

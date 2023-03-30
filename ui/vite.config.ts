@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 
 const components = [
   "dropdown",
+  "alert",
   "menu",
   "menu-item",
   "checkbox",
