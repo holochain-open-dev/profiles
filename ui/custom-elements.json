@@ -436,7 +436,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Copy AgentPubKey to clipboard on click",
               "attribute": "copyOnClick"
             },
@@ -446,7 +446,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Show tooltip on hover with truncated AgentPubKey",
               "attribute": "showOnHover"
             },
@@ -518,7 +518,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Copy AgentPubKey to clipboard on click",
               "fieldName": "copyOnClick"
             },
@@ -527,7 +527,7 @@
               "type": {
                 "text": "boolean"
               },
-              "default": "true",
+              "default": "false",
               "description": "Show tooltip on hover with truncated AgentPubKey",
               "fieldName": "showOnHover"
             },
