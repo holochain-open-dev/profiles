@@ -139,7 +139,7 @@ export class AgentAvatar extends LitElement {
         placement="top"
         .content=${this.justCopiedHash || this.disableTooltip
           ? msg("Copied!")
-          : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
+          : `${encodeHashToBase64(this.agentPubKey).substring(0, 10)}...`}
         .trigger=${this.disableTooltip || this.justCopiedHash
           ? "manual"
           : "hover focus"}
