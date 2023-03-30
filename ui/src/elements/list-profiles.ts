@@ -72,6 +72,7 @@ export class ListProfiles extends LitElement {
                 style="margin-right: 8px;"
                 .agentPubKey=${agent_pub_key}
                 @click=${() => this.fireAgentSelected(agent_pub_key)}
+                showOnHover
               >
               </agent-avatar
               ><span> ${profile.nickname}</span>
