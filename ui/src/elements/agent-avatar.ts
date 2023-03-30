@@ -71,7 +71,7 @@ export class AgentAvatar extends LitElement {
         width: `${this.size}px`,
       })}
     >
-      <holo-identicon .hash=${this.agentPubKey} .size=${this.size}>
+      <holo-identicon .hash=${this.agentPubKey} .size=${this.size} .showOnHover=${this.showOnHover} .copyOnClick=${this.copyOnClick}>
       </holo-identicon>
       <div class="badge"><slot name="badge"></slot></div>
     </div>`;
