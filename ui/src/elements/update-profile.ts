@@ -5,7 +5,7 @@ import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { sharedStyles } from "@holochain-open-dev/elements";
 
-import "@holochain-open-dev/elements/elements/display-error.js";
+import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 
 import "./edit-profile.js";

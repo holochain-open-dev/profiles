@@ -1,12 +1,12 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/elements/my-profile.js";
-import "@holochain-open-dev/profiles/elements/profile-prompt.js";
-import "@holochain-open-dev/profiles/elements/profiles-context.js";
+import "@holochain-open-dev/profiles/dist/elements/my-profile.js";
+import "@holochain-open-dev/profiles/dist/elements/profile-prompt.js";
+import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
 import { decodeHashFromBase64 } from "@holochain/client";
 import {
   ProfilesZomeMock,
   demoProfiles,
-} from "@holochain-open-dev/profiles/mocks";
+} from "@holochain-open-dev/profiles/dist/mocks.js";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const mock = new ProfilesZomeMock(

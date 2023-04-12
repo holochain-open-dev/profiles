@@ -6,7 +6,7 @@ import { sharedStyles } from "@holochain-open-dev/elements";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { localized, msg } from "@lit/localize";
 
-import "@holochain-open-dev/elements/elements/display-error.js";
+import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
 

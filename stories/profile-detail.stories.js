@@ -1,7 +1,7 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/elements/profile-detail.js";
-import "@holochain-open-dev/profiles/elements/profiles-context.js";
-import { ProfilesZomeMock } from "@holochain-open-dev/profiles/mocks";
+import "@holochain-open-dev/profiles/dist/elements/profile-detail.js";
+import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
+import { ProfilesZomeMock } from "@holochain-open-dev/profiles/dist/mocks.js";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const mock = new ProfilesZomeMock();

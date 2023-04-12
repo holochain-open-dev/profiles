@@ -8,7 +8,7 @@ import '@shoelace-style/shoelace/dist/components/avatar/avatar.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/input/input.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
-import '@holochain-open-dev/elements/elements/select-avatar.js';
+import '@holochain-open-dev/elements/dist/elements/select-avatar.js';
 
 import { ProfilesStore } from '../profiles-store.js';
 import { profilesStoreContext } from '../context.js';

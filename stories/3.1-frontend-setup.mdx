@@ -43,7 +43,7 @@ async function setupProfilesStore() {
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
-import "@holochain-open-dev/profiles/elements/profiles-context.js";
+import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
 ```
 
 And then add the `<profiles-context>` element in your html:
@@ -65,7 +65,7 @@ You need to set the `store` property of it to your already instantiated `Profile
 
 ```html
 <!-- React -->
-<profiles-context store="{profilesStore}"><!-- ... --></profiles-context>
+<profiles-context store={profilesStore}><!-- ... --></profiles-context>
 
 <!-- Angular -->
 <profiles-context [store]="profilesStore"><!-- ... --></profiles-context>
@@ -74,10 +74,10 @@ You need to set the `store` property of it to your already instantiated `Profile
 <profiles-context :store="profilesStore"><!-- ... --></profiles-context>
 
 <!-- Svelte -->
-<profiles-context store="{profilesStore}"><!-- ... --></profiles-context>
+<profiles-context store={profilesStore}><!-- ... --></profiles-context>
 
 <!-- Lit -->
-<profiles-context .store="${profilesStore}"><!-- ... --></profiles-context>
+<profiles-context .store=${profilesStore}><!-- ... --></profiles-context>
 ```
 
 OR
@@ -94,7 +94,7 @@ contextElement.store = store;
 5. [Choose which elements you need](?path=/docs/frontend-elements) and import them like this:
 
 ```js
-import "@holochain-open-dev/profiles/elements/profiles-context.js";
+import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
 ```
 
 And then they are ready be used inside the `<profiles-context>` just like any other HTML tag.

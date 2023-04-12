@@ -6,7 +6,7 @@ import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 
-import "@holochain-open-dev/elements/elements/display-error.js";
+import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 import "./agent-avatar.js";
 

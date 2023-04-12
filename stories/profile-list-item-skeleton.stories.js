@@ -1,5 +1,5 @@
 import { html } from "lit-html";
-import "@holochain-open-dev/profiles/elements/profile-list-item-skeleton.js";
+import "@holochain-open-dev/profiles/dist/elements/profile-list-item-skeleton.js";
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/web-components/writing-stories/introduction
 export default {

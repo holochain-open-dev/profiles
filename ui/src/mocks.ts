@@ -85,6 +85,7 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
   }
 
   get_agent_profile(agent_address: AgentPubKey) {
+    console.log(this.agentsProfiles.get(agent_address));
     return this.agentsProfiles.get(agent_address);
   }
 

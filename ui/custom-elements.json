@@ -568,14 +568,6 @@
               "name": "renderIdenticon"
             },
             {
-              "kind": "field",
-              "name": "justCopiedHash",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
               "kind": "method",
               "name": "copyHash"
             },
