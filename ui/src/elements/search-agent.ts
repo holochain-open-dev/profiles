@@ -210,14 +210,22 @@ export class SearchAgent extends LitElement implements FormField {
           ></display-error>
         `;
       case "complete": {
-        const agents = this._searchProfiles.value.value;
-        if (agents.size === 0)
+        let agents = Array.from(this._searchProfiles.value.value.entries());
+
+        if (!this.includeMyself) {
+          agents = agents.filter(
+            ([pubkey, _profile]) =>
+              pubkey.toString() !== this.store.client.client.myPubKey.toString()
+          );
+        }
+
+        if (agents.length === 0)
           return html`<sl-menu-item>
             ${msg("No agents match the filter")}
           </sl-menu-item>`;
 
         return html`
-          ${Array.from(agents.entries()).map(
+          ${agents.map(
             ([pubkey, profile]) => html`
               <sl-menu-item .value=${encodeHashToBase64(pubkey)}>
                 <agent-avatar
