@@ -114,7 +114,7 @@ export class SearchAgent extends LitElement implements FormField {
       this._textField.reportValidity();
     }
 
-    return invalid;
+    return !invalid;
   }
 
   async reset() {
