@@ -71,7 +71,10 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )?;
 
         for l in links {
-            if my_pub_key.eq(&AgentPubKey::from(EntryHash::from(l.target))) {
+            let agent_pub_key = AgentPubKey::try_from(l.target).map_err(|_e| wasm_error!(
+                WasmErrorInner::Guest("exepected an agent key".to_string())
+            ))?;
+            if my_pub_key.eq(&agent_pub_key) {
                 delete_link(l.create_link_hash)?;
             }
         }
@@ -115,7 +118,7 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
 
     let agents = links
         .into_iter()
-        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
+        .filter_map(|l| AgentPubKey::try_from(l.target).ok())
         .collect();
 
     Ok(agents)
@@ -131,10 +134,12 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Reco
     }
 
     let link = links[0].clone();
+    let maybe_profile = match link.target.into_action_hash() {
+        Some(action_hash) => Some(get_latest(action_hash)?),
+        None => None
+    };
 
-    let profile = get_latest(link.target.into())?;
-
-    Ok(Some(profile))
+    Ok(maybe_profile)
 }
 
 fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
@@ -179,7 +184,7 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
 
     let agents = links
         .into_iter()
-        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
+        .filter_map(|l| AgentPubKey::try_from(l.target).ok())
         .collect();
 
     Ok(agents)
