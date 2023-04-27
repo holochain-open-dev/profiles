@@ -71,9 +71,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )?;
 
         for l in links {
-            let agent_pub_key = AgentPubKey::try_from(l.target).map_err(|_e| wasm_error!(
-                WasmErrorInner::Guest("exepected an agent key".to_string())
-            ))?;
+            let agent_pub_key = AgentPubKey::try_from(l.target).map_err(|e| wasm_error!(e))?;
             if my_pub_key.eq(&agent_pub_key) {
                 delete_link(l.create_link_hash)?;
             }
