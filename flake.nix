@@ -25,7 +25,7 @@
           }: {
             devShells.default = pkgs.mkShell {
               inputsFrom = [ inputs.holochain.devShells.${system}.holonix ];
-              packages = [ pkgs.nodejs-18_x pkgs.cargo-nextest ];
+              packages = [ pkgs.nodejs-18_x pkgs.cargo-nextest pkgs.sqlite ];
 
               shellHook = ''
                 unset CARGO_TARGET_DIR

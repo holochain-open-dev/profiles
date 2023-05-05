@@ -285,27 +285,7 @@ export class SearchAgent extends LitElement implements FormField {
         :host {
           display: flex;
         }
-        #list {
-          margin-top: 16px;
-          margin-left: 16px;
-        }
       `,
     ];
   }
-
-  /**
-   * @ignore
-   */
-  // static get scopedElements() {
-  //   return {
-  //     "sl-skeleton": SlSkeleton,
-  //     "agent-avatar": AgentAvatar,
-  //     "md-outlined-text-field": MdOutlinedTextField,
-  //     "md-menu-surface": MdMenuSurface,
-  //     "md-list": MdList,
-  //     "display-error": DisplayError,
-  //     "md-list-item": MdListItem,
-  //     "profile-list-item-skeleton": ProfileListItemSkeleton,
-  //   };
-  // }
 }

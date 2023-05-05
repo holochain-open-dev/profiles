@@ -26,12 +26,6 @@ const exclude = components.map(
   (c) => `@shoelace-style/shoelace/dist/components/${c}/${c}.js`
 );
 export default defineConfig({
-  optimizeDeps: {
-    exclude: [
-      ...exclude,
-      "@holochain-open-dev/elements/dist/elements/display-error.js",
-    ],
-  },
   root: "./demo",
   plugins: [
     checker({
