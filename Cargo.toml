@@ -3,10 +3,10 @@ members = ["crates/*", "tests"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = {git = "https://github.com/holochain/holochain", branch="holohash-usability-fix"}
-hdk = {git = "https://github.com/holochain/holochain", branch="holohash-usability-fix"}
+hdi = {git = "https://github.com/holochain/holochain", branch="develop"}
+hdk = {git = "https://github.com/holochain/holochain", branch="develop"}
 serde = "1"
-holochain = {git = "https://github.com/holochain/holochain", branch="holohash-usability-fix"}
+holochain = {git = "https://github.com/holochain/holochain", branch="develop"}
 
 [profile.dev]
 opt-level = "z"
