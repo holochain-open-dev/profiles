@@ -20,6 +20,6 @@ name = "hc_zome_profiles_coordinator"
 [dependencies]
 derive_more = "0"
 serde = "1"
-hc_zome_profiles_integrity = { path = "../integrity", version = "0.3" }
+hc_zome_profiles_integrity = { path = "../integrity" }
 
 hdk = { workspace = true }
