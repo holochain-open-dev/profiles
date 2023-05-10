@@ -35,6 +35,7 @@ export class UpdateProfile extends LitElement {
 
   async updateProfile(profile: Profile) {
     await this.store.client.updateProfile(profile);
+    await this.store.myProfile.reload();
 
     this.dispatchEvent(
       new CustomEvent("profile-updated", {

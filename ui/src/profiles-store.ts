@@ -6,6 +6,7 @@ import {
   lazyLoadAndPoll,
   joinAsyncMap,
   lazyLoad,
+  manualReloadStore,
 } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 
@@ -60,7 +61,10 @@ export class ProfilesStore {
   );
 
   // Fetches your profile
-  myProfile = this.profiles.get(this.client.client.myPubKey);
+  // TODO: change the manual implementation when signals are working consistently
+  myProfile = manualReloadStore(async () =>
+    this.client.getAgentProfile(this.client.client.myPubKey)
+  );
 
   // Fetches the profiles for the given agents
   agentsProfiles(
