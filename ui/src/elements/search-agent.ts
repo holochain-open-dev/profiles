@@ -65,6 +65,12 @@ export class SearchAgent extends LitElement implements FormField {
   @property()
   disabled = false;
 
+  /**
+   * @internal
+   */
+  @state()
+  value!: AgentPubKey | undefined;
+
   /** Public attributes */
 
   /**
@@ -94,12 +100,6 @@ export class SearchAgent extends LitElement implements FormField {
   @consume({ context: profilesStoreContext, subscribe: true })
   @property()
   store!: ProfilesStore;
-
-  /**
-   * @internal
-   */
-  @state()
-  value!: AgentPubKey | undefined;
 
   /**
    * @internal
