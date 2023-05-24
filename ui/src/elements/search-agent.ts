@@ -2,12 +2,7 @@ import { customElement, property, state, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { consume } from "@lit-labs/context";
 import { localized, msg } from "@lit/localize";
-import {
-  AgentPubKey,
-  decodeHashFromBase64,
-  encodeHashToBase64,
-} from "@holochain/client";
-import { AsyncStatus, StoreSubscriber } from "@holochain-open-dev/stores";
+import { AgentPubKey } from "@holochain/client";
 import {
   FormField,
   FormFieldController,
@@ -22,10 +17,10 @@ import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
 import SlInput from "@shoelace-style/shoelace/dist/components/input/input";
-import SlDropdown from "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
+import "./search-agent-dropdown.js";
 
 import { Profile } from "../types.js";
 import { ProfilesStore } from "../profiles-store.js";
@@ -132,114 +127,22 @@ export class SearchAgent extends LitElement implements FormField {
   /**
    * @internal
    */
-  @state()
-  private _searchProfiles:
-    | StoreSubscriber<AsyncStatus<ReadonlyMap<AgentPubKey, Profile>>>
-    | undefined;
-
-  /**
-   * @internal
-   */
   @query("#textfield")
   private _textField!: SlInput;
 
-  /**
-   * @internal
-   */
-  @query("#dropdown")
-  private dropdown!: SlDropdown;
+  @state()
+  searchFilter: string = "";
 
-  onFilterChange() {
-    if ((this._textField as any).value.length < 3) {
-      this._searchProfiles = undefined;
-      return;
-    }
-
-    this.dropdown.show();
-    const store = this.store.searchProfiles((this._textField as any).value);
-    this._searchProfiles = new StoreSubscriber(this, () => store);
-  }
-
-  onUsernameSelected(agentPubKey: AgentPubKey) {
-    this.dispatchEvent(
-      new CustomEvent("agent-selected", {
-        detail: {
-          agentPubKey,
-        },
-      })
-    );
+  onUsernameSelected(agentPubKey: AgentPubKey, profile: Profile) {
     this.value = agentPubKey;
 
     // If the consumer says so, clear the field
     if (this.clearOnSelect) {
       this._textField.value = "";
-      this._searchProfiles = undefined;
-    } else if (this._searchProfiles?.value.status === "complete") {
-      this._textField.value =
-        this._searchProfiles.value.value.get(agentPubKey)!.nickname;
+    } else {
+      this._textField.value = profile.nickname;
     }
-    this.dropdown.hide();
-  }
-
-  renderAgentList() {
-    if (this._searchProfiles === undefined) return html``;
-    switch (this._searchProfiles.value.status) {
-      case "pending":
-        return Array(3).map(
-          () => html`
-            <sl-menu-item>
-              <sl-skeleton
-                effect="sheen"
-                slot="prefix"
-                style="height: 32px; width: 32px; border-radius: 50%; margin: 8px"
-              ></sl-skeleton>
-              <sl-skeleton
-                effect="sheen"
-                style="width: 100px; margin: 8px; border-radius: 12px"
-              ></sl-skeleton>
-            </sl-menu-item>
-          `
-        );
-      case "error":
-        return html`
-          <display-error
-            style="flex: 1; display:flex"
-            tooltip
-            .headline=${msg("Error searching agents")}
-            .error=${this._searchProfiles.value.error.data.data}
-          ></display-error>
-        `;
-      case "complete": {
-        let agents = Array.from(this._searchProfiles.value.value.entries());
-
-        if (!this.includeMyself) {
-          agents = agents.filter(
-            ([pubkey, _profile]) =>
-              pubkey.toString() !== this.store.client.client.myPubKey.toString()
-          );
-        }
-
-        if (agents.length === 0)
-          return html`<sl-menu-item>
-            ${msg("No agents match the filter")}
-          </sl-menu-item>`;
-
-        return html`
-          ${agents.map(
-            ([pubkey, profile]) => html`
-              <sl-menu-item .value=${encodeHashToBase64(pubkey)}>
-                <agent-avatar
-                  slot="prefix"
-                  .agentPubKey=${pubkey}
-                  style="margin-right: 16px"
-                ></agent-avatar>
-                ${profile.nickname}
-              </sl-menu-item>
-            `
-          )}
-        `;
-      }
-    }
+    this.searchFilter = "";
   }
 
   /**
@@ -256,24 +159,24 @@ export class SearchAgent extends LitElement implements FormField {
   render() {
     return html`
       <div style="flex: 1; display: flex;">
-        <sl-dropdown id="dropdown">
+        <search-agent-dropdown
+          id="dropdown"
+          .open=${this.searchFilter.length >= 3}
+          style="flex: 1"
+          .includeMyself=${this.includeMyself}
+          .searchFilter=${this.searchFilter}
+          @agent-selected=${(e: CustomEvent) =>
+            this.onUsernameSelected(e.detail.agentPubKey, e.detail.profile)}
+        >
           <sl-input
             id="textfield"
-            slot="trigger"
             .label=${this._label}
             .placeholder=${msg("At least 3 chars...")}
-            @input=${() => this.onFilterChange()}
-          ></sl-input>
-          <sl-menu
-            @sl-select=${(e: CustomEvent) => {
-              this.onUsernameSelected(
-                decodeHashFromBase64(e.detail.item.value)
-              );
+            @input=${(e: CustomEvent) => {
+              this.searchFilter = (e.target as SlInput).value;
             }}
-          >
-            ${this.renderAgentList()}
-          </sl-menu>
-        </sl-dropdown>
+          ></sl-input>
+        </search-agent-dropdown>
       </div>
     `;
   }

@@ -25,12 +25,15 @@
       import { LitElement, html } from "lit";
       import { ProfilesStore, ProfilesClient } from "../src/index.ts";
 
+      import { onSubmit } from "@holochain-open-dev/elements";
       import "../src/elements/profiles-context.ts";
       import "../src/elements/profile-prompt.ts";
       import "../src/elements/agent-avatar.ts";
+      import "../src/elements/agent-mention.ts";
       import "../src/elements/my-profile.ts";
       import "../src/elements/list-profiles.ts";
       import "../src/elements/search-agent.ts";
+      import "../src/elements/textarea-with-mentions.ts";
       // import "@holochain-open-dev/profiles/definitions/agent-avatar.js";
       // import "@holochain-open-dev/profiles/definitions/my-profile.js";
       // import "@holochain-open-dev/profiles/definitions/search-agent.js";
@@ -68,22 +71,50 @@
           this.loaded = true;
         }
 
+        onSubmit(f) {
+          console.log(f);
+          this.shadowRoot.querySelector("form").reset();
+          setTimeout(() => {
+            this.shadowRoot.querySelector("textarea-with-mentions").value =
+              f.hi;
+          }, 400);
+        }
+
         render() {
           if (!this.loaded) return html`<span>Loading...</span>`;
           return html`
             <profiles-context .store=${this.store}>
               <profile-prompt style="align-items: start">
+                <form ${onSubmit((f) => this.onSubmit(f))}>
+                  <textarea-with-mentions
+                    name="hi"
+                    label="hey"
+                  ></textarea-with-mentions>
+                  <input type="submit" />
+                </form>
                 <list-profiles></list-profiles>
                 <my-profile style="height: 800px; width: 800px;"></my-profile>
-                <search-agent required include-myself></search-agent>
                 <agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
                   <div
                     style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
                     slot="badge"
                   ></div>
                 </agent-avatar>
-                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey} .showOnHover=${false} .copyOnClick=${false}>
+                <search-agent
+                  name="author"
+                  required
+                  include-myself
+                ></search-agent>
+                <agent-avatar
+                  .agentPubKey=${this.store.client.client.myPubKey}
+                  .showOnHover=${false}
+                  .copyOnClick=${false}
+                >
                 </agent-avatar>
+                <agent-mention
+                  .agentPubKey=${this.store.client.client.myPubKey}
+                >
+                </agent-mention>
               </profile-prompt>
             </profiles-context>
           `;

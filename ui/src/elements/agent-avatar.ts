@@ -59,8 +59,10 @@ export class AgentAvatar extends LitElement {
   /**
    * @internal
    */
-  private _agentProfile = new StoreSubscriber(this, () =>
-    this.store.profiles.get(this.agentPubKey)
+  private _agentProfile = new StoreSubscriber(
+    this,
+    () => this.store.profiles.get(this.agentPubKey),
+    () => [this.agentPubKey]
   );
 
   renderIdenticon() {

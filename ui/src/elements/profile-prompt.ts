@@ -33,7 +33,11 @@ export class ProfilePrompt extends LitElement {
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+  private _myProfile = new StoreSubscriber(
+    this,
+    () => this.store.myProfile,
+    () => []
+  );
 
   renderPrompt(myProfile: Profile | undefined) {
     if (myProfile) return html`<slot></slot>`;
