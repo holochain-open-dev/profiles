@@ -149,7 +149,6 @@ export class SearchAgentDropdown extends LitElement {
   }
 
   render() {
-    console.log(this._searchProfiles.value, this.searchFilter);
     return html`
       <sl-dropdown id="dropdown" style="flex: 1" .open=${ifDefined(this.open)}>
         <slot slot="trigger"></slot>
