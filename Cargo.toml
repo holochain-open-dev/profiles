@@ -3,8 +3,8 @@ members = ["crates/*", "tests"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = {git = "https://github.com/holochain/holochain", branch="develop"}
-hdk = {git = "https://github.com/holochain/holochain", branch="develop"}
+hdi = "=0.3.1-beta-dev.0"
+hdk = "=0.2.1-beta-dev.0"
 serde = "1"
 holochain = {git = "https://github.com/holochain/holochain", branch="develop"}
 
