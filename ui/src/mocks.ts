@@ -18,7 +18,9 @@ import { Profile } from "./types";
 export function demoProfiles(): AgentPubKeyMap<Record> {
   const map = new AgentPubKeyMap<Record>();
   map.set(
-    decodeHashFromBase64("uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww"),
+    decodeHashFromBase64(
+      "uhCAk13OZ84d5HFum5PZYcl61kHHMfL2EJ4yNbHwSp4vn6QeOdFii"
+    ),
     fakeRecord(
       fakeCreateAction(),
       fakeEntry({
@@ -32,7 +34,9 @@ export function demoProfiles(): AgentPubKeyMap<Record> {
     )
   );
   map.set(
-    decodeHashFromBase64("uhCAkSEspAJks5Q8863Jg1RJhuJHJpFWzwDJkxVjVSk9JueU"),
+    decodeHashFromBase64(
+      "uhCAkLZ0NvfBs5o07Gidd748Oe9GpnQVj2UQM0xmDjYQEbhNMhJGw"
+    ),
     fakeRecord(
       fakeCreateAction(),
       fakeEntry({

@@ -11,6 +11,16 @@ use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
+trait Hi {
+    fn new () -> ();
+}
+
+impl Hi for Profile {
+    fn new () -> () {
+        ()
+    }
+}
+
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn create_profile(profile: Profile) -> ExternResult<Record> {
