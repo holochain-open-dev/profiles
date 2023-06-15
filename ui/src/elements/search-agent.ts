@@ -131,7 +131,7 @@ export class SearchAgent extends LitElement implements FormField {
   private _textField!: SlInput;
 
   @state()
-  searchFilter: string = "";
+  searchFilter = "";
 
   onUsernameSelected(agentPubKey: AgentPubKey, profile: Profile) {
     this.value = agentPubKey;

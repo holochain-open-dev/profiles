@@ -84,7 +84,10 @@
           if (!this.loaded) return html`<span>Loading...</span>`;
           return html`
             <profiles-context .store=${this.store}>
-              <profile-prompt style="align-items: start">
+              <profile-prompt
+                style="align-items: start"
+                @profile-created=${(e) => console.log(e)}
+              >
                 <form ${onSubmit((f) => this.onSubmit(f))}>
                   <textarea-with-mentions
                     name="hi"

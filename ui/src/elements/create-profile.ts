@@ -33,8 +33,6 @@ export class CreateProfile extends LitElement {
   async createProfile(profile: Profile) {
     try {
       await this.store.client.createProfile(profile);
-      await this.store.myProfile.reload();
-
       this.dispatchEvent(
         new CustomEvent("profile-created", {
           detail: {
@@ -44,6 +42,7 @@ export class CreateProfile extends LitElement {
           composed: true,
         })
       );
+      await this.store.myProfile.reload();
     } catch (e) {
       console.error(e);
       notifyError(msg("Error creating the profile"));

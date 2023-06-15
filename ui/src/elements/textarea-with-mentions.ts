@@ -134,10 +134,8 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 
         dropdownEl.addEventListener("sl-hide", () =>
           setTimeout(() => {
-            try {
-              view.dom.getRootNode().removeChild(dropdownEl);
-              view.dispatch(view.state.tr.setMeta(pluginKey, "hidden"));
-            } catch (e) {}
+            view.dom.getRootNode().removeChild(dropdownEl);
+            view.dispatch(view.state.tr.setMeta(pluginKey, "hidden"));
           }, 10)
         );
       }
