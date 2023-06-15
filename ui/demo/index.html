@@ -107,6 +107,7 @@
                   name="author"
                   required
                   include-myself
+                  @agent-selected=${(e) => console.log(e)}
                 ></search-agent>
                 <agent-avatar
                   .agentPubKey=${this.store.client.client.myPubKey}

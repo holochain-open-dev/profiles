@@ -80,6 +80,8 @@ export class SearchAgentDropdown extends LitElement {
           agentPubKey,
           profile,
         },
+        bubbles: true,
+        composed: true,
       })
     );
   }
