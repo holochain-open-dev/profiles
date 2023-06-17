@@ -137,7 +137,7 @@ export class ProfileDetail extends LitElement {
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching the profile")}
-          .error=${this._agentProfile.value.error.data.data}
+          .error=${this._agentProfile.value.error}
         ></display-error>`;
     }
   }

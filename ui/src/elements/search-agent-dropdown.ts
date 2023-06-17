@@ -114,7 +114,7 @@ export class SearchAgentDropdown extends LitElement {
             style="flex: 1; display:flex"
             tooltip
             .headline=${msg("Error searching agents")}
-            .error=${this._searchProfiles.value.error.data.data}
+            .error=${this._searchProfiles.value.error}
           ></display-error>
         `;
       case "complete": {

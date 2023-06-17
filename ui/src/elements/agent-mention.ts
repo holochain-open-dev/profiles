@@ -100,7 +100,7 @@ export class AgentMention extends LitElement {
           <display-error
             tooltip
             .headline=${msg("Error fetching the agent's avatar")}
-            .error=${this._agentProfile.value.error.data.data}
+            .error=${this._agentProfile.value.error}
           ></display-error>
         `;
     }

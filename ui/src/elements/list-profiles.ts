@@ -93,7 +93,7 @@ export class ListProfiles extends LitElement {
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching the profiles for all agents")}
-          .error=${this._allProfiles.value.error.data.data}
+          .error=${this._allProfiles.value.error}
         ></display-error>`;
       case "complete":
         return this.renderList(this._allProfiles.value.value);

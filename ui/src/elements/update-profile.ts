@@ -69,7 +69,7 @@ export class UpdateProfile extends LitElement {
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching your profile")}
-          .error=${this._myProfile.value.error.data.data}
+          .error=${this._myProfile.value.error}
         ></display-error>`;
     }
   }
