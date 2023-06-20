@@ -167,6 +167,7 @@ export class SearchAgent extends LitElement implements FormField {
           .searchFilter=${this.searchFilter}
           @agent-selected=${(e: CustomEvent) =>
             this.onUsernameSelected(e.detail.agentPubKey, e.detail.profile)}
+          .store=${this.store}
         >
           <sl-input
             id="textfield"

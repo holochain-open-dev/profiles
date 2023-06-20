@@ -140,6 +140,7 @@ export class SearchAgentDropdown extends LitElement {
                   slot="prefix"
                   .agentPubKey=${pubkey}
                   style="margin-right: 16px"
+                  .store=${this.store}
                 ></agent-avatar>
                 ${profile.nickname}
               </sl-menu-item>

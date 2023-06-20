@@ -69,6 +69,7 @@ export class ListProfiles extends LitElement {
           ([agent_pub_key, profile]) => html`
             <div class="row" style="align-items: center; margin-bottom: 16px;">
               <agent-avatar
+                .store=${this.store}
                 style="margin-right: 8px;"
                 .agentPubKey=${agent_pub_key}
                 @click=${() => this.fireAgentSelected(agent_pub_key)}

@@ -37,6 +37,7 @@ export class MyProfile extends LitElement {
       return html`<update-profile
         @profile-updated=${() => (this._editing = false)}
         @cancel-edit-profile=${() => (this._editing = false)}
+        .store=${this.store}
       ></update-profile>`;
 
     return html`
