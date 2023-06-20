@@ -59,6 +59,7 @@ export class UpdateProfile extends LitElement {
         </div>`;
       case "complete":
         return html` <edit-profile
+          .store=${this.store}
           .allowCancel=${true}
           style="margin-top: 16px; flex: 1"
           .profile=${this._myProfile.value.value}

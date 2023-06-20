@@ -108,6 +108,7 @@ export class EditProfile extends LitElement {
           ${this.avatarMode()
             ? html` <select-avatar
                 name="avatar"
+                .store=${this.store}
                 .value=${this.profile?.fields['avatar'] || undefined}
                 .required=${this.store.config.avatarMode === 'avatar-required'}
               ></select-avatar>`
