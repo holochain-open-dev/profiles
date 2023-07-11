@@ -11,16 +11,6 @@ use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
-trait Hi {
-    fn new () -> ();
-}
-
-impl Hi for Profile {
-    fn new () -> () {
-        ()
-    }
-}
-
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn create_profile(profile: Profile) -> ExternResult<Record> {
@@ -81,8 +71,10 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )?;
 
         for l in links {
-            if my_pub_key.eq(&AgentPubKey::from(EntryHash::from(l.target))) {
-                delete_link(l.create_link_hash)?;
+            if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
+                if my_pub_key.eq(&pub_key) {
+                    delete_link(l.create_link_hash)?;
+                }
             }
         }
 
@@ -123,10 +115,13 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
         )),
     )?;
 
-    let agents = links
-        .into_iter()
-        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
-        .collect();
+    let mut agents: Vec<AgentPubKey> = vec![];
+
+    for link in links {
+        if let Ok(pub_key) = AgentPubKey::try_from(link.target) {
+            agents.push(pub_key);
+        }
+    }
 
     Ok(agents)
 }
@@ -142,7 +137,9 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Reco
 
     let link = links[0].clone();
 
-    let profile = get_latest(link.target.into())?;
+    let profile = get_latest(link.target.into_action_hash().ok_or(wasm_error!(
+        WasmErrorInner::Guest("Profile link target is not of ActionHash".into())
+    ))?)?;
 
     Ok(Some(profile))
 }
@@ -187,10 +184,13 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
         .flatten()
         .collect::<Vec<Link>>();
 
-    let agents = links
-        .into_iter()
-        .map(|l| AgentPubKey::from(EntryHash::from(l.target)))
-        .collect();
+    let mut agents: Vec<AgentPubKey> = vec![];
+
+    for link in links {
+        if let Ok(pub_key) = AgentPubKey::try_from(link.target) {
+            agents.push(pub_key);
+        }
+    }
 
     Ok(agents)
 }
