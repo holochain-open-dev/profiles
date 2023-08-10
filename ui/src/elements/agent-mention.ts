@@ -1,9 +1,9 @@
 import { consume } from "@lit-labs/context";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
-import { state, property, customElement } from "lit/decorators.js";
+import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { AgentPubKey, encodeHashToBase64 } from "@holochain/client";
+import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 

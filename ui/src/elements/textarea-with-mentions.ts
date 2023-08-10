@@ -10,7 +10,7 @@ import {
   splitHrlString,
 } from "@holochain-open-dev/utils";
 import { Schema, NodeSpec } from "prosemirror-model";
-import { Plugin, PluginKey, Selection, TextSelection } from "prosemirror-state";
+import { Plugin, PluginKey } from "prosemirror-state";
 import { baseKeymap } from "prosemirror-commands";
 import { keymap } from "prosemirror-keymap";
 

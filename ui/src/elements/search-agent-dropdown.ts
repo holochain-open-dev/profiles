@@ -1,4 +1,4 @@
-import { customElement, property, state, query } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { css, html, LitElement } from "lit";
 import { consume } from "@lit-labs/context";
