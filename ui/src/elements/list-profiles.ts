@@ -35,7 +35,8 @@ export class ListProfiles extends LitElement {
    */
   private _allProfiles = new StoreSubscriber(
     this,
-    () => this.store.allProfiles
+    () => this.store.allProfiles,
+    () => [this.store],
   );
 
   initials(nickname: string): string {

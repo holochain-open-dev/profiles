@@ -50,7 +50,7 @@ export class AgentMention extends LitElement {
   private _agentProfile = new StoreSubscriber(
     this,
     () => this.store.profiles.get(this.agentPubKey),
-    () => [this.agentPubKey]
+    () => [this.agentPubKey, this.store]
   );
 
   renderAvatar(profile: Profile | undefined) {

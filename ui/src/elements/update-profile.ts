@@ -31,7 +31,7 @@ export class UpdateProfile extends LitElement {
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile);
+  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile, () => [this.store]);
 
   async updateProfile(profile: Profile) {
     await this.store.client.updateProfile(profile);

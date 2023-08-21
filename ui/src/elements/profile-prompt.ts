@@ -36,7 +36,7 @@ export class ProfilePrompt extends LitElement {
   private _myProfile = new StoreSubscriber(
     this,
     () => this.store.myProfile,
-    () => []
+    () => [this.store]
   );
 
   renderPrompt(myProfile: Profile | undefined) {
