@@ -94,11 +94,11 @@ export class ProfileDetail extends LitElement {
 
           <span style="flex: 1"></span>
 
-          <span style="font-size: 12px;">
-            Joined ${new Intl.DateTimeFormat().format(new Date(profile.joined))}
-          </span>
 
           <slot name="action"></slot>
+        </div>
+        <div class="row" style="margin-top: 8px; font-size: 12px;">
+          Joined ${new Intl.DateTimeFormat().format(new Date(Math.floor(profile.joined/1000)))}
         </div>
 
         ${Object.entries(this.getAdditionalFields(profile))

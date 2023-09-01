@@ -12,7 +12,7 @@ import '@holochain-open-dev/elements/dist/elements/select-avatar.js';
 
 import { ProfilesStore } from '../profiles-store.js';
 import { profilesStoreContext } from '../context.js';
-import { Profile } from '../types.js';
+import { CreateProfileInput, Profile } from '../types.js';
 import { FieldConfig } from '../config.js';
 
 /**
@@ -57,7 +57,7 @@ export class EditProfile extends LitElement {
     const nickname = fields['nickname'];
     delete fields['nickname'];
 
-    const profile: Profile = {
+    const profile: CreateProfileInput = {
       fields,
       nickname,
     };
