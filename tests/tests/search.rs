@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use hc_zome_profiles_integrity::*;
+use hc_zome_profiles_coordinator::CreateProfileInput;
 use holochain::prelude::{AgentPubKey, Record};
 use holochain::test_utils::consistency_10s;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
@@ -23,7 +23,7 @@ async fn create_and_get() {
     let alice_zome = alice.zome("profiles");
     let bob_zome = bobbo.zome("profiles");
 
-    let profile = Profile {
+    let profile = CreateProfileInput {
         nickname: String::from("ALIce"),
         fields: BTreeMap::from([(String::from("avatar"), String::from("aliceavatar"))]),
     };
@@ -35,7 +35,7 @@ async fn create_and_get() {
         .call(
             &bob_zome,
             "create_profile",
-            Profile {
+            CreateProfileInput {
                 nickname: "bobbo".into(),
                 fields: BTreeMap::new(),
             },

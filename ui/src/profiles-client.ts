@@ -5,7 +5,7 @@ import {
   AppAgentClient,
   RoleName,
 } from "@holochain/client";
-import { Profile, ProfilesSignal } from "./types";
+import { CreateProfileInput, Profile, ProfilesSignal } from "./types";
 
 export class ProfilesClient extends ZomeClient<ProfilesSignal> {
   constructor(
@@ -57,7 +57,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    *
    * @param profile the profile to create
    */
-  async createProfile(profile: Profile): Promise<void> {
+  async createProfile(profile: CreateProfileInput): Promise<void> {
     return this.callZome("create_profile", profile);
   }
 
@@ -66,7 +66,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    *
    * @param profile the profile to create
    */
-  async updateProfile(profile: Profile): Promise<void> {
+  async updateProfile(profile: CreateProfileInput): Promise<void> {
     return this.callZome("update_profile", profile);
   }
 }

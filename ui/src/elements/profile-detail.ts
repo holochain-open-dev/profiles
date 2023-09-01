@@ -94,6 +94,10 @@ export class ProfileDetail extends LitElement {
 
           <span style="flex: 1"></span>
 
+          <span style="font-size: 12px;">
+            Joined ${new Intl.DateTimeFormat().format(new Date(profile.joined))}
+          </span>
+
           <slot name="action"></slot>
         </div>
 
@@ -121,6 +125,10 @@ export class ProfileDetail extends LitElement {
                 ></sl-skeleton>
               </div>
             </div>
+            <sl-skeleton
+              effect="pulse"
+              style="width: 200px; margin-top: 16px;"
+            ></sl-skeleton>
 
             ${this.store.config.additionalFields.map(
               () => html`

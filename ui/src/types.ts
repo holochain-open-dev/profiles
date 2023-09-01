@@ -40,4 +40,10 @@ export type EntryTypes = { type: "Profile" } & Profile;
 export interface Profile {
   nickname: string;
   fields: Record<string, string>;
+  joined: number;
+}
+
+export interface CreateProfileInput {
+  nickname: string;
+  fields: Record<string, string>;
 }
