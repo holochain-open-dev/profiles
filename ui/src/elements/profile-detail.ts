@@ -35,6 +35,12 @@ export class ProfileDetail extends LitElement {
   @property()
   store!: ProfilesStore;
 
+  /**
+   * Enables showing the agent joined timestamp
+   */
+  @property({ type: Boolean})
+  showJoined = false;
+
   /** Private properties */
 
   /**
@@ -84,6 +90,12 @@ export class ProfileDetail extends LitElement {
         >
       </div>`;
 
+    const joinedTimestamp = this.showJoined ? html`
+      <div class="row" style="margin-top: 8px; font-size: 12px;">
+        Joined ${new Intl.DateTimeFormat().format(new Date(Math.floor(profile.joined/1000)))}
+      </div>` : null;
+    
+
     return html`
       <div class="column">
         <div class="row" style="align-items: center">
@@ -94,8 +106,11 @@ export class ProfileDetail extends LitElement {
 
           <span style="flex: 1"></span>
 
+
           <slot name="action"></slot>
         </div>
+
+        ${joinedTimestamp}
 
         ${Object.entries(this.getAdditionalFields(profile))
           .filter(([, value]) => value !== "")
@@ -121,6 +136,10 @@ export class ProfileDetail extends LitElement {
                 ></sl-skeleton>
               </div>
             </div>
+            <sl-skeleton
+              effect="pulse"
+              style="width: 200px; margin-top: 16px;"
+            ></sl-skeleton>
 
             ${this.store.config.additionalFields.map(
               () => html`

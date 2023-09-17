@@ -24,6 +24,12 @@ export class MyProfile extends LitElement {
   @property()
   store!: ProfilesStore;
 
+  /**
+   * Enables showing the agent joined timestamp
+   */
+  @property({ type: Boolean})
+  showJoined = false;
+  
   /** Private properties */
 
   /**
@@ -40,7 +46,7 @@ export class MyProfile extends LitElement {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
+      <profile-detail .agentPubKey=${this.store.client.client.myPubKey} .showJoined=${this.showJoined}>
         <sl-icon-button
           src="${wrapPathInSvg(mdiPencil)}"
           slot="action"

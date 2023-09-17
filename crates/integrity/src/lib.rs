@@ -20,6 +20,7 @@ use hdi::prelude::*;
 pub struct Profile {
     pub nickname: String,
     pub fields: BTreeMap<String, String>,
+    pub joined: Timestamp,
 }
 
 #[derive(Serialize, Deserialize)]

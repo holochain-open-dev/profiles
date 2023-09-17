@@ -7,28 +7,38 @@
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
+use std::collections::BTreeMap;
+
 use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CreateProfileInput {
+    pub nickname: String,
+    pub fields: BTreeMap<String, String>,
+}
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn create_profile(profile: Profile) -> ExternResult<Record> {
-    let agent_info = agent_info()?;
+pub fn create_profile(input: CreateProfileInput) -> ExternResult<Record> {
+    let agent_address = agent_info()?.agent_initial_pubkey;
+    let joined = get_agent_joined_timestamp(agent_address.clone())?;
+    
+    let action_hash = create_entry(EntryTypes::Profile( Profile {
+        nickname: input.nickname.clone(),
+        fields: input.fields,
+        joined,
+    }))?;
 
-    let action_hash = create_entry(EntryTypes::Profile(profile.clone()))?;
-
-    let path = prefix_path(profile.nickname.clone())?;
+    let path = prefix_path(input.nickname.clone())?;
 
     path.ensure()?;
-
-    let agent_address = agent_info.agent_initial_pubkey.clone();
 
     create_link(
         path.path_entry_hash()?,
         agent_address.clone(),
         LinkTypes::PathToAgent,
-        LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
+        LinkTag::new(input.nickname.to_lowercase().as_bytes().to_vec()),
     )?;
     create_link(
         agent_address,
@@ -45,16 +55,12 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
 
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn update_profile(profile: Profile) -> ExternResult<Record> {
+pub fn update_profile(input: CreateProfileInput) -> ExternResult<Record> {
     let previous_profile_record = crate::get_agent_profile(agent_info()?.agent_latest_pubkey)?
         .ok_or(wasm_error!(WasmErrorInner::Guest(
             "I haven't created a profile yet".into(),
         )))?;
 
-    let action_hash = update_entry(previous_profile_record.action_address().clone(), &profile)?;
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
-
-    // If we have changed the nickname, remove the previous nickname link and add a new one
     let previous_profile: Profile = previous_profile_record
         .entry()
         .to_app_option()
@@ -62,7 +68,16 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         .ok_or(wasm_error!(WasmErrorInner::Guest(
             "Previous profile is malformed".to_string()
         )))?;
-    if previous_profile.nickname.ne(&profile.nickname) {
+
+    let action_hash = update_entry(previous_profile_record.action_address().clone(), EntryTypes::Profile(Profile {
+        nickname: input.nickname.clone(),
+        fields: input.fields,
+        joined: previous_profile.joined,
+    }))?;
+    let my_pub_key = agent_info()?.agent_latest_pubkey;
+
+    // If we have changed the nickname, remove the previous nickname link and add a new one
+    if previous_profile.nickname.ne(&input.nickname) {
         let previous_prefix_path = prefix_path(previous_profile.nickname)?;
         let links = get_links(
             previous_prefix_path.path_entry_hash()?,
@@ -78,7 +93,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             }
         }
 
-        let path = prefix_path(profile.nickname.clone())?;
+        let path = prefix_path(input.nickname.clone())?;
 
         path.ensure()?;
 
@@ -86,7 +101,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             path.path_entry_hash()?,
             my_pub_key,
             LinkTypes::PathToAgent,
-            LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
+            LinkTag::new(input.nickname.to_lowercase().as_bytes().to_vec()),
         )?;
     }
 
@@ -194,6 +209,30 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
 
     Ok(agents)
 }
+
+#[hdk_extern]
+pub fn get_agent_joined_timestamp(agent: AgentPubKey) -> ExternResult<Timestamp> {
+    let joining_agent_activity: AgentActivity = get_agent_activity(
+        agent,
+        ChainQueryFilter::new()
+            .action_type(ActionType::AgentValidationPkg)
+            .include_entries(true),
+        ActivityRequest::Full,
+    )?;
+    let action = joining_agent_activity
+        .valid_activity
+        .first()
+        .ok_or(wasm_error!(WasmErrorInner::Guest(
+            "AgentValidationPkg action not found".to_string()
+        )))?;
+    let record =
+        get(action.clone().1, GetOptions::default())?.ok_or(wasm_error!(WasmErrorInner::Guest(
+            "Failed to get AgentValidationPkg action from action hash".to_string()
+        )))?;
+
+    Ok(record.action_hashed().timestamp())
+}
+
 
 /** Helpers*/
 

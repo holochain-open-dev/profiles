@@ -10,7 +10,7 @@ import "./edit-profile.js";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import { Profile } from "../types.js";
+import { CreateProfileInput, Profile } from "../types.js";
 
 /**
  * A custom element that fires event on value change.
@@ -30,7 +30,7 @@ export class CreateProfile extends LitElement {
 
   /** Private properties */
 
-  async createProfile(profile: Profile) {
+  async createProfile(profile: CreateProfileInput) {
     try {
       await this.store.client.createProfile(profile);
       this.dispatchEvent(
