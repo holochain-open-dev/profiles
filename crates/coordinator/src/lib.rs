@@ -22,7 +22,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
 
     path.ensure()?;
 
-    let agent_address = agent_info.agent_initial_pubkey.clone();
+    let agent_address = agent_info.agent_initial_pubkey;
 
     create_link(
         path.path_entry_hash()?,
@@ -64,11 +64,14 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )))?;
     if previous_profile.nickname.ne(&profile.nickname) {
         let previous_prefix_path = prefix_path(previous_profile.nickname)?;
-        let links = get_links(
-            previous_prefix_path.path_entry_hash()?,
-            LinkTypes::PathToAgent,
-            None,
-        )?;
+        let links = get_links(GetLinksInput {
+            base_address: previous_prefix_path.path_entry_hash()?.into(),
+            link_type: LinkTypes::PathToAgent.try_into_filter()?,
+            tag_prefix: None,
+            after: None,
+            before: None,
+            author: None,
+        })?;
 
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
@@ -107,13 +110,16 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
     }
 
     let prefix_path = prefix_path(nickname_filter.clone())?;
-    let links = get_links(
-        prefix_path.path_entry_hash()?,
-        LinkTypes::PathToAgent,
-        Some(LinkTag::new(
+    let links = get_links(GetLinksInput {
+        base_address: prefix_path.path_entry_hash()?.into(),
+        link_type: LinkTypes::PathToAgent.try_into_filter()?,
+        tag_prefix: Some(LinkTag::new(
             nickname_filter.to_lowercase().as_bytes().to_vec(),
         )),
-    )?;
+        after: None,
+        before: None,
+        author: None,
+    })?;
 
     let mut agents: Vec<AgentPubKey> = vec![];
 
@@ -129,9 +135,16 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
 /// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
 pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Record>> {
-    let links = get_links(agent_pub_key, LinkTypes::AgentToProfile, None)?;
+    let links = get_links(GetLinksInput {
+        base_address: agent_pub_key.into(),
+        link_type: LinkTypes::AgentToProfile.try_into_filter()?,
+        tag_prefix: None,
+        after: None,
+        before: None,
+        author: None,
+    })?;
 
-    if links.len() == 0 {
+    if links.is_empty() {
         return Ok(None);
     }
 
@@ -170,11 +183,14 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
     let get_links_input: Vec<GetLinksInput> = children
         .into_iter()
         .map(|path| {
-            Ok(GetLinksInput::new(
-                path.path_entry_hash()?.into(),
-                LinkTypes::PathToAgent.try_into_filter()?,
-                None,
-            ))
+            Ok(GetLinksInput {
+                base_address: path.path_entry_hash()?.into(),
+                link_type: LinkTypes::PathToAgent.try_into_filter()?,
+                tag_prefix: None,
+                after: None,
+                before: None,
+                author: None,
+            })
         })
         .collect::<ExternResult<Vec<GetLinksInput>>>()?;
 
@@ -249,7 +265,7 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
             Ok(())
         }
         Action::DeleteLink(delete_link) => {
-            let record = get(delete_link.link_add_address.clone(), GetOptions::default())?.ok_or(
+            let record = get(delete_link.link_add_address, GetOptions::default())?.ok_or(
                 wasm_error!(WasmErrorInner::Guest(
                     "Failed to fetch CreateLink action".to_string()
                 )),
@@ -264,9 +280,9 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                     Ok(())
                 }
                 _ => {
-                    return Err(wasm_error!(WasmErrorInner::Guest(
+                    Err(wasm_error!(WasmErrorInner::Guest(
                         "Create Link should exist".to_string()
-                    )));
+                    )))
                 }
             }
         }
@@ -325,9 +341,9 @@ fn get_entry_for_action(action_hash: &ActionHash) -> ExternResult<Option<EntryTy
             return Ok(None);
         }
     };
-    Ok(EntryTypes::deserialize_from_type(
-        zome_index.clone(),
-        entry_index.clone(),
+    EntryTypes::deserialize_from_type(
+        *zome_index,
+        *entry_index,
         entry,
-    )?)
+    )
 }
