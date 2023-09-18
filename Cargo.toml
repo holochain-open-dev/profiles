@@ -3,9 +3,9 @@ members = ["crates/*", "tests"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "=0.4.0-beta-dev.10"
-hdk = "=0.3.0-beta-dev.14"
-holochain_integrity_types = "=0.3.0-beta-dev.10"
+hdi = "=0.4.0-beta-dev.9"
+hdk = "=0.3.0-beta-dev.13"
+holochain_integrity_types = "=0.3.0-beta-dev.9"
 serde = "=1.0.171"
 holochain = "0.2.2"
 
