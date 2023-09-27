@@ -9,7 +9,7 @@ version = "0.0.1"
 fixt = "*"
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
-holo_hash = { version = "*", default-features = false, features = [
+holo_hash = { version = "0.1.4", default-features = false, features = [
   "test_utils",
 ] }
 holochain = { workspace = true, features = ["test_utils", "sweetest"] }

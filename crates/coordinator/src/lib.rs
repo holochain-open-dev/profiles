@@ -71,7 +71,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )?;
 
         for l in links {
-            if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
+            if let Ok(pub_key) = AgentPubKey::try_from(EntryHash::from(l.target)) {
                 if my_pub_key.eq(&pub_key) {
                     delete_link(l.create_link_hash)?;
                 }
@@ -118,7 +118,7 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
     let mut agents: Vec<AgentPubKey> = vec![];
 
     for link in links {
-        if let Ok(pub_key) = AgentPubKey::try_from(link.target) {
+        if let Ok(pub_key) = AgentPubKey::try_from(EntryHash::from(link.target)) {
             agents.push(pub_key);
         }
     }
@@ -187,7 +187,7 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
     let mut agents: Vec<AgentPubKey> = vec![];
 
     for link in links {
-        if let Ok(pub_key) = AgentPubKey::try_from(link.target) {
+        if let Ok(pub_key) = AgentPubKey::try_from(EntryHash::from(link.target)) {
             agents.push(pub_key);
         }
     }
