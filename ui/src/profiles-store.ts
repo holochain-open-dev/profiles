@@ -61,10 +61,7 @@ export class ProfilesStore {
   );
 
   // Fetches your profile
-  // TODO: change the manual implementation when signals are working consistently
-  myProfile = manualReloadStore(async () =>
-    this.client.getAgentProfile(this.client.client.myPubKey)
-  );
+  myProfile = this.profiles.get(this.client.client.myPubKey);
 
   // Fetches the profiles for the given agents
   agentsProfiles(

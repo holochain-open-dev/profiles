@@ -31,11 +31,14 @@ export class UpdateProfile extends LitElement {
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile, () => [this.store]);
+  private _myProfile = new StoreSubscriber(
+    this,
+    () => this.store.myProfile,
+    () => [this.store]
+  );
 
   async updateProfile(profile: Profile) {
     await this.store.client.updateProfile(profile);
-    await this.store.myProfile.reload();
 
     this.dispatchEvent(
       new CustomEvent("profile-updated", {

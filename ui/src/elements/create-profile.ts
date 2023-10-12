@@ -42,7 +42,6 @@ export class CreateProfile extends LitElement {
           composed: true,
         })
       );
-      await this.store.myProfile.reload();
     } catch (e) {
       console.error(e);
       notifyError(msg("Error creating the profile"));

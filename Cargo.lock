@@ -2022,7 +2022,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b12f620a0d22b7dcd534a849f0024b0b47c4343b15f1c0ec02e37f4990f6f16"
 dependencies = [
  "hdk_derive",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_integrity_types",
  "holochain_wasmer_guest",
  "paste",
@@ -2041,7 +2041,7 @@ dependencies = [
  "getrandom 0.2.10",
  "hdi",
  "hdk_derive",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_wasmer_guest",
  "holochain_zome_types",
  "paste",
@@ -2131,17 +2131,6 @@ checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "holo_hash"
-version = "0.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28bbf8ca867fb0d5090fb80fa9bc83cbf5202137f435e3d7edfe3227a7356eec"
-dependencies = [
- "serde",
- "serde_bytes",
- "thiserror",
-]
-
-[[package]]
-name = "holo_hash"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2a5aa5c7b7c2d99ba6769e58ead10d5d4ead9036724a54a7fcea1c0203aac00e"
@@ -2190,7 +2179,7 @@ dependencies = [
  "getrandom 0.2.10",
  "ghost_actor 0.3.0-alpha.6",
  "hdk",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_cascade",
  "holochain_conductor_api",
  "holochain_keystore",
@@ -2272,7 +2261,7 @@ dependencies = [
  "ghost_actor 0.3.0-alpha.6",
  "hdk",
  "hdk_derive",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_p2p",
  "holochain_serialized_bytes",
  "holochain_sqlite",
@@ -2299,7 +2288,7 @@ checksum = "4696d86bc639c07469f95d369d1e93d5a50f9afd782ed14fa74e7040293a133a"
 dependencies = [
  "derive_more",
  "directories",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_keystore",
  "holochain_p2p",
  "holochain_serialized_bytes",
@@ -2324,7 +2313,7 @@ checksum = "fdfffeca0c6dea328a1ff7097946a951035dd137f4b9ad0db00f5377cd6c9326"
 dependencies = [
  "arbitrary",
  "derive_builder",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_serialized_bytes",
  "holochain_util",
  "kitsune_p2p_dht",
@@ -2345,7 +2334,7 @@ checksum = "f03dedeb6f3e244558f491356c4a00da9c5a44a05ca683e460c6e5434ed2e149"
 dependencies = [
  "base64 0.13.1",
  "futures",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_serialized_bytes",
  "holochain_zome_types",
  "kitsune_p2p_types",
@@ -2373,7 +2362,7 @@ dependencies = [
  "fixt",
  "futures",
  "ghost_actor 0.3.0-alpha.6",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_keystore",
  "holochain_serialized_bytes",
  "holochain_trace",
@@ -2437,7 +2426,7 @@ dependencies = [
  "fixt",
  "futures",
  "getrandom 0.2.10",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_serialized_bytes",
  "holochain_util",
  "holochain_zome_types",
@@ -2487,7 +2476,7 @@ dependencies = [
  "fallible-iterator",
  "futures",
  "getrandom 0.2.10",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_keystore",
  "holochain_p2p",
  "holochain_serialized_bytes",
@@ -2561,7 +2550,7 @@ dependencies = [
  "flate2",
  "futures",
  "getrandom 0.2.10",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_keystore",
  "holochain_serialized_bytes",
  "holochain_sqlite",
@@ -2711,7 +2700,7 @@ dependencies = [
  "contrafact",
  "derive_builder",
  "fixt",
- "holo_hash 0.2.2",
+ "holo_hash",
  "holochain_integrity_types",
  "holochain_serialized_bytes",
  "holochain_wasmer_common",
@@ -6207,7 +6196,6 @@ dependencies = [
  "hc_zome_profiles_coordinator",
  "hc_zome_profiles_integrity",
  "hdk",
- "holo_hash 0.0.4",
  "holochain",
  "tokio",
 ]

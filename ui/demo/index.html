@@ -34,10 +34,6 @@
       import "../src/elements/list-profiles.ts";
       import "../src/elements/search-agent.ts";
       import "../src/elements/textarea-with-mentions.ts";
-      // import "@holochain-open-dev/profiles/definitions/agent-avatar.js";
-      // import "@holochain-open-dev/profiles/definitions/my-profile.js";
-      // import "@holochain-open-dev/profiles/definitions/search-agent.js";
-      // import "@holochain-open-dev/profiles/definitions/list-profiles.js";
 
       class ProfilesTest extends LitElement {
         static get properties() {
@@ -49,7 +45,10 @@
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect("", "test-app");
+          const client = await AppAgentWebsocket.connect(
+            new URL("ws://localhost"),
+            "test-app"
+          );
 
           const service = new ProfilesClient(client, "profiles-test");
 

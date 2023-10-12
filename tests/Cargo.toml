@@ -9,9 +9,6 @@ version = "0.0.1"
 fixt = "*"
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
-holo_hash = { version = "*", default-features = false, features = [
-  "test_utils",
-] }
 holochain = { workspace = true, features = ["test_utils", "sweetest"] }
 tokio = { version = "1.24", features = ["full"] }
 
