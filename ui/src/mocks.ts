@@ -13,6 +13,7 @@ import {
   AppAgentClient,
   Record,
 } from "@holochain/client";
+import { ProfilesClient } from "./profiles-client";
 import { Profile } from "./types";
 
 export function demoProfiles(): AgentPubKeyMap<Record> {
@@ -95,4 +96,17 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
   get_agents_with_profile() {
     return Array.from(this.agentsProfiles.keys());
   }
+}
+
+export async function sampleProfile(
+  client: ProfilesClient,
+  partialProfile: Partial<Profile> = {}
+): Promise<Profile> {
+  return {
+    ...{
+      nickname: "alice",
+      fields: {},
+    },
+    ...partialProfile,
+  };
 }

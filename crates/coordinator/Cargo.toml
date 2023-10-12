@@ -23,3 +23,10 @@ serde = "1"
 hc_zome_profiles_integrity = { path = "../integrity", version = "0.2" }
 
 hdk = { workspace = true }
+
+[dev-dependencies]
+fixt = "*"
+futures = { version = "0.3.1", default-features = false }
+hdk = { workspace = true, features = ["encoding", "test_utils"] }
+holochain = { workspace = true }
+tokio = { version = "1.3", features = ["full"] }

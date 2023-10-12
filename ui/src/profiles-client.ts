@@ -1,4 +1,8 @@
-import { decodeEntry, ZomeClient } from "@holochain-open-dev/utils";
+import {
+  decodeEntry,
+  EntryRecord,
+  ZomeClient,
+} from "@holochain-open-dev/utils";
 import {
   AgentPubKey,
   Record,
@@ -57,8 +61,9 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    *
    * @param profile the profile to create
    */
-  async createProfile(profile: Profile): Promise<void> {
-    return this.callZome("create_profile", profile);
+  async createProfile(profile: Profile): Promise<EntryRecord<Profile>> {
+    const record: Record = await this.callZome("create_profile", profile);
+    return new EntryRecord(record);
   }
 
   /**
@@ -66,7 +71,8 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    *
    * @param profile the profile to create
    */
-  async updateProfile(profile: Profile): Promise<void> {
-    return this.callZome("update_profile", profile);
+  async updateProfile(profile: Profile): Promise<EntryRecord<Profile>> {
+    const record: Record = await this.callZome("update_profile", profile);
+    return new EntryRecord(record);
   }
 }

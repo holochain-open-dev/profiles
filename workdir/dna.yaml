@@ -8,11 +8,11 @@ integrity:
   origin_time: 2022-02-11T23:05:19.470323Z
   zomes:
     - name: profiles_integrity
-      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
+      bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
 
 coordinator:
   zomes:
     - name: profiles
-      bundled: ../../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
+      bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
       dependencies:
         - name: profiles_integrity

@@ -1,13 +1,14 @@
 [workspace]
-members = ["crates/*", "tests"]
+members = ["crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
 hdi = "0.3.2"
 hdk = "0.2.2"
 serde = "1"
-holochain = "0.2.2"
-
+holochain = { version = "0.2.2", default-features = false, features = [
+  "test_utils",
+] }
 [profile.dev]
 opt-level = "z"
 
