@@ -15,7 +15,7 @@
     "./locales/*": "./locales/*",
     "./dist/*": "./dist/*"
   },
-  "files": ["dist"],
+  "files": ["dist", "locales"],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
     "build": "npm run lint && tsc",

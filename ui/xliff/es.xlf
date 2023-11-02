@@ -1,78 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-<file target-language="fr-fr" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<file target-language="es" source-language="en" original="lit-localize-inputs" datatype="plaintext">
 <body>
 <trans-unit id="se9f30e4492cee2cd">
   <source>Nickname</source>
-  <target>Surnom</target>
+  <target>Nombre de usuario</target>
 </trans-unit>
 <trans-unit id="s3798c0344c399eb7">
   <source>Min. <x id="0" equiv-text="${this.store.config.minNicknameLength}"/> characters</source>
-  <target>Min. <x id="0" equiv-text="${this.store.config.minNicknameLength}"/> caractères</target>
+  <target>Min. <x id="0" equiv-text="${this.store.config.minNicknameLength}"/> caracteres</target>
 </trans-unit>
 <trans-unit id="sc93a9aa3e5bcbf5d">
   <source>Save Profile</source>
-  <target>Enregistrer Profil</target>
+  <target>Guardar Perfil</target>
 </trans-unit>
 <trans-unit id="sbe57083b4c785878">
   <source>Create Profile</source>
-  <target>Créer Profil</target>
+  <target>Crear Perfil</target>
 </trans-unit>
 <trans-unit id="s639c68c3284a2269">
   <source>Update Profile</source>
-  <target>Mettre à jour Profil</target>
+  <target>Actualizar Perfil</target>
 </trans-unit>
 <trans-unit id="s39aca5bd9eed9271">
   <source>This agent hasn't created a profile yet</source>
-  <target>Cet utilisateur n'a pas encore créé de profil</target>
+  <target>Este agente no ha creado su perfil todavía</target>
 </trans-unit>
 <trans-unit id="s6068cc1885ea6494">
   <source>No agents match the filter</source>
-  <target>Aucun agent ne corresponds au filtre</target>
+  <target>No se ha encontrado ningún agente</target>
 </trans-unit>
 <trans-unit id="s3fa309bef44c54e9">
   <source>At least 3 chars...</source>
-  <target>Au moins 3 caractères...</target>
+  <target>Al menos 3 caracteres...</target>
 </trans-unit>
 <trans-unit id="s1d96e130c0544d92">
   <source>There are no created profiles yet</source>
-  <target>Il n'y a pas encore de profils créés</target>
+  <target>Aún no se ha creado ningún perfil</target>
 </trans-unit>
 <trans-unit id="sdfb2b12b255de30c">
   <source>Copied!</source>
+  <target>Copied!</target>
 </trans-unit>
 <trans-unit id="sa77a504cfafd6d20">
   <source>Error fetching the agent's avatar</source>
+  <target>Error buscando el avatar del agente</target>
 </trans-unit>
 <trans-unit id="s2ceb11be2290bb1b">
   <source>Cancel</source>
+  <target>Cancelar</target>
 </trans-unit>
 <trans-unit id="seb9fbffaa6fddee6">
   <source>Error creating the profile</source>
+  <target>Error creando el perfil</target>
 </trans-unit>
 <trans-unit id="s7c2f825ccdf2bf38">
   <source>Error fetching the profiles for all agents</source>
+  <target>Error buscando los perfiles de todos los agentes</target>
 </trans-unit>
 <trans-unit id="sffdcc47c1ec17387">
   <source>Error fetching your profile</source>
+  <target>Error buscando tu perfil</target>
 </trans-unit>
 <trans-unit id="sc5c9f04c2d0a5f1d">
   <source>Error fetching the profile</source>
+  <target>Error buscando el perfil</target>
 </trans-unit>
 <trans-unit id="sdd16cd8b418b1752">
   <source>Enter at least 3 chars to search...</source>
+  <target>Introduce al menos 3 carácteres para buscar...</target>
 </trans-unit>
 <trans-unit id="s0f790cd5b748b24d">
   <source>Error searching agents</source>
+  <target>Error buscando los agentes</target>
 </trans-unit>
 <trans-unit id="sbbb75506e75dfbf8">
   <source>Search Agent</source>
+  <target>Buscar agente</target>
 </trans-unit>
 <trans-unit id="s20453e988c3e79f3">
   <source>Press '@' to mention an agent.</source>
+  <target>Presiona '@' para mencionar a un agente</target>
 </trans-unit>
 <trans-unit id="s6ef2512ced4487d3">
   <source>No agents selected yet.</source>
+  <target>No hay ningún agente seleccionado todavía.</target>
 </trans-unit>
 </body>
 </file>
