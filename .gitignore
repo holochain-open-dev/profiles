@@ -6,3 +6,4 @@ dist/
 *.dna
 *.happ
 storybook-static/
+locales/
