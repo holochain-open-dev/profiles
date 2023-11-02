@@ -13,7 +13,7 @@ import {
 } from "@holochain/client";
 import { decode } from "@msgpack/msgpack";
 import { EntryRecord } from "@holochain-open-dev/utils";
-import { toPromise } from "@holochain-open-dev/stores";
+import { get, toPromise } from "@holochain-open-dev/stores";
 
 import { Profile } from "../../ui/src/types.js";
 import { sampleProfile } from "../../ui/src/mocks.js";
@@ -24,6 +24,7 @@ test("create Profile", async () => {
     const { alice, bob } = await setup(scenario);
 
     let myProfile = await toPromise(alice.store.myProfile);
+    alice.store.myProfile.subscribe(() => {}); // store keepalive
     assert.notOk(myProfile);
 
     // Alice creates a Post
@@ -33,7 +34,8 @@ test("create Profile", async () => {
       );
     assert.ok(profile);
 
-    myProfile = await toPromise(alice.store.myProfile);
-    assert.ok(myProfile);
+    const profileStatus = get(alice.store.myProfile);
+    assert.equal(profileStatus.status, "complete");
+    assert.ok((profileStatus as any).value);
   });
 });
