@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "Frontend module for the Holochain hc_zome_profiles zomes",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",

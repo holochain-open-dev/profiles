@@ -13,6 +13,7 @@ import "./profile-list-item-skeleton.js";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { Profile } from "../types";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element list-profiles
@@ -60,7 +61,7 @@ export class ListProfiles extends LitElement {
     }
   }
 
-  renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
+  renderList(profiles: ReadonlyMap<AgentPubKey, EntryRecord<Profile>>) {
     if (profiles.size === 0)
       return html`<span>${msg("There are no created profiles yet")} ></span>`;
 
@@ -75,7 +76,7 @@ export class ListProfiles extends LitElement {
                 @click=${() => this.fireAgentSelected(agent_pub_key)}
               >
               </agent-avatar
-              ><span> ${profile.nickname}</span>
+              ><span> ${profile.entry.nickname}</span>
             </div>
           `
         )}

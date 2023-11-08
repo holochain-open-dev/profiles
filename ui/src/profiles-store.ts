@@ -84,7 +84,7 @@ export class ProfilesStore {
     this.agentsWithProfile,
     (agents) =>
       this.agentsProfiles(agents) as AsyncReadable<
-        ReadonlyMap<AgentPubKey, Profile>
+        ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
       >
   );
 
