@@ -64,6 +64,13 @@ export class SearchAgents extends LitElement implements FormField {
   emptyListPlaceholder = msg("No agents selected yet.");
 
   /**
+   * Whether to include my own agent as a possible agent to select.
+   * @attr include-myself
+   */
+  @property({ type: Boolean, attribute: "include-myself" })
+  includeMyself = false;
+
+  /**
    * @internal
    */
   _controller = new FormFieldController(this);
@@ -91,6 +98,7 @@ export class SearchAgents extends LitElement implements FormField {
           @agent-selected=${(e: any) => {
             this.value = [...this.value, e.detail.agentPubKey];
           }}
+          .includeMyself=${this.includeMyself}
         ></search-agent>
         ${this.value.length === 0
           ? html`<span class="placeholder">${this.emptyListPlaceholder}</span>`

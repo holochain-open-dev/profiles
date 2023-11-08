@@ -33,6 +33,7 @@
       import "../src/elements/my-profile.ts";
       import "../src/elements/list-profiles.ts";
       import "../src/elements/search-agent.ts";
+      import "../src/elements/search-agents.ts";
       import "../src/elements/textarea-with-mentions.ts";
 
       class ProfilesTest extends LitElement {
@@ -108,6 +109,11 @@
                   include-myself
                   @agent-selected=${(e) => console.log(e)}
                 ></search-agent>
+                <search-agents
+                  name="hosts"
+                  required
+                  include-myself
+                ></search-agents>
                 <agent-avatar
                   .agentPubKey=${this.store.client.client.myPubKey}
                   .showOnHover=${false}

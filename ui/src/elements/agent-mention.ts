@@ -1,4 +1,4 @@
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
@@ -6,6 +6,7 @@ import { styleMap } from "lit-html/directives/style-map.js";
 import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@holochain-open-dev/elements/dist/elements/holo-identicon.js";
@@ -53,8 +54,8 @@ export class AgentMention extends LitElement {
     () => [this.agentPubKey, this.store]
   );
 
-  renderAvatar(profile: Profile | undefined) {
-    if (!profile || !profile.fields.avatar) {
+  renderAvatar(profile: EntryRecord<Profile> | undefined) {
+    if (!profile || !profile.entry.fields.avatar) {
       return html` <div
         style=${styleMap({
           position: "relative",
@@ -73,18 +74,18 @@ export class AgentMention extends LitElement {
     }
     return html`
       <sl-avatar
-        .image=${profile.fields.avatar}
+        .image=${profile.entry.fields.avatar}
         style="--size: ${this.size}px;"
       >
       </sl-avatar>
     `;
   }
 
-  renderProfile(profile: Profile | undefined) {
+  renderProfile(profile: EntryRecord<Profile> | undefined) {
     return html`
       <div class="row">
         ${this.renderAvatar(profile)}
-        <span style="margin-left: 8px">${profile?.nickname}</span>
+        <span style="margin-left: 8px">${profile?.entry.nickname}</span>
       </div>
     `;
   }

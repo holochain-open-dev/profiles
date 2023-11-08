@@ -1,8 +1,12 @@
-import { css, html, LitElement } from "lit";
+import { TemplateResult, css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
-import { consume } from "@lit-labs/context";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { consume } from "@lit/context";
+import {
+  AsyncReadable,
+  AsyncStatus,
+  subscribe,
+} from "@holochain-open-dev/stores";
 import { sharedStyles } from "@holochain-open-dev/elements";
 
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
@@ -13,6 +17,7 @@ import "./create-profile.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element profile-prompt
@@ -30,16 +35,7 @@ export class ProfilePrompt extends LitElement {
 
   /** Private properties */
 
-  /**
-   * @internal
-   */
-  private _myProfile = new StoreSubscriber(
-    this,
-    () => this.store.myProfile,
-    () => [this.store]
-  );
-
-  renderPrompt(myProfile: Profile | undefined) {
+  renderPrompt(myProfile: EntryRecord<Profile> | undefined) {
     if (myProfile) return html`<slot></slot>`;
 
     return html`
@@ -56,22 +52,16 @@ export class ProfilePrompt extends LitElement {
   }
 
   render() {
-    switch (this._myProfile.value.status) {
-      case "pending":
-        return html` <div
-          class="column"
-          style="align-items: center; justify-content: center; flex: 1;"
-        >
-          <sl-spinner style="font-size: 2rem;"></sl-spinner>
-        </div>`;
-      case "complete":
-        return this.renderPrompt(this._myProfile.value.value);
-      case "error":
-        return html`<display-error
-          .headline=${msg("Error fetching your profile")}
-          .error=${this._myProfile.value.error}
-        ></display-error> `;
-    }
+    return html`${subscribe(
+      this.store.myProfile,
+      withSpinnerAndDisplayError({
+        completed: (p) => this.renderPrompt(p),
+        error: {
+          label: msg("Error fetching your profile"),
+          tooltip: false,
+        },
+      })
+    )}`;
   }
 
   static get styles() {
@@ -84,5 +74,46 @@ export class ProfilePrompt extends LitElement {
         }
       `,
     ];
+  }
+}
+
+export function withSpinnerAndDisplayError<T>(renderers: {
+  completed: (value: T) => TemplateResult;
+  error: ((error: any) => TemplateResult) | { label: string; tooltip: boolean };
+}) {
+  return (status: AsyncStatus<T>) =>
+    renderAsyncStatus(status, {
+      pending: () => html`<div
+        style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;"
+      >
+        <sl-spinner style="font-size: 2rem;"></sl-spinner>
+      </div>`,
+      error: (e: any) =>
+        typeof renderers.error === "function"
+          ? renderers.error(e)
+          : html`<display-error
+              .headline=${renderers.error?.label}
+              .tooltip=${renderers.error?.tooltip}
+              .error=${e}
+            ></display-error> `,
+      completed: renderers.completed,
+    });
+}
+
+export function renderAsyncStatus<T>(
+  status: AsyncStatus<T>,
+  renderers: {
+    completed: (value: T) => TemplateResult;
+    error: (error: any) => TemplateResult;
+    pending: () => TemplateResult;
+  }
+): TemplateResult {
+  switch (status.status) {
+    case "pending":
+      return renderers.pending();
+    case "complete":
+      return renderers.completed(status.value);
+    case "error":
+      return renderers.error(status.error);
   }
 }

@@ -1,7 +1,7 @@
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
@@ -47,7 +47,7 @@ export class ProfileListItem extends LitElement {
         return html`
           <div class="row" style="align-items: center; gap: 8px">
             <agent-avatar .agentPubKey=${this.agentPubKey}></agent-avatar>
-            <span>${this._profile.value.value?.nickname}</span>
+            <span>${this._profile.value.value?.entry.nickname}</span>
           </div>
         `;
       case "error":

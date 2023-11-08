@@ -28,13 +28,13 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    */
   async getAgentProfile(
     agentPubKey: AgentPubKey
-  ): Promise<Profile | undefined> {
+  ): Promise<EntryRecord<Profile> | undefined> {
     const record: Record | undefined = await this.callZome(
       "get_agent_profile",
       agentPubKey
     );
 
-    return record ? decodeEntry(record) : undefined;
+    return record ? new EntryRecord(record) : undefined;
   }
 
   /**

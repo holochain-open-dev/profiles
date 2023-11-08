@@ -1,4 +1,4 @@
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { AgentPubKey } from "@holochain/client";
 import { html, LitElement } from "lit";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
@@ -13,6 +13,7 @@ import "./agent-avatar.js";
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element profile-detail
@@ -73,7 +74,7 @@ export class ProfileDetail extends LitElement {
     `;
   }
 
-  renderProfile(profile: Profile | undefined) {
+  renderProfile(profile: EntryRecord<Profile> | undefined) {
     if (!profile)
       return html`<div
         class="column"
@@ -89,7 +90,7 @@ export class ProfileDetail extends LitElement {
         <div class="row" style="align-items: center">
           <agent-avatar .agentPubKey=${this.agentPubKey}></agent-avatar>
           <span style="font-size: 16px; margin-left: 8px;"
-            >${profile.nickname}</span
+            >${profile.entry.nickname}</span
           >
 
           <span style="flex: 1"></span>
@@ -97,7 +98,7 @@ export class ProfileDetail extends LitElement {
           <slot name="action"></slot>
         </div>
 
-        ${Object.entries(this.getAdditionalFields(profile))
+        ${Object.entries(this.getAdditionalFields(profile.entry))
           .filter(([, value]) => value !== "")
           .map(([key, value]) => this.renderAdditionalField(key, value))}
       </div>

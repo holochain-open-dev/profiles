@@ -1,14 +1,19 @@
 import { customElement, property, query } from "lit/decorators.js";
 import { ifDefined } from "lit/directives/if-defined.js";
 import { css, html, LitElement } from "lit";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import {
   AgentPubKey,
   decodeHashFromBase64,
   encodeHashToBase64,
 } from "@holochain/client";
-import { StoreSubscriber, toPromise } from "@holochain-open-dev/stores";
+import {
+  AsyncStatus,
+  completed,
+  StoreSubscriber,
+  toPromise,
+} from "@holochain-open-dev/stores";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
@@ -24,6 +29,8 @@ import "./profile-list-item-skeleton.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { sharedStyles } from "@holochain-open-dev/elements";
+import { EntryRecord } from "@holochain-open-dev/utils";
+import { Profile } from "../types.js";
 
 /**
  * @element search-agent-dropdown
@@ -57,12 +64,14 @@ export class SearchAgentDropdown extends LitElement {
   /**
    * @internal
    */
-  private _searchProfiles = new StoreSubscriber(
+  private _searchProfiles = new StoreSubscriber<
+    AsyncStatus<ReadonlyMap<AgentPubKey, EntryRecord<Profile>> | undefined>
+  >(
     this,
     () =>
       this.searchFilter && this.searchFilter.length >= 3
         ? this.store.searchProfiles(this.searchFilter)
-        : undefined,
+        : completed(undefined),
     () => [this.searchFilter]
   );
 
@@ -87,7 +96,7 @@ export class SearchAgentDropdown extends LitElement {
   }
 
   renderAgentList() {
-    if (this._searchProfiles.value === undefined)
+    if (!this._searchProfiles.value)
       return html`<sl-menu-item disabled
         >${msg("Enter at least 3 chars to search...")}</sl-menu-item
       >`;
@@ -118,6 +127,10 @@ export class SearchAgentDropdown extends LitElement {
           ></display-error>
         `;
       case "complete": {
+        if (!this._searchProfiles.value.value)
+          return html`<sl-menu-item disabled
+            >${msg("Enter at least 3 chars to search...")}</sl-menu-item
+          >`;
         let agents = Array.from(this._searchProfiles.value.value.entries());
 
         if (!this.includeMyself) {
@@ -141,7 +154,7 @@ export class SearchAgentDropdown extends LitElement {
                   .agentPubKey=${pubkey}
                   style="margin-right: 16px"
                 ></agent-avatar>
-                ${profile.nickname}
+                ${profile.entry.nickname}
               </sl-menu-item>
             `
           )}
