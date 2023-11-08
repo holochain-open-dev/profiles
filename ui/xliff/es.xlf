@@ -38,10 +38,6 @@
   <source>There are no created profiles yet</source>
   <target>Aún no se ha creado ningún perfil</target>
 </trans-unit>
-<trans-unit id="sdfb2b12b255de30c">
-  <source>Copied!</source>
-  <target>Copied!</target>
-</trans-unit>
 <trans-unit id="sa77a504cfafd6d20">
   <source>Error fetching the agent's avatar</source>
   <target>Error buscando el avatar del agente</target>
