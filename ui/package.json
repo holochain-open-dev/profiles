@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@holochain-open-dev/elements": "^0.8.3",
-    "@holochain-open-dev/stores": "^0.7.12",
+    "@holochain-open-dev/stores": "^0.8.2",
     "@holochain-open-dev/utils": "^0.16.2",
     "@holochain/client": "^0.16.0",
     "@lit/context": "^1.0.1",
