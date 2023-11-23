@@ -1,13 +1,10 @@
-import { TemplateResult, css, html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit/context";
-import {
-  AsyncReadable,
-  AsyncStatus,
-  subscribe,
-} from "@holochain-open-dev/stores";
-import { sharedStyles } from "@holochain-open-dev/elements";
+import { subscribe } from "@holochain-open-dev/stores";
+import { renderAsyncStatus, sharedStyles } from "@holochain-open-dev/elements";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
@@ -17,7 +14,6 @@ import "./create-profile.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
-import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element profile-prompt
@@ -54,12 +50,18 @@ export class ProfilePrompt extends LitElement {
   render() {
     return html`${subscribe(
       this.store.myProfile,
-      withSpinnerAndDisplayError({
-        completed: (p) => this.renderPrompt(p),
-        error: {
-          label: msg("Error fetching your profile"),
-          tooltip: false,
-        },
+      renderAsyncStatus({
+        complete: (p) => this.renderPrompt(p),
+        pending: () => html`<div
+          style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;"
+        >
+          <sl-spinner style="font-size: 2rem;"></sl-spinner>
+        </div>`,
+        error: (e) =>
+          html`<display-error
+            .error=${e}
+            .headline=${msg("Error fetching your profile")}
+          ></display-error>`,
       })
     )}`;
   }
