@@ -10,7 +10,7 @@ import {
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
 
 const mock = new ProfilesZomeMock(
-  demoProfiles(),
+  await demoProfiles(),
   decodeHashFromBase64("uhCAk8OKb2hznzG023xxh_vR3Q7Y4IEOAo4B0QN7ZhbGYeww")
 );
 

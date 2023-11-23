@@ -1,6 +1,6 @@
 import { html, css, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { sharedStyles } from "@holochain-open-dev/elements";
@@ -31,11 +31,14 @@ export class UpdateProfile extends LitElement {
   /**
    * @internal
    */
-  private _myProfile = new StoreSubscriber(this, () => this.store.myProfile, () => [this.store]);
+  private _myProfile = new StoreSubscriber(
+    this,
+    () => this.store.myProfile,
+    () => [this.store]
+  );
 
   async updateProfile(profile: Profile) {
     await this.store.client.updateProfile(profile);
-    await this.store.myProfile.reload();
 
     this.dispatchEvent(
       new CustomEvent("profile-updated", {

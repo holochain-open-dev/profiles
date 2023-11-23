@@ -2,7 +2,7 @@ import { customElement, property } from "lit/decorators.js";
 
 import { SlTextareaProsemirror } from "@holochain-open-dev/elements/dist/elements/sl-textarea-prosemirror.js";
 import { DnaHash, encodeHashToBase64 } from "@holochain/client";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import {
   getCellIdFromRoleName,

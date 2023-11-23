@@ -1,0 +1,17 @@
+{
+  "name": "tests",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^2.7.0",
+    "@holochain/client": "^0.17.0-dev.1",
+    "@holochain/tryorama": "^0.15.2",
+    "@holochain-open-dev/stores": "^0.8.2",
+    "@holochain-open-dev/utils": "^0.16.0",
+    "typescript": "^4.9.4",
+    "vitest": "^0.28.4"
+  },
+  "type": "module"
+}

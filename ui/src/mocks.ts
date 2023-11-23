@@ -13,16 +13,17 @@ import {
   AppAgentClient,
   Record,
 } from "@holochain/client";
+import { ProfilesClient } from "./profiles-client";
 import { Profile } from "./types";
 
-export function demoProfiles(): AgentPubKeyMap<Record> {
+export async function demoProfiles(): Promise<AgentPubKeyMap<Record>> {
   const map = new AgentPubKeyMap<Record>();
   map.set(
     decodeHashFromBase64(
       "uhCAk13OZ84d5HFum5PZYcl61kHHMfL2EJ4yNbHwSp4vn6QeOdFii"
     ),
-    fakeRecord(
-      fakeCreateAction(),
+    await fakeRecord(
+      await fakeCreateAction(),
       fakeEntry({
         nickname: "Alice",
         fields: {
@@ -37,8 +38,8 @@ export function demoProfiles(): AgentPubKeyMap<Record> {
     decodeHashFromBase64(
       "uhCAkLZ0NvfBs5o07Gidd748Oe9GpnQVj2UQM0xmDjYQEbhNMhJGw"
     ),
-    fakeRecord(
-      fakeCreateAction(),
+    await fakeRecord(
+      await fakeCreateAction(),
       fakeEntry({
         nickname: "Bob",
         fields: {
@@ -54,14 +55,17 @@ export function demoProfiles(): AgentPubKeyMap<Record> {
 
 export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
   constructor(
-    public agentsProfiles: AgentPubKeyMap<Record> = demoProfiles(),
+    public agentsProfiles: AgentPubKeyMap<Record>,
     myPubKey?: AgentPubKey
   ) {
     super("lobby", "profiles", myPubKey);
   }
 
   async create_profile(profile: Profile): Promise<Record> {
-    const record = fakeRecord(fakeCreateAction(), fakeEntry(profile));
+    const record = await fakeRecord(
+      await fakeCreateAction(),
+      fakeEntry(profile)
+    );
     this.agentsProfiles.set(this.myPubKey, record);
     setTimeout(() =>
       this.emitSignal({
@@ -95,4 +99,17 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
   get_agents_with_profile() {
     return Array.from(this.agentsProfiles.keys());
   }
+}
+
+export async function sampleProfile(
+  client: ProfilesClient,
+  partialProfile: Partial<Profile> = {}
+): Promise<Profile> {
+  return {
+    ...{
+      nickname: "alice",
+      fields: {},
+    },
+    ...partialProfile,
+  };
 }

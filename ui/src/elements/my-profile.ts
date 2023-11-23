@@ -1,4 +1,4 @@
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { html, LitElement } from "lit";
 import { property, state, customElement } from "lit/decorators.js";
 import { sharedStyles, wrapPathInSvg } from "@holochain-open-dev/elements";

@@ -1,6 +1,6 @@
 import { html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import { sharedStyles, notifyError } from "@holochain-open-dev/elements";
 
@@ -42,7 +42,6 @@ export class CreateProfile extends LitElement {
           composed: true,
         })
       );
-      await this.store.myProfile.reload();
     } catch (e) {
       console.error(e);
       notifyError(msg("Error creating the profile"));
@@ -68,5 +67,5 @@ export class CreateProfile extends LitElement {
     `;
   }
 
-  static styles = [sharedStyles];
+  static styles = sharedStyles;
 }

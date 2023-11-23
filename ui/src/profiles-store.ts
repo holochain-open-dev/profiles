@@ -1,18 +1,39 @@
-import { LazyHoloHashMap, slice } from "@holochain-open-dev/utils";
+import { EntryRecord, LazyHoloHashMap } from "@holochain-open-dev/utils";
+import { encode } from "@msgpack/msgpack";
 import {
-  asyncDeriveStore,
   AsyncReadable,
   asyncReadable,
-  lazyLoadAndPoll,
-  joinAsyncMap,
   lazyLoad,
-  manualReloadStore,
+  sliceAndJoin,
+  pipe,
+  collectionStore,
+  derived,
+  NotFoundError,
+  AsyncStatus,
 } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 
 import { ProfilesClient } from "./profiles-client.js";
 import { Profile } from "./types.js";
 import { defaultConfig, ProfilesConfig } from "./config.js";
+import { uniquify } from "./stores.js";
+// @ts-ignore
+import isEqual from "lodash-es/isEqual.js";
+
+export function catchNotFoundError<T>(
+  store: AsyncReadable<T>
+): AsyncReadable<T | undefined> {
+  return derived(store, (asyncStatus) => {
+    if (asyncStatus.status !== "error") return asyncStatus;
+
+    if (asyncStatus.error instanceof NotFoundError)
+      return {
+        status: "complete",
+        value: undefined,
+      } as AsyncStatus<undefined>;
+    return asyncStatus;
+  });
+}
 
 export class ProfilesStore {
   config: ProfilesConfig;
@@ -27,9 +48,31 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile = lazyLoadAndPoll(
-    () => this.client.getAgentsWithProfile(),
-    1000
+  agentsWithProfile: AsyncReadable<AgentPubKey[]> = asyncReadable(
+    async (set) => {
+      let hashes: AgentPubKey[];
+      const fetch = async () => {
+        const nhashes = await this.client.getAgentsWithProfile();
+        if (!isEqual(nhashes, hashes)) {
+          hashes = uniquify(nhashes);
+          set(hashes);
+        }
+      };
+      await fetch();
+      const interval = setInterval(() => fetch(), 4000);
+      const unsubs = this.client.onSignal((signal) => {
+        if (signal.type === "LinkCreated") {
+          if ("AgentToProfile" in signal.link_type) {
+            hashes = uniquify([...hashes, this.client.client.myPubKey]);
+            set(hashes);
+          }
+        }
+      });
+      return () => {
+        clearInterval(interval);
+        unsubs();
+      };
+    }
   );
 
   /**
@@ -37,17 +80,19 @@ export class ProfilesStore {
    *
    * This will get slower as the number of agents in the DHT increases
    */
-  allProfiles = asyncDeriveStore(
+  allProfiles = pipe(
     this.agentsWithProfile,
     (agents) =>
       this.agentsProfiles(agents) as AsyncReadable<
-        ReadonlyMap<AgentPubKey, Profile>
+        ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
       >
   );
 
-  // Fetches the profile for the given agent
+  /**
+   * Fetches the profile for the given agent
+   */
   profiles = new LazyHoloHashMap((agent: AgentPubKey) =>
-    asyncReadable<Profile | undefined>(async (set) => {
+    asyncReadable<EntryRecord<Profile> | undefined>(async (set) => {
       const profile = await this.client.getAgentProfile(agent);
       set(profile);
 
@@ -55,32 +100,38 @@ export class ProfilesStore {
         if (this.client.client.myPubKey.toString() !== agent.toString()) return;
         if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
           return;
-        set(signal.app_entry);
+        const record = new EntryRecord<Profile>({
+          entry: {
+            Present: {
+              entry_type: "App",
+              entry: encode(signal.app_entry),
+            },
+          },
+          signed_action: signal.action,
+        });
+        set(record);
       });
     })
   );
 
   // Fetches your profile
-  // TODO: change the manual implementation when signals are working consistently
-  myProfile = manualReloadStore(async () =>
-    this.client.getAgentProfile(this.client.client.myPubKey)
-  );
+  myProfile = this.profiles.get(this.client.client.myPubKey);
 
   // Fetches the profiles for the given agents
   agentsProfiles(
     agents: Array<AgentPubKey>
-  ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile | undefined>> {
-    return joinAsyncMap(slice(this.profiles, agents));
+  ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>> {
+    return sliceAndJoin(this.profiles, agents);
   }
 
   searchProfiles(
     searchFilter: string
-  ): AsyncReadable<ReadonlyMap<AgentPubKey, Profile>> {
-    return asyncDeriveStore(
+  ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile>>> {
+    return pipe(
       lazyLoad(async () => this.client.searchAgents(searchFilter)),
       (agents) =>
         this.agentsProfiles(agents) as AsyncReadable<
-          ReadonlyMap<AgentPubKey, Profile>
+          ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
         >
     );
   }

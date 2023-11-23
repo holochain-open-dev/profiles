@@ -230,6 +230,7 @@ pub enum Signal {
     },
     LinkDeleted {
         action: SignedActionHashed,
+        create_link_action: SignedActionHashed,
         link_type: LinkTypes,
     },
     EntryCreated {
@@ -265,25 +266,26 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
             Ok(())
         }
         Action::DeleteLink(delete_link) => {
-            let record = get(delete_link.link_add_address, GetOptions::default())?.ok_or(
-                wasm_error!(WasmErrorInner::Guest(
-                    "Failed to fetch CreateLink action".to_string()
-                )),
-            )?;
+            let record =
+                get(delete_link.link_add_address, GetOptions::default())?.ok_or(wasm_error!(
+                    WasmErrorInner::Guest("Failed to fetch CreateLink action".to_string())
+                ))?;
             match record.action() {
                 Action::CreateLink(create_link) => {
                     if let Ok(Some(link_type)) =
                         LinkTypes::from_type(create_link.zome_index, create_link.link_type)
                     {
-                        emit_signal(Signal::LinkDeleted { action, link_type })?;
+                        emit_signal(Signal::LinkDeleted {
+                            action,
+                            link_type,
+                            create_link_action: record.signed_action,
+                        })?;
                     }
                     Ok(())
                 }
-                _ => {
-                    Err(wasm_error!(WasmErrorInner::Guest(
-                        "Create Link should exist".to_string()
-                    )))
-                }
+                _ => Err(wasm_error!(WasmErrorInner::Guest(
+                    "Create Link should exist".to_string()
+                ))),
             }
         }
         Action::Create(_create) => {
@@ -341,9 +343,5 @@ fn get_entry_for_action(action_hash: &ActionHash) -> ExternResult<Option<EntryTy
             return Ok(None);
         }
     };
-    EntryTypes::deserialize_from_type(
-        *zome_index,
-        *entry_index,
-        entry,
-    )
+    EntryTypes::deserialize_from_type(*zome_index, *entry_index, entry)
 }

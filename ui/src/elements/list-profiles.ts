@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { AgentPubKey } from "@holochain/client";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { sharedStyles } from "@holochain-open-dev/elements";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { localized, msg } from "@lit/localize";
@@ -13,6 +13,7 @@ import "./profile-list-item-skeleton.js";
 import { ProfilesStore } from "../profiles-store";
 import { profilesStoreContext } from "../context";
 import { Profile } from "../types";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element list-profiles
@@ -36,7 +37,7 @@ export class ListProfiles extends LitElement {
   private _allProfiles = new StoreSubscriber(
     this,
     () => this.store.allProfiles,
-    () => [this.store],
+    () => [this.store]
   );
 
   initials(nickname: string): string {
@@ -60,7 +61,7 @@ export class ListProfiles extends LitElement {
     }
   }
 
-  renderList(profiles: ReadonlyMap<AgentPubKey, Profile>) {
+  renderList(profiles: ReadonlyMap<AgentPubKey, EntryRecord<Profile>>) {
     if (profiles.size === 0)
       return html`<span>${msg("There are no created profiles yet")} ></span>`;
 
@@ -75,7 +76,7 @@ export class ListProfiles extends LitElement {
                 @click=${() => this.fireAgentSelected(agent_pub_key)}
               >
               </agent-avatar
-              ><span> ${profile.nickname}</span>
+              ><span> ${profile.entry.nickname}</span>
             </div>
           `
         )}

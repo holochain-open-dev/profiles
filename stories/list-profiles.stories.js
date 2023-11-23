@@ -1,8 +1,13 @@
 import { html } from "lit-html";
 import "@holochain-open-dev/profiles/dist/elements/list-profiles.js";
 import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
-import { ProfilesZomeMock } from "@holochain-open-dev/profiles/dist/mocks.js";
+import {
+  ProfilesZomeMock,
+  demoProfiles,
+} from "@holochain-open-dev/profiles/dist/mocks.js";
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
+
+const mock = new ProfilesZomeMock(await demoProfiles());
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/web-components/writing-stories/introduction
 export default {
@@ -11,7 +16,7 @@ export default {
   component: "list-profiles",
   render: (args) =>
     html` <profiles-context
-      .store=${new ProfilesStore(new ProfilesClient(new ProfilesZomeMock()))}
+      .store=${new ProfilesStore(new ProfilesClient(mock))}
     >
       <list-profiles />
     </profiles-context>`,

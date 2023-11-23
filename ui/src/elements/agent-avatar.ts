@@ -1,5 +1,9 @@
-import { consume } from "@lit-labs/context";
-import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
+import { consume } from "@lit/context";
+import {
+  hashProperty,
+  sharedStyles,
+  wrapPathInSvg,
+} from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
 import { state, property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
@@ -17,6 +21,8 @@ import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
+import { EntryRecord } from "@holochain-open-dev/utils";
+import { mdiClock, mdiClose } from "@mdi/js";
 
 @localized()
 @customElement("agent-avatar")
@@ -87,38 +93,13 @@ export class AgentAvatar extends LitElement {
   /**
    * @internal
    */
-  @state()
-  justCopiedHash = false;
-
-  /**
-   * @internal
-   */
   timeout: any;
 
-  async copyHash() {
-    await navigator.clipboard.writeText(encodeHashToBase64(this.agentPubKey));
-
-    if (this.timeout) clearTimeout(this.timeout);
-
-    this.justCopiedHash = true;
-    (this.shadowRoot!.getElementById("tooltip") as SlTooltip).show();
-
-    this.timeout = setTimeout(() => {
-      (this.shadowRoot!.getElementById("tooltip") as SlTooltip).hide();
-      setTimeout(() => {
-        this.justCopiedHash = false;
-      }, 100);
-    }, 2000);
-  }
-
-  renderProfile(profile: Profile | undefined) {
-    if (!profile || !profile.fields.avatar) return this.renderIdenticon();
+  renderProfile(profile: EntryRecord<Profile> | undefined) {
+    if (!profile || !profile.entry.fields.avatar) return this.renderIdenticon();
 
     const contents = html`
       <div
-        @click=${() => {
-          if (!this.disableCopy) this.copyHash();
-        }}
         style=${styleMap({
           cursor: this.disableCopy ? "" : "pointer",
           position: "relative",
@@ -127,8 +108,18 @@ export class AgentAvatar extends LitElement {
         })}
       >
         <sl-avatar
-          .image=${profile.fields.avatar}
+          .image=${profile.entry.fields.avatar}
           style="--size: ${this.size}px;"
+          @click=${() =>
+            this.dispatchEvent(
+              new CustomEvent("profile-clicked", {
+                composed: true,
+                bubbles: true,
+                detail: {
+                  agentPubKey: this.agentPubKey,
+                },
+              })
+            )}
         >
         </sl-avatar>
         <div class="badge"><slot name="badge"></slot></div>
@@ -139,13 +130,9 @@ export class AgentAvatar extends LitElement {
       <sl-tooltip
         id="tooltip"
         placement="top"
-        .content=${this.justCopiedHash || this.disableTooltip
-          ? msg("Copied!")
-          : `${encodeHashToBase64(this.agentPubKey).substring(0, 6)}...`}
-        .trigger=${this.disableTooltip || this.justCopiedHash
-          ? "manual"
-          : "hover focus"}
+        .trigger=${this.disableTooltip ? "manual" : "hover focus"}
         hoist
+        .content=${profile.entry.nickname}
       >
         ${contents}
       </sl-tooltip>

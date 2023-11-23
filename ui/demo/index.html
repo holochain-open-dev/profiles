@@ -33,11 +33,8 @@
       import "../src/elements/my-profile.ts";
       import "../src/elements/list-profiles.ts";
       import "../src/elements/search-agent.ts";
+      import "../src/elements/search-agents.ts";
       import "../src/elements/textarea-with-mentions.ts";
-      // import "@holochain-open-dev/profiles/definitions/agent-avatar.js";
-      // import "@holochain-open-dev/profiles/definitions/my-profile.js";
-      // import "@holochain-open-dev/profiles/definitions/search-agent.js";
-      // import "@holochain-open-dev/profiles/definitions/list-profiles.js";
 
       class ProfilesTest extends LitElement {
         static get properties() {
@@ -49,7 +46,10 @@
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect("", "test-app");
+          const client = await AppAgentWebsocket.connect(
+            new URL("ws://localhost"),
+            "test-app"
+          );
 
           const service = new ProfilesClient(client, "profiles-test");
 
@@ -109,6 +109,11 @@
                   include-myself
                   @agent-selected=${(e) => console.log(e)}
                 ></search-agent>
+                <search-agents
+                  name="hosts"
+                  required
+                  include-myself
+                ></search-agents>
                 <agent-avatar
                   .agentPubKey=${this.store.client.client.myPubKey}
                   .showOnHover=${false}

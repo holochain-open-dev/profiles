@@ -1,6 +1,6 @@
 import { customElement, property, state, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
-import { consume } from "@lit-labs/context";
+import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import { AgentPubKey } from "@holochain/client";
 import {
@@ -25,6 +25,7 @@ import "./search-agent-dropdown.js";
 import { Profile } from "../types.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element search-agent
@@ -118,7 +119,7 @@ export class SearchAgent extends LitElement implements FormField {
       const profile = await this.store.client.getAgentProfile(
         this.defaultValue
       );
-      this._textField.value = profile?.nickname || "";
+      this._textField.value = profile?.entry.nickname || "";
     } else {
       this._textField.value = "";
     }
@@ -133,14 +134,14 @@ export class SearchAgent extends LitElement implements FormField {
   @state()
   searchFilter = "";
 
-  onUsernameSelected(agentPubKey: AgentPubKey, profile: Profile) {
+  onUsernameSelected(agentPubKey: AgentPubKey, profile: EntryRecord<Profile>) {
     this.value = agentPubKey;
 
     // If the consumer says so, clear the field
     if (this.clearOnSelect) {
       this._textField.value = "";
     } else {
-      this._textField.value = profile.nickname;
+      this._textField.value = profile.entry.nickname;
     }
     this.searchFilter = "";
   }
