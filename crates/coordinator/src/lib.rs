@@ -260,8 +260,11 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
                     if let Ok(Some(link_type)) =
                         LinkTypes::from_type(create_link.zome_index, create_link.link_type)
                     {
-                        emit_signal(Signal::LinkDeleted { action, link_type,
-                            create_link_action: record.action().clone() })?;
+                        emit_signal(Signal::LinkDeleted {
+                            action,
+                            link_type,
+                            create_link_action: record.signed_action.clone(),
+                        })?;
                     }
                     Ok(())
                 }
