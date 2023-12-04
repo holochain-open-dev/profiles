@@ -15,15 +15,12 @@
     "./locales/*": "./locales/*",
     "./dist/*": "./dist/*"
   },
-  "files": [
-    "dist",
-    "locales"
-  ],
+  "files": ["dist", "locales"],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
     "build": "npm run lint && tsc",
     "test": "npm run build && web-test-runner --coverage",
-    "package": "vite build && cd dist && bestzip ../dist.zip *",
+    "package": "vite build && cd demo/dist && bestzip ../../dist.zip *",
     "lint": "eslint --ext .ts,.html src --ignore-path .gitignore",
     "analyze": "cem analyze --litelement --exclude dist",
     "format": "eslint --ext .ts,.html src --fix --ignore-path .gitignore",

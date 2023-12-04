@@ -13,7 +13,7 @@
     "docs:start": "npm run docs:setup && storybook dev -p 6006",
     "docs:publish": "npm run docs:setup && storybook build && gh-pages -d ./storybook-static -b gh-pages",
     "docs:setup": "npm run build -w @holochain-open-dev/profiles && npm run analyze -w @holochain-open-dev/profiles",
-    "package": "npm run build:happ && npm run package -w ui && hc web-app pack workdir --recursive"
+    "package": "npm run build:zome && sh optimize-wasms.sh && npm run package -w ui && hc web-app pack workdir --recursive"
   },
   "devDependencies": {
     "@holochain-playground/cli": "^0.1.0",

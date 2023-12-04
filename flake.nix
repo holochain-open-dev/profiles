@@ -33,6 +33,7 @@
                 nodejs-18_x
                 # more packages go here
                 cargo-nextest
+                binaryen
               ];
             };
           };

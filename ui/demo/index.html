@@ -22,6 +22,7 @@
       import "@shoelace-style/shoelace/dist/themes/dark.css";
 
       import { AppAgentWebsocket } from "@holochain/client";
+      import { decode } from "@msgpack/msgpack";
       import { LitElement, html } from "lit";
       import { ProfilesStore, ProfilesClient } from "../src/index.ts";
 
@@ -36,6 +37,22 @@
       import "../src/elements/search-agents.ts";
       import "../src/elements/textarea-with-mentions.ts";
 
+      async function sendRequest(request) {
+        return new Promise((resolve, reject) => {
+          const channel = new MessageChannel();
+
+          window.top.postMessage(request, "*", [channel.port2]);
+
+          channel.port1.onmessage = (m) => {
+            if (m.data.type === "success") {
+              resolve(m.data.result);
+            } else if (m.data.type === "error") {
+              reject(m.data.error);
+            }
+          };
+        });
+      }
+
       class ProfilesTest extends LitElement {
         static get properties() {
           return {
@@ -46,12 +63,47 @@
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect(
-            new URL("ws://localhost"),
-            "test-app"
-          );
+          try {
+            const appRuntimeInfo = await Promise.race([
+              sendRequest({
+                type: "get-app-runtime-info",
+              }),
+              new Promise((_resolve, reject) =>
+                setTimeout(() => reject(new Error("")), 1000)
+              ),
+            ]);
 
-          const service = new ProfilesClient(client, "profiles-test");
+            this._client = await AppAgentWebsocket.connect(
+              new URL(`ws://localhost:${appRuntimeInfo.runtimeInfo.app_port}`),
+              appRuntimeInfo.appId,
+              60000
+            );
+
+            const appWs = this._client.appWebsocket;
+            appWs.callZome = appWs._requester("call_zome", {
+              input: async (request) => {
+                if ("signature" in request) {
+                  return request;
+                }
+
+                return sendRequest({
+                  type: "sign-zome-call",
+                  zomeCall: request,
+                });
+              },
+              output: (response) => decode(response),
+            });
+          } catch (e) {
+            // await setLocale();
+            // console.log('we are in the normal launcher env');
+            this._client = await AppAgentWebsocket.connect(
+              new URL(`ws://localhost`),
+              "test-app",
+              60000
+            );
+          }
+
+          const service = new ProfilesClient(this._client, "profiles-test");
 
           this.store = new ProfilesStore(service, {
             avatarMode: "avatar-required",

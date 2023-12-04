@@ -5,5 +5,7 @@ dist/
 .hc*
 *.dna
 *.happ
+*.webhapp
+dist.zip
 storybook-static/
 locales/
