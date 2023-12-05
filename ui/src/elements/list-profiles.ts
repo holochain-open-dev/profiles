@@ -66,7 +66,7 @@ export class ListProfiles extends LitElement {
       return html`<span>${msg("There are no created profiles yet")} ></span>`;
 
     return html`
-      <div style="min-width: 80px; flex: 1;" }>
+      <div style="min-width: 80px; flex: 1;">
         ${Array.from(profiles.entries()).map(
           ([agent_pub_key, profile]) => html`
             <div class="row" style="align-items: center; margin-bottom: 16px;">
