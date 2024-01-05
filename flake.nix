@@ -9,6 +9,8 @@
     holochain = {
       url = "github:holochain/holochain";
       inputs.versions.follows = "versions";
+
+      inputs.launcher.url = "github:holochain/launcher/last-hc-sandbox";
     };
   };
 
