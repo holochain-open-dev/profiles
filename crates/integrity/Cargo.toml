@@ -19,6 +19,6 @@ name = "hc_zome_profiles_integrity"
 
 [dependencies]
 derive_more = "0"
-serde = "1"
+serde = "=1.0.166"
 
 hdi = { workspace = true }
