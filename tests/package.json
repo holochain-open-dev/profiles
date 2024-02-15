@@ -7,8 +7,8 @@
   "dependencies": {
     "@msgpack/msgpack": "^2.7.0",
     "@holochain/client": "^0.17.0-dev.3",
-    "@holochain/tryorama": "file:~/projects/holochain/core/tryorama",
-    "@holochain-open-dev/stores": "^0.8.2",
+    "@holochain/tryorama": "^0.16.0-dev.0",
+    "@holochain-open-dev/stores": "^0.8.11",
     "@holochain-open-dev/utils": "^0.16.0",
     "typescript": "^4.9.4",
     "vitest": "^0.28.4"
