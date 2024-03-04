@@ -1,11 +1,12 @@
-# Developer Setup
+# Contributing
+
+## Developer Setup
 
 > TLDR: run `nix develop`, `npm install` and `npm start` or `npm test` in the root folder of repository.
 
-## Requirements
+### Requirements
 
 - Having [nix](https://developer.holochain.org/docs/install) installed.
-  - Note that you don't have to execute `nix-shell https://holochain.love` as we are going to be building on a custom version of holochain.
 - Enter the nix-shell on this folder with:
 
 ```bash
@@ -24,13 +25,13 @@ Should give something like:
 holochain 0.1.3
 ```
 
-## Install
+### Install
 
 ```bash
 npm install
 ```
 
-## Running
+### Running
 
 ```bash
 npm start
@@ -42,7 +43,7 @@ Or if you want more than 2 agents:
 AGENTS=3 npm run network
 ```
 
-## Testing
+### Testing
 
 ```bash
 npm test

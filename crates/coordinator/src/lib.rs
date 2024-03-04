@@ -64,14 +64,13 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )))?;
     if previous_profile.nickname.ne(&profile.nickname) {
         let previous_prefix_path = prefix_path(previous_profile.nickname)?;
-        let links = get_links(GetLinksInput {
-            base_address: previous_prefix_path.path_entry_hash()?.into(),
-            link_type: LinkTypes::PathToAgent.try_into_filter()?,
-            tag_prefix: None,
-            after: None,
-            before: None,
-            author: None,
-        })?;
+        let links = get_links(
+            GetLinksInputBuilder::try_new(
+                previous_prefix_path.path_entry_hash()?,
+                LinkTypes::PathToAgent.try_into_filter()?,
+            )?
+            .build(),
+        )?;
 
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
@@ -110,16 +109,16 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
     }
 
     let prefix_path = prefix_path(nickname_filter.clone())?;
-    let links = get_links(GetLinksInput {
-        base_address: prefix_path.path_entry_hash()?.into(),
-        link_type: LinkTypes::PathToAgent.try_into_filter()?,
-        tag_prefix: Some(LinkTag::new(
+    let links = get_links(
+        GetLinksInputBuilder::try_new(
+            prefix_path.path_entry_hash()?,
+            LinkTypes::PathToAgent.try_into_filter()?,
+        )?
+        .tag_prefix(LinkTag::new(
             nickname_filter.to_lowercase().as_bytes().to_vec(),
-        )),
-        after: None,
-        before: None,
-        author: None,
-    })?;
+        ))
+        .build(),
+    )?;
 
     let mut agents: Vec<AgentPubKey> = vec![];
 
@@ -135,14 +134,10 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
 /// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
 pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Record>> {
-    let links = get_links(GetLinksInput {
-        base_address: agent_pub_key.into(),
-        link_type: LinkTypes::AgentToProfile.try_into_filter()?,
-        tag_prefix: None,
-        after: None,
-        before: None,
-        author: None,
-    })?;
+    let links = get_links(
+        GetLinksInputBuilder::try_new(agent_pub_key, LinkTypes::AgentToProfile.try_into_filter()?)?
+            .build(),
+    )?;
 
     if links.is_empty() {
         return Ok(None);
@@ -183,14 +178,11 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
     let get_links_input: Vec<GetLinksInput> = children
         .into_iter()
         .map(|path| {
-            Ok(GetLinksInput {
-                base_address: path.path_entry_hash()?.into(),
-                link_type: LinkTypes::PathToAgent.try_into_filter()?,
-                tag_prefix: None,
-                after: None,
-                before: None,
-                author: None,
-            })
+            Ok(GetLinksInputBuilder::try_new(
+                path.path_entry_hash()?,
+                LinkTypes::PathToAgent.try_into_filter()?,
+            )?
+            .build())
         })
         .collect::<ExternResult<Vec<GetLinksInput>>>()?;
 

@@ -58,7 +58,7 @@ export class ProfilePrompt extends LitElement {
     return html`${subscribe(
       this.store.myProfile,
       withSpinnerAndDisplayError({
-        completed: (p) => this.renderPrompt(p),
+        complete: (p) => this.renderPrompt(p),
         error: {
           label: msg("Error fetching your profile"),
           tooltip: false,

@@ -28,11 +28,12 @@
     "analyze": "cem analyze --litelement --exclude dist",
     "format": "eslint --ext .ts,.html src --fix --ignore-path .gitignore",
     "localize:extract": "lit-localize extract",
-    "localize:build": "lit-localize build"
+    "localize:build": "lit-localize build",
+    "prepare": "tsc"
   },
   "dependencies": {
     "@holochain-open-dev/elements": "^0.8.3",
-    "@holochain-open-dev/stores": "^0.8.2",
+    "@holochain-open-dev/stores": "^0.8.11",
     "@holochain-open-dev/utils": "^0.16.2",
     "@holochain/client": "^0.17.0-dev.3",
     "@lit/context": "^1.0.1",
