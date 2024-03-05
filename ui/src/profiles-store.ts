@@ -6,17 +6,16 @@ import {
   lazyLoad,
   sliceAndJoin,
   pipe,
-  collectionStore,
   derived,
   NotFoundError,
   AsyncStatus,
+  uniquify,
 } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
 
 import { ProfilesClient } from "./profiles-client.js";
 import { Profile } from "./types.js";
 import { defaultConfig, ProfilesConfig } from "./config.js";
-import { uniquify } from "./stores.js";
 // @ts-ignore
 import isEqual from "lodash-es/isEqual.js";
 

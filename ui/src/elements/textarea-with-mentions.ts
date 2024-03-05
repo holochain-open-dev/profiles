@@ -37,17 +37,17 @@ export const agentMentionSpec: NodeSpec = {
 
 export type SearchAgentPluginState =
   | {
-      dropdownEl: SearchAgentDropdown;
-      mentionCharIndex: number;
-      lastCharIndex: number;
-    }
+    dropdownEl: SearchAgentDropdown;
+    mentionCharIndex: number;
+    lastCharIndex: number;
+  }
   | "hidden";
 const schema = new Schema({
   nodes: {
     doc: { content: "paragraph+" },
     paragraph: {
       content: "(text|agentMention)*",
-      toDOM(node) {
+      toDOM() {
         return ["p", 0];
       },
     },
@@ -76,7 +76,7 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
         state.dropdownEl.dropdown.handleTriggerKeyDown(event);
       }
     },
-    handleTextInput(view, from, to, text) {
+    handleTextInput(view, _from, to, text) {
       const state = this.getState(view.state);
       console.log(state);
 

@@ -2,15 +2,14 @@ import { consume } from "@lit/context";
 import {
   hashProperty,
   sharedStyles,
-  wrapPathInSvg,
 } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
-import { state, property, customElement } from "lit/decorators.js";
+import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { AgentPubKey, encodeHashToBase64 } from "@holochain/client";
+import { AgentPubKey, } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { SlTooltip } from "@shoelace-style/shoelace";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@holochain-open-dev/elements/dist/elements/holo-identicon.js";
@@ -21,8 +20,6 @@ import "@shoelace-style/shoelace/dist/components/tooltip/tooltip.js";
 import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
-import { EntryRecord } from "@holochain-open-dev/utils";
-import { mdiClock, mdiClose } from "@mdi/js";
 
 @localized()
 @customElement("agent-avatar")
@@ -74,10 +71,10 @@ export class AgentAvatar extends LitElement {
   renderIdenticon() {
     return html` <div
       style=${styleMap({
-        position: "relative",
-        height: `${this.size}px`,
-        width: `${this.size}px`,
-      })}
+      position: "relative",
+      height: `${this.size}px`,
+      width: `${this.size}px`,
+    })}
     >
       <holo-identicon
         .disableCopy=${this.disableCopy}
@@ -101,25 +98,25 @@ export class AgentAvatar extends LitElement {
     const contents = html`
       <div
         style=${styleMap({
-          cursor: this.disableCopy ? "" : "pointer",
-          position: "relative",
-          height: `${this.size}px`,
-          width: `${this.size}px`,
-        })}
+      cursor: this.disableCopy ? "" : "pointer",
+      position: "relative",
+      height: `${this.size}px`,
+      width: `${this.size}px`,
+    })}
       >
         <sl-avatar
           .image=${profile.entry.fields.avatar}
           style="--size: ${this.size}px;"
           @click=${() =>
-            this.dispatchEvent(
-              new CustomEvent("profile-clicked", {
-                composed: true,
-                bubbles: true,
-                detail: {
-                  agentPubKey: this.agentPubKey,
-                },
-              })
-            )}
+        this.dispatchEvent(
+          new CustomEvent("profile-clicked", {
+            composed: true,
+            bubbles: true,
+            detail: {
+              agentPubKey: this.agentPubKey,
+            },
+          })
+        )}
         >
         </sl-avatar>
         <div class="badge"><slot name="badge"></slot></div>
