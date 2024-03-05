@@ -16,7 +16,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
     public roleName: RoleName,
     public zomeName = "profiles"
   ) {
-    super(client, roleName, zomeName);
+    super(client as any, roleName, zomeName);
   }
 
   /**

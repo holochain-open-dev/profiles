@@ -249,8 +249,10 @@ export class TextareaWithMentions extends SlTextareaProsemirror {
     super.firstUpdated();
     const appInfo = await this.store.client.client.appInfo();
 
-    const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
-    this.dnaHash = cellId[0];
+    if (appInfo) {
+      const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
+      this.dnaHash = cellId[0];
+    }
   }
 
   @property()
