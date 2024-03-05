@@ -6,9 +6,6 @@ import {
   lazyLoad,
   sliceAndJoin,
   pipe,
-  derived,
-  NotFoundError,
-  AsyncStatus,
   uniquify,
 } from "@holochain-open-dev/stores";
 import { AgentPubKey } from "@holochain/client";
@@ -18,21 +15,6 @@ import { Profile } from "./types.js";
 import { defaultConfig, ProfilesConfig } from "./config.js";
 // @ts-ignore
 import isEqual from "lodash-es/isEqual.js";
-
-export function catchNotFoundError<T>(
-  store: AsyncReadable<T>
-): AsyncReadable<T | undefined> {
-  return derived(store, (asyncStatus) => {
-    if (asyncStatus.status !== "error") return asyncStatus;
-
-    if (asyncStatus.error instanceof NotFoundError)
-      return {
-        status: "complete",
-        value: undefined,
-      } as AsyncStatus<undefined>;
-    return asyncStatus;
-  });
-}
 
 export class ProfilesStore {
   config: ProfilesConfig;
