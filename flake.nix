@@ -11,7 +11,6 @@
       inputs.versions.follows = "versions";
     };
 		hcUtils.url = "github:holochain-open-dev/common";
-    dream2nix.url = "github:nix-community/dream2nix";
   };
 
   outputs = inputs @ { ... }:

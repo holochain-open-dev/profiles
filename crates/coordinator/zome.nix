@@ -1,4 +1,3 @@
-
 { inputs, rootPath, ... }:
 
 {
@@ -11,7 +10,7 @@
     , options
     , ...
     }: {
-      packages.profiles_coordinator = inputs.hcUtils.outputs.lib.rustZome {
+      packages.profiles = inputs.hcUtils.outputs.lib.rustZome {
         workspacePath = rootPath;
         holochain = inputs'.holochain;
 				cratePath = ./.;
