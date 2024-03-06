@@ -56,6 +56,8 @@ jobs:
         run: brew install coreutils
 
       - name: Build zomes
+        env:
+          CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_AUTH_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
           nix build .#profiles_integrity
           sha256sum result
