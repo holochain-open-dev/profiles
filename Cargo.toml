@@ -17,3 +17,4 @@ opt-level = "z"
 opt-level = "z"
 trim-paths = true
 remap-debuginfo = true
+strip = "symbols"
