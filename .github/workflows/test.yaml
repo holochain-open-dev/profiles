@@ -1,4 +1,4 @@
-name: "test"
+name: "main"
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
@@ -29,5 +29,17 @@ jobs:
 
       - name: Install and test
         run: |
-          nix develop --command bash -c "npm i && npm t"
+          nix develop --command bash -c "npm i && npm t && npm run build -w ui"
+
+  push-to-nix-cache:
+    strategy: 
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    steps:
+      - name: Build zomes
+        run: |
+          nix build .#profiles_integrity
+          sha256sum result
+          nix build .#profiles
+          sha256sum result
 

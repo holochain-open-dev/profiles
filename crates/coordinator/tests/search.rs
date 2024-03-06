@@ -10,7 +10,7 @@ async fn create_and_get() {
     // Use prebuilt DNA file
     let dna_path = std::env::current_dir()
         .unwrap()
-        .join("../../workdir/profiles-test.dna");
+        .join(std::env::var("DNA_PATH").expect("DNA_PATH not set"));
     let dna = SweetDnaFile::from_bundle(&dna_path).await.unwrap();
 
     // Set up conductors

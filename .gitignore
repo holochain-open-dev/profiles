@@ -8,3 +8,4 @@ dist/
 *.happ
 storybook-static/
 locales/
+result*

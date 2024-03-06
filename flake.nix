@@ -38,8 +38,6 @@
               inputsFrom = [ inputs'.holochain.devShells.holonix ];
               packages = with pkgs; [
                 nodejs_20
-                # more packages go here
-                cargo-nextest
               ];
             };
 
