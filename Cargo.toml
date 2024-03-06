@@ -1,3 +1,5 @@
+cargo-features = ["trim-paths"]
+
 [workspace]
 members = ["crates/*"]
 resolver = "2"
@@ -13,3 +15,5 @@ opt-level = "z"
 
 [profile.release]
 opt-level = "z"
+trim-paths = true
+remap-debuginfo = true
