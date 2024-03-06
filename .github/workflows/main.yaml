@@ -51,6 +51,10 @@ jobs:
         with:
           name: holochain-ci
 
+      - name: Install coreutils for macOS
+        if: matrix.os == 'macOS-latest'
+        run: brew install coreutils
+
       - name: Build zomes
         run: |
           nix build .#profiles_integrity
