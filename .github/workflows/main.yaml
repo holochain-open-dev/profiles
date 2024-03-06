@@ -31,8 +31,7 @@ jobs:
         run: |
           nix develop --command bash -c "npm i && npm t && npm run build -w ui"
 
-
-  push-to-nix-cache:
+  push-to-cachix:
     strategy: 
       matrix:
         os: [ ubuntu-latest, macos-latest ]
@@ -52,15 +51,15 @@ jobs:
           name: holochain-ci
 
       - name: Install coreutils for macOS
-        if: matrix.os == 'macOS-latest'
+        if: matrix.os == 'macos-latest'
         run: brew install coreutils
 
       - name: Build zomes
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_AUTH_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          nix build .#profiles_integrity
+          nix build .#profiles_integrity.meta.debug
           sha256sum result
-          nix build .#profiles
+          nix build .#profiles.meta.debug
           sha256sum result
 
