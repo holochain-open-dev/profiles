@@ -1,4 +1,4 @@
-# cargo-features = ["trim-paths"]
+cargo-features = ["trim-paths"]
 
 [workspace]
 members = ["crates/*"]
@@ -15,5 +15,5 @@ opt-level = "z"
 
 [profile.release]
 opt-level = "z"
-# trim-paths = true
-# remap-debuginfo = true
+trim-paths = true
+remap-debuginfo = true
