@@ -62,4 +62,3 @@ jobs:
           sha256sum result
           nix build .#profiles.meta.debug
           sha256sum result
-
