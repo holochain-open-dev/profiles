@@ -41,23 +41,6 @@
                 nodejs_20
               ];
             };
-
-            packages.profiles_ui =
-              let
-                packageJson = builtins.fromJSON (builtins.readFile ./ui/package.json);
-              in
-                pkgs.buildNpmPackage {
-                  pname = packageJson.name;
-                  version = packageJson.version;
-                  src = ./.;
-                  npmWorkspace = packageJson.name;
-                  npmDeps = pkgs.importNpmLock {
-                    npmRoot = ./.;
-
-                    packageLock = builtins.fromJSON (builtins.readFile ./package-lock.json);
-                    package = builtins.fromJSON (builtins.readFile ./package.json);
-                  };
-                };
           };
       };
 }
