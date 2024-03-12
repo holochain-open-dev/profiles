@@ -23,6 +23,7 @@
         imports = [
           ./crates/coordinator/zome.nix
           ./crates/integrity/zome.nix
+          ./ui/ui.nix
         ];
 
         systems = builtins.attrNames inputs.holochain.devShells;

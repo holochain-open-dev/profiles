@@ -31,34 +31,13 @@ jobs:
         run: |
           nix develop --command bash -c "npm i && npm t && npm run build -w ui"
 
-  push-to-cachix:
-    strategy: 
-      matrix:
-        os: [ ubuntu-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Install nix
-        uses: cachix/install-nix-action@v18
-        with:
-          install_url: https://releases.nixos.org/nix/nix-2.12.0/install
-          extra_nix_config: |
-            experimental-features = flakes nix-command
-
-      - uses: cachix/cachix-action@v10
-        with:
-          name: holochain-ci
-
-      - name: Install coreutils for macOS
-        if: matrix.os == 'macos-latest'
-        run: brew install coreutils
-
       - name: Build zomes
         env:
-          CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_AUTH_TOKEN_HOLOCHAIN_OPEN_DEV }}"
+          CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          nix build -L .#profiles_integrity
-          sha256sum result
-          nix build -L .#profiles
-          sha256sum result
+          cachix watch-exec holochain-open-dev -- nix build -L .#profiles_integrity.meta.debug
+          cachix watch-exec holochain-open-dev -- nix build -L .#profiles_integrity
+          cachix pin holochain-open-dev profiles_integrity $(nix path-info .#profiles_integrity)
+
+          cachix watch-exec holochain-open-dev -- nix build -L .#profiles.meta.debug
+          cachix watch-exec holochain-open-dev -- nix build -L .#profiles
