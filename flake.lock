@@ -1616,11 +1616,11 @@
         "versions": "versions_8"
       },
       "locked": {
-        "lastModified": 1710260531,
-        "narHash": "sha256-ESwKaCU/jHTbuX4OxRTACeuGkJ18XoLzOVTDr6VshgA=",
+        "lastModified": 1710262818,
+        "narHash": "sha256-m/jLq+c1ciOlTjLBduZiJWgtesgr0dqiLYYHsuxGyG4=",
         "owner": "holochain-open-dev",
         "repo": "common",
-        "rev": "1fd758cf0536a256dd2f0cf69f11391e30a9340a",
+        "rev": "cf83886557946ac983e47300048f5b31c0667db1",
         "type": "github"
       },
       "original": {
