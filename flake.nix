@@ -13,6 +13,15 @@
 		hcInfra.url = "github:holochain-open-dev/infrastructure";
   };
 
+  nixConfig = {
+		extra-substituters = [
+	    "https://holochain-open-dev.cachix.org"
+	  ];	
+		extra-trusted-public-keys = [
+			"holochain-open-dev.cachix.org-1:3Tr+9in6uo44Ga7qiuRIfOTFXog+2+YbyhwI/Z6Cp4U="
+	  ];
+	};
+
   outputs = inputs @ { ... }:
     inputs.holochain.inputs.flake-parts.lib.mkFlake
       {
