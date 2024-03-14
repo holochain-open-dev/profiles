@@ -10,7 +10,7 @@
       url = "github:holochain/holochain";
       inputs.versions.follows = "versions";
     };
-		hcUtils.url = "github:holochain-open-dev/common";
+		hcInfra.url = "github:holochain-open-dev/infrastructure";
   };
 
   outputs = inputs @ { ... }:
@@ -23,7 +23,6 @@
         imports = [
           ./crates/coordinator/zome.nix
           ./crates/integrity/zome.nix
-          ./ui/ui.nix
         ];
 
         systems = builtins.attrNames inputs.holochain.devShells;
