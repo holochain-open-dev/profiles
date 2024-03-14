@@ -13,8 +13,7 @@ import { AgentPubKey } from "@holochain/client";
 import { ProfilesClient } from "./profiles-client.js";
 import { Profile } from "./types.js";
 import { defaultConfig, ProfilesConfig } from "./config.js";
-// @ts-ignore
-import isEqual from "lodash-es/isEqual.js";
+import { areHashesArraysEqual } from "./utils.js";
 
 export class ProfilesStore {
   config: ProfilesConfig;
@@ -34,7 +33,7 @@ export class ProfilesStore {
       let hashes: AgentPubKey[];
       const fetch = async () => {
         const nhashes = await this.client.getAgentsWithProfile();
-        if (!isEqual(nhashes, hashes)) {
+        if (!areHashesArraysEqual(nhashes, hashes)) {
           hashes = uniquify(nhashes);
           set(hashes);
         }
