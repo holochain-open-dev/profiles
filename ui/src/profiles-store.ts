@@ -33,7 +33,7 @@ export class ProfilesStore {
       let hashes: AgentPubKey[];
       const fetch = async () => {
         const nhashes = await this.client.getAgentsWithProfile();
-        if (!areHashesArraysEqual(nhashes, hashes)) {
+        if (hashes === undefined || !areHashesArraysEqual(nhashes, hashes)) {
           hashes = uniquify(nhashes);
           set(hashes);
         }

@@ -1,7 +1,7 @@
 {
   "name": "@holochain-open-dev/profiles-dev",
   "private": true,
-  "workspaces": ["ui", "tests"],
+  "workspaces": ["ui", "tests", "docs"],
   "scripts": {
     "start": "AGENTS=2 npm run network",
     "network": "hc s clean && npm run build:happ && BOOTSTRAP_PORT=$(port) SIGNAL_PORT=$(port) UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run local-services\" \"npm run launch\" \"holochain-playground\"",
