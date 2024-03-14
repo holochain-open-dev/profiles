@@ -4,7 +4,7 @@ on:
   # but only for the main branch
   push: 
     branches: [ main, develop ]
-  pull_request:
+  pull_request: 
     branches: [ main, develop ]
 
 jobs:
@@ -37,10 +37,18 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          cachix watch-exec holochain-open-dev -- nix build -L .#profiles_integrity.meta.debug
-          cachix watch-exec holochain-open-dev -- nix build -L .#profiles_integrity
+          nix build -L .#profiles_integrity.meta.debug
+          cachix push holochain-open-dev $(nix path-info .#profiles_integrity.meta.debug)
+          cachix pin holochain-open-dev profiles_integrity_debug $(nix path-info .#profiles_integrity.meta.debug)
+
+          nix build -L .#profiles_integrity
+          cachix push holochain-open-dev $(nix path-info .#profiles_integrity)
           cachix pin holochain-open-dev profiles_integrity $(nix path-info .#profiles_integrity)
 
-          cachix watch-exec holochain-open-dev -- nix build -L .#profiles.meta.debug
-          cachix watch-exec holochain-open-dev -- nix build -L .#profiles
+          nix build -L .#profiles.meta.debug
+          cachix push holochain-open-dev $(nix path-info .#profiles.meta.debug)
+          cachix pin holochain-open-dev profiles_debug $(nix path-info .#profiles.meta.debug)
+
+          nix build -L .#profiles
+          cachix push holochain-open-dev $(nix path-info .#profiles)
           cachix pin holochain-open-dev profiles $(nix path-info .#profiles)
