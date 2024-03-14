@@ -17,15 +17,17 @@ jobs:
         uses: ./.github/actions/extend-space
 
       - name: Install nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v25
         with:
-          install_url: https://releases.nixos.org/nix/nix-2.12.0/install
-          extra_nix_config: |
-            experimental-features = flakes nix-command
+          nix_path: nixpkgs=channel:nixos-unstable
 
-      - uses: cachix/cachix-action@v10
+      - uses: cachix/cachix-action@v14
         with:
           name: holochain-ci
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: holochain-open-dev
 
       - name: Install and test
         run: |
@@ -41,3 +43,4 @@ jobs:
 
           cachix watch-exec holochain-open-dev -- nix build -L .#profiles.meta.debug
           cachix watch-exec holochain-open-dev -- nix build -L .#profiles
+          cachix pin holochain-open-dev profiles $(nix path-info .#profiles)
