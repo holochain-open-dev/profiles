@@ -3,8 +3,8 @@ members = ["crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "0.4.0-beta-dev.27"
-hdk = "0.3.0-beta-dev.31"
+hdi = "0.4.0-beta-dev.29"
+hdk = "0.3.0-beta-dev.33"
 serde = "1"
 holochain = "0.3.0-beta-dev.37"
 
