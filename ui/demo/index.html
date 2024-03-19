@@ -46,10 +46,7 @@
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect(
-            new URL("ws://localhost"),
-            "test-app"
-          );
+          const client = await AppAgentWebsocket.connect("test-app");
 
           const service = new ProfilesClient(client, "profiles-test");
 

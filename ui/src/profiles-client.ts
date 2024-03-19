@@ -1,5 +1,4 @@
 import {
-  decodeEntry,
   EntryRecord,
   ZomeClient,
 } from "@holochain-open-dev/utils";
