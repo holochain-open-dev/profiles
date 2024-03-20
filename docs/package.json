@@ -1,24 +1,18 @@
 {
   "name": "docs",
-  "version": "0.0.1",
-  "private": true,
-  "description": "A documentation page based on the @rocket/launch theme",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "rocket build",
-    "dev": "npm start",
-    "preview": "rocket preview --open",
-    "start": "NODE_DEBUG=engine:rendering rocket start --open"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@rocket/cli": "^0.21.0",
-    "@rocket/engine": "^0.2.0",
-    "@rocket/launch": "^0.21.3",
-    "@rocket/search": "^0.7.0",
-    "lit": "^3.0.0"
-  },
-  "@rocket/template-name": "Documentation Website (@rocket/launch Theme)",
-  "imports": {
-    "#src/*": "./site/src/*"
+    "vitepress": "^1.0.0-rc.45"
   }
 }
