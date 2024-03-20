@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.17.2",
+  "version": "0.300.0-dev.0",
   "description": "Frontend module for the Holochain hc_zome_profiles zomes",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -15,11 +15,7 @@
     "./locales/*": "./locales/*",
     "./dist/*": "./dist/*"
   },
-  "files": [
-    "dist",
-    "README.md",
-    "locales"
-  ],
+  "files": ["dist", "README.md", "locales"],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
     "build": "npm run lint && tsc && npm run localize:build",
@@ -33,9 +29,9 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "^0.8.3",
-    "@holochain-open-dev/stores": "^0.8.11",
-    "@holochain-open-dev/utils": "^0.16.2",
+    "@holochain-open-dev/elements": "0.300.0-dev.0",
+    "@holochain-open-dev/stores": "0.300.0-dev.0",
+    "@holochain-open-dev/utils": "0.300.0-dev.0",
     "@holochain/client": "^0.17.0-dev.7",
     "@lit/context": "^1.0.1",
     "@lit/localize": "^0.12.0",
