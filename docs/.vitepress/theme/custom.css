@@ -1,0 +1,27 @@
+api-demo::part(header) {
+  display: none;
+}
+api-docs::part(header) {
+  display: none;
+}
+api-demo, api-docs {
+  font-family: inherit;
+}
+
+.sl-theme-dark api-docs,api-demo {
+  --ave-primary-color: #537c9d;
+  --ave-secondary-color: rgba(255, 255, 255, 0.54);
+  --ave-accent-color: #d63200;
+  --ave-border-color: rgba(255, 255, 255, 0.12);
+  --ave-border-radius: 4px;
+  --ave-header-color: black;
+  --ave-item-color: rgba(255, 255, 255, 0.87);
+  --ave-label-color: #c0c0c0;
+  --ave-link-color: #498abe;
+  --ave-link-hover-color: #d63200;
+  --ave-tab-indicator-size: 2px;
+  --ave-tab-color: rgba(255, 255, 255, 0.54);
+  --ave-tag-background-color: #e2e3e5;
+  --ave-tag-border-color: #d6d8db;
+  --ave-tag-color: #383d41;
+}

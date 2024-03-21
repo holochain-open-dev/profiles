@@ -67,13 +67,15 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
       fakeEntry(profile)
     );
     this.agentsProfiles.set(this.myPubKey, record);
-    setTimeout(() =>
+    setTimeout(() => {
+      console.log('hey');
       this.emitSignal({
         type: "EntryCreated",
         app_entry: {
           Profile: profile,
         },
       })
+    }
     );
     return record;
   }

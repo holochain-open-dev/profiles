@@ -1,10 +1,8 @@
-import { TemplateResult, css, html, LitElement } from "lit";
+import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit/context";
 import {
-  AsyncReadable,
-  AsyncStatus,
   subscribe,
 } from "@holochain-open-dev/stores";
 import {
@@ -29,8 +27,9 @@ import { EntryRecord } from "@holochain-open-dev/utils";
 @localized()
 @customElement("profile-prompt")
 export class ProfilePrompt extends LitElement {
+
   /**
-   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
+   * Profiles store for this element, not required if you embed this element inside a `<profiles-context>`
    */
   @consume({ context: profilesStoreContext, subscribe: true })
   @property()
@@ -38,7 +37,7 @@ export class ProfilePrompt extends LitElement {
 
   /** Private properties */
 
-  renderPrompt(myProfile: EntryRecord<Profile> | undefined) {
+  private renderPrompt(myProfile: EntryRecord<Profile> | undefined) {
     if (myProfile) return html`<slot></slot>`;
 
     return html`

@@ -1,11 +1,3 @@
-import { Meta } from '@storybook/addon-docs';
-import { ArgsTable } from '@storybook/addon-docs/blocks';
-import {ProfilesStore} from '@holochain-open-dev/profiles'
-
-<Meta title="Frontend/ProfilesStore" 
-  parameters={{ previewTabs: { canvas: { hidden: true } } }}
-/>
-
 # ProfilesStore
 
 The `ProfilesStore` is a typescript class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements.

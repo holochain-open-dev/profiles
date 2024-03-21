@@ -1,7 +1,7 @@
-import { defineConfig } from "vitepress";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid({
   vue: {
     template: {
       compilerOptions: {
@@ -15,17 +15,11 @@ export default defineConfig({
   description: "Profiles module for holochain apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    // nav: [{ text: "Home", link: "/" }],
 
     sidebar: [
       {
-        text: "Guides",
-        items: [
-          {
-            text: "Setup",
-            link: "/setup.md",
-          },
-        ],
+        text: "Setup",
+        link: "/setup.md",
       },
       {
         text: "API Reference",
@@ -72,5 +66,30 @@ export default defineConfig({
         link: "https://github.com/holochain-open-dev/profiles",
       },
     ],
+    search: {
+      provider: 'local'
+    }
   },
+  head: [
+    [
+      'script',
+      {},
+      `
+function syncTheme() {
+    const isDark = document.documentElement.classList.contains('dark');
+    const isShoelaceDark = document.documentElement.classList.contains('sl-theme-dark');
+    if (isDark && !isShoelaceDark) document.documentElement.classList = "dark sl-theme-dark";
+    if (!isDark && isShoelaceDark) document.documentElement.classList = "";
+}
+const attrObserver = new MutationObserver((mutations) => {
+  mutations.forEach(mu => {
+    if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+    syncTheme();
+  });
+});
+attrObserver.observe(document.documentElement, {attributes: true});
+syncTheme();
+      `
+    ]
+  ]
 });

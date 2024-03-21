@@ -8,7 +8,7 @@ hero:
   tagline: Plug-and-play profile management for your hApps
   actions:
     - theme: brand
-      text: Guides
+      text: Setup
       link: /setup.md
     - theme: alt
       text: API Reference

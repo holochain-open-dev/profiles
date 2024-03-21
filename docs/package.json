@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run dev",
-    "dev": "vitepress dev",
-    "build": "npm run cargo:docs && vitepress build",
+    "dev": "npm run analyze -w @holochain-open-dev/profiles && npm run cargo:docs && vitepress dev",
+    "build": "npm run analyze -w @holochain-open-dev/profiles && npm run cargo:docs && vitepress build",
     "cargo:docs": "cargo doc --release --no-deps --target-dir public/backend",
     "preview": "vitepress preview"
   },
@@ -15,6 +15,8 @@
   "license": "ISC",
   "devDependencies": {
     "api-viewer-element": "^1.0.0-pre.8",
-    "vitepress": "^1.0.0-rc.45"
+    "mermaid": "^10.9.0",
+    "vitepress": "^1.0.0-rc.45",
+    "vitepress-plugin-mermaid": "^2.0.16"
   }
 }
