@@ -5,21 +5,24 @@ layout: home
 hero:
   name: "@holochain-open-dev/profiles"
   text: "Profiles module for holochain apps"
-  tagline: My great project tagline
+  tagline: Plug-and-play profile management for your hApps
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Guides
+      link: /setup.md
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: API Reference
+      link: /api-reference
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: UI+Backend Module
+    details: Following the holochain-open-dev guidelines
+    link: https://holochain-open-dev.github.io
+  - title: Manage your profile
+    details: Create and update your profile
+  - title: Search by nickname
+    details: Form elements for entries with a field of type `AgentPubKey`
+  - title: Configurable profile fields
+    details: Customize the fields that you need in your hApp
 ---
 

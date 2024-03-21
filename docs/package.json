@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "start": "npm run dev",
+    "dev": "vitepress dev",
+    "build": "npm run cargo:docs && vitepress build",
+    "cargo:docs": "cargo doc --release --no-deps --target-dir public/backend",
+    "preview": "vitepress preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "api-viewer-element": "^1.0.0-pre.8",
     "vitepress": "^1.0.0-rc.45"
   }
 }
