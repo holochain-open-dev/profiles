@@ -655,6 +655,108 @@
     },
     {
       "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/elements/agent-avatar.ts",
       "declarations": [
         {
@@ -2466,108 +2568,6 @@
           "declaration": {
             "name": "UpdateProfile",
             "module": "src/elements/update-profile.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]

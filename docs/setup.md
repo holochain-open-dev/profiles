@@ -16,9 +16,7 @@ nix run github:holochain-open-dev/templates#hc-scaffold-app-template -- web-app
 > [!NOTE]
 > This guide assumes you have a flake.nix in your repository that you created with the [holochain-open-dev scaffolding template](https://github.com/holochain-open-dev/templates)
 
-### Nix Flake Setup
-
-In your `flake.nix`, add the 
+1. In your `flake.nix`, add the profiles repository to the inputs and to the `holochainSources` list:
 
 ```nix
 {
@@ -102,9 +100,7 @@ In your `flake.nix`, add the
 }
 ```
 
-### Zome Setup 
-
-Go in to the `dna.yaml` for the DNA in which you want to scaffold this zome, and add the `profiles` and `profiles_integrity` zomes to it:
+2. Go in to the `dna.yaml` for the DNA in which you want to scaffold this zome, and add the `profiles` and `profiles_integrity` zomes to it:
 
 ```yaml
 ---
@@ -123,23 +119,68 @@ coordinator:
         - name: profiles_integrity # [!code ++]
 ```
 
-### Frontend Setup
+3.a. **If you already have a `dna.nix` in your DNA**, you don't need to do anything else for the zomes to be included in your DNA.
 
-> [Go here](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/) to look at examples of integration of this module in different frontend frameworks (Vue, Svelte, etc.).
+3.b. **If you don't have a `dna.nix` already**, create one with this content in the top level folder for your DNA (should contain the `zomes` and `workdir` folder):
 
-1. Install this module and its necessary dependencies with:
+```
+├── dna.nix # [!code ++]
+├── workdir
+│  ├── dna.yaml
+├── zomes
+   ├── coordinator
+   ├── integrity
+```
+
+```nix
+# dna.nix
+{ inputs, allZomes, ... }:
+
+{
+  # Import all ./zomes/coordinator/*/zome.nix and ./zomes/integrity/*/zome.nix  
+  imports = (
+      map (m: "${./.}/zomes/coordinator/${m}/zome.nix")
+        (builtins.attrNames (builtins.readDir ./zomes/coordinator))
+    )
+    ++ 
+    (
+      map (m: "${./.}/zomes/integrity/${m}/zome.nix")
+        (builtins.attrNames (builtins.readDir ./zomes/integrity))
+    )
+  ;
+  perSystem =
+    { inputs'
+    , self'
+    , ...
+    }: {
+  	  packages.MY_DNA = inputs.hcInfra.outputs.lib.dna {
+        dnaManifest = ./workdir/dna.yaml; # Point to your DNA manifest
+        holochain = inputs'.holochain;
+        zomes = (allZomes { inherit inputs' self'; }) // {
+          # Override specific zomes here, e.g.:
+          # profiles_integrity = inputs'.profiles.packages.profiles_integrity;
+        };
+      };
+  	};
+}
+```
+
+Now you should be able build your dna with `nix build .#MY_DNA` from the top level of your repository.
+
+4. Install the UI for this module and its necessary dependencies with:
 
 ```bash
 pnpm install github:holochain-open-dev/profiles/main?path:ui
 ```
 
-Careful! If you are using PNPM workspaces (which is the case for the apps generated with the holochain-open-dev scaffolding tool, you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the holochain-open-dev scaffolding tool:
+> [!WARNING]
+> Careful! If you are using PNPM workspaces (which is the case for the apps generated with the holochain-open-dev scaffolding tool) you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the holochain-open-dev scaffolding tool:
+>
+>```bash
+>pnpm -F ui install @holochain-open-dev/profiles
+>```
 
-```bash
-pnpm -F ui install @holochain-open-dev/profiles
-```
-
-2. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
+5. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
 
 ```js
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
@@ -148,7 +189,7 @@ import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
 async function setupProfilesStore() {
   const client = await AppAgentWebsocket.connect('MY_APP_ID');
 
-// TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
+  // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
   const profilesStore = new ProfilesStore(new ProfilesClient(client, '<MY_CELL_ROLE>'), {
     avatarMode: "avatar-optional",
   });
@@ -156,7 +197,7 @@ async function setupProfilesStore() {
 }
 ```
 
-3. Import the `<profiles-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@holochain-open-dev/profiles`:
+6. Import the `<profiles-context>` element and add it to your html **wrapping the whole section of your page in which you are going to be placing** the other elements from `@holochain-open-dev/profiles`:
 
 ```js
 // This can be placed in the index.js, at the top level of your web-app.
@@ -172,7 +213,7 @@ And then add the `<profiles-context>` element in your html:
 </profiles-context>
 ```
 
-4. Attach the `profilesStore` to the `<profiles-context>` element:
+7. Attach the `profilesStore` to the `<profiles-context>` element:
 
 You need to set the `store` property of it to your already instantiated `ProfilesStore` object:
 
@@ -215,7 +256,7 @@ contextElement.store = store;
 > [!NOTE]
 > Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), to see examples on integrating this module in each javascript framework.
 
-5. [Choose which elements you need](/profile-prompt) and import them like this:
+8. [Choose which elements you need](/profile-prompt) and import them like this:
 
 ```js
 import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
@@ -225,7 +266,7 @@ And then they are ready be used inside the `<profiles-context>` just like any ot
 
 This will define all the elements from this module in the global `CustomElementsRegistry`. You can read more about Custom Elements [here](https://developers.google.com/web/fundamentals/web-components/customelements).
 
-6. As all the other holochain-open-dev modules, the profiles module uses [shoelace](https://shoelace.style) as its component library. Add your preferred shoelace theme in your `<head>` tag:
+9. Like all the other holochain-open-dev modules, the profiles module uses [shoelace](https://shoelace.style) as its component library. Add your preferred shoelace theme in your `<head>` tag:
 
 ```html
 <head>
@@ -241,7 +282,9 @@ import '@shoelace-style/shoelace/dist/themes/light.css';
 
 You can read more about how to initialize the shoelace theme [here](https://shoelace.style/getting-started/themes?id=activating-themes).
 
-That's it! You can spend some time now to take a look at [which elements are available](?path=/docs/frontend-elements-create-profile--docs).
+---
+
+That's it! You have now integrated both the backend and the frontend for the profiles module.
 
 # Example
 

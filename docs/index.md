@@ -11,8 +11,17 @@ hero:
       text: Setup
       link: /setup.md
     - theme: alt
-      text: API Reference
-      link: /api-reference
+      text: Integrity Zome API
+      link: "/backend/doc/hc_zome_profiles_integrity/index.html"
+      target: "_blank"
+    - theme: alt
+      text: Coordinator Zome API
+      link: "/backend/doc/hc_zome_profiles_coordinator/index.html"
+      target: "_blank"
+    - theme: alt
+      text: Frontend API
+      link: "/elements/profile-prompt.md"
+      target: "_blank"
 
 features:
   - title: UI+Backend Module
@@ -25,4 +34,3 @@ features:
   - title: Configurable profile fields
     details: Customize the fields that you need in your hApp
 ---
-

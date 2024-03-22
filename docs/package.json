@@ -8,7 +8,7 @@
     "start": "npm run dev",
     "dev": "npm run setup && vitepress dev",
     "build": "npm run setup && vitepress build",
-    "setup": "npm run analyze -w @holochain-open-dev/profiles && cp ../ui/custom-elements.json public && npm run cargo:docs",
+    "setup": "npm run analyze -w @holochain-open-dev/profiles && cp ../ui/custom-elements.json elements && npm run cargo:docs",
     "cargo:docs": "cargo doc --release --no-deps --target-dir public/backend",
     "preview": "vitepress preview"
   },

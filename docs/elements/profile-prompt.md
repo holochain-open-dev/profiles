@@ -31,11 +31,6 @@ import '@holochain-open-dev/profiles/dist/elements/profile-prompt.js'
 > [!WARNING]
 > Like all the elements in this module, `<profile-prompt>` needs to be placed inside an initialized `<profiles-context>`.
 
-```mermaid
-flowchart LR
-  a-->b
-```
-
 ## Demo
 
 Here is an interactive demo of the element:

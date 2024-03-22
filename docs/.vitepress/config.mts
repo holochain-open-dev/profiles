@@ -1,6 +1,5 @@
-import { defineConfig, } from "vitepress";
-// import mermaid from "@agoose77/markdown-it-mermaid";
 import { withMermaid } from 'vitepress-plugin-mermaid';
+import fs from 'fs';
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
@@ -52,16 +51,12 @@ export default withMermaid({
               },
               {
                 text: "Elements",
-                items: [
-                  {
-                    text: "profiles-context",
-                    link: "/profiles-context.md",
-                  },
-                  {
-                    text: "profile-prompt",
-                    link: "/profile-prompt.md",
-                  },
-                ],
+                items: fs.readdirSync("./elements").filter(file => file.endsWith('.md')).map(el =>
+                ({
+                  text: el.split('.md')[0],
+                  link: `/elements/${el}`,
+                }),
+                ),
               },
             ],
           },
