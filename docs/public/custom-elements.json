@@ -1,1 +1,2604 @@
-../../ui/custom-elements.json
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "locales/ca.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "templates",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n      's0f790cd5b748b24d': `Error buscant agents`,\n's1d96e130c0544d92': `No hi ha cap perfil creat`,\n's20453e988c3e79f3': `Pressiona '@' per mencionar un agent.`,\n's2ceb11be2290bb1b': `Cancel·lar`,\n's3798c0344c399eb7': str`Min. ${0} caràcters`,\n's39aca5bd9eed9271': `Aquest agent encara no ha creat el seu perfil`,\n's3fa309bef44c54e9': `Almenys 3 caràcters...`,\n's6068cc1885ea6494': `No s'ha trobat cap agent amb aquest filtre`,\n's639c68c3284a2269': `Actualitzar Perfil`,\n's6ef2512ced4487d3': `No s'ha seleccionat cap agent encara`,\n's7c2f825ccdf2bf38': `Error buscant els perfils de tots els agents`,\n'sa77a504cfafd6d20': `Error buscant l'avatar de l'agent`,\n'sbbb75506e75dfbf8': `Buscar Agent`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscant el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introdueix almenys 3 caràcters per buscar...`,\n'se9f30e4492cee2cd': `Nom d'usuari`,\n'seb9fbffaa6fddee6': `Error creant el perfil`,\n'sffdcc47c1ec17387': `Error buscant el teu perfil`,\n    }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "templates",
+          "declaration": {
+            "name": "templates",
+            "module": "locales/ca.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "locales/de.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "templates",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n      's0f790cd5b748b24d': `Profile suchen fehlgeschlagen`,\n's1d96e130c0544d92': `Keine Profile vorhanden`,\n's20453e988c3e79f3': `Drücke '@' um eine Person zu erwähnen.`,\n's2ceb11be2290bb1b': `Abbrechen`,\n's3798c0344c399eb7': str`Min. ${0} Zeichen`,\n's39aca5bd9eed9271': `Diese Person hat noch kein Profil erstellt`,\n's3fa309bef44c54e9': `Mindestens 3 Zeichen...`,\n's6068cc1885ea6494': `Keine Profile gefunden für die Sucheingabe`,\n's639c68c3284a2269': `Profil Aktualisieren`,\n's6ef2512ced4487d3': `Noch keine Personen ausgewählt.`,\n's7c2f825ccdf2bf38': `Profile laden fehlgeschlagen`,\n'sa77a504cfafd6d20': `Profilbild konnte nicht geladen werden`,\n'sbbb75506e75dfbf8': `Profil suchen`,\n'sbe57083b4c785878': `Profil erstellen`,\n'sc5c9f04c2d0a5f1d': `Profil laden fehlgeschlagen`,\n'sc93a9aa3e5bcbf5d': `Profil speichern`,\n'sdd16cd8b418b1752': `Mindestens 3 Buchstaben eingeben...`,\n'se9f30e4492cee2cd': `Benutzername`,\n'seb9fbffaa6fddee6': `Speichern fehlgeschlagen`,\n'sffdcc47c1ec17387': `Profil laden fehlgeschlagen`,\n    }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "templates",
+          "declaration": {
+            "name": "templates",
+            "module": "locales/de.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "locales/es.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "templates",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n      's0f790cd5b748b24d': `Error buscando los agentes`,\n's1d96e130c0544d92': `Aún no se ha creado ningún perfil`,\n's20453e988c3e79f3': `Presiona '@' para mencionar a un agente`,\n's2ceb11be2290bb1b': `Cancelar`,\n's3798c0344c399eb7': str`Min. ${0} caracteres`,\n's39aca5bd9eed9271': `Este agente no ha creado su perfil todavía`,\n's3fa309bef44c54e9': `Al menos 3 caracteres...`,\n's6068cc1885ea6494': `No se ha encontrado ningún agente`,\n's639c68c3284a2269': `Actualizar Perfil`,\n's6ef2512ced4487d3': `No hay ningún agente seleccionado todavía.`,\n's7c2f825ccdf2bf38': `Error buscando los perfiles de todos los agentes`,\n'sa77a504cfafd6d20': `Error buscando el avatar del agente`,\n'sbbb75506e75dfbf8': `Buscar agente`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscando el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introduce al menos 3 carácteres para buscar...`,\n'se9f30e4492cee2cd': `Nombre de usuario`,\n'seb9fbffaa6fddee6': `Error creando el perfil`,\n'sffdcc47c1ec17387': `Error buscando tu perfil`,\n    }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "templates",
+          "declaration": {
+            "name": "templates",
+            "module": "locales/es.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "locales/fr-fr.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "templates",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n      's1d96e130c0544d92': `Il n'y a pas encore de profils créés`,\n's3798c0344c399eb7': str`Min. ${0} caractères`,\n's39aca5bd9eed9271': `Cet utilisateur n'a pas encore créé de profil`,\n's3fa309bef44c54e9': `Au moins 3 caractères...`,\n's6068cc1885ea6494': `Aucun agent ne corresponds au filtre`,\n's639c68c3284a2269': `Mettre à jour Profil`,\n'sbe57083b4c785878': `Créer Profil`,\n'sc93a9aa3e5bcbf5d': `Enregistrer Profil`,\n'se9f30e4492cee2cd': `Surnom`,\n'sa77a504cfafd6d20': `Error fetching the agent's avatar`,\n's2ceb11be2290bb1b': `Cancel`,\n'seb9fbffaa6fddee6': `Error creating the profile`,\n's7c2f825ccdf2bf38': `Error fetching the profiles for all agents`,\n'sffdcc47c1ec17387': `Error fetching your profile`,\n'sc5c9f04c2d0a5f1d': `Error fetching the profile`,\n'sdd16cd8b418b1752': `Enter at least 3 chars to search...`,\n's0f790cd5b748b24d': `Error searching agents`,\n'sbbb75506e75dfbf8': `Search Agent`,\n's6ef2512ced4487d3': `No agents selected yet.`,\n's20453e988c3e79f3': `Press '@' to mention an agent.`,\n    }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "templates",
+          "declaration": {
+            "name": "templates",
+            "module": "locales/fr-fr.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "locales/locales.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sourceLocale",
+          "default": "`en`",
+          "description": "The locale code that templates in this source code are written in."
+        },
+        {
+          "kind": "variable",
+          "name": "targetLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  `ca`,\n  `de`,\n  `es`,\n  `fr-fr`,\n  `sv`,\n]",
+          "description": "The other locale codes that this application is localized into. Sorted\nlexicographically."
+        },
+        {
+          "kind": "variable",
+          "name": "allLocales",
+          "type": {
+            "text": "array"
+          },
+          "default": "[\n  `ca`,\n  `de`,\n  `en`,\n  `es`,\n  `fr-fr`,\n  `sv`,\n]",
+          "description": "All valid project locale codes. Sorted lexicographically."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sourceLocale",
+          "declaration": {
+            "name": "sourceLocale",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "targetLocales",
+          "declaration": {
+            "name": "targetLocales",
+            "module": "locales/locales.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "allLocales",
+          "declaration": {
+            "name": "allLocales",
+            "module": "locales/locales.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "locales/sv.js",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "templates",
+          "type": {
+            "text": "object"
+          },
+          "default": "{\n      's0f790cd5b748b24d': `Fel vid sökning av agenter`,\n's1d96e130c0544d92': `Det finns ingen profil skapad än`,\n's20453e988c3e79f3': `Skriv '@' för att benämna en agent§`,\n's2ceb11be2290bb1b': `Avbryt`,\n's3798c0344c399eb7': str`Min. ${0} tecken`,\n's39aca5bd9eed9271': `Denna agent har inte skapat en profil än`,\n's3fa309bef44c54e9': `Minst 3 tecken...`,\n's6068cc1885ea6494': `Inga agenter som matchar filtret`,\n's639c68c3284a2269': `Uppdatera profil`,\n's6ef2512ced4487d3': `Ingen agent vald än.`,\n's7c2f825ccdf2bf38': `Fel vid hämtning av profiler för alla agenter`,\n'sa77a504cfafd6d20': `Fel vid hämtning av agentens avatar`,\n'sbbb75506e75dfbf8': `Sök efter agent`,\n'sbe57083b4c785878': `Skapa profil`,\n'sc5c9f04c2d0a5f1d': `Fel vid hämtning av profilen`,\n'sc93a9aa3e5bcbf5d': `Spara profil`,\n'sdd16cd8b418b1752': `Skriv minst 3 tecken för att söka...`,\n'se9f30e4492cee2cd': `Smeknamn`,\n'seb9fbffaa6fddee6': `Fel inträffade vid skapande av profil`,\n'sffdcc47c1ec17387': `Fel vid hämtning av din profil`,\n    }"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "templates",
+          "declaration": {
+            "name": "templates",
+            "module": "locales/sv.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/config.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "defaultConfig",
+          "type": {
+            "text": "ProfilesConfig"
+          },
+          "default": "{\n  avatarMode: 'avatar-optional',\n  additionalFields: [],\n  minNicknameLength: 3,\n}"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "defaultConfig",
+          "declaration": {
+            "name": "defaultConfig",
+            "module": "src/config.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/context.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "profilesStoreContext"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "profilesStoreContext",
+          "declaration": {
+            "name": "profilesStoreContext",
+            "module": "src/context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./types\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./context\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./profiles-client\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./profiles-store\""
+          }
+        },
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "\"./config\""
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/mocks.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "demoProfiles",
+          "return": {
+            "type": {
+              "text": "Promise<AgentPubKeyMap<Record>>"
+            }
+          }
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesZomeMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "return": {
+                "type": {
+                  "text": "Promise<Record>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "update_profile",
+              "return": {
+                "type": {
+                  "text": "Promise<Record>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_agents",
+              "parameters": [
+                {
+                  "name": "nickname_filter",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "agent_address",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agents_with_profile"
+            }
+          ],
+          "superclass": {
+            "name": "ZomeMock",
+            "package": "@holochain-open-dev/utils"
+          }
+        },
+        {
+          "kind": "function",
+          "name": "sampleProfile",
+          "return": {
+            "type": {
+              "text": "Promise<Profile>"
+            }
+          },
+          "parameters": [
+            {
+              "name": "client",
+              "type": {
+                "text": "ProfilesClient"
+              }
+            },
+            {
+              "name": "partialProfile",
+              "default": "{}",
+              "type": {
+                "text": "Partial<Profile>"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "demoProfiles",
+          "declaration": {
+            "name": "demoProfiles",
+            "module": "src/mocks.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ProfilesZomeMock",
+          "declaration": {
+            "name": "ProfilesZomeMock",
+            "module": "src/mocks.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "sampleProfile",
+          "declaration": {
+            "name": "sampleProfile",
+            "module": "src/mocks.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/profiles-client.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesClient",
+          "members": [
+            {
+              "kind": "method",
+              "name": "getAgentProfile",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  },
+                  "description": "the agent to get the profile for"
+                }
+              ],
+              "description": "Get the profile for the given agent, if they have created it"
+            },
+            {
+              "kind": "method",
+              "name": "searchAgents",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nicknameFilter",
+                  "type": {
+                    "text": "string"
+                  },
+                  "description": "must be of at least 3 characters"
+                }
+              ],
+              "description": "Search profiles that start with nicknameFilter"
+            },
+            {
+              "kind": "method",
+              "name": "getAgentsWithProfile",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "description": "Get all the agents in the DHT that have created a profile"
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<EntryRecord<Profile>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  },
+                  "description": "the profile to create"
+                }
+              ],
+              "description": "Create my profile"
+            },
+            {
+              "kind": "method",
+              "name": "updateProfile",
+              "return": {
+                "type": {
+                  "text": "Promise<EntryRecord<Profile>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  },
+                  "description": "the profile to create"
+                }
+              ],
+              "description": "Update my profile"
+            }
+          ],
+          "superclass": {
+            "name": "ZomeClient",
+            "package": "@holochain-open-dev/utils"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesClient",
+          "declaration": {
+            "name": "ProfilesClient",
+            "module": "src/profiles-client.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/profiles-store.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesStore",
+          "members": [
+            {
+              "kind": "field",
+              "name": "config",
+              "type": {
+                "text": "ProfilesConfig"
+              },
+              "default": "{ ...defaultConfig, ...config }"
+            },
+            {
+              "kind": "field",
+              "name": "agentsWithProfile",
+              "type": {
+                "text": "AsyncReadable<AgentPubKey[]>"
+              },
+              "description": "Fetches all the agents that have created a profile in the DHT"
+            },
+            {
+              "kind": "field",
+              "name": "allProfiles",
+              "description": "Fetches the profiles for all agents in the DHT\n\nThis will get slower as the number of agents in the DHT increases"
+            },
+            {
+              "kind": "field",
+              "name": "profiles",
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<EntryRecord<Profile> | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.onSignal((signal) => {\n        if (this.client.client.myPubKey.toString() !== agent.toString()) return;\n        if (!(signal.type === \"EntryCreated\" || signal.type === \"EntryUpdated\"))\n          return;\n        const record = new EntryRecord<Profile>({\n          entry: {\n            Present: {\n              entry_type: \"App\",\n              entry: encode(signal.app_entry),\n            },\n          },\n          signed_action: signal.action,\n        });\n        set(record);\n      });\n    })\n  )",
+              "description": "Fetches the profile for the given agent"
+            },
+            {
+              "kind": "field",
+              "name": "myProfile"
+            },
+            {
+              "kind": "method",
+              "name": "agentsProfiles",
+              "return": {
+                "type": {
+                  "text": "AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "agents",
+                  "type": {
+                    "text": "Array<AgentPubKey>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "searchProfiles",
+              "return": {
+                "type": {
+                  "text": "AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile>>>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "searchFilter",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesStore",
+          "declaration": {
+            "name": "ProfilesStore",
+            "module": "src/profiles-store.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/types.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "areHashesArraysEqual",
+          "return": {
+            "type": {
+              "text": "boolean"
+            }
+          },
+          "parameters": [
+            {
+              "name": "hashes1",
+              "type": {
+                "text": "HoloHash[]"
+              }
+            },
+            {
+              "name": "hashes2",
+              "type": {
+                "text": "HoloHash[]"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "areHashesArraysEqual",
+          "declaration": {
+            "name": "areHashesArraysEqual",
+            "module": "src/utils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/agent-avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AgentAvatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "attribute": "agentPubKey"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the avatar image in pixels.",
+              "attribute": "size"
+            },
+            {
+              "kind": "field",
+              "name": "disableTooltip",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables showing the tooltip for the public key",
+              "attribute": "disable-tooltip"
+            },
+            {
+              "kind": "field",
+              "name": "disableCopy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disable copying of the public key on click",
+              "attribute": "disable-copy"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "renderIdenticon"
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "EntryRecord<Profile> | undefined"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-clicked",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "fieldName": "agentPubKey"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "32",
+              "description": "Size of the avatar image in pixels.",
+              "fieldName": "size"
+            },
+            {
+              "name": "disable-tooltip",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables showing the tooltip for the public key",
+              "fieldName": "disableTooltip"
+            },
+            {
+              "name": "disable-copy",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disable copying of the public key on click",
+              "fieldName": "disableCopy"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "agent-avatar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AgentAvatar",
+          "declaration": {
+            "name": "AgentAvatar",
+            "module": "src/elements/agent-avatar.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "agent-avatar",
+          "declaration": {
+            "name": "AgentAvatar",
+            "module": "src/elements/agent-avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/agent-mention.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AgentMention",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "attribute": "agentPubKey"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "24",
+              "description": "Size of the avatar image in pixels.",
+              "attribute": "size"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "renderAvatar",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "EntryRecord<Profile> | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "EntryRecord<Profile> | undefined"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderContent"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. The public key identifying the agent whose profile is going to be shown.",
+              "fieldName": "agentPubKey"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "number"
+              },
+              "default": "24",
+              "description": "Size of the avatar image in pixels.",
+              "fieldName": "size"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "agent-mention",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AgentMention",
+          "declaration": {
+            "name": "AgentMention",
+            "module": "src/elements/agent-mention.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "agent-mention",
+          "declaration": {
+            "name": "AgentMention",
+            "module": "src/elements/agent-mention.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/agents-avatars.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "AgentsAvatars",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "AgentPubKey[]"
+              },
+              "attribute": "agents"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agents",
+              "type": {
+                "text": "AgentPubKey[]"
+              },
+              "fieldName": "agents"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "agents-avatars",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AgentsAvatars",
+          "declaration": {
+            "name": "AgentsAvatars",
+            "module": "src/elements/agents-avatars.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "agents-avatars",
+          "declaration": {
+            "name": "AgentsAvatars",
+            "module": "src/elements/agents-avatars.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/create-profile.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A custom element that fires event on value change.",
+          "name": "CreateProfile",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "createProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ],
+              "description": "Private properties"
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-created",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "create-profile",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "CreateProfile",
+          "declaration": {
+            "name": "CreateProfile",
+            "module": "src/elements/create-profile.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "create-profile",
+          "declaration": {
+            "name": "CreateProfile",
+            "module": "src/elements/create-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/edit-profile.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "EditProfile",
+          "members": [
+            {
+              "kind": "field",
+              "name": "profile",
+              "type": {
+                "text": "EntryRecord<Profile> | undefined"
+              },
+              "description": "The profile to be edited.",
+              "attribute": "profile"
+            },
+            {
+              "kind": "field",
+              "name": "saveProfileLabel",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Label for the save profile button.",
+              "attribute": "save-profile-label"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "allowCancel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "attribute": "allow-cancel"
+            },
+            {
+              "kind": "method",
+              "name": "avatarMode",
+              "description": "Private properties"
+            },
+            {
+              "kind": "method",
+              "name": "fireSaveProfile",
+              "parameters": [
+                {
+                  "name": "fields",
+                  "type": {
+                    "text": "Record<string, string>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fireCancel"
+            },
+            {
+              "kind": "method",
+              "name": "renderField",
+              "parameters": [
+                {
+                  "name": "fieldConfig",
+                  "type": {
+                    "text": "FieldConfig"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "save-profile",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the save profile button is clicked"
+            },
+            {
+              "name": "cancel-edit-profile",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "profile",
+              "type": {
+                "text": "EntryRecord<Profile> | undefined"
+              },
+              "description": "The profile to be edited.",
+              "fieldName": "profile"
+            },
+            {
+              "name": "save-profile-label",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Label for the save profile button.",
+              "fieldName": "saveProfileLabel"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            },
+            {
+              "name": "allow-cancel",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "fieldName": "allowCancel"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "edit-profile",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "EditProfile",
+          "declaration": {
+            "name": "EditProfile",
+            "module": "src/elements/edit-profile.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "edit-profile",
+          "declaration": {
+            "name": "EditProfile",
+            "module": "src/elements/edit-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/list-profiles.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ListProfiles",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "initials",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "nickname",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "fireAgentSelected",
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderList",
+              "parameters": [
+                {
+                  "name": "profiles",
+                  "type": {
+                    "text": "ReadonlyMap<AgentPubKey, EntryRecord<Profile>>"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects an agent from the list. Detail will have this shape: { agentPubKey: <AGENT_PUB_KEY as Uint8Array> }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "list-profiles",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ListProfiles",
+          "declaration": {
+            "name": "ListProfiles",
+            "module": "src/elements/list-profiles.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "list-profiles",
+          "declaration": {
+            "name": "ListProfiles",
+            "module": "src/elements/list-profiles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/my-profile.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MyProfile",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "my-profile",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MyProfile",
+          "declaration": {
+            "name": "MyProfile",
+            "module": "src/elements/my-profile.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "my-profile",
+          "declaration": {
+            "name": "MyProfile",
+            "module": "src/elements/my-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-detail.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfileDetail",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
+              "attribute": "agentPubKey"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "getAdditionalFields",
+              "return": {
+                "type": {
+                  "text": "Record<string, string>"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderAdditionalField",
+              "parameters": [
+                {
+                  "name": "fieldId",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "fieldValue",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "EntryRecord<Profile> | undefined"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED. Public key identifying the agent for which the profile should be shown",
+              "fieldName": "agentPubKey"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-detail",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfileDetail",
+          "declaration": {
+            "name": "ProfileDetail",
+            "module": "src/elements/profile-detail.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-detail",
+          "declaration": {
+            "name": "ProfileDetail",
+            "module": "src/elements/profile-detail.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-list-item-skeleton.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfileListItemSkeleton",
+          "members": [],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-list-item-skeleton",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfileListItemSkeleton",
+          "declaration": {
+            "name": "ProfileListItemSkeleton",
+            "module": "src/elements/profile-list-item-skeleton.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-list-item-skeleton",
+          "declaration": {
+            "name": "ProfileListItemSkeleton",
+            "module": "src/elements/profile-list-item-skeleton.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-list-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfileListItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED: the public key of the agent to render the profile for",
+              "attribute": "agentPubKey"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "agentPubKey",
+              "type": {
+                "text": "AgentPubKey"
+              },
+              "description": "REQUIRED: the public key of the agent to render the profile for",
+              "fieldName": "agentPubKey"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-list-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfileListItem",
+          "declaration": {
+            "name": "ProfileListItem",
+            "module": "src/elements/profile-list-item.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-list-item",
+          "declaration": {
+            "name": "ProfileListItem",
+            "module": "src/elements/profile-list-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profile-prompt.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilePrompt",
+          "slots": [
+            {
+              "description": "Will be displayed above the create-profile form when the user is prompted with it",
+              "name": "hero"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a `<profiles-context>`",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "renderPrompt",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "myProfile",
+                  "type": {
+                    "text": "EntryRecord<Profile> | undefined"
+                  }
+                }
+              ],
+              "description": "Private properties"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a `<profiles-context>`",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profile-prompt",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilePrompt",
+          "declaration": {
+            "name": "ProfilePrompt",
+            "module": "src/elements/profile-prompt.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "profile-prompt",
+          "declaration": {
+            "name": "ProfilePrompt",
+            "module": "src/elements/profile-prompt.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/profiles-context.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesContext",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "attribute": "store"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "profiles-context",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesContext",
+          "declaration": {
+            "name": "ProfilesContext",
+            "module": "src/elements/profiles-context.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "profiles-context",
+          "declaration": {
+            "name": "ProfilesContext",
+            "module": "src/elements/profiles-context.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/search-agent-dropdown.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SearchAgentDropdown",
+          "members": [
+            {
+              "kind": "field",
+              "name": "searchFilter",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Public attributes",
+              "attribute": "searchFilter"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "attribute": "open"
+            },
+            {
+              "kind": "field",
+              "name": "includeMyself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "attribute": "include-myself"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "onUsernameSelected",
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "renderAgentList"
+            }
+          ],
+          "events": [
+            {
+              "name": "agent-selected",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "include-myself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "fieldName": "includeMyself",
+              "attribute": "include-myself"
+            },
+            {
+              "name": "searchFilter",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Public attributes",
+              "fieldName": "searchFilter"
+            },
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "fieldName": "open"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "search-agent-dropdown",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SearchAgentDropdown",
+          "declaration": {
+            "name": "SearchAgentDropdown",
+            "module": "src/elements/search-agent-dropdown.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "search-agent-dropdown",
+          "declaration": {
+            "name": "SearchAgentDropdown",
+            "module": "src/elements/search-agent-dropdown.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/search-agent.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SearchAgent",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the field if this element is used inside a form\nRequired only if the element is used inside a form",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "defaultValue",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "The default value of the field if this element is used inside a form",
+              "attribute": "defaultValue"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is required if this element is used inside a form",
+              "attribute": "required"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is disabled if this element is used inside a form",
+              "attribute": "disabled"
+            },
+            {
+              "kind": "field",
+              "name": "clearOnSelect",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected.",
+              "attribute": "clear-on-select"
+            },
+            {
+              "kind": "field",
+              "name": "includeMyself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "attribute": "include-myself"
+            },
+            {
+              "kind": "field",
+              "name": "fieldLabel",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the agent searching field.",
+              "attribute": "field-label"
+            },
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity"
+            },
+            {
+              "kind": "method",
+              "name": "reset"
+            },
+            {
+              "kind": "field",
+              "name": "searchFilter",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\""
+            },
+            {
+              "kind": "method",
+              "name": "onUsernameSelected",
+              "parameters": [
+                {
+                  "name": "agentPubKey",
+                  "type": {
+                    "text": "AgentPubKey"
+                  }
+                },
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "EntryRecord<Profile>"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }",
+              "name": "agent-selected"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "clear-on-select",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to clear the field when an agent is selected.",
+              "fieldName": "clearOnSelect",
+              "attribute": "clear-on-select"
+            },
+            {
+              "name": "include-myself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "fieldName": "includeMyself",
+              "attribute": "include-myself"
+            },
+            {
+              "name": "field-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the agent searching field.",
+              "fieldName": "fieldLabel",
+              "attribute": "field-label"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the field if this element is used inside a form\nRequired only if the element is used inside a form",
+              "fieldName": "name"
+            },
+            {
+              "name": "defaultValue",
+              "type": {
+                "text": "AgentPubKey | undefined"
+              },
+              "description": "The default value of the field if this element is used inside a form",
+              "fieldName": "defaultValue"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is required if this element is used inside a form",
+              "fieldName": "required"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is disabled if this element is used inside a form",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "search-agent",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SearchAgent",
+          "declaration": {
+            "name": "SearchAgent",
+            "module": "src/elements/search-agent.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "search-agent",
+          "declaration": {
+            "name": "SearchAgent",
+            "module": "src/elements/search-agent.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/search-agents.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "SearchAgents",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the field if this element is used inside a form\nRequired only if the element is used inside a form",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "defaultValue",
+              "type": {
+                "text": "Array<AgentPubKey>"
+              },
+              "default": "[]",
+              "description": "The default value of the field if this element is used inside a form",
+              "attribute": "defaultValue"
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is required if this element is used inside a form",
+              "attribute": "required"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is disabled if this element is used inside a form",
+              "attribute": "disabled"
+            },
+            {
+              "kind": "field",
+              "name": "fieldLabel",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the agent searching field.",
+              "attribute": "field-label"
+            },
+            {
+              "kind": "field",
+              "name": "emptyListPlaceholder",
+              "description": "Placeholder to show when the list is empty.",
+              "attribute": "empty-list-placeholder"
+            },
+            {
+              "kind": "field",
+              "name": "includeMyself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "attribute": "include-myself"
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity"
+            },
+            {
+              "kind": "method",
+              "name": "reset"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "field-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Label for the agent searching field.",
+              "fieldName": "fieldLabel",
+              "attribute": "field-label"
+            },
+            {
+              "name": "empty-list-placeholder",
+              "description": "Placeholder to show when the list is empty.",
+              "fieldName": "emptyListPlaceholder",
+              "attribute": "empty-list-placeholder"
+            },
+            {
+              "name": "include-myself",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether to include my own agent as a possible agent to select.",
+              "fieldName": "includeMyself",
+              "attribute": "include-myself"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "The name of the field if this element is used inside a form\nRequired only if the element is used inside a form",
+              "fieldName": "name"
+            },
+            {
+              "name": "defaultValue",
+              "type": {
+                "text": "Array<AgentPubKey>"
+              },
+              "default": "[]",
+              "description": "The default value of the field if this element is used inside a form",
+              "fieldName": "defaultValue"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is required if this element is used inside a form",
+              "fieldName": "required"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether this field is disabled if this element is used inside a form",
+              "fieldName": "disabled"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "search-agents",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SearchAgents",
+          "declaration": {
+            "name": "SearchAgents",
+            "module": "src/elements/search-agents.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "search-agents",
+          "declaration": {
+            "name": "SearchAgents",
+            "module": "src/elements/search-agents.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/textarea-with-mentions.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "agentMentionSpec",
+          "type": {
+            "text": "NodeSpec"
+          },
+          "default": "{\n  attrs: { agentPubKey: {} },\n  inline: true,\n  group: \"inline\",\n  draggable: true,\n  toDOM: (node) => {\n    console.log(node);\n    return [\n      \"agent-mention\",\n      { \"agent-pub-key\": encodeHashToBase64(node.attrs.agentPubKey) },\n    ];\n  },\n  parseDOM: [{ tag: \"agent-mention\" }],\n}"
+        },
+        {
+          "kind": "variable",
+          "name": "pluginKey",
+          "default": "new PluginKey(\"search-agent\")"
+        },
+        {
+          "kind": "variable",
+          "name": "searchAgentPlugin",
+          "default": "new Plugin<SearchAgentPluginState>({\n  key: pluginKey,\n  state: {\n    init() {\n      return \"hidden\";\n    },\n    apply(tr, state) {\n      const newPluginState = tr.getMeta(pluginKey);\n      return newPluginState ? newPluginState : state;\n    },\n  },\n  props: {\n    handleKeyDown(view, event) {\n      const state = this.getState(view.state);\n      if (state && state !== \"hidden\" && event.key === \"ArrowDown\") {\n        state.dropdownEl.dropdown.handleTriggerKeyDown(event);\n      }\n    },\n    handleTextInput(view, _from, to, text) {\n      const state = this.getState(view.state);\n      console.log(state);\n\n      if (state && state !== \"hidden\") {\n        setTimeout(() => {\n          state.dropdownEl.searchFilter = view.state.doc.textBetween(\n            state.mentionCharIndex + 1,\n            to + 1\n          );\n          view.dispatch(\n            view.state.tr.setMeta(pluginKey, {\n              ...state,\n              lastCharIndex: to,\n            })\n          );\n        });\n      } else if (text === \"@\") {\n        const { top, left } = view.coordsAtPos(to);\n        const dropdownEl = document.createElement(\n          \"search-agent-dropdown\"\n        ) as SearchAgentDropdown;\n\n        dropdownEl.innerHTML = `<div style=\"position: fixed; height: 24px; top: ${top}px; left: ${left}px\"></div>`;\n        dropdownEl.open = true;\n        dropdownEl.includeMyself = true;\n        view.dom.getRootNode().appendChild(dropdownEl);\n\n        view.dispatch(\n          view.state.tr.setMeta(pluginKey, {\n            dropdownEl,\n            mentionCharIndex: to,\n            lastCharIndex: to,\n          })\n        );\n\n        dropdownEl.addEventListener(\"agent-selected\", (e: any) => {\n          const agentPubKey = e.detail.agentPubKey;\n          const state = this.getState(view.state);\n\n          if (!state || state === \"hidden\") return;\n\n          const tr = view.state.tr;\n\n          tr.replaceRangeWith(\n            state.mentionCharIndex,\n            state.lastCharIndex + 1,\n            agentType.create({\n              agentPubKey,\n            })\n          );\n\n          view.dom.getRootNode().removeChild(dropdownEl);\n          view.dispatch(tr.setMeta(pluginKey, \"hidden\"));\n        });\n\n        dropdownEl.addEventListener(\"sl-hide\", () =>\n          setTimeout(() => {\n            view.dom.getRootNode().removeChild(dropdownEl);\n            view.dispatch(view.state.tr.setMeta(pluginKey, \"hidden\"));\n          }, 10)\n        );\n      }\n    },\n  },\n})"
+        },
+        {
+          "kind": "class",
+          "description": "",
+          "name": "TextareaWithMentions",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "field",
+              "name": "dnaHash",
+              "type": {
+                "text": "DnaHash"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "helpText",
+              "type": {
+                "text": "string"
+              },
+              "attribute": "helpText"
+            },
+            {
+              "kind": "field",
+              "name": "value"
+            },
+            {
+              "kind": "method",
+              "name": "editorStateConfig"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            },
+            {
+              "name": "helpText",
+              "type": {
+                "text": "string"
+              },
+              "fieldName": "helpText"
+            }
+          ],
+          "superclass": {
+            "name": "SlTextareaProsemirror",
+            "package": "@holochain-open-dev/elements/dist/elements/sl-textarea-prosemirror.js"
+          },
+          "tagName": "textarea-with-mentions",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "agentMentionSpec",
+          "declaration": {
+            "name": "agentMentionSpec",
+            "module": "src/elements/textarea-with-mentions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "pluginKey",
+          "declaration": {
+            "name": "pluginKey",
+            "module": "src/elements/textarea-with-mentions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "searchAgentPlugin",
+          "declaration": {
+            "name": "searchAgentPlugin",
+            "module": "src/elements/textarea-with-mentions.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TextareaWithMentions",
+          "declaration": {
+            "name": "TextareaWithMentions",
+            "module": "src/elements/textarea-with-mentions.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "textarea-with-mentions",
+          "declaration": {
+            "name": "TextareaWithMentions",
+            "module": "src/elements/textarea-with-mentions.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/update-profile.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "UpdateProfile",
+          "members": [
+            {
+              "kind": "field",
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "attribute": "store"
+            },
+            {
+              "kind": "method",
+              "name": "updateProfile",
+              "parameters": [
+                {
+                  "name": "profile",
+                  "type": {
+                    "text": "Profile"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "profile-updated",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired after the profile has been created. Detail will have this shape: { profile: { nickname, fields } }"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "store",
+              "type": {
+                "text": "ProfilesStore"
+              },
+              "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
+              "fieldName": "store"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "update-profile",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "UpdateProfile",
+          "declaration": {
+            "name": "UpdateProfile",
+            "module": "src/elements/update-profile.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "update-profile",
+          "declaration": {
+            "name": "UpdateProfile",
+            "module": "src/elements/update-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/elements/utils/image.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "resizeAndExport",
+          "parameters": [
+            {
+              "name": "img",
+              "type": {
+                "text": "HTMLImageElement"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "resizeAndExport",
+          "declaration": {
+            "name": "resizeAndExport",
+            "module": "src/elements/utils/image.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -13,24 +13,130 @@ nix run github:holochain-open-dev/templates#hc-scaffold-app-template -- web-app
 
 ## Manual Setup
 
-### Zome Setup
+> [!NOTE]
+> This guide assumes you have a flake.nix in your repository that you created with the [holochain-open-dev scaffolding template](https://github.com/holochain-open-dev/templates)
 
-### Frontent Setup
+### Nix Flake Setup
 
-> This guide assumes you are building a web application written in JS or TS, using NPM as the package manager.
+In your `flake.nix`, add the 
+
+```nix
+{
+  description = "Template for Holochain app development";
+
+  inputs = {
+    versions.url  = "github:holochain/holochain?dir=versions/weekly";
+
+    holochain.url = "github:holochain/holochain";
+    holochain.inputs.versions.follows = "versions";
+
+    nixpkgs.follows = "holochain/nixpkgs";
+    flake-parts.follows = "holochain/flake-parts";
+
+    scaffolding.url = "github:holochain-open-dev/templates";
+    hcInfra.url = "github:holochain-open-dev/infrastructure";
+
+    # Holochain dependencies (zomes, DNAs and hApps)
+    profiles.url = "github:holochain-open-dev/profiles/nixify"; # [!code ++]
+    # Add more repositories here...
+  };
+
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake
+      {
+        inherit inputs;
+        specialArgs = rec {
+          # All the upstream repositories that output zomes, dnas or happs packages
+          holochainSources = inputs': with inputs'; [ 
+            profiles # [!code ++]
+            # ... and add the name of the repository here as well
+          ];
+
+          ## Special arguments for the flake parts of this repository
+          
+          rootPath = ./.;
+
+          # Aggregators: take all the packages from this repository and the upstream
+          # holochain sources and merge them
+          allHolochainPackages = { inputs', self' }: inputs.nixpkgs.lib.attrsets.mergeAttrsList (
+            [ self'.packages ] 
+            ++ builtins.map (s: s.packages) (holochainSources inputs')
+          );
+          allZomes = { inputs', self' }: inputs.hcInfra.outputs.lib.filterZomes (allHolochainPackages { inherit inputs' self'; });
+          allDnas = { inputs', self' }: inputs.hcInfra.outputs.lib.filterDnas (allHolochainPackages { inherit inputs' self'; });
+          allHapps = { inputs', self' }: inputs.hcInfra.outputs.lib.filterHapps (allHolochainPackages { inherit inputs' self'; });
+        };
+      }
+      {
+        imports = [
+          ./happ.nix
+        ];
+      
+        systems = builtins.attrNames inputs.holochain.devShells;
+        perSystem =
+          { inputs'
+          , config
+          , pkgs
+          , system
+          , ...
+          }: {
+            devShells.default = pkgs.mkShell {
+              inputsFrom = [ inputs'.holochain.devShells.holonix ];
+
+              packages = with pkgs; [
+                nodejs_20
+                cargo-nextest
+              ] ++ [
+                inputs'.scaffolding.packages.hc-scaffold-app-template
+                inputs'.hcInfra.packages.pnpm
+                inputs'.hcInfra.packages.sync-npm-git-dependencies-with-nix
+              ];
+              
+              shellHook = ''
+                sync-npm-git-dependencies-with-nix
+              '';
+
+            };
+          };
+      };
+}
+```
+
+### Zome Setup 
+
+Go in to the `dna.yaml` for the DNA in which you want to scaffold this zome, and add the `profiles` and `profiles_integrity` zomes to it:
+
+```yaml
+---
+manifest_version: "1"
+name: my_dna
+integrity:
+  network_seed: ~
+  properties: ~
+  origin_time: 1711032942640745
+  zomes:
+    - name: profiles_integrity # [!code ++]
+coordinator:
+  zomes:
+    - name: profiles # [!code ++]
+      dependencies: # [!code ++]
+        - name: profiles_integrity # [!code ++]
+```
+
+### Frontend Setup
 
 > [Go here](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/) to look at examples of integration of this module in different frontend frameworks (Vue, Svelte, etc.).
 
 1. Install this module and its necessary dependencies with:
 
 ```bash
-npm install @holochain-open-dev/profiles
+pnpm install github:holochain-open-dev/profiles/main?path:ui
 ```
 
-Careful! If you are using NPM workspaces (which is the case for the apps generated with the holochain scaffolding tool (`hc scaffold`), you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the scaffolding tool:
+Careful! If you are using PNPM workspaces (which is the case for the apps generated with the holochain-open-dev scaffolding tool, you need to specify which workspace you want to install those dependencies to, and run the command from the root folder of the repository. In the case of the apps generated with the holochain-open-dev scaffolding tool:
 
 ```bash
-npm install @holochain-open-dev/profiles -w ui
+pnpm -F ui install @holochain-open-dev/profiles
 ```
 
 2. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
@@ -68,8 +174,6 @@ And then add the `<profiles-context>` element in your html:
 
 4. Attach the `profilesStore` to the `<profiles-context>` element:
 
-- Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), select the framework you are using, and follow its example.
-
 You need to set the `store` property of it to your already instantiated `ProfilesStore` object:
 
 - If you **are using some JS framework**:
@@ -105,9 +209,13 @@ const contextElement = document.querySelector("profiles-context");
 contextElement.store = store;
 ```
 
+> [!NOTE]
 > You can read more about the context pattern [here](https://holochain-open-dev.github.io/reusable-modules/frontend/using/#context).
 
-5. [Choose which elements you need](?path=/docs/frontend-elements) and import them like this:
+> [!NOTE]
+> Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), to see examples on integrating this module in each javascript framework.
+
+5. [Choose which elements you need](/profile-prompt) and import them like this:
 
 ```js
 import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";

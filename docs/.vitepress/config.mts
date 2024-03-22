@@ -1,4 +1,6 @@
-import { withMermaid } from "vitepress-plugin-mermaid";
+import { defineConfig, } from "vitepress";
+// import mermaid from "@agoose77/markdown-it-mermaid";
+import { withMermaid } from 'vitepress-plugin-mermaid';
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid({
@@ -9,6 +11,13 @@ export default withMermaid({
         isCustomElement: (tag) => tag.includes("-"),
       },
     },
+  },
+  vite: {
+    optimizeDeps: {
+      include: [
+        'mermaid'
+      ]
+    }
   },
   base: "/profiles",
   title: "@holochain-open-dev/profiles",
@@ -74,22 +83,23 @@ export default withMermaid({
     [
       'script',
       {},
+      // Synchronize the vitepress dark/light theme with the shoelace mode
       `
-function syncTheme() {
-    const isDark = document.documentElement.classList.contains('dark');
-    const isShoelaceDark = document.documentElement.classList.contains('sl-theme-dark');
-    if (isDark && !isShoelaceDark) document.documentElement.classList = "dark sl-theme-dark";
-    if (!isDark && isShoelaceDark) document.documentElement.classList = "";
-}
-const attrObserver = new MutationObserver((mutations) => {
-  mutations.forEach(mu => {
-    if (mu.type !== "attributes" && mu.attributeName !== "class") return;
-    syncTheme();
+  function syncTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const isShoelaceDark = document.documentElement.classList.contains('sl-theme-dark');
+      if (isDark && !isShoelaceDark) document.documentElement.classList = "dark sl-theme-dark";
+      if (!isDark && isShoelaceDark) document.documentElement.classList = "";
+  }
+  const attrObserver = new MutationObserver((mutations) => {
+    mutations.forEach(mu => {
+      if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+      syncTheme();
+    });
   });
-});
-attrObserver.observe(document.documentElement, {attributes: true});
-syncTheme();
-      `
+  attrObserver.observe(document.documentElement, {attributes: true});
+  syncTheme();
+        `
     ]
-  ]
+  ],
 });
