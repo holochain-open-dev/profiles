@@ -2,7 +2,7 @@ import { consume } from "@lit/context";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
-import { styleMap } from "lit-html/directives/style-map.js";
+import { styleMap } from "lit/directives/style-map.js";
 import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
@@ -58,10 +58,10 @@ export class AgentMention extends LitElement {
     if (!profile || !profile.entry.fields.avatar) {
       return html` <div
         style=${styleMap({
-          position: "relative",
-          height: `${this.size}px`,
-          width: `${this.size}px`,
-        })}
+        position: "relative",
+        height: `${this.size}px`,
+        width: `${this.size}px`,
+      })}
       >
         <holo-identicon
           .disableCopy=${true}

@@ -11,16 +11,16 @@
     , self'
     , ...
     }: {
-      packages.profiles = inputs.hcUtils.outputs.lib.rustZome {
+      packages.profiles = inputs.hcInfra.outputs.lib.rustZome {
         workspacePath = rootPath;
         holochain = inputs'.holochain;
 				crateCargoToml = ./Cargo.toml;
       };
 
-      checks.profiles = inputs.hcUtils.outputs.lib.sweettest {
+      checks.profiles = inputs.hcInfra.outputs.lib.sweettest {
         workspacePath = rootPath;
         holochain = inputs'.holochain;
-        dna = inputs.hcUtils.outputs.lib.dna {
+        dna = inputs.hcInfra.outputs.lib.dna {
           dnaManifest = builtins.toFile "dna.yaml" ''
             ---
             manifest_version: "1"
@@ -39,7 +39,7 @@
                     - name: profiles_integrity
                   dylib: ~
           '';
-          zomes = inputs.hcUtils.outputs.lib.filterZomes self'.packages;
+          zomes = inputs.hcInfra.outputs.lib.filterZomes self'.packages;
           holochain = inputs'.holochain;
         };
         crateCargoToml = ./Cargo.toml;

@@ -37,10 +37,10 @@ export const agentMentionSpec: NodeSpec = {
 
 export type SearchAgentPluginState =
   | {
-    dropdownEl: SearchAgentDropdown;
-    mentionCharIndex: number;
-    lastCharIndex: number;
-  }
+      dropdownEl: SearchAgentDropdown;
+      mentionCharIndex: number;
+      lastCharIndex: number;
+    }
   | "hidden";
 const schema = new Schema({
   nodes: {
@@ -248,11 +248,9 @@ export class TextareaWithMentions extends SlTextareaProsemirror {
   async firstUpdated() {
     super.firstUpdated();
     const appInfo = await this.store.client.client.appInfo();
-
-    if (appInfo) {
-      const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
-      this.dnaHash = cellId[0];
-    }
+    if (!appInfo) throw new Error("Appinfo is null.");
+    const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
+    this.dnaHash = cellId[0];
   }
 
   @property()

@@ -10,10 +10,10 @@
     , options
     , ...
     }: {
-      packages.profiles_integrity = inputs.hcUtils.outputs.lib.rustZome {
+      packages.profiles_integrity = inputs.hcInfra.outputs.lib.rustZome {
         workspacePath = rootPath;
         holochain = inputs'.holochain;
-				crateCargoToml = ./Cargo.toml;
+			  crateCargoToml = ./Cargo.toml;
       };
   	};
 }
