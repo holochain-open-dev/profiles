@@ -56,7 +56,13 @@
               buildInputs = [ pkgs.makeWrapper ];
               postBuild = ''
                 wrapProgram $out/bin/scaffold-remote-zome \
-                  --add-flags "profiles --integrity-zome-name profiles_integrity --coordinator-zome-name profiles --remote-zome-git-url github:holochain-open-dev/profiles --remote-zome-git-branch nixify --remote-npm-package-name @holochain-open-dev/profiles --remote-npm-package-path ui"
+                  --add-flags "profiles \
+                    --integrity-zome-name profiles_integrity \
+                    --coordinator-zome-name profiles \
+                    --remote-zome-git-url github:holochain-open-dev/profiles \
+                    --remote-zome-git-branch nixify \
+                    --remote-npm-package-name @holochain-open-dev/profiles \
+                    --remote-npm-package-path ./ui"
               '';
             };
           };
