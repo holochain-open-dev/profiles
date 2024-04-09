@@ -10,7 +10,7 @@
       url = "github:holochain/holochain";
       inputs.versions.follows = "versions";
     };
-		hcInfra.url = "github:holochain-open-dev/infrastructure";
+    hc-infra.url = "github:holochain-open-dev/infrastructure/0.300.0-dev";
   };
 
   nixConfig = {
@@ -49,6 +49,10 @@
                 nodejs_20
               ];
             };
+
+            packages.scaffold = pkgs.writeShellScriptBin "scaffold-profiles" ''
+              ${inputs'.hc-infra.packages.scaffold-remote-zome}/bin/scaffold-remote-zome profiles --integrity-zome-name profiles_integrity --coordinator-zome-name profiles --remote-zome-git-url github:holochain-open-dev/profiles --remote-npm-package-name @holochain-open-dev/profiles --remote-npm-package-path ./ui 
+            ''; 
           };
       };
 }
