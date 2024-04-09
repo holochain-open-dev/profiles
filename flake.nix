@@ -62,7 +62,7 @@
                     --remote-zome-git-url github:holochain-open-dev/profiles \
                     --remote-zome-git-branch nixify \
                     --remote-npm-package-name @holochain-open-dev/profiles \
-                    --remote-npm-package-path ./ui"
+                    --remote-npm-package-path ui"
               '';
             };
           };
