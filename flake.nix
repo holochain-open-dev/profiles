@@ -50,9 +50,15 @@
               ];
             };
 
-            packages.scaffold = pkgs.writeShellScriptBin "scaffold-profiles" ''
-              ${inputs'.hc-infra.packages.scaffold-remote-zome}/bin/scaffold-remote-zome profiles --integrity-zome-name profiles_integrity --coordinator-zome-name profiles --remote-zome-git-url github:holochain-open-dev/profiles --remote-npm-package-name @holochain-open-dev/profiles --remote-npm-package-path ./ui 
-            ''; 
+            packages.scaffold = pkgs.symlinkJoin {
+              name = "scaffold-remote-zome";
+              paths = [ inputs'.hc-infra.packages.scaffold-remote-zome ];
+              buildInputs = [ pkgs.makeWrapper ];
+              postBuild = ''
+                wrapProgram $out/bin/scaffold-remote-zome \
+                  --add-flags "profiles --integrity-zome-name profiles_integrity --coordinator-zome-name profiles --remote-zome-git-url github:holochain-open-dev/profiles/nixify --remote-npm-package-name @holochain-open-dev/profiles --remote-npm-package-path ui"
+              '';
+            };
           };
       };
 }
