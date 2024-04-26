@@ -56,7 +56,7 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
           class="row"
           style="flex: 1; justify-content: center; align-items: center"
         >
-          <sl-spinner style="font-size: 0.2rem"></sl-spinner>
+          <sl-spinner style="font-size: 2rem"></sl-spinner>
         </div>`;
       case "error":
         return html`<display-error

@@ -51,7 +51,7 @@ export class UpdateProfile extends SignalWatcher(LitElement) {
           class="column"
           style="align-items: center; justify-content: center; flex: 1;"
         >
-          <sl-spinner style="font-size: 0.2rem"></sl-spinner>
+          <sl-spinner style="font-size: 2rem"></sl-spinner>
         </div>`;
       case "completed":
         return html` <edit-profile
