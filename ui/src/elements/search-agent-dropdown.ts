@@ -14,6 +14,7 @@ import {
   Signal,
   SignalWatcher,
   toPromise,
+  joinAsyncMap,
 } from "@holochain-open-dev/signals";
 import { sharedStyles } from "@holochain-open-dev/elements";
 import { EntryRecord, HoloHashMap, slice } from "@holochain-open-dev/utils";
@@ -31,7 +32,6 @@ import "./profile-list-item-skeleton.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
-import { joinAsyncMap } from "../join.js";
 
 /**
  * @element search-agent-dropdown
