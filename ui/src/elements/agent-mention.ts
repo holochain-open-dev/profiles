@@ -5,8 +5,8 @@ import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
 import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { EntryRecord } from "@holochain-open-dev/utils";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@holochain-open-dev/elements/dist/elements/holo-identicon.js";
@@ -21,7 +21,7 @@ import { Profile } from "../types.js";
 
 @localized()
 @customElement("agent-mention")
-export class AgentMention extends LitElement {
+export class AgentMention extends SignalWatcher(LitElement) {
   /** Public properties */
 
   /**
@@ -45,23 +45,14 @@ export class AgentMention extends LitElement {
   @property()
   store!: ProfilesStore;
 
-  /**
-   * @internal
-   */
-  private _agentProfile = new StoreSubscriber(
-    this,
-    () => this.store.profiles.get(this.agentPubKey),
-    () => [this.agentPubKey, this.store]
-  );
-
   renderAvatar(profile: EntryRecord<Profile> | undefined) {
     if (!profile || !profile.entry.fields.avatar) {
       return html` <div
         style=${styleMap({
-        position: "relative",
-        height: `${this.size}px`,
-        width: `${this.size}px`,
-      })}
+          position: "relative",
+          height: `${this.size}px`,
+          width: `${this.size}px`,
+        })}
       >
         <holo-identicon
           .disableCopy=${true}
@@ -91,17 +82,18 @@ export class AgentMention extends LitElement {
   }
 
   renderContent() {
-    switch (this._agentProfile.value.status) {
+    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    switch (profile.status) {
       case "pending":
         return html`<sl-skeleton effect="pulse"></sl-skeleton>`;
-      case "complete":
-        return this.renderProfile(this._agentProfile.value.value);
+      case "completed":
+        return this.renderProfile(profile.value);
       case "error":
         return html`
           <display-error
             tooltip
             .headline=${msg("Error fetching the agent's avatar")}
-            .error=${this._agentProfile.value.error}
+            .error=${profile.error}
           ></display-error>
         `;
     }

@@ -1,19 +1,23 @@
-import { EntryRecord, LazyHoloHashMap } from "@holochain-open-dev/utils";
+import {
+  EntryRecord,
+  HashType,
+  LazyHoloHashMap,
+  retype,
+  slice,
+} from "@holochain-open-dev/utils";
 import { encode } from "@msgpack/msgpack";
 import {
-  AsyncReadable,
-  asyncReadable,
-  lazyLoad,
-  sliceAndJoin,
-  pipe,
-  uniquify,
-} from "@holochain-open-dev/stores";
+  Signal,
+  collectionSignal,
+  AsyncComputed,
+  joinAsyncMap,
+  AsyncState,
+} from "@holochain-open-dev/signals";
 import { AgentPubKey } from "@holochain/client";
 
 import { ProfilesClient } from "./profiles-client.js";
 import { Profile } from "./types.js";
 import { defaultConfig, ProfilesConfig } from "./config.js";
-import { areHashesArraysEqual } from "./utils.js";
 
 export class ProfilesStore {
   config: ProfilesConfig;
@@ -25,94 +29,91 @@ export class ProfilesStore {
     this.config = { ...defaultConfig, ...config };
   }
 
+  private agentsWithProfileLinks$ = collectionSignal(
+    this.client,
+    () => this.client.getAgentsWithProfile(),
+    "PathToAgent"
+  );
+
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile: AsyncReadable<AgentPubKey[]> = asyncReadable(
-    async (set) => {
-      let hashes: AgentPubKey[];
-      const fetch = async () => {
-        const nhashes = await this.client.getAgentsWithProfile();
-        if (hashes === undefined || !areHashesArraysEqual(nhashes, hashes)) {
-          hashes = uniquify(nhashes);
-          set(hashes);
-        }
-      };
-      await fetch();
-      const interval = setInterval(() => fetch(), 4000);
-      const unsubs = this.client.onSignal((signal) => {
-        if (signal.type === "LinkCreated") {
-          if ("AgentToProfile" in signal.link_type) {
-            hashes = uniquify([...hashes, this.client.client.myPubKey]);
-            set(hashes);
-          }
-        }
-      });
-      return () => {
-        clearInterval(interval);
-        unsubs();
-      };
-    }
-  );
+  agentsWithProfile$ = new AsyncComputed(() => {
+    const links = this.agentsWithProfileLinks$.get();
+    if (links.status !== "completed") return links;
+
+    const value = links.value.map((l) => retype(l.target, HashType.AGENT));
+    return {
+      status: "completed",
+      value,
+    };
+  });
 
   /**
    * Fetches the profiles for all agents in the DHT
    *
    * This will get slower as the number of agents in the DHT increases
    */
-  allProfiles = pipe(
-    this.agentsWithProfile,
-    (agents) =>
-      this.agentsProfiles(agents) as AsyncReadable<
-        ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
-      >
-  );
+  allProfiles$ = new AsyncComputed(() => {
+    const agentsWithProfile = this.agentsWithProfile$.get();
+    if (agentsWithProfile.status !== "completed") return agentsWithProfile;
+
+    const allProfiles = slice(this.profiles$, agentsWithProfile.value);
+    const value = joinAsyncMap(allProfiles);
+    return {
+      status: "completed",
+      value,
+    };
+  });
 
   /**
    * Fetches the profile for the given agent
    */
-  profiles = new LazyHoloHashMap((agent: AgentPubKey) =>
-    asyncReadable<EntryRecord<Profile> | undefined>(async (set) => {
-      const profile = await this.client.getAgentProfile(agent);
-      set(profile);
-
-      return this.client.onSignal((signal) => {
-        if (this.client.client.myPubKey.toString() !== agent.toString()) return;
-        if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
-          return;
-        const record = new EntryRecord<Profile>({
-          entry: {
-            Present: {
-              entry_type: "App",
-              entry: encode(signal.app_entry),
-            },
-          },
-          signed_action: signal.action,
-        });
-        set(record);
-      });
-    })
-  );
-
-  // Fetches your profile
-  myProfile = this.profiles.get(this.client.client.myPubKey);
-
-  // Fetches the profiles for the given agents
-  agentsProfiles(
-    agents: Array<AgentPubKey>
-  ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>> {
-    return sliceAndJoin(this.profiles, agents);
-  }
-
-  searchProfiles(
-    searchFilter: string
-  ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile>>> {
-    return pipe(
-      lazyLoad(async () => this.client.searchAgents(searchFilter)),
-      (agents) =>
-        this.agentsProfiles(agents) as AsyncReadable<
-          ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
-        >
+  profiles$ = new LazyHoloHashMap((agent: AgentPubKey) => {
+    let unsubscribe: (() => void) | undefined;
+    const signal = new AsyncState<EntryRecord<Profile> | undefined>(
+      { status: "pending" },
+      {
+        [Signal.subtle.watched]: async () => {
+          const value = await this.client.getAgentProfile(agent);
+          signal.set({
+            status: "completed",
+            value,
+          });
+          unsubscribe = this.client.onSignal((profilesSignal) => {
+            if (this.client.client.myPubKey.toString() !== agent.toString())
+              return;
+            if (
+              !(
+                profilesSignal.type === "EntryCreated" ||
+                profilesSignal.type === "EntryUpdated"
+              )
+            )
+              return;
+            const record = new EntryRecord<Profile>({
+              entry: {
+                Present: {
+                  entry_type: "App",
+                  entry: encode(profilesSignal.app_entry),
+                },
+              },
+              signed_action: profilesSignal.action,
+            });
+            signal.set({
+              status: "completed",
+              value: record,
+            });
+          });
+        },
+        [Signal.subtle.unwatched]: () => {
+          signal.set({ status: "pending" });
+          unsubscribe?.();
+        },
+      }
     );
-  }
+    return signal;
+  });
+
+  // Fetches the profile for the active agent
+  myProfile$ = this.profiles$.get(this.client.client.myPubKey);
 }

@@ -9,14 +9,14 @@ import {
   hashProperty,
   sharedStyles,
 } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
-import "@shoelace-style/shoelace/dist/components/input/input.js";
-import SlInput from "@shoelace-style/shoelace/dist/components/input/input";
+import SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
@@ -33,7 +33,10 @@ import { EntryRecord } from "@holochain-open-dev/utils";
  */
 @localized()
 @customElement("search-agent")
-export class SearchAgent extends LitElement implements FormField {
+export class SearchAgent
+  extends SignalWatcher(LitElement)
+  implements FormField
+{
   /** Form field properties */
 
   /**

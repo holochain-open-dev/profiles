@@ -1,12 +1,10 @@
-import {
-  EntryRecord,
-  ZomeClient,
-} from "@holochain-open-dev/utils";
+import { EntryRecord, ZomeClient } from "@holochain-open-dev/utils";
 import {
   AgentPubKey,
   Record,
   AppAgentClient,
   RoleName,
+  Link,
 } from "@holochain/client";
 import { Profile, ProfilesSignal } from "./types";
 
@@ -51,7 +49,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    *
    * @returns the agent public keys of all agents that have created a profile
    */
-  async getAgentsWithProfile(): Promise<AgentPubKey[]> {
+  async getAgentsWithProfile(): Promise<Link[]> {
     return this.callZome("get_agents_with_profile", null);
   }
 

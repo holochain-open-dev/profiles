@@ -170,7 +170,7 @@ fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
 
 /// Gets all the agents that have created a profile in this DHT.
 #[hdk_extern]
-pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
+pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<Link>> {
     let path = Path::from("all_profiles").typed(LinkTypes::PrefixPath)?;
 
     let children = path.children_paths()?;
@@ -192,15 +192,7 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
         .flatten()
         .collect::<Vec<Link>>();
 
-    let mut agents: Vec<AgentPubKey> = vec![];
-
-    for link in links {
-        if let Ok(pub_key) = AgentPubKey::try_from(link.target) {
-            agents.push(pub_key);
-        }
-    }
-
-    Ok(agents)
+    Ok(links)
 }
 
 /** Helpers*/

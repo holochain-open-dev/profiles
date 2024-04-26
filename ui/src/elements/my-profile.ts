@@ -2,6 +2,7 @@ import { consume } from "@lit/context";
 import { html, LitElement } from "lit";
 import { property, state, customElement } from "lit/decorators.js";
 import { sharedStyles, wrapPathInSvg } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 import { mdiPencil } from "@mdi/js";
 
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
@@ -16,7 +17,7 @@ import "./profile-detail.js";
  * @element my-profile
  */
 @customElement("my-profile")
-export class MyProfile extends LitElement {
+export class MyProfile extends SignalWatcher(LitElement) {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */

@@ -3,13 +3,14 @@ import { AgentPubKey } from "@holochain/client";
 import { localized } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 /**
  * @element agents-avatars
  */
 @localized()
 @customElement("agents-avatars")
-export class AgentsAvatars extends LitElement {
+export class AgentsAvatars extends SignalWatcher(LitElement) {
   @property()
   agents!: AgentPubKey[];
 

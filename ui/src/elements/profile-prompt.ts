@@ -2,13 +2,9 @@ import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit/context";
-import {
-  subscribe,
-} from "@holochain-open-dev/stores";
-import {
-  sharedStyles,
-  withSpinnerAndDisplayError,
-} from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
+import { sharedStyles } from "@holochain-open-dev/elements";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
@@ -18,7 +14,6 @@ import "./create-profile.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { Profile } from "../types.js";
-import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element profile-prompt
@@ -26,8 +21,7 @@ import { EntryRecord } from "@holochain-open-dev/utils";
  */
 @localized()
 @customElement("profile-prompt")
-export class ProfilePrompt extends LitElement {
-
+export class ProfilePrompt extends SignalWatcher(LitElement) {
   /**
    * Profiles store for this element, not required if you embed this element inside a `<profiles-context>`
    */
@@ -54,27 +48,33 @@ export class ProfilePrompt extends LitElement {
   }
 
   render() {
-    return html`${subscribe(
-      this.store.myProfile,
-      withSpinnerAndDisplayError({
-        complete: (p) => this.renderPrompt(p),
-        error: {
-          label: msg("Error fetching your profile"),
-          tooltip: false,
-        },
-      })
-    )}`;
+    const myProfile = this.store.myProfile$.get();
+
+    switch (myProfile.status) {
+      case "pending":
+        return html`<div
+          class="row"
+          style="flex: 1; justify-content: center; align-items: center"
+        >
+          <sl-spinner style="font-size: 0.2rem"></sl-spinner>
+        </div>`;
+      case "error":
+        return html`<display-error
+          .headline=${msg("Error fetching your profile.")}
+          .error=${myProfile.error}
+        ></display-error>`;
+      case "completed":
+        return this.renderPrompt(myProfile.value);
+    }
   }
 
-  static get styles() {
-    return [
-      sharedStyles,
-      css`
-        :host {
-          display: flex;
-          flex: 1;
-        }
-      `,
-    ];
-  }
+  static styles = [
+    sharedStyles,
+    css`
+      :host {
+        display: flex;
+        flex: 1;
+      }
+    `,
+  ];
 }

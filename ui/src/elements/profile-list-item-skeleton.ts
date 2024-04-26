@@ -1,6 +1,7 @@
 import { css, html, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { sharedStyles } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 
@@ -8,7 +9,7 @@ import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
  * @element profile-list-item-skeleton
  */
 @customElement("profile-list-item-skeleton")
-export class ProfileListItemSkeleton extends LitElement {
+export class ProfileListItemSkeleton extends SignalWatcher(LitElement) {
   render() {
     return html`<div class="row" style="align-items: center; width: 150px">
       <sl-skeleton

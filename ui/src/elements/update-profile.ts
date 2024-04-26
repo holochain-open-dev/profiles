@@ -2,8 +2,8 @@ import { html, css, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { sharedStyles } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/spinner/spinner.js";
@@ -20,22 +20,13 @@ import { Profile } from "../types.js";
  */
 @localized()
 @customElement("update-profile")
-export class UpdateProfile extends LitElement {
+export class UpdateProfile extends SignalWatcher(LitElement) {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
   @consume({ context: profilesStoreContext, subscribe: true })
   @property()
   store!: ProfilesStore;
-
-  /**
-   * @internal
-   */
-  private _myProfile = new StoreSubscriber(
-    this,
-    () => this.store.myProfile,
-    () => [this.store]
-  );
 
   async updateProfile(profile: Profile) {
     await this.store.client.updateProfile(profile);
@@ -52,19 +43,21 @@ export class UpdateProfile extends LitElement {
   }
 
   render() {
-    switch (this._myProfile.value.status) {
+    const myProfile = this.store.myProfile$.get();
+
+    switch (myProfile.status) {
       case "pending":
         return html`<div
           class="column"
           style="align-items: center; justify-content: center; flex: 1;"
         >
-          <sl-spinner></sl-spinner>
+          <sl-spinner style="font-size: 0.2rem"></sl-spinner>
         </div>`;
-      case "complete":
+      case "completed":
         return html` <edit-profile
           .allowCancel=${true}
           style="margin-top: 16px; flex: 1"
-          .profile=${this._myProfile.value.value}
+          .profile=${myProfile.value}
           .saveProfileLabel=${msg("Update Profile")}
           @save-profile=${(e: CustomEvent) =>
             this.updateProfile(e.detail.profile)}
@@ -72,7 +65,7 @@ export class UpdateProfile extends LitElement {
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching your profile")}
-          .error=${this._myProfile.value.error}
+          .error=${myProfile.error}
         ></display-error>`;
     }
   }

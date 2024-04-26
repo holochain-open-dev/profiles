@@ -3,6 +3,7 @@ import { property, customElement } from "lit/decorators.js";
 import { consume } from "@lit/context";
 import { localized, msg } from "@lit/localize";
 import { sharedStyles, notifyError } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@shoelace-style/shoelace/dist/components/alert/alert.js";
 import "@shoelace-style/shoelace/dist/components/card/card.js";
@@ -20,7 +21,7 @@ import { Profile } from "../types.js";
  */
 @localized()
 @customElement("create-profile")
-export class CreateProfile extends LitElement {
+export class CreateProfile extends SignalWatcher(LitElement) {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */

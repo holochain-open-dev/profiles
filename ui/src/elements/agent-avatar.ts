@@ -1,15 +1,12 @@
 import { consume } from "@lit/context";
-import {
-  hashProperty,
-  sharedStyles,
-} from "@holochain-open-dev/elements";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit/directives/style-map.js";
-import { AgentPubKey, } from "@holochain/client";
+import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { EntryRecord } from "@holochain-open-dev/utils";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@holochain-open-dev/elements/dist/elements/holo-identicon.js";
@@ -23,7 +20,7 @@ import { Profile } from "../types.js";
 
 @localized()
 @customElement("agent-avatar")
-export class AgentAvatar extends LitElement {
+export class AgentAvatar extends SignalWatcher(LitElement) {
   /** Public properties */
 
   /**
@@ -59,22 +56,13 @@ export class AgentAvatar extends LitElement {
   @property()
   store!: ProfilesStore;
 
-  /**
-   * @internal
-   */
-  private _agentProfile = new StoreSubscriber(
-    this,
-    () => this.store.profiles.get(this.agentPubKey),
-    () => [this.agentPubKey, this.store]
-  );
-
   renderIdenticon() {
     return html` <div
       style=${styleMap({
-      position: "relative",
-      height: `${this.size}px`,
-      width: `${this.size}px`,
-    })}
+        position: "relative",
+        height: `${this.size}px`,
+        width: `${this.size}px`,
+      })}
     >
       <holo-identicon
         .disableCopy=${this.disableCopy}
@@ -98,25 +86,25 @@ export class AgentAvatar extends LitElement {
     const contents = html`
       <div
         style=${styleMap({
-      cursor: this.disableCopy ? "" : "pointer",
-      position: "relative",
-      height: `${this.size}px`,
-      width: `${this.size}px`,
-    })}
+          cursor: this.disableCopy ? "" : "pointer",
+          position: "relative",
+          height: `${this.size}px`,
+          width: `${this.size}px`,
+        })}
       >
         <sl-avatar
           .image=${profile.entry.fields.avatar}
           style="--size: ${this.size}px;"
           @click=${() =>
-        this.dispatchEvent(
-          new CustomEvent("profile-clicked", {
-            composed: true,
-            bubbles: true,
-            detail: {
-              agentPubKey: this.agentPubKey,
-            },
-          })
-        )}
+            this.dispatchEvent(
+              new CustomEvent("profile-clicked", {
+                composed: true,
+                bubbles: true,
+                detail: {
+                  agentPubKey: this.agentPubKey,
+                },
+              })
+            )}
         >
         </sl-avatar>
         <div class="badge"><slot name="badge"></slot></div>
@@ -139,20 +127,23 @@ export class AgentAvatar extends LitElement {
   render() {
     if (this.store.config.avatarMode === "identicon")
       return this.renderIdenticon();
-    switch (this._agentProfile.value.status) {
+
+    const profile = this.store.profiles$.get(this.agentPubKey).get();
+
+    switch (profile.status) {
       case "pending":
         return html`<sl-skeleton
           effect="pulse"
           style="height: ${this.size}px; width: ${this.size}px"
         ></sl-skeleton>`;
-      case "complete":
-        return this.renderProfile(this._agentProfile.value.value);
+      case "completed":
+        return this.renderProfile(profile.value);
       case "error":
         return html`
           <display-error
             tooltip
             .headline=${msg("Error fetching the agent's avatar")}
-            .error=${this._agentProfile.value.error}
+            .error=${profile.error}
           ></display-error>
         `;
     }

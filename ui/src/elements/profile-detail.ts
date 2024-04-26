@@ -1,10 +1,10 @@
 import { consume } from "@lit/context";
 import { AgentPubKey } from "@holochain/client";
 import { html, LitElement } from "lit";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { customElement, property } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
@@ -20,7 +20,7 @@ import { EntryRecord } from "@holochain-open-dev/utils";
  */
 @localized()
 @customElement("profile-detail")
-export class ProfileDetail extends LitElement {
+export class ProfileDetail extends SignalWatcher(LitElement) {
   /** Public properties */
 
   /**
@@ -37,15 +37,6 @@ export class ProfileDetail extends LitElement {
   store!: ProfilesStore;
 
   /** Private properties */
-
-  /**
-   * @internal
-   */
-  private _agentProfile = new StoreSubscriber(
-    this,
-    () => this.store.profiles.get(this.agentPubKey),
-    () => [this.agentPubKey, this.store]
-  );
 
   getAdditionalFields(profile: Profile): Record<string, string> {
     const fields: Record<string, string> = {};
@@ -106,7 +97,8 @@ export class ProfileDetail extends LitElement {
   }
 
   render() {
-    switch (this._agentProfile.value.status) {
+    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    switch (profile.status) {
       case "pending":
         return html`
           <div class="column">
@@ -133,12 +125,12 @@ export class ProfileDetail extends LitElement {
             )}
           </div>
         `;
-      case "complete":
-        return this.renderProfile(this._agentProfile.value.value);
+      case "completed":
+        return this.renderProfile(profile.value);
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching the profile")}
-          .error=${this._agentProfile.value.error}
+          .error=${profile.error}
         ></display-error>`;
     }
   }

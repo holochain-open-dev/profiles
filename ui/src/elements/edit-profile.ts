@@ -4,6 +4,7 @@ import { localized, msg, str } from "@lit/localize";
 import { consume } from "@lit/context";
 import { onSubmit, sharedStyles } from "@holochain-open-dev/elements";
 import { EntryRecord } from "@holochain-open-dev/utils";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@shoelace-style/shoelace/dist/components/avatar/avatar.js";
 import "@shoelace-style/shoelace/dist/components/button/button.js";
@@ -22,7 +23,7 @@ import { FieldConfig } from "../config.js";
  */
 @localized()
 @customElement("edit-profile")
-export class EditProfile extends LitElement {
+export class EditProfile extends SignalWatcher(LitElement) {
   /**
    * The profile to be edited.
    */

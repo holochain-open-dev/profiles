@@ -16,9 +16,8 @@ import { keymap } from "prosemirror-keymap";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import "./search-agent-dropdown.js";
-import "./agent-mention.js";
 import { SearchAgentDropdown } from "./search-agent-dropdown.js";
+import "./agent-mention.js";
 
 export const agentMentionSpec: NodeSpec = {
   attrs: { agentPubKey: {} },

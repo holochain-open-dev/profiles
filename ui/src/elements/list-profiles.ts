@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { AgentPubKey } from "@holochain/client";
 import { consume } from "@lit/context";
 import { sharedStyles } from "@holochain-open-dev/elements";
-import { StoreSubscriber } from "@holochain-open-dev/stores";
 import { localized, msg } from "@lit/localize";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "./agent-avatar.js";
@@ -21,7 +21,7 @@ import { EntryRecord } from "@holochain-open-dev/utils";
  */
 @localized()
 @customElement("list-profiles")
-export class ListProfiles extends LitElement {
+export class ListProfiles extends SignalWatcher(LitElement) {
   /**
    * Profiles store for this element, not required if you embed this element inside a <profiles-context>
    */
@@ -30,15 +30,6 @@ export class ListProfiles extends LitElement {
   store!: ProfilesStore;
 
   /** Private properties */
-
-  /**
-   * @internal
-   */
-  private _allProfiles = new StoreSubscriber(
-    this,
-    () => this.store.allProfiles,
-    () => [this.store]
-  );
 
   initials(nickname: string): string {
     return nickname
@@ -85,7 +76,9 @@ export class ListProfiles extends LitElement {
   }
 
   render() {
-    switch (this._allProfiles.value.status) {
+    const allProfiles = this.store.allProfiles$.get();
+
+    switch (allProfiles.status) {
       case "pending":
         return html`<div class="column center-content">
           <profile-list-item-skeleton> </profile-list-item-skeleton>
@@ -95,10 +88,10 @@ export class ListProfiles extends LitElement {
       case "error":
         return html`<display-error
           .headline=${msg("Error fetching the profiles for all agents")}
-          .error=${this._allProfiles.value.error}
+          .error=${allProfiles.error}
         ></display-error>`;
-      case "complete":
-        return this.renderList(this._allProfiles.value.value);
+      case "completed":
+        return this.renderList(allProfiles.value);
     }
   }
 

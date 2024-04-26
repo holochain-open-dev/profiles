@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { SignalWatcher } from "@holochain-open-dev/signals";
 
 import "@shoelace-style/shoelace/dist/components/icon-button/icon-button.js";
 import {
@@ -21,7 +22,10 @@ import "./search-agent.js";
  */
 @localized()
 @customElement("search-agents")
-export class SearchAgents extends LitElement implements FormField {
+export class SearchAgents
+  extends SignalWatcher(LitElement)
+  implements FormField
+{
   /** Form field properties */
 
   /**

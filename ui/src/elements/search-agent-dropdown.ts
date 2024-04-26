@@ -9,28 +9,29 @@ import {
   encodeHashToBase64,
 } from "@holochain/client";
 import {
-  AsyncStatus,
-  completed,
-  StoreSubscriber,
+  AsyncComputed,
+  fromPromise,
+  Signal,
+  SignalWatcher,
   toPromise,
-} from "@holochain-open-dev/stores";
+} from "@holochain-open-dev/signals";
+import { sharedStyles } from "@holochain-open-dev/elements";
+import { EntryRecord, HoloHashMap, slice } from "@holochain-open-dev/utils";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
 import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
-import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
-import "@shoelace-style/shoelace/dist/components/input/input.js";
 import SlDropdown from "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
+import "@shoelace-style/shoelace/dist/components/input/input.js";
 
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import { sharedStyles } from "@holochain-open-dev/elements";
-import { EntryRecord } from "@holochain-open-dev/utils";
 import { Profile } from "../types.js";
+import { joinAsyncMap } from "../join.js";
 
 /**
  * @element search-agent-dropdown
@@ -38,11 +39,17 @@ import { Profile } from "../types.js";
  */
 @localized()
 @customElement("search-agent-dropdown")
-export class SearchAgentDropdown extends LitElement {
+export class SearchAgentDropdown extends SignalWatcher(LitElement) {
   /** Public attributes */
 
-  @property()
-  searchFilter: string | undefined;
+  set searchFilter(sf: string | undefined) {
+    this.searchFilter$.set(sf);
+  }
+  get searchFilter() {
+    return this.searchFilter$.get();
+  }
+
+  searchFilter$ = new Signal.State<string | undefined>(undefined);
 
   @property()
   open: boolean | undefined;
@@ -64,16 +71,25 @@ export class SearchAgentDropdown extends LitElement {
   /**
    * @internal
    */
-  private _searchProfiles = new StoreSubscriber<
-    AsyncStatus<ReadonlyMap<AgentPubKey, EntryRecord<Profile>> | undefined>
-  >(
-    this,
-    () =>
-      this.searchFilter && this.searchFilter.length >= 3
-        ? this.store.searchProfiles(this.searchFilter)
-        : completed(undefined),
-    () => [this.searchFilter]
-  );
+  _searchProfiles$ = new AsyncComputed(() => {
+    const filter = this.searchFilter$.get();
+    if (!filter || filter.length < 3)
+      return {
+        status: "completed",
+        value: new HoloHashMap() as ReadonlyMap<
+          AgentPubKey,
+          EntryRecord<Profile> | undefined
+        >,
+      };
+
+    const agents = fromPromise(() =>
+      this.store.client.searchAgents(filter)
+    ).get();
+    if (agents.status !== "completed") return agents;
+
+    const profiles = slice(this.store.profiles$, agents.value);
+    return joinAsyncMap(profiles).get();
+  });
 
   /**
    * @internal
@@ -82,7 +98,7 @@ export class SearchAgentDropdown extends LitElement {
   public dropdown!: SlDropdown;
 
   async onUsernameSelected(agentPubKey: AgentPubKey) {
-    const profile = await toPromise(this.store.profiles.get(agentPubKey));
+    const profile = await toPromise(this.store.profiles$.get(agentPubKey));
     this.dispatchEvent(
       new CustomEvent("agent-selected", {
         detail: {
@@ -96,11 +112,14 @@ export class SearchAgentDropdown extends LitElement {
   }
 
   renderAgentList() {
-    if (!this._searchProfiles.value)
+    if (!this.searchFilter || this.searchFilter.length < 3)
       return html`<sl-menu-item disabled
         >${msg("Enter at least 3 chars to search...")}</sl-menu-item
       >`;
-    switch (this._searchProfiles.value.status) {
+
+    const searchResult = this._searchProfiles$.get();
+
+    switch (searchResult.status) {
       case "pending":
         return Array(3).map(
           () => html`
@@ -123,15 +142,11 @@ export class SearchAgentDropdown extends LitElement {
             style="flex: 1; display:flex"
             tooltip
             .headline=${msg("Error searching agents")}
-            .error=${this._searchProfiles.value.error}
+            .error=${searchResult.error}
           ></display-error>
         `;
-      case "complete": {
-        if (!this._searchProfiles.value.value)
-          return html`<sl-menu-item disabled
-            >${msg("Enter at least 3 chars to search...")}</sl-menu-item
-          >`;
-        let agents = Array.from(this._searchProfiles.value.value.entries());
+      case "completed": {
+        let agents = Array.from(searchResult.value.entries());
 
         if (!this.includeMyself) {
           agents = agents.filter(
@@ -154,7 +169,7 @@ export class SearchAgentDropdown extends LitElement {
                   .agentPubKey=${pubkey}
                   style="margin-right: 16px"
                 ></agent-avatar>
-                ${profile.entry.nickname}
+                ${profile?.entry.nickname}
               </sl-menu-item>
             `
           )}
