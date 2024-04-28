@@ -87,7 +87,7 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
     ).get();
     if (agents.status !== "completed") return agents;
 
-    const profiles = slice(this.store.profiles$, agents.value);
+    const profiles = slice(this.store.profiles, agents.value);
     return joinAsyncMap(profiles).get();
   });
 
@@ -98,7 +98,7 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
   public dropdown!: SlDropdown;
 
   async onUsernameSelected(agentPubKey: AgentPubKey) {
-    const profile = await toPromise(this.store.profiles$.get(agentPubKey));
+    const profile = await toPromise(this.store.profiles.get(agentPubKey));
     this.dispatchEvent(
       new CustomEvent("agent-selected", {
         detail: {

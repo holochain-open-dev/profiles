@@ -82,7 +82,7 @@ export class AgentMention extends SignalWatcher(LitElement) {
   }
 
   renderContent() {
-    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    const profile = this.store.profiles.get(this.agentPubKey).get();
     switch (profile.status) {
       case "pending":
         return html`<sl-skeleton effect="pulse"></sl-skeleton>`;

@@ -25,7 +25,7 @@ const config = {
 const store = new ProfilesStore(new ProfilesClient(appAgentClient, 'my-role-name'), config);
 ```
 
-> Learn how to setup the `AppAgentClient` object [here](https://www.npmjs.com/package/@holochain/client).
+> Learn how to setup the `AppClient` object [here](https://www.npmjs.com/package/@holochain/client).
 
 The config for the `ProfilesStore` has these options:
 

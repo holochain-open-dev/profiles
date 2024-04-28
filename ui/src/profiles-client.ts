@@ -2,7 +2,7 @@ import { EntryRecord, ZomeClient } from "@holochain-open-dev/utils";
 import {
   AgentPubKey,
   Record,
-  AppAgentClient,
+  AppClient,
   RoleName,
   Link,
 } from "@holochain/client";
@@ -10,7 +10,7 @@ import { Profile, ProfilesSignal } from "./types";
 
 export class ProfilesClient extends ZomeClient<ProfilesSignal> {
   constructor(
-    public client: AppAgentClient,
+    public client: AppClient,
     public roleName: RoleName,
     public zomeName = "profiles"
   ) {

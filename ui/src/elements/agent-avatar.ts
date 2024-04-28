@@ -128,7 +128,7 @@ export class AgentAvatar extends SignalWatcher(LitElement) {
     if (this.store.config.avatarMode === "identicon")
       return this.renderIdenticon();
 
-    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    const profile = this.store.profiles.get(this.agentPubKey).get();
 
     switch (profile.status) {
       case "pending":

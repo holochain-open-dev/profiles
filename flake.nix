@@ -10,7 +10,7 @@
       url = "github:holochain/holochain";
       inputs.versions.follows = "versions";
     };
-    hc-infra.url = "github:holochain-open-dev/infrastructure/0.300.0-dev";
+    hc-infra.url = "github:holochain-open-dev/infrastructure";
   };
 
   nixConfig = {

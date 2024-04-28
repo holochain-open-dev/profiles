@@ -31,7 +31,7 @@ export class ProfileListItem extends SignalWatcher(LitElement) {
   store!: ProfilesStore;
 
   render() {
-    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    const profile = this.store.profiles.get(this.agentPubKey).get();
     switch (profile.status) {
       case "pending":
         return html`<profile-list-item-skeleton></profile-list-item-skeleton>`;

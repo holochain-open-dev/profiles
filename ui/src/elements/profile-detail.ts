@@ -97,7 +97,7 @@ export class ProfileDetail extends SignalWatcher(LitElement) {
   }
 
   render() {
-    const profile = this.store.profiles$.get(this.agentPubKey).get();
+    const profile = this.store.profiles.get(this.agentPubKey).get();
     switch (profile.status) {
       case "pending":
         return html`

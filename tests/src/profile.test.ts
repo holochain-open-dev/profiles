@@ -15,7 +15,7 @@ test("create Profile", async () => {
     let agentsWithProfile = await toPromise(alice.store.agentsWithProfile$);
     assert.equal(agentsWithProfile.length, 0);
     watch(alice.store.agentsWithProfile$, () => {}); // store keepalive
-    let myProfile = await toPromise(alice.store.myProfile);
+    let myProfile = await toPromise(alice.store.myProfile$);
     watch(alice.store.myProfile$, () => {}); // store keepalive
     assert.notOk(myProfile);
 

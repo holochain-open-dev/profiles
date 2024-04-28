@@ -10,7 +10,7 @@ import {
 import {
   decodeHashFromBase64,
   AgentPubKey,
-  AppAgentClient,
+  AppClient,
   Record,
 } from "@holochain/client";
 import { ProfilesClient } from "./profiles-client";
@@ -53,7 +53,7 @@ export async function demoProfiles(): Promise<AgentPubKeyMap<Record>> {
   return map;
 }
 
-export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
+export class ProfilesZomeMock extends ZomeMock implements AppClient {
   constructor(
     public agentsProfiles: AgentPubKeyMap<Record>,
     myPubKey?: AgentPubKey
@@ -68,15 +68,14 @@ export class ProfilesZomeMock extends ZomeMock implements AppAgentClient {
     );
     this.agentsProfiles.set(this.myPubKey, record);
     setTimeout(() => {
-      console.log('hey');
+      console.log("hey");
       this.emitSignal({
         type: "EntryCreated",
         app_entry: {
           Profile: profile,
         },
-      })
-    }
-    );
+      });
+    });
     return record;
   }
 

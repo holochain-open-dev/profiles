@@ -1,3 +1,4 @@
+import { AppClient } from "@holochain/client";
 import { Scenario } from "@holochain/tryorama";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -21,11 +22,11 @@ export async function setup(scenario: Scenario) {
   await scenario.shareAllAgents();
 
   const aliceStore = new ProfilesStore(
-    new ProfilesClient(alice.appAgentWs as any, "profiles-test", "profiles")
+    new ProfilesClient(alice.appWs as AppClient, "profiles-test", "profiles")
   );
 
   const bobStore = new ProfilesStore(
-    new ProfilesClient(bob.appAgentWs as any, "profiles-test", "profiles")
+    new ProfilesClient(bob.appWs as AppClient, "profiles-test", "profiles")
   );
 
   // Shortcut peer discovery through gossip and register all agents in every

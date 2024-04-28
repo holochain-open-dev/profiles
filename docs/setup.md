@@ -180,14 +180,14 @@ pnpm install github:holochain-open-dev/profiles/main?path:ui
 >pnpm -F ui install @holochain-open-dev/profiles
 >```
 
-5. Connect to Holochain with the `AppAgentClient`, and create the `ProfilesStore` with it:
+5. Connect to Holochain with the `AppClient`, and create the `ProfilesStore` with it:
 
 ```js
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
-import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
+import { AppWebsocket, AppWebsocket } from "@holochain/client";
 
 async function setupProfilesStore() {
-  const client = await AppAgentWebsocket.connect('MY_APP_ID');
+  const client = await AppWebsocket.connect('MY_APP_ID');
 
   // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
   const profilesStore = new ProfilesStore(new ProfilesClient(client, '<MY_CELL_ROLE>'), {

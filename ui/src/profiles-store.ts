@@ -12,6 +12,7 @@ import {
   AsyncComputed,
   joinAsyncMap,
   AsyncState,
+  mapCompleted,
 } from "@holochain-open-dev/signals";
 import { AgentPubKey } from "@holochain/client";
 
@@ -29,25 +30,17 @@ export class ProfilesStore {
     this.config = { ...defaultConfig, ...config };
   }
 
-  private agentsWithProfileLinks$ = collectionSignal(
-    this.client,
-    () => this.client.getAgentsWithProfile(),
-    "PathToAgent"
-  );
-
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile$ = new AsyncComputed(() => {
-    const links = this.agentsWithProfileLinks$.get();
-    if (links.status !== "completed") return links;
-
-    const value = links.value.map((l) => retype(l.target, HashType.AGENT));
-    return {
-      status: "completed",
-      value,
-    };
-  });
+  agentsWithProfile$ = mapCompleted(
+    collectionSignal(
+      this.client,
+      () => this.client.getAgentsWithProfile(),
+      "PathToAgent"
+    ),
+    (links) => links.map((l) => retype(l.target, HashType.AGENT))
+  );
 
   /**
    * Fetches the profiles for all agents in the DHT
@@ -58,18 +51,14 @@ export class ProfilesStore {
     const agentsWithProfile = this.agentsWithProfile$.get();
     if (agentsWithProfile.status !== "completed") return agentsWithProfile;
 
-    const allProfiles = slice(this.profiles$, agentsWithProfile.value);
-    const value = joinAsyncMap(allProfiles);
-    return {
-      status: "completed",
-      value,
-    };
+    const allProfiles = slice(this.profiles, agentsWithProfile.value);
+    return joinAsyncMap(allProfiles).get();
   });
 
   /**
    * Fetches the profile for the given agent
    */
-  profiles$ = new LazyHoloHashMap((agent: AgentPubKey) => {
+  profiles = new LazyHoloHashMap((agent: AgentPubKey) => {
     let unsubscribe: (() => void) | undefined;
     const signal = new AsyncState<EntryRecord<Profile> | undefined>(
       { status: "pending" },
@@ -115,5 +104,5 @@ export class ProfilesStore {
   });
 
   // Fetches the profile for the active agent
-  myProfile$ = this.profiles$.get(this.client.client.myPubKey);
+  myProfile$ = this.profiles.get(this.client.client.myPubKey);
 }
