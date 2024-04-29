@@ -32,7 +32,7 @@ test("create Profile", async () => {
     assert.equal(agentsWithProfile.length, 1);
 
     const profileStatus = alice.store.myProfile$.get();
-    assert.equal(profileStatus.status, "complete");
+    assert.equal(profileStatus.status, "completed");
     assert.ok((profileStatus as any).value);
   });
 });

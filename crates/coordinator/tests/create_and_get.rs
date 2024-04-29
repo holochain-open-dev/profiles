@@ -2,7 +2,6 @@ use std::collections::BTreeMap;
 
 use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
-use holochain::test_utils::consistency_10s;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
 
 #[tokio::test(flavor = "multi_thread")]
@@ -41,7 +40,7 @@ async fn create_and_get() {
         .call(&alice_zome, "create_profile", profile)
         .await;
 
-    consistency_10s([&alice, &bobbo]).await;
+    await_consistency(30, [&alice, &bobbo]).await.unwrap();
 
     let record_2: Option<Record> = conductors[0]
         .call(&alice_zome, "get_agent_profile", alice_pub_key)
@@ -65,7 +64,7 @@ async fn create_and_get() {
         .call(&alice_zome, "update_profile", profile.clone())
         .await;
 
-    consistency_10s([&alice, &bobbo]).await;
+    await_consistency(30, [&alice, &bobbo]).await.unwrap();
 
     // ---> get it over the DHT though get_agent_profile()
     let alices_profile: Option<Record> = conductors[1]
@@ -111,7 +110,7 @@ async fn create_and_get() {
         )
         .await;
 
-    let all_agents: Vec<AgentPubKey> = conductors[1]
+    let all_agents: Vec<Link> = conductors[1]
         .call(&bob_zome, "get_agents_with_profile", ())
         .await;
 
