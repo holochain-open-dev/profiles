@@ -46,26 +46,30 @@
         }
 
         async firstUpdated() {
-          const client = await AppWebsocket.connect("test-app");
+          try {
+            const client = await AppWebsocket.connect();
 
-          const service = new ProfilesClient(client, "profiles-test");
+            const service = new ProfilesClient(client, "profiles-test");
 
-          this.store = new ProfilesStore(service, {
-            avatarMode: "avatar-required",
-            additionalFields: [
-              {
-                name: "location",
-                label: "Location",
-                required: true,
-              },
-              {
-                name: "bio",
-                label: "Bio",
-                required: false,
-              },
-            ],
-          });
-          this.loaded = true;
+            this.store = new ProfilesStore(service, {
+              avatarMode: "avatar-required",
+              additionalFields: [
+                {
+                  name: "location",
+                  label: "Location",
+                  required: true,
+                },
+                {
+                  name: "bio",
+                  label: "Bio",
+                  required: false,
+                },
+              ],
+            });
+            this.loaded = true;
+          } catch (e) {
+            console.error(e);
+          }
         }
 
         onSubmit(f) {

@@ -9,10 +9,7 @@ jobs:
   testbuild:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Extend space
-        uses: ./.github/actions/extend-space
+      - uses: actions/checkout@v3
 
       - name: Install nix
         uses: cachix/install-nix-action@v25

@@ -1,6 +1,6 @@
 # ProfilesStore
 
-The `ProfilesStore` is a typescript class that contains `svelte` stores, to which you can subscribe to get reactive updates in your elements.
+The `ProfilesStore` is a typescript class that contains [`async-signals`](https://npmjs.com/packages/async-signals), which you can watch to get reactive updates in your elements.
 
 ```js
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
@@ -22,7 +22,7 @@ const config = {
     }
   ], 
 };
-const store = new ProfilesStore(new ProfilesClient(appAgentClient, 'my-role-name'), config);
+const store = new ProfilesStore(new ProfilesClient(appClient, 'my-role-name'), config);
 ```
 
 > Learn how to setup the `AppClient` object [here](https://www.npmjs.com/package/@holochain/client).
