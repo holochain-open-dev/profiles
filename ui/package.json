@@ -18,7 +18,7 @@
 	"files": ["dist", "README.md", "src", "locales"],
 	"scripts": {
 		"start": "vite --clearScreen false --port $UI_PORT",
-		"build": "npm run lint && tsc && npm run localize:build",
+		"build": "tsc && npm run localize:build",
 		"lint": "eslint src",
 		"analyze": "cem analyze --litelement --exclude dist",
 		"format": "eslint src --fix",
