@@ -16,18 +16,16 @@
   },
   "devDependencies": {
     "@holochain-playground/cli": "^0.1.0",
-    "@storybook/addon-essentials": "^7.5.3",
-    "@storybook/addon-links": "^7.5.3",
-    "@storybook/blocks": "^7.5.3",
-    "@storybook/web-components": "^7.5.3",
-    "@storybook/web-components-webpack5": "^7.5.3",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@eslint/js": "^8.0.0",
     "concurrently": "^6.2.1",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
     "gh-pages": "^3.2.3",
-    "lit-html": "^2.6.1",
     "new-port-cli": "^1.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "storybook": "^7.0.0-beta.33"
+    "prettier": "^3.2.5",
+    "typescript-eslint": "^7.7.0",
+    "typescript": "^5.4.5"
   },
   "type": "module"
 }

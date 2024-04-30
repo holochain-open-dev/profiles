@@ -8,7 +8,7 @@
     "@msgpack/msgpack": "^2.8.0",
     "@holochain/client": "^0.17.0-dev.12",
     "@holochain/tryorama": "^0.16.0-dev.6",
-    "@holochain-open-dev/signals": "^0.300.0-dev.5",
+    "@holochain-open-dev/signals": "^0.300.0-dev.7",
     "@holochain-open-dev/utils": "^0.300.0-dev.2",
     "typescript": "^4.9.4",
     "vitest": "^1.4.0"
