@@ -2,7 +2,6 @@ use std::collections::BTreeMap;
 
 use hc_zome_profiles_integrity::*;
 use holochain::prelude::{AgentPubKey, Record};
-use holochain::test_utils::consistency_10s;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
 
 #[tokio::test(flavor = "multi_thread")]
@@ -42,7 +41,7 @@ async fn create_and_get() {
         )
         .await;
 
-    consistency_10s([&alice, &bobbo]).await;
+    let _result = await_consistency(10000,[&alice, &bobbo]).await;
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
         .call(&bob_zome, "search_agents", String::from("ali"))

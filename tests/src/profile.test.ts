@@ -25,7 +25,6 @@ test("create Profile", async () => {
         await sampleProfile(alice.store.client)
       );
     assert.ok(profile);
-
     await pause(1000); // Difference in time between the create the processing of the signal
 
     agentsWithProfile = await toPromise(alice.store.agentsWithProfile);

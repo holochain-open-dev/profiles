@@ -62,7 +62,7 @@ export class ProfilesStore {
       const interval = setInterval(() => fetch(), 4000);
       const unsubs = this.client.onSignal((signal) => {
         if (signal.type === "LinkCreated") {
-          if ("AgentToProfile" in signal.link_type) {
+          if ("AgentToProfile" === signal.link_type) {
             hashes = uniquify([...hashes, this.client.client.myPubKey]);
             set(hashes);
           }
