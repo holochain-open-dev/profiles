@@ -4,8 +4,8 @@ import {
 	AsyncComputed,
 	Signal,
 	SignalWatcher,
-	fromPromise,
 	joinAsyncMap,
+	pipe,
 	toPromise,
 } from '@holochain-open-dev/signals';
 import {
@@ -74,25 +74,14 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	/**
 	 * @internal
 	 */
-	_searchProfiles$ = new AsyncComputed(() => {
-		const filter = this.searchFilter$.get();
-		if (!filter || filter.length < 3)
-			return {
-				status: 'completed',
-				value: new HoloHashMap() as ReadonlyMap<
-					AgentPubKey,
-					EntryRecord<Profile> | undefined
-				>,
-			};
-
-		const agents = fromPromise(() =>
-			this.store.client.searchAgents(filter),
-		).get();
-		if (agents.status !== 'completed') return agents;
-
-		const profiles = slice(this.store.profiles, agents.value);
-		return joinAsyncMap(mapValues(profiles, p => p.get()));
-	});
+	_searchProfiles$ = pipe(
+		this.searchFilter$,
+		filter => this.store.client.searchAgents(filter!),
+		agents => {
+			const profiles = slice(this.store.profiles, agents);
+			return joinAsyncMap(mapValues(profiles, p => p.get()));
+		},
+	);
 
 	/**
 	 * @internal

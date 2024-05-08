@@ -1,31 +1,30 @@
 {
-  "name": "@holochain-open-dev/profiles-dev",
-  "private": true,
-  "workspaces": ["ui", "tests", "docs"],
-  "scripts": {
-    "start": "AGENTS=2 npm run network",
-    "network": "hc s clean && npm run build:happ && BOOTSTRAP_PORT=$(port) SIGNAL_PORT=$(port) UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run local-services\" \"npm run launch\" \"holochain-playground\"",
-    "test": "npm run build:happ && nix flake check -L && npm test -w tests",
-    "launch": "echo pass | RUST_LOG=warn hc launch --piped -n $AGENTS workdir/profiles-test.happ --ui-port $UI_PORT network --bootstrap http://127.0.0.1:$BOOTSTRAP_PORT webrtc ws://127.0.0.1:$SIGNAL_PORT",
-    "local-services": "hc run-local-services --bootstrap-port $BOOTSTRAP_PORT --signal-port $SIGNAL_PORT",
-    "build:happ": "npm run build:zome && hc app pack workdir --recursive",
-    "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
-    "docs:start": "npm run docs:setup && storybook dev -p 6006",
-    "docs:publish": "npm run docs:setup && storybook build && gh-pages -d ./storybook-static -b gh-pages",
-    "docs:setup": "npm run build -w @holochain-open-dev/profiles && npm run analyze -w @holochain-open-dev/profiles"
-  },
-  "devDependencies": {
-    "@holochain-playground/cli": "^0.1.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@eslint/js": "^8.0.0",
-    "concurrently": "^6.2.1",
-    "eslint": "^8.0.0",
-    "eslint-config-prettier": "^9.1.0",
-    "gh-pages": "^3.2.3",
-    "new-port-cli": "^1.0.0",
-    "prettier": "^3.2.5",
-    "typescript-eslint": "^7.7.0",
-    "typescript": "^5.4.5"
-  },
-  "type": "module"
+	"name": "@holochain-open-dev/profiles-dev",
+	"private": true,
+	"workspaces": ["ui", "tests", "docs"],
+	"scripts": {
+		"start": "AGENTS=2 npm run network",
+		"network": "hc s clean && npm run build:happ && BOOTSTRAP_PORT=$(port) SIGNAL_PORT=$(port) UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run local-services\" \"npm run launch\" \"holochain-playground\"",
+		"test": "npm run build:happ && nix flake check -L && npm test -w tests",
+		"launch": "echo pass | RUST_LOG=warn hc launch --piped -n $AGENTS workdir/profiles-test.happ --ui-port $UI_PORT network --bootstrap http://127.0.0.1:$BOOTSTRAP_PORT webrtc ws://127.0.0.1:$SIGNAL_PORT",
+		"local-services": "hc run-local-services --bootstrap-port $BOOTSTRAP_PORT --signal-port $SIGNAL_PORT",
+		"build:happ": "npm run build:zome && hc app pack workdir --recursive",
+		"build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
+		"docs:start": "npm run docs:setup && storybook dev -p 6006",
+		"docs:publish": "npm run docs:setup && storybook build && gh-pages -d ./storybook-static -b gh-pages",
+		"docs:setup": "npm run build -w @holochain-open-dev/profiles && npm run analyze -w @holochain-open-dev/profiles"
+	},
+	"devDependencies": {
+		"@holochain-playground/cli": "^0.1.0",
+		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
+		"@eslint/js": "^8.0.0",
+		"concurrently": "^6.2.1",
+		"eslint": "^8.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"new-port-cli": "^1.0.0",
+		"prettier": "^3.2.5",
+		"typescript-eslint": "^7.7.0",
+		"typescript": "^5.4.5"
+	},
+	"type": "module"
 }

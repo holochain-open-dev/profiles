@@ -1,137 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-GB">
-  <head>
-    <meta charset="utf-8" />
-    <style>
-      body {
-        background: black;
-        font-family: Arial, Helvetica, sans-serif;
-      }
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-      }
-    </style>
-  </head>
-  <body class="sl-theme-dark">
-    <profiles-test style="height: 100%; display: flex"></profiles-test>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+			body {
+				background: black;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body class="sl-theme-dark">
+		<profiles-test style="height: 100%; display: flex"></profiles-test>
 
-    <script type="module">
-      import "@shoelace-style/shoelace/dist/themes/dark.css";
+		<script type="module">
+			import { onSubmit } from '@holochain-open-dev/elements';
+			import { AppWebsocket } from '@holochain/client';
+			import '@shoelace-style/shoelace/dist/themes/dark.css';
+			import { LitElement, html } from 'lit';
 
-      import { AppWebsocket } from "@holochain/client";
-      import { LitElement, html } from "lit";
-      import { ProfilesStore, ProfilesClient } from "../src/index.ts";
+			import '../src/elements/agent-avatar.ts';
+			import '../src/elements/agent-mention.ts';
+			import '../src/elements/list-profiles.ts';
+			import '../src/elements/my-profile.ts';
+			import '../src/elements/profile-prompt.ts';
+			import '../src/elements/profiles-context.ts';
+			import '../src/elements/search-agent.ts';
+			import '../src/elements/search-agents.ts';
+			import '../src/elements/textarea-with-mentions.ts';
+			import { ProfilesClient, ProfilesStore } from '../src/index.ts';
 
-      import { onSubmit } from "@holochain-open-dev/elements";
-      import "../src/elements/profiles-context.ts";
-      import "../src/elements/profile-prompt.ts";
-      import "../src/elements/agent-avatar.ts";
-      import "../src/elements/agent-mention.ts";
-      import "../src/elements/my-profile.ts";
-      import "../src/elements/list-profiles.ts";
-      import "../src/elements/search-agent.ts";
-      import "../src/elements/search-agents.ts";
-      import "../src/elements/textarea-with-mentions.ts";
+			class ProfilesTest extends LitElement {
+				static get properties() {
+					return {
+						loaded: {
+							type: Boolean,
+						},
+					};
+				}
 
-      class ProfilesTest extends LitElement {
-        static get properties() {
-          return {
-            loaded: {
-              type: Boolean,
-            },
-          };
-        }
+				async firstUpdated() {
+					try {
+						const client = await AppWebsocket.connect();
 
-        async firstUpdated() {
-          try {
-            const client = await AppWebsocket.connect();
+						const service = new ProfilesClient(client, 'profiles-test');
 
-            const service = new ProfilesClient(client, "profiles-test");
+						this.store = new ProfilesStore(service, {
+							avatarMode: 'avatar-required',
+							additionalFields: [
+								{
+									name: 'location',
+									label: 'Location',
+									required: true,
+								},
+								{
+									name: 'bio',
+									label: 'Bio',
+									required: false,
+								},
+							],
+						});
+						this.loaded = true;
+					} catch (e) {
+						console.error(e);
+					}
+				}
 
-            this.store = new ProfilesStore(service, {
-              avatarMode: "avatar-required",
-              additionalFields: [
-                {
-                  name: "location",
-                  label: "Location",
-                  required: true,
-                },
-                {
-                  name: "bio",
-                  label: "Bio",
-                  required: false,
-                },
-              ],
-            });
-            this.loaded = true;
-          } catch (e) {
-            console.error(e);
-          }
-        }
+				onSubmit(f) {
+					this.shadowRoot.querySelector('form').reset();
+					setTimeout(() => {
+						this.shadowRoot.querySelector('textarea-with-mentions').value =
+							f.hi;
+					}, 400);
+				}
 
-        onSubmit(f) {
-          console.log(f);
-          this.shadowRoot.querySelector("form").reset();
-          setTimeout(() => {
-            this.shadowRoot.querySelector("textarea-with-mentions").value =
-              f.hi;
-          }, 400);
-        }
+				render() {
+					if (!this.loaded) return html`<span>Loading...</span>`;
+					return html`
+						<profiles-context .store=${this.store}>
+							<profile-prompt
+								style="align-items: start"
+								@profile-created=${e => console.log(e)}
+							>
+								<form ${onSubmit(f => this.onSubmit(f))}>
+									<textarea-with-mentions
+										name="hi"
+										label="hey"
+									></textarea-with-mentions>
+									<input type="submit" />
+								</form>
+								<list-profiles></list-profiles>
+								<my-profile style="height: 800px; width: 800px;"></my-profile>
+								<agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
+									<div
+										style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
+										slot="badge"
+									></div>
+								</agent-avatar>
+								<search-agent
+									name="author"
+									required
+									include-myself
+									@agent-selected=${e => console.log(e)}
+								></search-agent>
+								<search-agents
+									name="hosts"
+									required
+									include-myself
+								></search-agents>
+								<agent-avatar
+									.agentPubKey=${this.store.client.client.myPubKey}
+									.showOnHover=${false}
+									.copyOnClick=${false}
+								>
+								</agent-avatar>
+								<agent-mention
+									.agentPubKey=${this.store.client.client.myPubKey}
+								>
+								</agent-mention>
+							</profile-prompt>
+						</profiles-context>
+					`;
+				}
+			}
 
-        render() {
-          if (!this.loaded) return html`<span>Loading...</span>`;
-          return html`
-            <profiles-context .store=${this.store}>
-              <profile-prompt
-                style="align-items: start"
-                @profile-created=${(e) => console.log(e)}
-              >
-                <form ${onSubmit((f) => this.onSubmit(f))}>
-                  <textarea-with-mentions
-                    name="hi"
-                    label="hey"
-                  ></textarea-with-mentions>
-                  <input type="submit" />
-                </form>
-                <list-profiles></list-profiles>
-                <my-profile style="height: 800px; width: 800px;"></my-profile>
-                <agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
-                  <div
-                    style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
-                    slot="badge"
-                  ></div>
-                </agent-avatar>
-                <search-agent
-                  name="author"
-                  required
-                  include-myself
-                  @agent-selected=${(e) => console.log(e)}
-                ></search-agent>
-                <search-agents
-                  name="hosts"
-                  required
-                  include-myself
-                ></search-agents>
-                <agent-avatar
-                  .agentPubKey=${this.store.client.client.myPubKey}
-                  .showOnHover=${false}
-                  .copyOnClick=${false}
-                >
-                </agent-avatar>
-                <agent-mention
-                  .agentPubKey=${this.store.client.client.myPubKey}
-                >
-                </agent-mention>
-              </profile-prompt>
-            </profiles-context>
-          `;
-        }
-      }
-
-      customElements.define("profiles-test", ProfilesTest);
-    </script>
-  </body>
+			customElements.define('profiles-test', ProfilesTest);
+		</script>
+	</body>
 </html>
