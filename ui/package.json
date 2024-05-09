@@ -30,7 +30,7 @@
 		"@holochain-open-dev/elements": "^0.300.0-dev.1",
 		"@holochain-open-dev/signals": "^0.300.0-dev.8",
 		"@holochain-open-dev/utils": "^0.300.0-dev.2",
-		"@holochain/client": "^0.17.0-dev.12",
+		"@holochain/client": "^0.18.0-dev.0",
 		"@lit/context": "^1.0.1",
 		"@lit/localize": "^0.12.0",
 		"@mdi/js": "^7.1.96",
