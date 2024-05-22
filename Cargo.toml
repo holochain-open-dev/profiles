@@ -4,9 +4,9 @@ resolver = "2"
 
 [workspace.dependencies]
 serde = "1.0.193"
-hdi = "0.4.0-beta-dev.36"
-hdk = "0.3.0-beta-dev.41"
-holochain = "0.3.0-beta-dev.48"
+hdi = "0.4.1-rc"
+hdk = "0.3.1-rc"
+holochain = "0.3.1-rc"
 
 [profile.dev]
 opt-level = "z"
