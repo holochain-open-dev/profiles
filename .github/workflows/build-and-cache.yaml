@@ -32,18 +32,18 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          nix build -L .#profiles_integrity.meta.debug
-          cachix push holochain-open-dev $(nix path-info .#profiles_integrity.meta.debug)
-          cachix pin holochain-open-dev profiles_integrity_debug $(nix path-info .#profiles_integrity.meta.debug)
-
           nix build -L .#profiles_integrity
-          cachix push holochain-open-dev $(nix path-info .#profiles_integrity)
-          cachix pin holochain-open-dev profiles_integrity $(nix path-info .#profiles_integrity)
+          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles_integrity)
+          cachix pin holochain-open-dev profiles_integrity_debug $(nix path-info --accept-flake-config .#profiles_integrity)
 
-          nix build -L .#profiles.meta.debug
-          cachix push holochain-open-dev $(nix path-info .#profiles.meta.debug)
-          cachix pin holochain-open-dev profiles_debug $(nix path-info .#profiles.meta.debug)
+          nix build -L .#profiles_integrity.meta.release
+          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles_integrity.meta.release)
+          cachix pin holochain-open-dev profiles_integrity $(nix path-info --accept-flake-config .#profiles_integrity.meta.release)
 
           nix build -L .#profiles
-          cachix push holochain-open-dev $(nix path-info .#profiles)
-          cachix pin holochain-open-dev profiles $(nix path-info .#profiles)
+          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles)
+          cachix pin holochain-open-dev profiles_debug $(nix path-info --accept-flake-config .#profiles)
+
+          nix build -L .#profiles.meta.release
+          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles.meta.release)
+          cachix pin holochain-open-dev profiles $(nix path-info --accept-flake-config .#profiles.meta.release)
