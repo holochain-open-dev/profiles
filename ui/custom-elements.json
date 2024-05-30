@@ -12,7 +12,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n      's0f790cd5b748b24d': `Error buscant agents`,\n's1d96e130c0544d92': `No hi ha cap perfil creat`,\n's20453e988c3e79f3': `Pressiona '@' per mencionar un agent.`,\n's2ceb11be2290bb1b': `Cancel·lar`,\n's3798c0344c399eb7': str`Min. ${0} caràcters`,\n's39aca5bd9eed9271': `Aquest agent encara no ha creat el seu perfil`,\n's3fa309bef44c54e9': `Almenys 3 caràcters...`,\n's6068cc1885ea6494': `No s'ha trobat cap agent amb aquest filtre`,\n's639c68c3284a2269': `Actualitzar Perfil`,\n's6ef2512ced4487d3': `No s'ha seleccionat cap agent encara`,\n's7c2f825ccdf2bf38': `Error buscant els perfils de tots els agents`,\n'sa77a504cfafd6d20': `Error buscant l'avatar de l'agent`,\n'sbbb75506e75dfbf8': `Buscar Agent`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscant el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introdueix almenys 3 caràcters per buscar...`,\n'se9f30e4492cee2cd': `Nom d'usuari`,\n'seb9fbffaa6fddee6': `Error creant el perfil`,\n'sffdcc47c1ec17387': `Error buscant el teu perfil`,\n    }"
+          "default": "{\n      's0f790cd5b748b24d': `Error buscant agents`,\n's1d96e130c0544d92': `No hi ha cap perfil creat`,\n's20453e988c3e79f3': `Pressiona '@' per mencionar un agent.`,\n's2ceb11be2290bb1b': `Cancel·lar`,\n's3798c0344c399eb7': str`Min. ${0} caràcters`,\n's39aca5bd9eed9271': `Aquest agent encara no ha creat el seu perfil`,\n's3fa309bef44c54e9': `Almenys 3 caràcters...`,\n's6068cc1885ea6494': `No s'ha trobat cap agent amb aquest filtre`,\n's639c68c3284a2269': `Actualitzar Perfil`,\n's6ef2512ced4487d3': `No s'ha seleccionat cap agent encara`,\n's7c2f825ccdf2bf38': `Error buscant els perfils de tots els agents`,\n'sa77a504cfafd6d20': `Error buscant l'avatar de l'agent`,\n'sbbb75506e75dfbf8': `Buscar Agent`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscant el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introdueix almenys 3 caràcters per buscar...`,\n'se9f30e4492cee2cd': `Nom d'usuari`,\n'seb9fbffaa6fddee6': `Error creant el perfil`,\n'sffdcc47c1ec17387': `Error buscant el teu perfil`,\n's859587e842b7882b': `Error fetching your profile.`,\n    }"
         }
       ],
       "exports": [
@@ -36,7 +36,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n      's0f790cd5b748b24d': `Profile suchen fehlgeschlagen`,\n's1d96e130c0544d92': `Keine Profile vorhanden`,\n's20453e988c3e79f3': `Drücke '@' um eine Person zu erwähnen.`,\n's2ceb11be2290bb1b': `Abbrechen`,\n's3798c0344c399eb7': str`Min. ${0} Zeichen`,\n's39aca5bd9eed9271': `Diese Person hat noch kein Profil erstellt`,\n's3fa309bef44c54e9': `Mindestens 3 Zeichen...`,\n's6068cc1885ea6494': `Keine Profile gefunden für die Sucheingabe`,\n's639c68c3284a2269': `Profil Aktualisieren`,\n's6ef2512ced4487d3': `Noch keine Personen ausgewählt.`,\n's7c2f825ccdf2bf38': `Profile laden fehlgeschlagen`,\n'sa77a504cfafd6d20': `Profilbild konnte nicht geladen werden`,\n'sbbb75506e75dfbf8': `Profil suchen`,\n'sbe57083b4c785878': `Profil erstellen`,\n'sc5c9f04c2d0a5f1d': `Profil laden fehlgeschlagen`,\n'sc93a9aa3e5bcbf5d': `Profil speichern`,\n'sdd16cd8b418b1752': `Mindestens 3 Buchstaben eingeben...`,\n'se9f30e4492cee2cd': `Benutzername`,\n'seb9fbffaa6fddee6': `Speichern fehlgeschlagen`,\n'sffdcc47c1ec17387': `Profil laden fehlgeschlagen`,\n    }"
+          "default": "{\n      's0f790cd5b748b24d': `Profile suchen fehlgeschlagen`,\n's1d96e130c0544d92': `Keine Profile vorhanden`,\n's20453e988c3e79f3': `Drücke '@' um eine Person zu erwähnen.`,\n's2ceb11be2290bb1b': `Abbrechen`,\n's3798c0344c399eb7': str`Min. ${0} Zeichen`,\n's39aca5bd9eed9271': `Diese Person hat noch kein Profil erstellt`,\n's3fa309bef44c54e9': `Mindestens 3 Zeichen...`,\n's6068cc1885ea6494': `Keine Profile gefunden für die Sucheingabe`,\n's639c68c3284a2269': `Profil Aktualisieren`,\n's6ef2512ced4487d3': `Noch keine Personen ausgewählt.`,\n's7c2f825ccdf2bf38': `Profile laden fehlgeschlagen`,\n'sa77a504cfafd6d20': `Profilbild konnte nicht geladen werden`,\n'sbbb75506e75dfbf8': `Profil suchen`,\n'sbe57083b4c785878': `Profil erstellen`,\n'sc5c9f04c2d0a5f1d': `Profil laden fehlgeschlagen`,\n'sc93a9aa3e5bcbf5d': `Profil speichern`,\n'sdd16cd8b418b1752': `Mindestens 3 Buchstaben eingeben...`,\n'se9f30e4492cee2cd': `Benutzername`,\n'seb9fbffaa6fddee6': `Speichern fehlgeschlagen`,\n'sffdcc47c1ec17387': `Profil laden fehlgeschlagen`,\n's859587e842b7882b': `Error fetching your profile.`,\n    }"
         }
       ],
       "exports": [
@@ -60,7 +60,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n      's0f790cd5b748b24d': `Error buscando los agentes`,\n's1d96e130c0544d92': `Aún no se ha creado ningún perfil`,\n's20453e988c3e79f3': `Presiona '@' para mencionar a un agente`,\n's2ceb11be2290bb1b': `Cancelar`,\n's3798c0344c399eb7': str`Min. ${0} caracteres`,\n's39aca5bd9eed9271': `Este agente no ha creado su perfil todavía`,\n's3fa309bef44c54e9': `Al menos 3 caracteres...`,\n's6068cc1885ea6494': `No se ha encontrado ningún agente`,\n's639c68c3284a2269': `Actualizar Perfil`,\n's6ef2512ced4487d3': `No hay ningún agente seleccionado todavía.`,\n's7c2f825ccdf2bf38': `Error buscando los perfiles de todos los agentes`,\n'sa77a504cfafd6d20': `Error buscando el avatar del agente`,\n'sbbb75506e75dfbf8': `Buscar agente`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscando el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introduce al menos 3 carácteres para buscar...`,\n'se9f30e4492cee2cd': `Nombre de usuario`,\n'seb9fbffaa6fddee6': `Error creando el perfil`,\n'sffdcc47c1ec17387': `Error buscando tu perfil`,\n    }"
+          "default": "{\n      's0f790cd5b748b24d': `Error buscando los agentes`,\n's1d96e130c0544d92': `Aún no se ha creado ningún perfil`,\n's20453e988c3e79f3': `Presiona '@' para mencionar a un agente`,\n's2ceb11be2290bb1b': `Cancelar`,\n's3798c0344c399eb7': str`Min. ${0} caracteres`,\n's39aca5bd9eed9271': `Este agente no ha creado su perfil todavía`,\n's3fa309bef44c54e9': `Al menos 3 caracteres...`,\n's6068cc1885ea6494': `No se ha encontrado ningún agente`,\n's639c68c3284a2269': `Actualizar Perfil`,\n's6ef2512ced4487d3': `No hay ningún agente seleccionado todavía.`,\n's7c2f825ccdf2bf38': `Error buscando los perfiles de todos los agentes`,\n'sa77a504cfafd6d20': `Error buscando el avatar del agente`,\n'sbbb75506e75dfbf8': `Buscar agente`,\n'sbe57083b4c785878': `Crear Perfil`,\n'sc5c9f04c2d0a5f1d': `Error buscando el perfil`,\n'sc93a9aa3e5bcbf5d': `Guardar Perfil`,\n'sdd16cd8b418b1752': `Introduce al menos 3 carácteres para buscar...`,\n'se9f30e4492cee2cd': `Nombre de usuario`,\n'seb9fbffaa6fddee6': `Error creando el perfil`,\n'sffdcc47c1ec17387': `Error buscando tu perfil`,\n's859587e842b7882b': `Error fetching your profile.`,\n    }"
         }
       ],
       "exports": [
@@ -84,7 +84,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n      's1d96e130c0544d92': `Il n'y a pas encore de profils créés`,\n's3798c0344c399eb7': str`Min. ${0} caractères`,\n's39aca5bd9eed9271': `Cet utilisateur n'a pas encore créé de profil`,\n's3fa309bef44c54e9': `Au moins 3 caractères...`,\n's6068cc1885ea6494': `Aucun agent ne corresponds au filtre`,\n's639c68c3284a2269': `Mettre à jour Profil`,\n'sbe57083b4c785878': `Créer Profil`,\n'sc93a9aa3e5bcbf5d': `Enregistrer Profil`,\n'se9f30e4492cee2cd': `Surnom`,\n'sa77a504cfafd6d20': `Error fetching the agent's avatar`,\n's2ceb11be2290bb1b': `Cancel`,\n'seb9fbffaa6fddee6': `Error creating the profile`,\n's7c2f825ccdf2bf38': `Error fetching the profiles for all agents`,\n'sffdcc47c1ec17387': `Error fetching your profile`,\n'sc5c9f04c2d0a5f1d': `Error fetching the profile`,\n'sdd16cd8b418b1752': `Enter at least 3 chars to search...`,\n's0f790cd5b748b24d': `Error searching agents`,\n'sbbb75506e75dfbf8': `Search Agent`,\n's6ef2512ced4487d3': `No agents selected yet.`,\n's20453e988c3e79f3': `Press '@' to mention an agent.`,\n    }"
+          "default": "{\n      's1d96e130c0544d92': `Il n'y a pas encore de profils créés`,\n's3798c0344c399eb7': str`Min. ${0} caractères`,\n's39aca5bd9eed9271': `Cet utilisateur n'a pas encore créé de profil`,\n's3fa309bef44c54e9': `Au moins 3 caractères...`,\n's6068cc1885ea6494': `Aucun agent ne corresponds au filtre`,\n's639c68c3284a2269': `Mettre à jour Profil`,\n'sbe57083b4c785878': `Créer Profil`,\n'sc93a9aa3e5bcbf5d': `Enregistrer Profil`,\n'se9f30e4492cee2cd': `Surnom`,\n'sa77a504cfafd6d20': `Error fetching the agent's avatar`,\n's2ceb11be2290bb1b': `Cancel`,\n'seb9fbffaa6fddee6': `Error creating the profile`,\n's7c2f825ccdf2bf38': `Error fetching the profiles for all agents`,\n'sffdcc47c1ec17387': `Error fetching your profile`,\n'sc5c9f04c2d0a5f1d': `Error fetching the profile`,\n's859587e842b7882b': `Error fetching your profile.`,\n'sdd16cd8b418b1752': `Enter at least 3 chars to search...`,\n's0f790cd5b748b24d': `Error searching agents`,\n'sbbb75506e75dfbf8': `Search Agent`,\n's6ef2512ced4487d3': `No agents selected yet.`,\n's20453e988c3e79f3': `Press '@' to mention an agent.`,\n    }"
         }
       ],
       "exports": [
@@ -164,7 +164,7 @@
           "type": {
             "text": "object"
           },
-          "default": "{\n      's0f790cd5b748b24d': `Fel vid sökning av agenter`,\n's1d96e130c0544d92': `Det finns ingen profil skapad än`,\n's20453e988c3e79f3': `Skriv '@' för att benämna en agent§`,\n's2ceb11be2290bb1b': `Avbryt`,\n's3798c0344c399eb7': str`Min. ${0} tecken`,\n's39aca5bd9eed9271': `Denna agent har inte skapat en profil än`,\n's3fa309bef44c54e9': `Minst 3 tecken...`,\n's6068cc1885ea6494': `Inga agenter som matchar filtret`,\n's639c68c3284a2269': `Uppdatera profil`,\n's6ef2512ced4487d3': `Ingen agent vald än.`,\n's7c2f825ccdf2bf38': `Fel vid hämtning av profiler för alla agenter`,\n'sa77a504cfafd6d20': `Fel vid hämtning av agentens avatar`,\n'sbbb75506e75dfbf8': `Sök efter agent`,\n'sbe57083b4c785878': `Skapa profil`,\n'sc5c9f04c2d0a5f1d': `Fel vid hämtning av profilen`,\n'sc93a9aa3e5bcbf5d': `Spara profil`,\n'sdd16cd8b418b1752': `Skriv minst 3 tecken för att söka...`,\n'se9f30e4492cee2cd': `Smeknamn`,\n'seb9fbffaa6fddee6': `Fel inträffade vid skapande av profil`,\n'sffdcc47c1ec17387': `Fel vid hämtning av din profil`,\n    }"
+          "default": "{\n      's0f790cd5b748b24d': `Fel vid sökning av agenter`,\n's1d96e130c0544d92': `Det finns ingen profil skapad än`,\n's20453e988c3e79f3': `Skriv '@' för att benämna en agent§`,\n's2ceb11be2290bb1b': `Avbryt`,\n's3798c0344c399eb7': str`Min. ${0} tecken`,\n's39aca5bd9eed9271': `Denna agent har inte skapat en profil än`,\n's3fa309bef44c54e9': `Minst 3 tecken...`,\n's6068cc1885ea6494': `Inga agenter som matchar filtret`,\n's639c68c3284a2269': `Uppdatera profil`,\n's6ef2512ced4487d3': `Ingen agent vald än.`,\n's7c2f825ccdf2bf38': `Fel vid hämtning av profiler för alla agenter`,\n'sa77a504cfafd6d20': `Fel vid hämtning av agentens avatar`,\n'sbbb75506e75dfbf8': `Sök efter agent`,\n'sbe57083b4c785878': `Skapa profil`,\n'sc5c9f04c2d0a5f1d': `Fel vid hämtning av profilen`,\n'sc93a9aa3e5bcbf5d': `Spara profil`,\n'sdd16cd8b418b1752': `Skriv minst 3 tecken för att söka...`,\n'se9f30e4492cee2cd': `Smeknamn`,\n'seb9fbffaa6fddee6': `Fel inträffade vid skapande av profil`,\n'sffdcc47c1ec17387': `Fel vid hämtning av din profil`,\n's859587e842b7882b': `Error fetching your profile.`,\n    }"
         }
       ],
       "exports": [
@@ -232,7 +232,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./types\""
+            "package": "./types.js"
           }
         },
         {
@@ -240,7 +240,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./context\""
+            "package": "./context.js"
           }
         },
         {
@@ -248,7 +248,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./profiles-client\""
+            "package": "./profiles-client.js"
           }
         },
         {
@@ -256,7 +256,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./profiles-store\""
+            "package": "./profiles-store.js"
           }
         },
         {
@@ -264,7 +264,7 @@
           "name": "*",
           "declaration": {
             "name": "*",
-            "package": "\"./config\""
+            "package": "./config.js"
           }
         }
       ]
@@ -539,60 +539,24 @@
             },
             {
               "kind": "field",
-              "name": "agentsWithProfile",
-              "type": {
-                "text": "AsyncReadable<AgentPubKey[]>"
-              },
+              "name": "agentsWithProfile$",
               "description": "Fetches all the agents that have created a profile in the DHT"
             },
             {
               "kind": "field",
-              "name": "allProfiles",
+              "name": "allProfiles$",
+              "default": "new AsyncComputed(() => {\n\t\tconst agentsWithProfile = this.agentsWithProfile$.get();\n\t\tif (agentsWithProfile.status !== 'completed') return agentsWithProfile;\n\n\t\tconst allProfiles = slice(this.profiles, agentsWithProfile.value);\n\t\treturn joinAsyncMap(mapValues(allProfiles, p => p.get()));\n\t})",
               "description": "Fetches the profiles for all agents in the DHT\n\nThis will get slower as the number of agents in the DHT increases"
             },
             {
               "kind": "field",
               "name": "profiles",
-              "default": "new LazyHoloHashMap((agent: AgentPubKey) =>\n    asyncReadable<EntryRecord<Profile> | undefined>(async (set) => {\n      const profile = await this.client.getAgentProfile(agent);\n      set(profile);\n\n      return this.client.onSignal((signal) => {\n        if (this.client.client.myPubKey.toString() !== agent.toString()) return;\n        if (!(signal.type === \"EntryCreated\" || signal.type === \"EntryUpdated\"))\n          return;\n        const record = new EntryRecord<Profile>({\n          entry: {\n            Present: {\n              entry_type: \"App\",\n              entry: encode(signal.app_entry),\n            },\n          },\n          signed_action: signal.action,\n        });\n        set(record);\n      });\n    })\n  )",
+              "default": "new LazyHoloHashMap((agent: AgentPubKey) => {\n\t\tlet unsubscribe: (() => void) | undefined;\n\t\tconst signal = new AsyncState<EntryRecord<Profile> | undefined>(\n\t\t\t{ status: 'pending' },\n\t\t\t{\n\t\t\t\t[Signal.subtle.watched]: async () => {\n\t\t\t\t\tconst value = await this.client.getAgentProfile(agent);\n\t\t\t\t\tsignal.set({\n\t\t\t\t\t\tstatus: 'completed',\n\t\t\t\t\t\tvalue,\n\t\t\t\t\t});\n\t\t\t\t\tunsubscribe = this.client.onSignal(profilesSignal => {\n\t\t\t\t\t\tif (this.client.client.myPubKey.toString() !== agent.toString())\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\tif (\n\t\t\t\t\t\t\t!(\n\t\t\t\t\t\t\t\tprofilesSignal.type === 'EntryCreated' ||\n\t\t\t\t\t\t\t\tprofilesSignal.type === 'EntryUpdated'\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\tconst record = new EntryRecord<Profile>({\n\t\t\t\t\t\t\tentry: {\n\t\t\t\t\t\t\t\tPresent: {\n\t\t\t\t\t\t\t\t\tentry_type: 'App',\n\t\t\t\t\t\t\t\t\tentry: encode(profilesSignal.app_entry),\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\tsigned_action: profilesSignal.action,\n\t\t\t\t\t\t});\n\t\t\t\t\t\tsignal.set({\n\t\t\t\t\t\t\tstatus: 'completed',\n\t\t\t\t\t\t\tvalue: record,\n\t\t\t\t\t\t});\n\t\t\t\t\t});\n\t\t\t\t},\n\t\t\t\t[Signal.subtle.unwatched]: () => {\n\t\t\t\t\tsignal.set({ status: 'pending' });\n\t\t\t\t\tunsubscribe?.();\n\t\t\t\t},\n\t\t\t},\n\t\t);\n\t\treturn signal;\n\t})",
               "description": "Fetches the profile for the given agent"
             },
             {
               "kind": "field",
-              "name": "myProfile"
-            },
-            {
-              "kind": "method",
-              "name": "agentsProfiles",
-              "return": {
-                "type": {
-                  "text": "AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "agents",
-                  "type": {
-                    "text": "Array<AgentPubKey>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "searchProfiles",
-              "return": {
-                "type": {
-                  "text": "AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile>>>"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "searchFilter",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
+              "name": "myProfile$"
             }
           ]
         }
@@ -649,108 +613,6 @@
           "declaration": {
             "name": "areHashesArraysEqual",
             "module": "src/utils.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/index.js",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "getAppWebsocket"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "getAppWebsocket",
-          "declaration": {
-            "name": "getAppWebsocket",
-            "module": "test/mocks/index.js"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "test/mocks/profiles.mock.js",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "",
-          "name": "ProfilesMock",
-          "members": [
-            {
-              "kind": "method",
-              "name": "create_profile",
-              "parameters": [
-                {
-                  "name": "{ username }"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "search_profiles",
-              "parameters": [
-                {
-                  "name": "{ username_prefix }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_my_profile",
-              "parameters": [
-                {
-                  "name": "_"
-                },
-                {
-                  "name": "provenance"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "get_agent_profile",
-              "parameters": [
-                {
-                  "name": "{ agent_address }"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "findAgent",
-              "parameters": [
-                {
-                  "name": "agent_address"
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "agents",
-              "type": {
-                "text": "array"
-              },
-              "default": "[]"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ProfilesMock",
-          "declaration": {
-            "name": "ProfilesMock",
-            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]
@@ -882,6 +744,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1002,6 +870,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1054,6 +928,12 @@
                 "text": "AgentPubKey[]"
               },
               "fieldName": "agents"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -1132,6 +1012,12 @@
               },
               "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
               "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -1289,6 +1175,12 @@
               "fieldName": "allowCancel"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1349,7 +1241,8 @@
                     "text": "string"
                   }
                 }
-              ]
+              ],
+              "description": "Private properties"
             },
             {
               "kind": "method",
@@ -1370,7 +1263,7 @@
                 {
                   "name": "profiles",
                   "type": {
-                    "text": "ReadonlyMap<AgentPubKey, EntryRecord<Profile>>"
+                    "text": "ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>"
                   }
                 }
               ]
@@ -1393,6 +1286,12 @@
               },
               "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
               "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -1449,6 +1348,12 @@
               },
               "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
               "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -1520,7 +1425,8 @@
                     "text": "Profile"
                   }
                 }
-              ]
+              ],
+              "description": "Private properties"
             },
             {
               "kind": "method",
@@ -1571,6 +1477,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1607,6 +1519,12 @@
           "description": "",
           "name": "ProfileListItemSkeleton",
           "members": [],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1678,6 +1596,12 @@
               },
               "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
               "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -1756,6 +1680,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1810,6 +1740,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -1849,11 +1785,12 @@
             {
               "kind": "field",
               "name": "searchFilter",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Public attributes",
-              "attribute": "searchFilter"
+              "description": "Public attributes"
+            },
+            {
+              "kind": "field",
+              "name": "searchFilter$",
+              "default": "new Signal.State<string | undefined>(undefined)"
             },
             {
               "kind": "field",
@@ -1920,14 +1857,6 @@
               "attribute": "include-myself"
             },
             {
-              "name": "searchFilter",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Public attributes",
-              "fieldName": "searchFilter"
-            },
-            {
               "name": "open",
               "type": {
                 "text": "boolean | undefined"
@@ -1941,6 +1870,12 @@
               },
               "description": "Profiles store for this element, not required if you embed this element inside a <profiles-context>",
               "fieldName": "store"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -2169,6 +2104,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -2338,6 +2279,12 @@
               "default": "false",
               "description": "Whether this field is disabled if this element is used inside a form",
               "fieldName": "disabled"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
             }
           ],
           "superclass": {
@@ -2545,6 +2492,12 @@
               "fieldName": "store"
             }
           ],
+          "mixins": [
+            {
+              "name": "SignalWatcher",
+              "package": "@holochain-open-dev/signals"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -2568,6 +2521,108 @@
           "declaration": {
             "name": "UpdateProfile",
             "module": "src/elements/update-profile.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/index.js",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getAppWebsocket"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getAppWebsocket",
+          "declaration": {
+            "name": "getAppWebsocket",
+            "module": "test/mocks/index.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/mocks/profiles.mock.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "ProfilesMock",
+          "members": [
+            {
+              "kind": "method",
+              "name": "create_profile",
+              "parameters": [
+                {
+                  "name": "{ username }"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "search_profiles",
+              "parameters": [
+                {
+                  "name": "{ username_prefix }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_my_profile",
+              "parameters": [
+                {
+                  "name": "_"
+                },
+                {
+                  "name": "provenance"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "get_agent_profile",
+              "parameters": [
+                {
+                  "name": "{ agent_address }"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "findAgent",
+              "parameters": [
+                {
+                  "name": "agent_address"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "agents",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ProfilesMock",
+          "declaration": {
+            "name": "ProfilesMock",
+            "module": "test/mocks/profiles.mock.js"
           }
         }
       ]

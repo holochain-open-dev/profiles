@@ -256,7 +256,7 @@ contextElement.store = store;
 > [!NOTE]
 > Go to [this page](https://holochain-open-dev.github.io/reusable-modules/frontend/frameworks/), to see examples on integrating this module in each javascript framework.
 
-8. [Choose which elements you need](/profile-prompt) and import them like this:
+8. [Choose which elements you need](./elements/profile-prompt.md) and import them like this:
 
 ```js
 import "@holochain-open-dev/profiles/dist/elements/profiles-context.js";
