@@ -7,7 +7,7 @@ import {
 	RoleName,
 } from '@holochain/client';
 
-import { Profile, ProfilesSignal } from './types';
+import { Profile, ProfilesSignal } from './types.js';
 
 export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 	constructor(
