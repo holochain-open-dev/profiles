@@ -43,27 +43,6 @@ nix run github:holochain-open-dev/templates#hc-scaffold-app-template -- web-app
     inputs.flake-parts.lib.mkFlake
       {
         inherit inputs;
-        specialArgs = rec {
-          # All the upstream repositories that output zomes, dnas or happs packages
-          holochainSources = inputs': with inputs'; [ 
-            profiles # [!code ++]
-            # ... and add the name of the repository here as well
-          ];
-
-          ## Special arguments for the flake parts of this repository
-          
-          rootPath = ./.;
-
-          # Aggregators: take all the packages from this repository and the upstream
-          # holochain sources and merge them
-          allHolochainPackages = { inputs', self' }: inputs.nixpkgs.lib.attrsets.mergeAttrsList (
-            [ self'.packages ] 
-            ++ builtins.map (s: s.packages) (holochainSources inputs')
-          );
-          allZomes = { inputs', self' }: inputs.hcInfra.outputs.lib.filterZomes (allHolochainPackages { inherit inputs' self'; });
-          allDnas = { inputs', self' }: inputs.hcInfra.outputs.lib.filterDnas (allHolochainPackages { inherit inputs' self'; });
-          allHapps = { inputs', self' }: inputs.hcInfra.outputs.lib.filterHapps (allHolochainPackages { inherit inputs' self'; });
-        };
       }
       {
         imports = [
