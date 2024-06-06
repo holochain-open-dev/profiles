@@ -46,13 +46,13 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	/** Public attributes */
 
 	set searchFilter(sf: string | undefined) {
-		this.searchFilter$.set(sf);
+		this._searchFilter.set(sf);
 	}
 	get searchFilter() {
-		return this.searchFilter$.get();
+		return this._searchFilter.get();
 	}
 
-	searchFilter$ = new Signal.State<string | undefined>(undefined);
+	_searchFilter = new Signal.State<string | undefined>(undefined);
 
 	@property()
 	open: boolean | undefined;
@@ -74,8 +74,8 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	/**
 	 * @internal
 	 */
-	_searchProfiles$ = pipe(
-		this.searchFilter$,
+	_searchProfiles = pipe(
+		this._searchFilter,
 		filter => this.store.client.searchAgents(filter!),
 		agents => {
 			const profiles = slice(this.store.profiles, agents);
@@ -104,12 +104,13 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	}
 
 	renderAgentList() {
-		if (!this.searchFilter || this.searchFilter.length < 3)
+		const sf = this._searchFilter.get();
+		if (!sf || sf.length < 3)
 			return html`<sl-menu-item disabled
 				>${msg('Enter at least 3 chars to search...')}</sl-menu-item
 			>`;
 
-		const searchResult = this._searchProfiles$.get();
+		const searchResult = this._searchProfiles.get();
 
 		switch (searchResult.status) {
 			case 'pending':

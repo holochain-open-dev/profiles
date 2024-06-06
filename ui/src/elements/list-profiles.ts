@@ -79,7 +79,7 @@ export class ListProfiles extends SignalWatcher(LitElement) {
 	}
 
 	render() {
-		const allProfiles = this.store.allProfiles$.get();
+		const allProfiles = this.store.allProfiles.get();
 
 		switch (allProfiles.status) {
 			case 'pending':

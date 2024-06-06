@@ -34,7 +34,7 @@ export class ProfilesStore {
 	/**
 	 * Fetches all the agents that have created a profile in the DHT
 	 */
-	agentsWithProfile$ = mapCompleted(
+	agentsWithProfile = mapCompleted(
 		collectionSignal(
 			this.client,
 			() => this.client.getAgentsWithProfile(),
@@ -48,8 +48,8 @@ export class ProfilesStore {
 	 *
 	 * This will get slower as the number of agents in the DHT increases
 	 */
-	allProfiles$ = new AsyncComputed(() => {
-		const agentsWithProfile = this.agentsWithProfile$.get();
+	allProfiles = new AsyncComputed(() => {
+		const agentsWithProfile = this.agentsWithProfile.get();
 		if (agentsWithProfile.status !== 'completed') return agentsWithProfile;
 
 		const allProfiles = slice(this.profiles, agentsWithProfile.value);
@@ -105,5 +105,5 @@ export class ProfilesStore {
 	});
 
 	// Fetches the profile for the active agent
-	myProfile$ = this.profiles.get(this.client.client.myPubKey);
+	myProfile = this.profiles.get(this.client.client.myPubKey);
 }

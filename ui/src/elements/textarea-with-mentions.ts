@@ -1,145 +1,144 @@
-import { customElement, property } from "lit/decorators.js";
-
-import { SlTextareaProsemirror } from "@holochain-open-dev/elements/dist/elements/sl-textarea-prosemirror.js";
-import { DnaHash, encodeHashToBase64 } from "@holochain/client";
-import { consume } from "@lit/context";
-import { localized, msg } from "@lit/localize";
+import { SlTextareaProsemirror } from '@holochain-open-dev/elements/dist/elements/sl-textarea-prosemirror.js';
 import {
-  getCellIdFromRoleName,
-  joinHrlString,
-  splitHrlString,
-} from "@holochain-open-dev/utils";
-import { Schema, NodeSpec } from "prosemirror-model";
-import { Plugin, PluginKey } from "prosemirror-state";
-import { baseKeymap } from "prosemirror-commands";
-import { keymap } from "prosemirror-keymap";
+	getCellIdFromRoleName,
+	joinHrlString,
+	splitHrlString,
+} from '@holochain-open-dev/utils';
+import { DnaHash, encodeHashToBase64 } from '@holochain/client';
+import { consume } from '@lit/context';
+import { localized, msg } from '@lit/localize';
+import { customElement, property } from 'lit/decorators.js';
+import { baseKeymap } from 'prosemirror-commands';
+import { keymap } from 'prosemirror-keymap';
+import { NodeSpec, Schema } from 'prosemirror-model';
+import { Plugin, PluginKey } from 'prosemirror-state';
 
-import { ProfilesStore } from "../profiles-store.js";
-import { profilesStoreContext } from "../context.js";
-import { SearchAgentDropdown } from "./search-agent-dropdown.js";
-import "./agent-mention.js";
+import { profilesStoreContext } from '../context.js';
+import { ProfilesStore } from '../profiles-store.js';
+import './agent-mention.js';
+import { SearchAgentDropdown } from './search-agent-dropdown.js';
 
 export const agentMentionSpec: NodeSpec = {
-  attrs: { agentPubKey: {} },
-  inline: true,
-  group: "inline",
-  draggable: true,
-  toDOM: (node) => {
-    console.log(node);
-    return [
-      "agent-mention",
-      { "agent-pub-key": encodeHashToBase64(node.attrs.agentPubKey) },
-    ];
-  },
-  parseDOM: [{ tag: "agent-mention" }],
+	attrs: { agentPubKey: {} },
+	inline: true,
+	group: 'inline',
+	draggable: true,
+	toDOM: node => {
+		console.log(node);
+		return [
+			'agent-mention',
+			{ 'agent-pub-key': encodeHashToBase64(node.attrs.agentPubKey) },
+		];
+	},
+	parseDOM: [{ tag: 'agent-mention' }],
 };
 
 export type SearchAgentPluginState =
-  | {
-      dropdownEl: SearchAgentDropdown;
-      mentionCharIndex: number;
-      lastCharIndex: number;
-    }
-  | "hidden";
+	| {
+			dropdownEl: SearchAgentDropdown;
+			mentionCharIndex: number;
+			lastCharIndex: number;
+	  }
+	| 'hidden';
 const schema = new Schema({
-  nodes: {
-    doc: { content: "paragraph+" },
-    paragraph: {
-      content: "(text|agentMention)*",
-      toDOM() {
-        return ["p", 0];
-      },
-    },
-    text: {},
-    agentMention: agentMentionSpec,
-  },
+	nodes: {
+		doc: { content: 'paragraph+' },
+		paragraph: {
+			content: '(text|agentMention)*',
+			toDOM() {
+				return ['p', 0];
+			},
+		},
+		text: {},
+		agentMention: agentMentionSpec,
+	},
 });
 const agentType = schema.nodes.agentMention;
 
-export const pluginKey = new PluginKey("search-agent");
+export const pluginKey = new PluginKey('search-agent');
 export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
-  key: pluginKey,
-  state: {
-    init() {
-      return "hidden";
-    },
-    apply(tr, state) {
-      const newPluginState = tr.getMeta(pluginKey);
-      return newPluginState ? newPluginState : state;
-    },
-  },
-  props: {
-    handleKeyDown(view, event) {
-      const state = this.getState(view.state);
-      if (state && state !== "hidden" && event.key === "ArrowDown") {
-        state.dropdownEl.dropdown.handleTriggerKeyDown(event);
-      }
-    },
-    handleTextInput(view, _from, to, text) {
-      const state = this.getState(view.state);
-      console.log(state);
+	key: pluginKey,
+	state: {
+		init() {
+			return 'hidden';
+		},
+		apply(tr, state) {
+			const newPluginState = tr.getMeta(pluginKey);
+			return newPluginState ? newPluginState : state;
+		},
+	},
+	props: {
+		handleKeyDown(view, event) {
+			const state = this.getState(view.state);
+			if (state && state !== 'hidden' && event.key === 'ArrowDown') {
+				state.dropdownEl.dropdown.handleTriggerKeyDown(event);
+			}
+		},
+		handleTextInput(view, _from, to, text) {
+			const state = this.getState(view.state);
+			console.log(state);
 
-      if (state && state !== "hidden") {
-        setTimeout(() => {
-          state.dropdownEl.searchFilter = view.state.doc.textBetween(
-            state.mentionCharIndex + 1,
-            to + 1
-          );
-          view.dispatch(
-            view.state.tr.setMeta(pluginKey, {
-              ...state,
-              lastCharIndex: to,
-            })
-          );
-        });
-      } else if (text === "@") {
-        const { top, left } = view.coordsAtPos(to);
-        const dropdownEl = document.createElement(
-          "search-agent-dropdown"
-        ) as SearchAgentDropdown;
+			if (state && state !== 'hidden') {
+				setTimeout(() => {
+					state.dropdownEl.searchFilter = view.state.doc.textBetween(
+						state.mentionCharIndex + 1,
+						to + 1,
+					);
+					view.dispatch(
+						view.state.tr.setMeta(pluginKey, {
+							...state,
+							lastCharIndex: to,
+						}),
+					);
+				});
+			} else if (text === '@') {
+				const { top, left } = view.coordsAtPos(to);
+				const dropdownEl = document.createElement(
+					'search-agent-dropdown',
+				) as SearchAgentDropdown;
 
-        dropdownEl.innerHTML = `<div style="position: fixed; height: 24px; top: ${top}px; left: ${left}px"></div>`;
-        dropdownEl.open = true;
-        dropdownEl.includeMyself = true;
-        view.dom.getRootNode().appendChild(dropdownEl);
+				dropdownEl.innerHTML = `<div style="position: fixed; height: 24px; top: ${top}px; left: ${left}px"></div>`;
+				dropdownEl.open = true;
+				dropdownEl.includeMyself = true;
+				view.dom.getRootNode().appendChild(dropdownEl);
 
-        view.dispatch(
-          view.state.tr.setMeta(pluginKey, {
-            dropdownEl,
-            mentionCharIndex: to,
-            lastCharIndex: to,
-          })
-        );
+				view.dispatch(
+					view.state.tr.setMeta(pluginKey, {
+						dropdownEl,
+						mentionCharIndex: to,
+						lastCharIndex: to,
+					}),
+				);
 
-        dropdownEl.addEventListener("agent-selected", (e: any) => {
-          const agentPubKey = e.detail.agentPubKey;
-          const state = this.getState(view.state);
+				dropdownEl.addEventListener('agent-selected', (e: any) => {
+					const agentPubKey = e.detail.agentPubKey;
+					const state = this.getState(view.state);
 
-          if (!state || state === "hidden") return;
+					if (!state || state === 'hidden') return;
 
-          const tr = view.state.tr;
+					const tr = view.state.tr;
 
-          tr.replaceRangeWith(
-            state.mentionCharIndex,
-            state.lastCharIndex + 1,
-            agentType.create({
-              agentPubKey,
-            })
-          );
+					tr.replaceRangeWith(
+						state.mentionCharIndex,
+						state.lastCharIndex + 1,
+						agentType.create({
+							agentPubKey,
+						}),
+					);
 
-          view.dom.getRootNode().removeChild(dropdownEl);
-          view.dispatch(tr.setMeta(pluginKey, "hidden"));
-        });
+					view.dom.getRootNode().removeChild(dropdownEl);
+					view.dispatch(tr.setMeta(pluginKey, 'hidden'));
+				});
 
-        dropdownEl.addEventListener("sl-hide", () =>
-          setTimeout(() => {
-            view.dom.getRootNode().removeChild(dropdownEl);
-            view.dispatch(view.state.tr.setMeta(pluginKey, "hidden"));
-          }, 10)
-        );
-      }
-    },
-  },
+				dropdownEl.addEventListener('sl-hide', () =>
+					setTimeout(() => {
+						view.dom.getRootNode().removeChild(dropdownEl);
+						view.dispatch(view.state.tr.setMeta(pluginKey, 'hidden'));
+					}, 10),
+				);
+			}
+		},
+	},
 });
 
 // export class SearchAgentModule {
@@ -233,69 +232,69 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 // Quill.register("modules/search-agent", SearchAgentModule);
 
 @localized()
-@customElement("textarea-with-mentions")
+@customElement('textarea-with-mentions')
 export class TextareaWithMentions extends SlTextareaProsemirror {
-  /**
-   * Profiles store for this element, not required if you embed this element inside a <profiles-context>
-   */
-  @consume({ context: profilesStoreContext, subscribe: true })
-  @property()
-  store!: ProfilesStore;
+	/**
+	 * Profiles store for this element, not required if you embed this element inside a <profiles-context>
+	 */
+	@consume({ context: profilesStoreContext, subscribe: true })
+	@property()
+	store!: ProfilesStore;
 
-  dnaHash!: DnaHash;
+	dnaHash!: DnaHash;
 
-  async firstUpdated() {
-    super.firstUpdated();
-    const appInfo = await this.store.client.client.appInfo();
-    if (!appInfo) throw new Error("Appinfo is null.");
-    const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
-    this.dnaHash = cellId[0];
-  }
+	async firstUpdated() {
+		super.firstUpdated();
+		const appInfo = await this.store.client.client.appInfo();
+		if (!appInfo) throw new Error('Appinfo is null.');
+		const cellId = getCellIdFromRoleName(this.store.client.roleName, appInfo);
+		this.dnaHash = cellId[0];
+	}
 
-  @property()
-  helpText: string = msg("Press '@' to mention an agent.");
+	@property()
+	helpText: string = msg("Press '@' to mention an agent.");
 
-  get value() {
-    if (!this.input?.quill) return "";
-    const contents = this.input.quill.getContents();
+	get value() {
+		if (!this.input?.quill) return '';
+		const contents = this.input.quill.getContents();
 
-    const array = contents.ops.map((delta: any) => {
-      if (typeof delta.insert === "string") {
-        return delta.insert;
-      } else {
-        return [this.dnaHash, delta.insert["agent-mention"]];
-      }
-    });
+		const array = contents.ops.map((delta: any) => {
+			if (typeof delta.insert === 'string') {
+				return delta.insert;
+			} else {
+				return [this.dnaHash, delta.insert['agent-mention']];
+			}
+		});
 
-    const text = joinHrlString(array);
+		const text = joinHrlString(array);
 
-    return text.slice(0, text.length - 1); // Slice to remove the newline
-  }
+		return text.slice(0, text.length - 1); // Slice to remove the newline
+	}
 
-  set value(v: string) {
-    if (!this.input?.quill) return;
-    const array = splitHrlString(v);
+	set value(v: string) {
+		if (!this.input?.quill) return;
+		const array = splitHrlString(v);
 
-    const ops = array.map((hrlOrString) => {
-      if (typeof hrlOrString === "string") {
-        return {
-          insert: hrlOrString,
-        };
-      } else {
-        return {
-          insert: {
-            "agent-mention": hrlOrString[1],
-          },
-        };
-      }
-    });
-    this.input.quill.setContents(ops);
-  }
+		const ops = array.map(hrlOrString => {
+			if (typeof hrlOrString === 'string') {
+				return {
+					insert: hrlOrString,
+				};
+			} else {
+				return {
+					insert: {
+						'agent-mention': hrlOrString[1],
+					},
+				};
+			}
+		});
+		this.input.quill.setContents(ops);
+	}
 
-  editorStateConfig() {
-    return {
-      schema,
-      plugins: [keymap(baseKeymap), searchAgentPlugin],
-    };
-  }
+	editorStateConfig() {
+		return {
+			schema,
+			plugins: [keymap(baseKeymap), searchAgentPlugin],
+		};
+	}
 }
