@@ -2145,9 +2145,9 @@ dependencies = [
 
 [[package]]
 name = "hdi"
-version = "0.5.0-dev.1"
+version = "0.5.0-dev.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "367fb15bb6f1bf07c73dd3da85830a2fe2a37de5eceac5a0450e241222b0d9be"
+checksum = "77590a5ab844487181d7441eff048758e7229a3acb2cd8a56171cefde4489b3f"
 dependencies = [
  "getrandom 0.2.15",
  "hdk_derive",
@@ -2163,9 +2163,9 @@ dependencies = [
 
 [[package]]
 name = "hdk"
-version = "0.4.0-dev.1"
+version = "0.4.0-dev.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08966c37dccd8a205b22799f6143b25455378a7ac8b8af0a8826c6f2dc5c0070"
+checksum = "b4c812469803c86530ad0bd394526d14ca95d111bb79cc7e14975f54009ed022"
 dependencies = [
  "getrandom 0.2.15",
  "hdi",
@@ -2306,9 +2306,9 @@ dependencies = [
 
 [[package]]
 name = "holochain"
-version = "0.4.0-dev.1"
+version = "0.4.0-dev.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "88f8f56404f1c5ae2e5b24513669481326613e657c457f4820fa86c1119260b8"
+checksum = "4525ff60466e5b1ed924f883694676ca015fc8daf8cc6c43baff8d368b172217"
 dependencies = [
  "aitia",
  "anyhow",
@@ -2706,9 +2706,9 @@ dependencies = [
 
 [[package]]
 name = "holochain_test_wasm_common"
-version = "0.4.0-dev.1"
+version = "0.4.0-dev.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ffa599165c82a5be88e9e4a903a7828d6eff8fec8ccf85549468ee30d266c5a"
+checksum = "829157c29d0719391d7d21e59b910cb88e8afb39b1561b1ee5ccda51d0e969ff"
 dependencies = [
  "hdk",
  "serde",
