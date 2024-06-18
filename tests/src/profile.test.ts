@@ -11,7 +11,7 @@ test('create Profile', async () => {
 	await runScenario(async scenario => {
 		const { alice, bob } = await setup(scenario);
 
-		let agentsWithProfile = await toPromise(alice.store.agentsWithProfile$);
+		let agentsWithProfile = await toPromise(alice.store.agentsWithProfile);
 		assert.equal(agentsWithProfile.length, 0);
 		watch(alice.store.agentsWithProfile, () => {}); // store keepalive
 		let myProfile = await toPromise(alice.store.myProfile);

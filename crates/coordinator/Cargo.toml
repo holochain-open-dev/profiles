@@ -24,7 +24,7 @@ hc_zome_profiles_integrity = { path = "../integrity", version = "0.2" }
 hdk = { workspace = true }
 
 [dev-dependencies]
-fixt = "0.3.1-rc"
+fixt = "0.3.1"
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
 holochain = { workspace = true, features = ["test_utils"] }
