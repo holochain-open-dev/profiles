@@ -105,14 +105,9 @@
 								<search-agent
 									name="author"
 									required
-									include-myself
 									@agent-selected=${e => console.log(e)}
 								></search-agent>
-								<search-agents
-									name="hosts"
-									required
-									include-myself
-								></search-agents>
+								<search-agents name="hosts" required></search-agents>
 								<agent-avatar
 									.agentPubKey=${this.store.client.client.myPubKey}
 									.showOnHover=${false}

@@ -42,7 +42,6 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 	 * @returns the agents with the nickname starting with nicknameFilter
 	 */
 	async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
-		console.log('searchagents', nicknameFilter);
 		return this.callZome('search_agents', nicknameFilter);
 	}
 

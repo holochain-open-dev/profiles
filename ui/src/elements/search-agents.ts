@@ -7,12 +7,15 @@ import {
 } from '@holochain-open-dev/elements';
 import { SignalWatcher } from '@holochain-open-dev/signals';
 import { AgentPubKey } from '@holochain/client';
+import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import { mdiDelete } from '@mdi/js';
 import '@shoelace-style/shoelace/dist/components/icon-button/icon-button.js';
 import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
+import { profilesStoreContext } from '../context.js';
+import { ProfilesStore } from '../profiles-store.js';
 import './profile-list-item.js';
 import './search-agent.js';
 
@@ -67,16 +70,22 @@ export class SearchAgents
 	emptyListPlaceholder = msg('No agents selected yet.');
 
 	/**
-	 * Whether to include my own agent as a possible agent to select.
-	 * @attr include-myself
-	 */
-	@property({ type: Boolean, attribute: 'include-myself' })
-	includeMyself = false;
-
-	/**
 	 * @internal
 	 */
 	_controller = new FormFieldController(this);
+
+	/**
+	 * Profiles store for this element, not required if you embed this element inside a <profiles-context>
+	 */
+	@consume({ context: profilesStoreContext, subscribe: true })
+	@property()
+	store!: ProfilesStore;
+
+	/**
+	 * Agents that won't be listed in the search
+	 */
+	@property()
+	excludedAgents: AgentPubKey[] = [];
 
 	reportValidity() {
 		return true;
@@ -110,7 +119,7 @@ export class SearchAgents
 							}),
 						);
 					}}
-					.includeMyself=${this.includeMyself}
+					.excludedAgents=${this.excludedAgents}
 				></search-agent>
 				${this.value.length === 0
 					? html`<span class="placeholder">${this.emptyListPlaceholder}</span>`

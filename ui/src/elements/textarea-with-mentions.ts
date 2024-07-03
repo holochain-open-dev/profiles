@@ -99,7 +99,6 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 
 				dropdownEl.innerHTML = `<div style="position: fixed; height: 24px; top: ${top}px; left: ${left}px"></div>`;
 				dropdownEl.open = true;
-				dropdownEl.includeMyself = true;
 				view.dom.getRootNode().appendChild(dropdownEl);
 
 				view.dispatch(

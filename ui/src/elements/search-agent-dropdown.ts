@@ -58,18 +58,17 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	open: boolean | undefined;
 
 	/**
-	 * Whether to include my own agent as a possible agent to select.
-	 * @attr include-myself
-	 */
-	@property({ type: Boolean, attribute: 'include-myself' })
-	includeMyself = false;
-
-	/**
 	 * Profiles store for this element, not required if you embed this element inside a <profiles-context>
 	 */
 	@consume({ context: profilesStoreContext, subscribe: true })
 	@property()
 	store!: ProfilesStore;
+
+	/**
+	 * Agents that won't be listed in the search
+	 */
+	@property()
+	excludedAgents: AgentPubKey[] = [];
 
 	/**
 	 * @internal
@@ -140,14 +139,11 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 				`;
 			case 'completed': {
 				let agents = Array.from(searchResult.value.entries());
+				let excludedStr = this.excludedAgents.map(a => a.toString());
 
-				if (!this.includeMyself) {
-					agents = agents.filter(
-						([pubkey, _profile]) =>
-							pubkey.toString() !==
-							this.store.client.client.myPubKey.toString(),
-					);
-				}
+				agents = agents.filter(
+					([pubkey, _profile]) => !excludedStr.includes(pubkey.toString()),
+				);
 
 				if (agents.length === 0)
 					return html`<sl-menu-item disabled>
