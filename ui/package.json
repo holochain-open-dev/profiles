@@ -27,9 +27,9 @@
 		"prepare": "npm run build"
 	},
 	"dependencies": {
-		"@holochain-open-dev/elements": "^0.300.0",
-		"@holochain-open-dev/signals": "^0.300.0",
-		"@holochain-open-dev/utils": "^0.300.0",
+		"@holochain-open-dev/elements": "^0.300.1",
+		"@holochain-open-dev/signals": "^0.300.6",
+		"@holochain-open-dev/utils": "^0.300.2",
 		"@holochain/client": "^0.17.1",
 		"@lit/context": "^1.0.1",
 		"@lit/localize": "^0.12.0",
