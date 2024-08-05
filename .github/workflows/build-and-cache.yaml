@@ -1,4 +1,4 @@
-name: "main"
+name: "build-and-cache"
 on:
   # Trigger the workflow on push or pull request,
   # but only for the main branch
@@ -6,7 +6,7 @@ on:
     branches: [ main, develop, nixify ]
 
 jobs:
-  testbuild:
+  build-and-cache:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
