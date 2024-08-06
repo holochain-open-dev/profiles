@@ -4,10 +4,16 @@ on:
   # but only for the main branch
   push: 
     branches: [ main, develop, nixify ]
+  pull_request: 
+    branches: [ main ]
 
 jobs:
   build-and-cache:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
 
@@ -26,24 +32,30 @@ jobs:
 
       - name: Install and test
         run: |
-          nix develop --command bash -c "npm i && npm t && npm run build -w ui"
+          nix develop --no-update-lock-file --accept-flake-config --command bash -c "npm i && npm t && npm run build -w ui"
 
-      - name: Build zomes
+
+      - name: Build debug zomes
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          nix build -L .#profiles_integrity
-          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles_integrity)
-          cachix pin holochain-open-dev profiles_integrity_debug $(nix path-info --accept-flake-config .#profiles_integrity)
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles_integrity
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity | nix run nixpkgs#jq -- -r '.[].path')
+          cachix pin holochain-open-dev profiles_integrity_debug $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity | nix run nixpkgs#jq -- -r '.[].path')
 
-          nix build -L .#profiles_integrity.meta.release
-          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles_integrity.meta.release)
-          cachix pin holochain-open-dev profiles_integrity $(nix path-info --accept-flake-config .#profiles_integrity.meta.release)
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles | nix run nixpkgs#jq -- -r '.[].path')
+          cachix pin holochain-open-dev profiles_debug $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles | nix run nixpkgs#jq -- -r '.[].path')
 
-          nix build -L .#profiles
-          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles)
-          cachix pin holochain-open-dev profiles_debug $(nix path-info --accept-flake-config .#profiles)
+      - name: Build release zomes
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
+        run: |
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles_integrity.meta.release
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.meta.release | nix run nixpkgs#jq -- -r '.[].path')
+          cachix pin holochain-open-dev profiles_integrity $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.meta.release | nix run nixpkgs#jq -- -r '.[].path')
 
-          nix build -L .#profiles.meta.release
-          cachix push holochain-open-dev $(nix path-info --accept-flake-config .#profiles.meta.release)
-          cachix pin holochain-open-dev profiles $(nix path-info --accept-flake-config .#profiles.meta.release)
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles.meta.release
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.meta.release | nix run nixpkgs#jq -- -r '.[].path')
+          cachix pin holochain-open-dev profiles $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.meta.release | nix run nixpkgs#jq -- -r '.[].path')
