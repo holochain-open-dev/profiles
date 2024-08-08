@@ -15,19 +15,19 @@ jobs:
       - name: Extend space
         uses: ./.github/actions/extend-space
 
-      - name: Install nix
-        uses: cachix/install-nix-action@v25
+        uses: cachix/install-nix-action@v27
         with:
-          nix_path: nixpkgs=channel:nixos-unstable
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          nix_path: nixpkgs=channel:nixos-24.05
 
-      - uses: cachix/cachix-action@v14
+      - uses: cachix/cachix-action@v15
         with:
           name: holochain-ci
 
-      - uses: cachix/cachix-action@v14
+      - uses: cachix/cachix-action@v15
         with:
           name: holochain-open-dev
 
       - name: Install and test
         run: |
-          nix develop --command bash -c "npm i && npm t && npm run build -w ui"
+          nix develop --no-update-lock-file --command bash -c "npm i && npm t && npm run build -w ui"
