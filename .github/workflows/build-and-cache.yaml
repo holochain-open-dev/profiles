@@ -59,17 +59,17 @@ jobs:
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles_integrity.release
-          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.release | nix run nixpkgs#jq -- -r 'keys[0]')
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles_integrity.meta.release
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.meta.release | nix run nixpkgs#jq -- -r 'keys[0]')
 
-          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles.release
-          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.release | nix run nixpkgs#jq -- -r 'keys[0]')
+          cachix watch-exec holochain-open-dev -- nix build --no-update-lock-file --accept-flake-config -L .#profiles.meta.release
+          cachix push holochain-open-dev $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.meta.release | nix run nixpkgs#jq -- -r 'keys[0]')
 
       - name: Pin release zomes
         if: matrix.os == 'ubuntu-latest' && github.event_name != 'pull_request'
         env:
           CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_TOKEN_HOLOCHAIN_OPEN_DEV }}"
         run: |
-          cachix pin holochain-open-dev profiles_integrity $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.release | nix run nixpkgs#jq -- -r 'keys[0]')
+          cachix pin holochain-open-dev profiles_integrity $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles_integrity.meta.release | nix run nixpkgs#jq -- -r 'keys[0]')
 
-          cachix pin holochain-open-dev profiles $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.release | nix run nixpkgs#jq -- -r 'keys[0]')
+          cachix pin holochain-open-dev profiles $(nix path-info --json --accept-flake-config --no-warn-dirty .#profiles.meta.release | nix run nixpkgs#jq -- -r 'keys[0]')
