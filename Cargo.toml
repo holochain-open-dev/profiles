@@ -3,10 +3,10 @@ members = ["crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "=0.5.0-dev.7"
-hdk = "=0.4.0-dev.8"
+hdi = "=0.5.0-dev.12"
+hdk = "=0.4.0-dev.14"
 serde = "1"
-holochain = "0.4.0-dev.9"
+holochain = "0.4.0-dev.20"
 
 [profile.dev]
 opt-level = "z"
