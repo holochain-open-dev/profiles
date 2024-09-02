@@ -31,7 +31,7 @@
                 dylib: ~
         '';
         zomes = inputs.hc-infra.outputs.lib.filterZomes self'.packages;
-        holochain = inputs'.holochain;
+        inherit system;
       };
       crateCargoToml = ./Cargo.toml;
     };
