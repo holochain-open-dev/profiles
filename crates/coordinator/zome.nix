@@ -3,14 +3,14 @@
 {
   perSystem = { inputs', config, pkgs, system, lib, options, self', ... }: {
     packages.profiles = inputs.hc-infra.outputs.lib.rustZome {
+      inherit system;
       workspacePath = inputs.self.outPath;
-      holochain = inputs'.holochain;
       crateCargoToml = ./Cargo.toml;
     };
 
     checks.profiles = inputs.hc-infra.outputs.lib.sweettest {
+      inherit system;
       workspacePath = inputs.self.outPath;
-      holochain = inputs'.holochain;
       dna = inputs.hc-infra.outputs.lib.dna {
         dnaManifest = builtins.toFile "dna.yaml" ''
           ---
