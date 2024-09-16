@@ -12,6 +12,7 @@ import {
   AgentPubKey,
   AppClient,
   Record,
+  InstalledAppId,
 } from "@holochain/client";
 import { ProfilesClient } from "./profiles-client";
 import { Profile } from "./types";
@@ -54,11 +55,14 @@ export async function demoProfiles(): Promise<AgentPubKeyMap<Record>> {
 }
 
 export class ProfilesZomeMock extends ZomeMock implements AppClient {
+  installedAppId: InstalledAppId;
   constructor(
     public agentsProfiles: AgentPubKeyMap<Record>,
-    myPubKey?: AgentPubKey
+    myPubKey?: AgentPubKey,
+    installedAppId?: InstalledAppId,
   ) {
     super("lobby", "profiles", myPubKey);
+    this.installedAppId = installedAppId ? installedAppId : 'dummy-app-id';
   }
 
   async create_profile(profile: Profile): Promise<Record> {

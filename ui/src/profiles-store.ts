@@ -6,7 +6,6 @@ import {
   lazyLoad,
   sliceAndJoin,
   pipe,
-  collectionStore,
   derived,
   NotFoundError,
   AsyncStatus,

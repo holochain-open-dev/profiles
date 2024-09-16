@@ -3,7 +3,6 @@ import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";
 import { consume } from "@lit/context";
 import {
-  AsyncReadable,
   AsyncStatus,
   subscribe,
 } from "@holochain-open-dev/stores";
