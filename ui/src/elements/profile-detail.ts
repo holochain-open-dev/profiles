@@ -36,6 +36,9 @@ export class ProfileDetail extends LitElement {
   @property()
   store!: ProfilesStore;
 
+  @property({ type: Boolean, attribute: "no-additional-fields" })
+  noAdditionalFields = false;
+
   /** Private properties */
 
   /**
@@ -98,9 +101,11 @@ export class ProfileDetail extends LitElement {
           <slot name="action"></slot>
         </div>
 
-        ${Object.entries(this.getAdditionalFields(profile.entry))
-          .filter(([, value]) => value !== "")
-          .map(([key, value]) => this.renderAdditionalField(key, value))}
+        ${this.noAdditionalFields
+          ? html``
+          : Object.entries(this.getAdditionalFields(profile.entry))
+              .filter(([, value]) => value !== "")
+              .map(([key, value]) => this.renderAdditionalField(key, value))}
       </div>
     `;
   }

@@ -2,15 +2,13 @@ import { consume } from "@lit/context";
 import {
   hashProperty,
   sharedStyles,
-  wrapPathInSvg,
 } from "@holochain-open-dev/elements";
 import { css, html, LitElement } from "lit";
-import { state, property, customElement } from "lit/decorators.js";
+import { property, customElement } from "lit/decorators.js";
 import { styleMap } from "lit-html/directives/style-map.js";
-import { AgentPubKey, encodeHashToBase64 } from "@holochain/client";
+import { AgentPubKey } from "@holochain/client";
 import { localized, msg } from "@lit/localize";
 import { StoreSubscriber } from "@holochain-open-dev/stores";
-import { SlTooltip } from "@shoelace-style/shoelace";
 
 import "@holochain-open-dev/elements/dist/elements/display-error.js";
 import "@holochain-open-dev/elements/dist/elements/holo-identicon.js";
@@ -22,7 +20,6 @@ import { profilesStoreContext } from "../context.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { Profile } from "../types.js";
 import { EntryRecord } from "@holochain-open-dev/utils";
-import { mdiClock, mdiClose } from "@mdi/js";
 
 @localized()
 @customElement("agent-avatar")

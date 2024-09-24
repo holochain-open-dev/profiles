@@ -24,6 +24,9 @@ export class MyProfile extends LitElement {
   @property()
   store!: ProfilesStore;
 
+  @property({ type: Boolean, attribute: 'no-additional-fields' })
+  noAdditionalFields = false;
+
   /** Private properties */
 
   /**
@@ -40,7 +43,7 @@ export class MyProfile extends LitElement {
       ></update-profile>`;
 
     return html`
-      <profile-detail .agentPubKey=${this.store.client.client.myPubKey}>
+      <profile-detail .noAdditionalFields=${this.noAdditionalFields} .agentPubKey=${this.store.client.client.myPubKey}>
         <sl-icon-button
           src="${wrapPathInSvg(mdiPencil)}"
           slot="action"
