@@ -58,7 +58,7 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
     public agentsProfiles: AgentPubKeyMap<Record>,
     myPubKey?: AgentPubKey
   ) {
-    super("lobby", "profiles", myPubKey);
+    super("lobby", "profiles", myPubKey?.toString());
   }
 
   async create_profile(profile: Profile): Promise<Record> {
