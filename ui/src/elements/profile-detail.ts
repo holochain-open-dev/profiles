@@ -1,32 +1,32 @@
-import { consume } from '@lit/context';
-import { AgentPubKey } from '@holochain/client';
-import { html, LitElement } from 'lit';
-import { StoreSubscriber } from '@holochain-open-dev/stores';
-import { customElement, property } from 'lit/decorators.js';
-import { localized, msg } from '@lit/localize';
-import { hashProperty, sharedStyles } from '@holochain-open-dev/elements';
+import { consume } from "@lit/context";
+import { AgentPubKey } from "@holochain/client";
+import { html, LitElement } from "lit";
+import { StoreSubscriber } from "@holochain-open-dev/stores";
+import { customElement, property } from "lit/decorators.js";
+import { localized, msg } from "@lit/localize";
+import { hashProperty, sharedStyles } from "@holochain-open-dev/elements";
 
-import '@holochain-open-dev/elements/dist/elements/display-error.js';
-import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
-import './agent-avatar.js';
+import "@holochain-open-dev/elements/dist/elements/display-error.js";
+import "@shoelace-style/shoelace/dist/components/skeleton/skeleton.js";
+import "./agent-avatar.js";
 
-import { profilesStoreContext } from '../context.js';
-import { ProfilesStore } from '../profiles-store.js';
-import { Profile } from '../types.js';
-import { EntryRecord } from '@holochain-open-dev/utils';
+import { profilesStoreContext } from "../context.js";
+import { ProfilesStore } from "../profiles-store.js";
+import { Profile } from "../types.js";
+import { EntryRecord } from "@holochain-open-dev/utils";
 
 /**
  * @element profile-detail
  */
 @localized()
-@customElement('profile-detail')
+@customElement("profile-detail")
 export class ProfileDetail extends LitElement {
   /** Public properties */
 
   /**
    * REQUIRED. Public key identifying the agent for which the profile should be shown
    */
-  @property(hashProperty('agent-pub-key'))
+  @property(hashProperty("agent-pub-key"))
   agentPubKey!: AgentPubKey;
 
   /**
@@ -36,7 +36,7 @@ export class ProfileDetail extends LitElement {
   @property()
   store!: ProfilesStore;
 
-  @property({ type: Boolean, attribute: 'no-additional-fields' })
+  @property({ type: Boolean, attribute: "no-additional-fields" })
   noAdditionalFields = false;
 
   /** Private properties */
@@ -54,7 +54,7 @@ export class ProfileDetail extends LitElement {
     const fields: Record<string, string> = {};
 
     for (const [key, value] of Object.entries(profile.fields)) {
-      if (key !== 'avatar') {
+      if (key !== "avatar") {
         fields[key] = value;
       }
     }
@@ -104,7 +104,7 @@ export class ProfileDetail extends LitElement {
         ${this.noAdditionalFields
           ? html``
           : Object.entries(this.getAdditionalFields(profile.entry))
-              .filter(([, value]) => value !== '')
+              .filter(([, value]) => value !== "")
               .map(([key, value]) => this.renderAdditionalField(key, value))}
       </div>
     `;
@@ -112,7 +112,7 @@ export class ProfileDetail extends LitElement {
 
   render() {
     switch (this._agentProfile.value.status) {
-      case 'pending':
+      case "pending":
         return html`
           <div class="column">
             <div class="row" style="align-items: center">
@@ -138,11 +138,11 @@ export class ProfileDetail extends LitElement {
             )}
           </div>
         `;
-      case 'complete':
+      case "complete":
         return this.renderProfile(this._agentProfile.value.value);
-      case 'error':
+      case "error":
         return html`<display-error
-          .headline=${msg('Error fetching the profile')}
+          .headline=${msg("Error fetching the profile")}
           .error=${this._agentProfile.value.error}
         ></display-error>`;
     }
