@@ -1,6 +1,6 @@
 {
   description = "Template for Holochain app development";
-  
+
   inputs = {
     nixpkgs.follows = "holochain/nixpkgs";
 
