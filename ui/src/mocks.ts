@@ -61,8 +61,9 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
     myPubKey?: AgentPubKey,
     installedAppId?: InstalledAppId,
   ) {
-    super("lobby", "profiles", myPubKey);
-    this.installedAppId = installedAppId ? installedAppId : 'dummy-app-id';
+    const appId  = installedAppId ? installedAppId : 'dummy-app-id';
+    super("lobby", "profiles", installedAppId, myPubKey);
+    this.installedAppId = appId;
   }
 
   async create_profile(profile: Profile): Promise<Record> {

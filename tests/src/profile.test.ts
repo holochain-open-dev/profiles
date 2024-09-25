@@ -8,7 +8,7 @@ import { Profile } from "../../ui/src/types.js";
 import { sampleProfile } from "../../ui/src/mocks.js";
 import { setup } from "./common.js";
 
-test("create Profile", async () => {
+test("create & update Profile", async () => {
   await runScenario(async (scenario) => {
     const { alice, bob } = await setup(scenario);
 
@@ -19,7 +19,7 @@ test("create Profile", async () => {
     alice.store.myProfile.subscribe(() => {}); // store keepalive
     assert.notOk(myProfile);
 
-    // Alice creates a Post
+    // Alice creates a Profile
     const profile: EntryRecord<Profile> =
       await alice.store.client.createProfile(
         await sampleProfile(alice.store.client)
@@ -32,6 +32,26 @@ test("create Profile", async () => {
 
     const profileStatus = get(alice.store.myProfile);
     assert.equal(profileStatus.status, "complete");
-    assert.ok((profileStatus as any).value);
+    assert.equal((profileStatus as any).value.actionHash.toString(), profile.actionHash.toString());
+
+
+    // Alice updates a Profile
+    const profile2: EntryRecord<Profile> =
+      await alice.store.client.updateProfile(
+        {
+          nickname: "alice2",
+          fields: {},
+        }
+      );
+    assert.ok(profile2);
+    await pause(1000); // Difference in time between the create the processing of the signal
+
+    agentsWithProfile = await toPromise(alice.store.agentsWithProfile);
+    assert.equal(agentsWithProfile.length, 1);
+
+    const profileStatus2 = get(alice.store.myProfile);
+    assert.equal(profileStatus2.status, "complete");
+    assert.equal((profileStatus2 as any).value.actionHash.toString(), profile2.actionHash.toString());
+    assert.equal((profileStatus2 as any).value.entry.nickname, "alice2");
   });
 });
