@@ -9,7 +9,7 @@
 
     checks.profiles = inputs.hc-infra.outputs.builders.${system}.sweettest {
       workspacePath = inputs.self.outPath;
-      dna = inputs.hc-infra.outputs.builders.${system}.dna {
+      dna = (inputs.hc-infra.outputs.builders.${system}.dna {
         dnaManifest = builtins.toFile "dna.yaml" ''
           ---
           manifest_version: "1"
@@ -32,7 +32,7 @@
           profiles = self'.packages.profiles;
           profiles_integrity = self'.packages.profiles_integrity;
         };
-      };
+      }).meta.debug;
       crateCargoToml = ./Cargo.toml;
     };
   };
