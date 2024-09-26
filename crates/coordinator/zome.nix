@@ -2,16 +2,14 @@
 
 {
   perSystem = { inputs', config, pkgs, system, lib, options, self', ... }: {
-    packages.profiles = inputs.hc-infra.outputs.lib.rustZome {
-      inherit system;
+    packages.profiles = inputs.hc-infra.outputs.builders.${system}.rustZome {
       workspacePath = inputs.self.outPath;
       crateCargoToml = ./Cargo.toml;
     };
 
-    checks.profiles = inputs.hc-infra.outputs.lib.sweettest {
-      inherit system;
+    checks.profiles = inputs.hc-infra.outputs.builders.${system}.sweettest {
       workspacePath = inputs.self.outPath;
-      dna = inputs.hc-infra.outputs.lib.dna {
+      dna = inputs.hc-infra.outputs.builders.${system}.dna {
         dnaManifest = builtins.toFile "dna.yaml" ''
           ---
           manifest_version: "1"
@@ -30,8 +28,10 @@
                   - name: profiles_integrity
                 dylib: ~
         '';
-        zomes = inputs.hc-infra.outputs.lib.filterZomes self'.packages;
-        inherit system;
+        zomes = {
+          profiles = self'.packages.profiles;
+          profiles_integrity = self'.packages.profiles_integrity;
+        };
       };
       crateCargoToml = ./Cargo.toml;
     };
