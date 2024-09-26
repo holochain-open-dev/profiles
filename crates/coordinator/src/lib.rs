@@ -170,7 +170,13 @@ fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
             "Malformed details".into()
         ))),
         Details::Record(element_details) => match element_details.updates.last() {
-            Some(update) => get_latest(update.action_address().clone()),
+            Some(update) => match get_latest(update.action_address().clone()) {
+                Ok(record) => Ok(record),
+                Err(_) => {
+                    println!("Failed to find latest record for Profile. Returning previous one.");
+                    Ok(element_details.record)
+                }
+            },
             None => Ok(element_details.record),
         },
     }
