@@ -31,10 +31,10 @@
     "localize:build": "lit-localize build"
   },
   "dependencies": {
-    "@holochain-open-dev/elements": "0.400.0-dev.2",
-    "@holochain-open-dev/stores": "0.400.0-dev.2",
-    "@holochain-open-dev/utils": "0.400.0-dev.3",
-    "@holochain/client": "^0.18.0-dev.10",
+    "@holochain-open-dev/elements": "0.400.0-dev.3",
+    "@holochain-open-dev/stores": "0.400.0-dev.3",
+    "@holochain-open-dev/utils": "0.400.0-dev.4",
+    "@holochain/client": "^0.18.0-dev.13",
     "@lit/context": "^1.0.1",
     "@lit/localize": "^0.12.0",
     "@mdi/js": "^7.1.96",
