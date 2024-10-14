@@ -5,6 +5,7 @@
     nixpkgs.follows = "holonix/nixpkgs";
     holonix.url = "github:holochain/holonix/main-0.3";
     hc-infra.url = "github:holochain-open-dev/infrastructure";
+    playground.url = "github:darksoil-studio/holochain-playground";
   };
 
   nixConfig = {
@@ -22,7 +23,10 @@
       perSystem = { inputs', config, pkgs, system, lib, ... }: {
         devShells.default = pkgs.mkShell {
           inputsFrom = [ inputs'.holonix.devShells.default ];
-          packages = with pkgs; [ nodejs_20 ];
+          packages = with pkgs; [
+            nodejs_20
+            inputs'.playground.packages.hc-playground
+          ];
         };
 
         packages.scaffold = pkgs.symlinkJoin {
