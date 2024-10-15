@@ -1,41 +1,47 @@
-import { sharedStyles } from "@holochain-open-dev/elements";
-import { AgentPubKey } from "@holochain/client";
-import { localized } from "@lit/localize";
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { SignalWatcher } from "@holochain-open-dev/signals";
+import { sharedStyles } from '@holochain-open-dev/elements';
+import { SignalWatcher } from '@holochain-open-dev/signals';
+import { ActionHash, AgentPubKey } from '@holochain/client';
+import { localized } from '@lit/localize';
+import { LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 /**
  * @element agents-avatars
  */
 @localized()
-@customElement("agents-avatars")
+@customElement('agents-avatars')
 export class AgentsAvatars extends SignalWatcher(LitElement) {
-  @property()
-  agents!: AgentPubKey[];
+	@property()
+	agents: AgentPubKey[] = [];
 
-  render() {
-    return html`
-      <div class="row avatar-group">
-        ${this.agents
-          .slice(0, 3)
-          .map((a) => html`<agent-avatar .agentPubKey=${a}></agent-avatar>`)}
-        ${this.agents.length > 3
-          ? html`<sl-avatar
-              .initials=${`+${this.agents.length - 3}`}
-              style="--size: 32px"
-            ></sl-avatar>`
-          : html``}
-      </div>
-    `;
-  }
+	@property()
+	profilesHashes: ActionHash[] = [];
 
-  static styles = [
-    css`
-      .avatar-group agent-avatar:not(:first-of-type) {
-        margin-left: -0.5rem;
-      }
-    `,
-    sharedStyles,
-  ];
+	render() {
+		return html`
+			<div class="row avatar-group">
+				${this.agents
+					.slice(0, 3)
+					.map(a => html`<agent-avatar .agentPubKey=${a}></agent-avatar>`)}
+				${this.profilesHashes
+					.slice(0, 3 - this.agents.length)
+					.map(p => html`<agent-avatar .profileHash=${p}></agent-avatar>`)}
+				${this.agents.length + this.profilesHashes.length > 3
+					? html`<sl-avatar
+							.initials=${`+${this.agents.length - 3}`}
+							style="--size: 32px"
+						></sl-avatar>`
+					: html``}
+			</div>
+		`;
+	}
+
+	static styles = [
+		css`
+			.avatar-group agent-avatar:not(:first-of-type) {
+				margin-left: -0.5rem;
+			}
+		`,
+		sharedStyles,
+	];
 }

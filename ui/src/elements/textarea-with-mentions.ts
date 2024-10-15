@@ -16,18 +16,18 @@ import { Plugin, PluginKey } from 'prosemirror-state';
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
 import './agent-mention.js';
-import { SearchAgentDropdown } from './search-agent-dropdown.js';
+import { SearchProfileDropdown } from './search-profile-dropdown.js';
 
-export const agentMentionSpec: NodeSpec = {
-	attrs: { agentPubKey: {} },
+export const profileMentionSpec: NodeSpec = {
+	attrs: { profileHash: {} },
 	inline: true,
 	group: 'inline',
 	draggable: true,
 	toDOM: node => {
 		console.log(node);
 		return [
-			'agent-mention',
-			{ 'agent-pub-key': encodeHashToBase64(node.attrs.agentPubKey) },
+			'profile-mention',
+			{ 'profile-hash': encodeHashToBase64(node.attrs.profileHash) },
 		];
 	},
 	parseDOM: [{ tag: 'agent-mention' }],
@@ -35,7 +35,7 @@ export const agentMentionSpec: NodeSpec = {
 
 export type SearchAgentPluginState =
 	| {
-			dropdownEl: SearchAgentDropdown;
+			dropdownEl: SearchProfileDropdown;
 			mentionCharIndex: number;
 			lastCharIndex: number;
 	  }
@@ -44,19 +44,19 @@ const schema = new Schema({
 	nodes: {
 		doc: { content: 'paragraph+' },
 		paragraph: {
-			content: '(text|agentMention)*',
+			content: '(text|profileMention)*',
 			toDOM() {
 				return ['p', 0];
 			},
 		},
 		text: {},
-		agentMention: agentMentionSpec,
+		profileMention: profileMentionSpec,
 	},
 });
-const agentType = schema.nodes.agentMention;
+const profileType = schema.nodes.profileMention;
 
-export const pluginKey = new PluginKey('search-agent');
-export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
+export const pluginKey = new PluginKey('search-profile');
+export const searchProfilePlugin = new Plugin<SearchAgentPluginState>({
 	key: pluginKey,
 	state: {
 		init() {
@@ -94,8 +94,8 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 			} else if (text === '@') {
 				const { top, left } = view.coordsAtPos(to);
 				const dropdownEl = document.createElement(
-					'search-agent-dropdown',
-				) as SearchAgentDropdown;
+					'search-profile-dropdown',
+				) as SearchProfileDropdown;
 
 				dropdownEl.innerHTML = `<div style="position: fixed; height: 24px; top: ${top}px; left: ${left}px"></div>`;
 				dropdownEl.open = true;
@@ -109,8 +109,8 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 					}),
 				);
 
-				dropdownEl.addEventListener('agent-selected', (e: any) => {
-					const agentPubKey = e.detail.agentPubKey;
+				dropdownEl.addEventListener('profile-selected', (e: any) => {
+					const profileHash = e.detail.profileHash;
 					const state = this.getState(view.state);
 
 					if (!state || state === 'hidden') return;
@@ -120,8 +120,8 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
 					tr.replaceRangeWith(
 						state.mentionCharIndex,
 						state.lastCharIndex + 1,
-						agentType.create({
-							agentPubKey,
+						profileType.create({
+							profileHash,
 						}),
 					);
 
@@ -293,7 +293,7 @@ export class TextareaWithMentions extends SlTextareaProsemirror {
 	editorStateConfig() {
 		return {
 			schema,
-			plugins: [keymap(baseKeymap), searchAgentPlugin],
+			plugins: [keymap(baseKeymap), searchProfilePlugin],
 		};
 	}
 }

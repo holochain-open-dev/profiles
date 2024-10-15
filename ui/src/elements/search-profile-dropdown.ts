@@ -15,6 +15,7 @@ import {
 	slice,
 } from '@holochain-open-dev/utils';
 import {
+	ActionHash,
 	AgentPubKey,
 	decodeHashFromBase64,
 	encodeHashToBase64,
@@ -37,12 +38,12 @@ import './agent-avatar.js';
 import './profile-list-item-skeleton.js';
 
 /**
- * @element search-agent-dropdown
- * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
+ * @element search-profile-dropdown
+ * @fires profile-selected - Fired when the user selects some agent. Detail will have this shape: { profileHash: ActionHash }
  */
 @localized()
-@customElement('search-agent-dropdown')
-export class SearchAgentDropdown extends SignalWatcher(LitElement) {
+@customElement('search-profile-dropdown')
+export class SearchProfileDropdown extends SignalWatcher(LitElement) {
 	/** Public attributes */
 
 	set searchFilter(sf: string | undefined) {
@@ -65,20 +66,20 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	store!: ProfilesStore;
 
 	/**
-	 * Agents that won't be listed in the search
+	 * Profiles that won't be listed in the search
 	 */
 	@property()
-	excludedAgents: AgentPubKey[] = [];
+	excludedProfiles: ActionHash[] = [];
 
 	/**
 	 * @internal
 	 */
 	_searchProfiles = pipe(
 		this._searchFilter,
-		filter => this.store.client.searchAgents(filter!),
-		agents => {
-			const profiles = slice(this.store.profiles, agents);
-			return joinAsyncMap(mapValues(profiles, p => p.get()));
+		filter => this.store.client.searchProfiles(filter!),
+		profilesHashes => {
+			const profiles = slice(this.store.profiles, profilesHashes);
+			return joinAsyncMap(mapValues(profiles, p => p.latestVersion.get()));
 		},
 	);
 
@@ -88,13 +89,11 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 	@query('#dropdown')
 	public dropdown!: SlDropdown;
 
-	async onUsernameSelected(agentPubKey: AgentPubKey) {
-		const profile = await toPromise(this.store.profiles.get(agentPubKey));
+	async onProfileSelected(profileHash: ActionHash) {
 		this.dispatchEvent(
-			new CustomEvent('agent-selected', {
+			new CustomEvent('profile-selected', {
 				detail: {
-					agentPubKey,
-					profile,
+					profileHash,
 				},
 				bubbles: true,
 				composed: true,
@@ -102,7 +101,7 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 		);
 	}
 
-	renderAgentList() {
+	renderProfileList() {
 		const sf = this._searchFilter.get();
 		if (!sf || sf.length < 3)
 			return html`<sl-menu-item disabled
@@ -133,30 +132,31 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 					<display-error
 						style="flex: 1; display:flex"
 						tooltip
-						.headline=${msg('Error searching agents')}
+						.headline=${msg('Error searching profiles')}
 						.error=${searchResult.error}
 					></display-error>
 				`;
 			case 'completed': {
-				let agents = Array.from(searchResult.value.entries());
-				let excludedStr = this.excludedAgents.map(a => a.toString());
+				let profiles = Array.from(searchResult.value.entries());
+				let excludedStr = this.excludedProfiles.map(a => a.toString());
 
-				agents = agents.filter(
-					([pubkey, _profile]) => !excludedStr.includes(pubkey.toString()),
+				profiles = profiles.filter(
+					([profileHash, _profile]) =>
+						!excludedStr.includes(profileHash.toString()),
 				);
 
-				if (agents.length === 0)
+				if (profiles.length === 0)
 					return html`<sl-menu-item disabled>
-						${msg('No agents match the filter')}
+						${msg('No nicknames match the filter')}
 					</sl-menu-item>`;
 
 				return html`
-					${agents.map(
-						([pubkey, profile]) => html`
-							<sl-menu-item .value=${encodeHashToBase64(pubkey)}>
+					${profiles.map(
+						([profileHash, profile]) => html`
+							<sl-menu-item .value=${encodeHashToBase64(profileHash)}>
 								<agent-avatar
 									slot="prefix"
-									.agentPubKey=${pubkey}
+									.profileHash=${profileHash}
 									style="margin-right: 16px"
 								></agent-avatar>
 								${profile?.entry.nickname}
@@ -174,10 +174,10 @@ export class SearchAgentDropdown extends SignalWatcher(LitElement) {
 				<slot slot="trigger"></slot>
 				<sl-menu
 					@sl-select=${(e: CustomEvent) => {
-						this.onUsernameSelected(decodeHashFromBase64(e.detail.item.value));
+						this.onProfileSelected(decodeHashFromBase64(e.detail.item.value));
 					}}
 				>
-					${this.renderAgentList()}
+					${this.renderProfileList()}
 				</sl-menu>
 			</sl-dropdown>
 		`;

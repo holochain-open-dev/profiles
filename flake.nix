@@ -5,6 +5,7 @@
     nixpkgs.follows = "holonix/nixpkgs";
     holonix.url = "github:holochain/holonix/main-0.3";
     hc-infra.url = "github:holochain-open-dev/infrastructure";
+    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/develop";
     playground.url = "github:darksoil-studio/holochain-playground";
   };
 
@@ -25,6 +26,7 @@
           inputsFrom = [ inputs'.holonix.devShells.default ];
           packages = with pkgs; [
             nodejs_20
+            inputs'.p2p-shipyard.packages.hc-pilot
             inputs'.playground.packages.hc-playground
           ];
         };

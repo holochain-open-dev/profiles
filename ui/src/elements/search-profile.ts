@@ -5,9 +5,9 @@ import {
 	sharedStyles,
 } from '@holochain-open-dev/elements';
 import '@holochain-open-dev/elements/dist/elements/display-error.js';
-import { SignalWatcher } from '@holochain-open-dev/signals';
+import { SignalWatcher, toPromise } from '@holochain-open-dev/signals';
 import { EntryRecord } from '@holochain-open-dev/utils';
-import { AgentPubKey } from '@holochain/client';
+import { ActionHash, AgentPubKey } from '@holochain/client';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
@@ -21,17 +21,16 @@ import { customElement, property, query, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
 import { Profile } from '../types.js';
-import './agent-avatar.js';
 import './profile-list-item-skeleton.js';
-import './search-agent-dropdown.js';
+import './search-profile-dropdown.js';
 
 /**
- * @element search-agent
- * @fires agent-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
+ * @element search-profile
+ * @fires profile-selected - Fired when the user selects some agent. Detail will have this shape: { agentPubKey: HoloHash }
  */
 @localized()
-@customElement('search-agent')
-export class SearchAgent
+@customElement('search-profile')
+export class SearchProfile
 	extends SignalWatcher(LitElement)
 	implements FormField
 {
@@ -48,7 +47,7 @@ export class SearchAgent
 	 * The default value of the field if this element is used inside a form
 	 */
 	@property(hashProperty('default-value'))
-	defaultValue: AgentPubKey | undefined;
+	defaultValue: ActionHash | undefined;
 
 	/**
 	 * Whether this field is required if this element is used inside a form
@@ -66,7 +65,7 @@ export class SearchAgent
 	 * @internal
 	 */
 	@state()
-	value!: AgentPubKey | undefined;
+	value!: ActionHash | undefined;
 
 	/** Public attributes */
 
@@ -85,10 +84,10 @@ export class SearchAgent
 	store!: ProfilesStore;
 
 	/**
-	 * Agents that won't be listed in the search
+	 * Profiles that won't be listed in the search
 	 */
 	@property()
-	excludedAgents: AgentPubKey[] = [];
+	excludedProfiles: ActionHash[] = [];
 
 	/**
 	 * Label for the agent searching field.
@@ -116,8 +115,8 @@ export class SearchAgent
 	async reset() {
 		this.value = this.defaultValue;
 		if (this.defaultValue) {
-			const profile = await this.store.client.getAgentProfile(
-				this.defaultValue,
+			const profile = await toPromise(
+				this.store.profiles.get(this.defaultValue).latestVersion,
 			);
 			this._textField.value = profile?.entry.nickname || '';
 		} else {
@@ -134,8 +133,8 @@ export class SearchAgent
 	@state()
 	searchFilter = '';
 
-	onUsernameSelected(agentPubKey: AgentPubKey, profile: EntryRecord<Profile>) {
-		this.value = agentPubKey;
+	onProfileSelected(profileHash: ActionHash, profile: EntryRecord<Profile>) {
+		this.value = profileHash;
 
 		// If the consumer says so, clear the field
 		if (this.clearOnSelect) {
@@ -150,7 +149,7 @@ export class SearchAgent
 	 * @internal
 	 */
 	get _label() {
-		let l = this.fieldLabel ? this.fieldLabel : msg('Search Agent');
+		let l = this.fieldLabel ? this.fieldLabel : msg('Search Profile');
 
 		if (this.required !== false) l = `${l} *`;
 
@@ -160,14 +159,14 @@ export class SearchAgent
 	render() {
 		return html`
 			<div style="flex: 1; display: flex;">
-				<search-agent-dropdown
+				<search-profile-dropdown
 					id="dropdown"
 					.open=${this.searchFilter.length >= 3}
 					style="flex: 1"
-					.excludedAgents=${this.excludedAgents}
+					.excludedProfiles=${this.excludedProfiles}
 					.searchFilter=${this.searchFilter}
-					@agent-selected=${(e: CustomEvent) =>
-						this.onUsernameSelected(e.detail.agentPubKey, e.detail.profile)}
+					@profile-selected=${(e: CustomEvent) =>
+						this.onProfileSelected(e.detail.profileHash, e.detail.profile)}
 				>
 					<sl-input
 						id="textfield"
@@ -177,7 +176,7 @@ export class SearchAgent
 							this.searchFilter = (e.target as SlInput).value;
 						}}
 					></sl-input>
-				</search-agent-dropdown>
+				</search-profile-dropdown>
 			</div>
 		`;
 	}

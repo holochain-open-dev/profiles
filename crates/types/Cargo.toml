@@ -1,0 +1,13 @@
+[package]
+authors = [
+  "guillem.cordoba@gmail.com",
+]
+edition = "2021"
+name = "profiles_types"
+version = "0.2.0"
+
+[dependencies]
+derive_more = "0"
+serde = "1"
+
+hdi = { workspace = true }

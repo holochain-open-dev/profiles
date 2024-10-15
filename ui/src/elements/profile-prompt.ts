@@ -29,8 +29,8 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 
 	/** Private properties */
 
-	private renderPrompt(myProfile: EntryRecord<Profile> | undefined) {
-		if (myProfile) return html`<slot></slot>`;
+	private renderPrompt(myProfileExists: boolean) {
+		if (myProfileExists) return html`<slot></slot>`;
 
 		return html`
 			<div
@@ -62,7 +62,7 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 					.error=${myProfile.error}
 				></display-error>`;
 			case 'completed':
-				return this.renderPrompt(myProfile.value);
+				return this.renderPrompt(myProfile.value !== undefined);
 		}
 	}
 

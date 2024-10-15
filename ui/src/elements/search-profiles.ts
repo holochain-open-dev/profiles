@@ -6,7 +6,7 @@ import {
 	wrapPathInSvg,
 } from '@holochain-open-dev/elements';
 import { SignalWatcher } from '@holochain-open-dev/signals';
-import { AgentPubKey } from '@holochain/client';
+import { ActionHash, AgentPubKey } from '@holochain/client';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import { mdiDelete } from '@mdi/js';
@@ -17,14 +17,14 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
 import './profile-list-item.js';
-import './search-agent.js';
+import './search-profile.js';
 
 /**
- * @element search-agents
+ * @element search-profiles
  */
 @localized()
-@customElement('search-agents')
-export class SearchAgents
+@customElement('search-profiles')
+export class SearchProfiles
 	extends SignalWatcher(LitElement)
 	implements FormField
 {
@@ -41,7 +41,7 @@ export class SearchAgents
 	 * The default value of the field if this element is used inside a form
 	 */
 	@property(hashProperty('default-value'))
-	defaultValue: Array<AgentPubKey> = [];
+	defaultValue: Array<ActionHash> = [];
 
 	/**
 	 * Whether this field is required if this element is used inside a form
@@ -85,7 +85,7 @@ export class SearchAgents
 	 * Agents that won't be listed in the search
 	 */
 	@property()
-	excludedAgents: AgentPubKey[] = [];
+	excludedProfiles: ActionHash[] = [];
 
 	reportValidity() {
 		return true;
@@ -99,47 +99,47 @@ export class SearchAgents
 	 * @internal
 	 */
 	@state()
-	value: AgentPubKey[] = [];
+	value: ActionHash[] = [];
 
 	render() {
 		return html`
 			<div class="column" style="gap: 16px">
-				<search-agent
+				<search-profile
 					.fieldLabel=${this.fieldLabel}
 					clear-on-select
-					@agent-selected=${(e: any) => {
-						this.value = [...this.value, e.detail.agentPubKey];
+					@profile-selected=${(e: any) => {
+						this.value = [...this.value, e.detail.profileHash];
 						this.dispatchEvent(
-							new CustomEvent('agents-changed', {
+							new CustomEvent('profiles-changed', {
 								composed: true,
 								bubbles: true,
 								detail: {
-									agents: this.value,
+									profilesHashes: this.value,
 								},
 							}),
 						);
 					}}
-					.excludedAgents=${this.excludedAgents}
-				></search-agent>
+					.excludedProfiles=${this.excludedProfiles}
+				></search-profile>
 				${this.value.length === 0
 					? html`<span class="placeholder">${this.emptyListPlaceholder}</span>`
 					: this.value.map(
-							(agent, i) =>
+							(profileHash, i) =>
 								html`<div class="row">
 									<profile-list-item
 										style="flex: 1"
-										.agentPubKey=${agent}
+										.profileHash=${profileHash}
 									></profile-list-item
 									><sl-icon-button
 										.src=${wrapPathInSvg(mdiDelete)}
 										@click=${() => {
 											this.value = this.value.filter((v, i2) => i2 !== i);
 											this.dispatchEvent(
-												new CustomEvent('agents-changed', {
+												new CustomEvent('profiles-changed', {
 													composed: true,
 													bubbles: true,
 													detail: {
-														agents: this.value,
+														profilesHashes: this.value,
 													},
 												}),
 											);

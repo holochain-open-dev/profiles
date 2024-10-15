@@ -1,6 +1,8 @@
 import { sharedStyles } from '@holochain-open-dev/elements';
 import '@holochain-open-dev/elements/dist/elements/display-error.js';
-import { SignalWatcher } from '@holochain-open-dev/signals';
+import { AsyncResult, SignalWatcher } from '@holochain-open-dev/signals';
+import { EntryRecord } from '@holochain-open-dev/utils';
+import { ActionHash } from '@holochain/client';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import '@shoelace-style/shoelace/dist/components/spinner/spinner.js';
@@ -26,8 +28,8 @@ export class UpdateProfile extends SignalWatcher(LitElement) {
 	@property()
 	store!: ProfilesStore;
 
-	async updateProfile(profile: Profile) {
-		await this.store.client.updateProfile(profile);
+	async updateProfile(previousProfileHash: ActionHash, profile: Profile) {
+		await this.store.client.updateProfile(previousProfileHash, profile);
 
 		this.dispatchEvent(
 			new CustomEvent('profile-updated', {
@@ -40,8 +42,20 @@ export class UpdateProfile extends SignalWatcher(LitElement) {
 		);
 	}
 
-	render() {
+	myProfile(): AsyncResult<EntryRecord<Profile> | undefined> {
 		const myProfile = this.store.myProfile.get();
+		if (myProfile.status !== 'completed') return myProfile;
+		if (!myProfile.value) {
+			return {
+				status: 'completed',
+				value: undefined,
+			};
+		}
+		return myProfile.value.latestVersion.get();
+	}
+
+	render() {
+		const myProfile = this.myProfile();
 
 		switch (myProfile.status) {
 			case 'pending':
@@ -58,7 +72,7 @@ export class UpdateProfile extends SignalWatcher(LitElement) {
 					.profile=${myProfile.value}
 					.saveProfileLabel=${msg('Update Profile')}
 					@save-profile=${(e: CustomEvent) =>
-						this.updateProfile(e.detail.profile)}
+						this.updateProfile(myProfile.value!.actionHash, e.detail.profile)}
 				></edit-profile>`;
 			case 'error':
 				return html`<display-error

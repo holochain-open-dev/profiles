@@ -7,7 +7,7 @@ import { sampleProfile } from '../../ui/src/mocks.js';
 import { Profile } from '../../ui/src/types.js';
 import { setup } from './common.js';
 
-test('create Profile', async () => {
+test('create Profile and search', async () => {
 	await runScenario(async scenario => {
 		const { alice, bob } = await setup(scenario);
 
@@ -18,20 +18,20 @@ test('create Profile', async () => {
 		watch(alice.store.myProfile, () => {}); // store keepalive
 		assert.notOk(myProfile);
 
-		// // Alice creates a Profile
-		// const profile: EntryRecord<Profile> =
-		// 	await alice.store.client.createProfile(
-		// 		await sampleProfile(alice.store.client),
-		// 	);
-		// assert.ok(profile);
+		// Alice creates a Post
+		const profile: EntryRecord<Profile> =
+			await alice.store.client.createProfile(
+				await sampleProfile(alice.store.client, {
+					nickname: 'alice',
+				}),
+			);
+		assert.ok(profile);
 
-		// await pause(1000); // Difference in time between the create the processing of the signal
+		await dhtSync([alice.player, bob.player], alice.player.cells[0].cell_id[0]); // Difference in time between the create the processing of the signal
 
-		// agentsWithProfile = await toPromise(alice.store.allProfiles);
-		// assert.equal(agentsWithProfile.size, 1);
-
-		// const profileStatus = alice.store.myProfile.get();
-		// assert.equal(profileStatus.status, 'completed');
-		// assert.ok((profileStatus as any).value);
+		let profiles = await bob.store.client.searchProfiles('bob');
+		assert.equal(profiles.length, 0);
+		profiles = await bob.store.client.searchProfiles('ali');
+		assert.equal(profiles.length, 1);
 	});
 });
