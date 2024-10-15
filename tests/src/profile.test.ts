@@ -18,20 +18,20 @@ test('create Profile', async () => {
 		watch(alice.store.myProfile, () => {}); // store keepalive
 		assert.notOk(myProfile);
 
-		// // Alice creates a Profile
-		// const profile: EntryRecord<Profile> =
-		// 	await alice.store.client.createProfile(
-		// 		await sampleProfile(alice.store.client),
-		// 	);
-		// assert.ok(profile);
+		// Alice creates a Profile
+		const profile: EntryRecord<Profile> =
+			await alice.store.client.createProfile(
+				await sampleProfile(alice.store.client),
+			);
+		assert.ok(profile);
 
-		// await pause(1000); // Difference in time between the create the processing of the signal
+		await pause(1000); // Difference in time between the create the processing of the signal
 
-		// agentsWithProfile = await toPromise(alice.store.allProfiles);
-		// assert.equal(agentsWithProfile.size, 1);
+		agentsWithProfile = await toPromise(alice.store.allProfiles);
+		assert.equal(agentsWithProfile.size, 1);
 
-		// const profileStatus = alice.store.myProfile.get();
-		// assert.equal(profileStatus.status, 'completed');
-		// assert.ok((profileStatus as any).value);
+		const profileStatus = alice.store.myProfile.get();
+		assert.equal(profileStatus.status, 'completed');
+		assert.ok((profileStatus as any).value);
 	});
 });

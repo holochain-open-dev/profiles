@@ -89,11 +89,15 @@ export class SearchProfileDropdown extends SignalWatcher(LitElement) {
 	@query('#dropdown')
 	public dropdown!: SlDropdown;
 
-	async onProfileSelected(profileHash: ActionHash) {
+	async onProfileSelected(
+		profileHash: ActionHash,
+		profile: EntryRecord<Profile>,
+	) {
 		this.dispatchEvent(
 			new CustomEvent('profile-selected', {
 				detail: {
 					profileHash,
+					profile,
 				},
 				bubbles: true,
 				composed: true,
@@ -173,8 +177,12 @@ export class SearchProfileDropdown extends SignalWatcher(LitElement) {
 			<sl-dropdown id="dropdown" style="flex: 1" .open=${ifDefined(this.open)}>
 				<slot slot="trigger"></slot>
 				<sl-menu
-					@sl-select=${(e: CustomEvent) => {
-						this.onProfileSelected(decodeHashFromBase64(e.detail.item.value));
+					@sl-select=${async (e: CustomEvent) => {
+						const profileHash = decodeHashFromBase64(e.detail.item.value);
+						const profile = await toPromise(
+							this.store.profiles.get(profileHash).latestVersion,
+						);
+						this.onProfileSelected(profileHash, profile);
 					}}
 				>
 					${this.renderProfileList()}

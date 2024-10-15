@@ -26,12 +26,12 @@
 
 			import '../src/elements/agent-avatar.ts';
 			import '../src/elements/agent-mention.ts';
-			import '../src/elements/list-profiles.ts';
+			import '../src/elements/all-profiles.ts';
 			import '../src/elements/my-profile.ts';
 			import '../src/elements/profile-prompt.ts';
 			import '../src/elements/profiles-context.ts';
-			import '../src/elements/search-agent.ts';
-			import '../src/elements/search-agents.ts';
+			import '../src/elements/search-profile.ts';
+			import '../src/elements/search-profiles.ts';
 			import '../src/elements/textarea-with-mentions.ts';
 			import { ProfilesClient, ProfilesStore } from '../src/index.ts';
 
@@ -94,7 +94,7 @@
 									></textarea-with-mentions>
 									<input type="submit" />
 								</form>
-								<list-profiles></list-profiles>
+								<all-profiles></all-profiles>
 								<my-profile style="height: 800px; width: 800px;"></my-profile>
 								<agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
 									<div
@@ -102,12 +102,12 @@
 										slot="badge"
 									></div>
 								</agent-avatar>
-								<search-agent
+								<search-profile
 									name="author"
 									required
-									@agent-selected=${e => console.log(e)}
-								></search-agent>
-								<search-agents name="hosts" required></search-agents>
+									@profile-selected=${e => console.log(e)}
+								></search-profile>
+								<search-profiles name="hosts" required></search-profiles>
 								<agent-avatar
 									.agentPubKey=${this.store.client.client.myPubKey}
 									.showOnHover=${false}
