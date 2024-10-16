@@ -1,4 +1,6 @@
 import {
+	AsyncComputed,
+	AsyncSignal,
 	collectionSignal,
 	immutableEntrySignal,
 	latestVersionOfEntrySignal,
@@ -7,11 +9,12 @@ import {
 	pipe,
 	queryLiveEntriesSignal,
 } from '@holochain-open-dev/signals';
-import { LazyHoloHashMap, slice } from '@holochain-open-dev/utils';
+import { EntryRecord, LazyHoloHashMap, slice } from '@holochain-open-dev/utils';
 import { ActionHash, AgentPubKey, encodeHashToBase64 } from '@holochain/client';
 
 import { ProfilesConfig, defaultConfig } from './config.js';
 import { ProfilesClient } from './profiles-client.js';
+import { Profile } from './types.js';
 import { effect } from './utils.js';
 
 export class ProfilesStore {
@@ -30,26 +33,24 @@ export class ProfilesStore {
 
 		effect(() => {
 			const claims = this.myProfileClaims.get();
+			const myProfile = this.myProfile.get();
 
-			const agentToProfileLinks = this.agentToProfileLinks
-				.get(this.client.client.myPubKey)
-				.get();
-			if (claims.status !== 'completed') return;
+			console.log('hey1');
+
+			if (claims.status !== 'completed' || claims.value.length > 0) return;
+			if (myProfile.status !== 'completed' || myProfile.value !== undefined)
+				return;
+
+			console.log('hey2');
+			// Expensive subscription
+			const agentToProfileLinks = this.myProfileLinks.get();
 			if (agentToProfileLinks.status !== 'completed') return;
+			console.log('hey3', agentToProfileLinks.value);
 
-			const myLinks = agentToProfileLinks.value.filter(
-				l =>
-					encodeHashToBase64(l.author) ===
-					encodeHashToBase64(this.client.client.myPubKey),
-			);
-
-			if (
-				claims.value.length === 0 &&
-				agentToProfileLinks.value.length > 0 &&
-				myLinks.length === 0
-			) {
+			if (agentToProfileLinks.value.length > 0) {
 				if (this._creatingClaim) return;
 				this._creatingClaim = true;
+				console.log('creating');
 				const link = agentToProfileLinks.value[0];
 				this.client
 					.createProfileClaim({
@@ -83,18 +84,60 @@ export class ProfilesStore {
 			agent,
 			() => this.client.getAgentProfile(agent),
 			'AgentToProfile',
-			100,
 		),
 	);
+	private myProfileLinks = liveLinksSignal(
+		this.client,
+		this.client.client.myPubKey,
+		() => this.client.getAgentProfile(this.client.client.myPubKey),
+		'AgentToProfile',
+		1000,
+	);
 
-	agentProfile = new LazyHoloHashMap((agent: AgentPubKey) =>
-		pipe(this.agentToProfileLinks.get(agent), links => {
-			if (links.length > 1) throw new Error('Agent has more than one profile');
-			if (links.length === 0) return undefined;
+	agentProfile = new LazyHoloHashMap(
+		(agent: AgentPubKey) =>
+			new AsyncComputed(() => {
+				const links = this.agentToProfileLinks.get(agent).get();
 
-			const profileHash = links[0].target;
-			return this.profiles.get(profileHash);
-		}),
+				if (links.status !== 'completed') return links;
+				if (links.value.length > 0) {
+					if (links.value.length > 1) {
+						return {
+							status: 'error',
+							error: 'Agent has more than one profile',
+						};
+					}
+
+					const profileHash = links.value[0].target;
+					return {
+						status: 'completed',
+						value: this.profiles.get(profileHash),
+					};
+				}
+
+				if (
+					encodeHashToBase64(agent) !==
+					encodeHashToBase64(this.client.client.myPubKey)
+				) {
+					return {
+						status: 'completed',
+						value: undefined,
+					};
+				}
+
+				const claims = this.myProfileClaims.get();
+
+				if (claims.status !== 'completed') return claims;
+				if (claims.value.length === 0)
+					return {
+						status: 'completed' as const,
+						value: undefined,
+					};
+				return {
+					status: 'completed' as const,
+					value: this.profiles.get(claims.value[0].entry.profile_hash),
+				};
+			}),
 	);
 
 	/**

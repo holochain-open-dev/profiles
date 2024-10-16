@@ -1,27 +1,34 @@
-import { notifyError, sharedStyles } from '@holochain-open-dev/elements';
+import {
+	notify,
+	notifyError,
+	sharedStyles,
+} from '@holochain-open-dev/elements';
 import { SignalWatcher } from '@holochain-open-dev/signals';
 import { encodeHashToBase64 } from '@holochain/client';
 import { consume } from '@lit/context';
 import { msg } from '@lit/localize';
 import { SlInput } from '@shoelace-style/shoelace';
-import { LitElement, html } from 'lit';
+import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
-import { profilesStoreContext } from '../context';
-import { ProfilesStore } from '../profiles-store';
-import { RequestLinkAgentSignal } from '../types';
+import { TTL_CAP_GRANT } from '../config.js';
+import { profilesStoreContext } from '../context.js';
+import { ProfilesStore } from '../profiles-store.js';
+import { RequestLinkAgentSignal } from '../types.js';
+import './passcode-input.js';
+import { PasscodeInput } from './passcode-input.js';
 
 function randomDigit(): number {
-	return Math.round(Math.random() * 10);
+	return Math.floor(Math.random() * 10);
 }
 
-export function randomPassnumber(length: number) {
-	const passnumber: number[] = [];
+export function randomPasscode(length: number) {
+	const passcode: number[] = [];
 
 	for (let i = 0; i < length; i++) {
-		passnumber.push(randomDigit());
+		passcode.push(randomDigit());
 	}
-	return passnumber;
+	return passcode;
 }
 
 @customElement('link-agent-recipient')
@@ -34,21 +41,25 @@ export class LinkAgentRecipient extends SignalWatcher(LitElement) {
 	store!: ProfilesStore;
 
 	@state()
-	recipientPassnumber: number[] = [];
+	recipientPasscode: number[] = [];
 
 	@state()
 	requestLinkAgentSignal: RequestLinkAgentSignal | undefined;
 
-	inputtedRequestorPassnumber!: Array<number | undefined>;
+	interval: any;
 
 	async firstUpdated() {
-		this.recipientPassnumber = randomPassnumber(
-			this.store.config.passnumberLength,
+		this.recipientPasscode = randomPasscode(
+			this.store.config.linkDevicePasscodeLength,
 		);
-		this.inputtedRequestorPassnumber = Array.from(
-			Array(this.store.config.passnumberLength),
-		).map(() => undefined);
-		await this.store.client.prepareLinkAgent(this.recipientPassnumber);
+		this.interval = setInterval(async () => {
+			this.recipientPasscode = randomPasscode(
+				this.store.config.linkDevicePasscodeLength,
+			);
+			await this.store.client.clearLinkAgent();
+			await this.store.client.prepareLinkAgent(this.recipientPasscode);
+		}, TTL_CAP_GRANT);
+		await this.store.client.prepareLinkAgent(this.recipientPasscode);
 
 		this.store.client.onSignal(signal => {
 			if ('type' in signal) return;
@@ -57,74 +68,63 @@ export class LinkAgentRecipient extends SignalWatcher(LitElement) {
 	}
 	disconnectedCallback(): void {
 		super.disconnectedCallback();
+		clearInterval(this.interval);
 		this.store.client.clearLinkAgent();
-	}
-
-	clearPassnumber() {
-		const inputs = Array.from(this.shadowRoot!.querySelectorAll('sl-input'));
-		inputs.forEach(i => (i.value = ''));
-		this.inputtedRequestorPassnumber = Array.from(
-			Array(this.store.config.passnumberLength),
-		).map(() => undefined);
 	}
 
 	async attemptLinkAgent(
 		requestLinkAgentSignal: RequestLinkAgentSignal,
-		inputtedRequestorPassnumber: Array<number>,
+		inputtedRequestorPasscode: Array<number>,
 	) {
 		if (
 			!areEqual(
-				requestLinkAgentSignal.requestor_passnumber,
-				inputtedRequestorPassnumber,
+				requestLinkAgentSignal.requestor_passcode,
+				inputtedRequestorPasscode,
 			)
 		) {
-			notifyError(msg('Incorrect pass number'));
-			this.clearPassnumber();
+			notifyError(msg('Incorrect pass code'));
+			(
+				this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
+			).clearPasscode();
 			return;
 		}
 		try {
 			await this.store.client.linkAgentWithMyProfile(
 				requestLinkAgentSignal.from,
 			);
+			this.dispatchEvent(
+				new CustomEvent('agent-linked', {
+					bubbles: true,
+					composed: true,
+					detail: {
+						agentPubKey: requestLinkAgentSignal.from,
+					},
+				}),
+			);
+			notify(msg('Device linked successfully'));
 		} catch (e) {
 			console.error(e);
 			notifyError(msg(`Error`));
 		}
-		this.clearPassnumber();
+		(
+			this.shadowRoot!.querySelector('passcode-input') as PasscodeInput
+		).clearPasscode();
 	}
 
 	renderRequestLinkAgent(requestLinkAgentSignal: RequestLinkAgentSignal) {
 		return html`
-			<div class="column">
-				<div class="row">
-					${Array.from(Array(this.store.config.passnumberLength)).map(
-						(_, i) =>
-							html`<sl-input
-								id="input-${i}"
-								type="number"
-								min="0"
-								max="9"
-								@sl-input=${(e: CustomEvent) => {
-									const input = e.target as SlInput;
-									this.inputtedRequestorPassnumber[i] = parseInt(
-										input.value,
-										10,
-									);
-									const nextInput = this.shadowRoot!.getElementById(
-										`input-${i + 1}`,
-									);
-									if (nextInput) nextInput.focus();
-									if (
-										this.inputtedRequestorPassnumber.every(n => n !== undefined)
-									)
-										this.attemptLinkAgent(
-											requestLinkAgentSignal,
-											this.inputtedRequestorPassnumber as number[],
-										);
-								}}
-							></sl-input>`,
-					)}
-				</div>
+			<div
+				class="column"
+				style="gap: 12px; align-items: center; justify-content: center; flex: 1"
+			>
+				<span class="title">${msg('Device link request received')} </span>
+				<span>${msg('Enter the pass code from your other device:')} </span>
+				<passcode-input
+					.passcodeLength=${this.store.config.linkDevicePasscodeLength}
+					@passcode-change=${(e: CustomEvent) =>
+						this.attemptLinkAgent(requestLinkAgentSignal, e.detail.passcode)}
+				>
+				</passcode-input>
 			</div>
 		`;
 	}
@@ -133,18 +133,39 @@ export class LinkAgentRecipient extends SignalWatcher(LitElement) {
 		if (this.requestLinkAgentSignal)
 			return this.renderRequestLinkAgent(this.requestLinkAgentSignal);
 
-		return html`<div class="column">
-			<span>${this.recipientPassnumber.join('')}</span>
+		return html`<div
+			class="column"
+			style="gap: 12px; align-items: center; justify-content: center; flex: 1"
+		>
+			<span
+				>${msg(
+					'Enter this pass code in your other device (valid for one minute):',
+				)}
+			</span>
+			<span class="passcode">${this.recipientPasscode.join('')}</span>
 		</div>`;
 	}
 
-	static styles = [sharedStyles];
+	static styles = [
+		sharedStyles,
+		css`
+			:host {
+				display: flex;
+				justify-content: center;
+			}
+			.passcode {
+				font-family: Monospace, sans-serif;
+				letter-spacing: 0.2rem;
+				font-size: 3em;
+			}
+		`,
+	];
 }
 
-function areEqual(passnumber1: Array<number>, passnumber2: Array<number>) {
-	if (passnumber1.length !== passnumber2.length) return false;
-	for (let i = 0; i < passnumber1.length; i++) {
-		if (passnumber1[i] !== passnumber2[i]) return false;
+function areEqual(passcode1: Array<number>, passcode2: Array<number>) {
+	if (passcode1.length !== passcode2.length) return false;
+	for (let i = 0; i < passcode1.length; i++) {
+		if (passcode1[i] !== passcode2[i]) return false;
 	}
 
 	return true;

@@ -82,6 +82,19 @@
 
 				render() {
 					if (!this.loaded) return html`<span>Loading...</span>`;
+					if (this.linkAgent)
+						return html`
+							<profiles-context .store=${this.store}>
+								<link-agent-recipient
+									style="flex: 1"
+									@agent-linked=${() => {
+										this.linkAgent = false;
+										this.requestUpdate();
+									}}
+								>
+								</link-agent-recipient>
+							</profiles-context>
+						`;
 					return html`
 						<profiles-context .store=${this.store}>
 							<profile-prompt
@@ -119,8 +132,12 @@
 									.agentPubKey=${this.store.client.client.myPubKey}
 								>
 								</agent-mention>
+								<sl-button @click=${() => {
+									this.linkAgent = true;
+									this.requestUpdate();
+								}}>Link Device
+								</sl-button>
 
-								<link-agent-recipient> </link-agent-recipient>
 							</profile-prompt>
 						</profiles-context>
 					`;

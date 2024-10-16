@@ -3,7 +3,7 @@ import { ActionHash, AgentPubKey } from '@holochain/client';
 
 export interface RequestLinkAgentSignal {
 	from: AgentPubKey;
-	requestor_passnumber: Array<number>;
+	requestor_passcode: Array<number>;
 }
 
 export type ProfilesSignal =

@@ -29,14 +29,14 @@ fn linking_agents_path() -> Path {
     Path::from("linking_agents")
 }
 
-fn secret_from_passnumber(passnumber: Vec<u8>) -> CapSecret {
+fn secret_from_passcode(passcode: Vec<u8>) -> CapSecret {
     let mut secret: CapSecretBytes = [0; CAP_SECRET_BYTES];
 
-    for i in 0..passnumber.len() {
-        secret[i] = passnumber[i];
+    for i in 0..passcode.len() {
+        secret[i] = passcode[i];
     }
 
-    for i in 0..(CAP_SECRET_BYTES - passnumber.len()) {
+    for i in passcode.len()..(CAP_SECRET_BYTES - passcode.len()) {
         secret[i] = 0;
     }
 
@@ -44,14 +44,14 @@ fn secret_from_passnumber(passnumber: Vec<u8>) -> CapSecret {
 }
 
 #[hdk_extern]
-pub fn prepare_link_agent(passnumber: Vec<u8>) -> ExternResult<()> {
+pub fn prepare_link_agent(passcode: Vec<u8>) -> ExternResult<()> {
     let mut functions = BTreeSet::new();
     functions.insert((
         zome_info()?.name,
         FunctionName("receive_request_link_agent".into()),
     ));
     let access = CapAccess::Transferable {
-        secret: secret_from_passnumber(passnumber),
+        secret: secret_from_passcode(passcode),
     };
     let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
         String::from("link-agents"), // A string by which to later query for saved grants.
@@ -148,18 +148,18 @@ fn delete_link_relaxed(address: ActionHash) -> ExternResult<()> {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RequestLinkAgentInput {
     recipient: AgentPubKey,
-    recipient_passnumber: Vec<u8>,
-    requestor_passnumber: Vec<u8>,
+    recipient_passcode: Vec<u8>,
+    requestor_passcode: Vec<u8>,
 }
 
 #[hdk_extern]
-pub fn request_link_agent_message(input: RequestLinkAgentInput) -> ExternResult<()> {
+pub fn request_link_agent(input: RequestLinkAgentInput) -> ExternResult<()> {
     let response = call_remote(
         input.recipient,
         zome_info()?.name,
         "receive_request_link_agent".into(),
-        Some(secret_from_passnumber(input.recipient_passnumber)),
-        input.requestor_passnumber,
+        Some(secret_from_passcode(input.recipient_passcode)),
+        input.requestor_passcode,
     )?;
 
     match response {
@@ -171,13 +171,13 @@ pub fn request_link_agent_message(input: RequestLinkAgentInput) -> ExternResult<
 #[derive(Serialize, Deserialize, SerializedBytes, Debug, Clone)]
 pub struct RequestLinkAgentSignal {
     from: AgentPubKey,
-    requestor_passnumber: Vec<u8>,
+    requestor_passcode: Vec<u8>,
 }
 
 const TTL_LIVE_AGENTS_CAP_GRANTS: i64 = 1000 * 1000 * 60; // 1 minute
 
 #[hdk_extern]
-pub fn receive_request_link_agent(requestor_passnumber: Vec<u8>) -> ExternResult<()> {
+pub fn receive_request_link_agent(requestor_passcode: Vec<u8>) -> ExternResult<()> {
     let link_agents_cap_grants = query_link_agents_cap_grants()?;
     let now = sys_time()?;
 
@@ -196,7 +196,7 @@ pub fn receive_request_link_agent(requestor_passnumber: Vec<u8>) -> ExternResult
 
     let request_link_agent_signal = RequestLinkAgentSignal {
         from: call_info.provenance,
-        requestor_passnumber,
+        requestor_passcode,
     };
 
     emit_signal(request_link_agent_signal)?;

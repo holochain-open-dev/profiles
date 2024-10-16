@@ -1,9 +1,10 @@
-import { sharedStyles } from '@holochain-open-dev/elements';
+import { sharedStyles, wrapPathInSvg } from '@holochain-open-dev/elements';
 import '@holochain-open-dev/elements/dist/elements/display-error.js';
 import { SignalWatcher } from '@holochain-open-dev/signals';
 import { EntryRecord } from '@holochain-open-dev/utils';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
+import { mdiArrowLeft } from '@mdi/js';
 import '@shoelace-style/shoelace/dist/components/spinner/spinner.js';
 import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -34,9 +35,38 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 
 	renderContent() {
 		if (this.view === 'create-profile')
-			return html`<create-profile></create-profile>`;
+			return html`
+				<div class="column" style="align-items: start">
+					<sl-button
+						variant="text"
+						@click=${() => {
+							this.view = 'question';
+						}}
+						style="margin-bottom: 12px"
+					>
+						<sl-icon
+							slot="prefix"
+							.src=${wrapPathInSvg(mdiArrowLeft)}
+						></sl-icon>
+						${msg('Back')}</sl-button
+					>
+					<create-profile></create-profile>
+				</div>
+			`;
 		if (this.view === 'link-device')
-			return html`<link-agent-requestor></link-agent-requestor>`;
+			return html` <div class="column" style="align-items: start">
+				<sl-button
+					variant="text"
+					@click=${() => {
+						this.view = 'question';
+					}}
+					style="margin-bottom: 12px"
+				>
+					<sl-icon slot="prefix" .src=${wrapPathInSvg(mdiArrowLeft)}></sl-icon>
+					${msg('Back')}</sl-button
+				>
+				<link-agent-requestor></link-agent-requestor>
+			</div>`;
 
 		return html`
 			<sl-card>

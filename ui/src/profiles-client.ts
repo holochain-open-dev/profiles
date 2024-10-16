@@ -150,8 +150,8 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 		return new EntryRecord(record);
 	}
 
-	async prepareLinkAgent(passnumber: number[]) {
-		await this.callZome('prepare_link_agent', passnumber);
+	async prepareLinkAgent(passcode: number[]) {
+		await this.callZome('prepare_link_agent', passcode);
 	}
 	async getLinkingAgents(): Promise<Array<Link>> {
 		return this.callZome('get_linking_agents', null);
@@ -162,13 +162,13 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 
 	async requestLinkAgent(
 		recipient: AgentPubKey,
-		recipient_passnumber: number[],
-		requestor_passnumber: number[],
+		recipient_passcode: number[],
+		requestor_passcode: number[],
 	) {
 		await this.callZome('request_link_agent', {
 			recipient,
-			recipient_passnumber,
-			requestor_passnumber,
+			recipient_passcode,
+			requestor_passcode,
 		});
 	}
 }
