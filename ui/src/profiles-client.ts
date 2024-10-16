@@ -150,11 +150,25 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 		return new EntryRecord(record);
 	}
 
-	async clearAllLinkAgentsCapGrants() {
-		await this.callZome('clear_all_link_agents_cap_grants', null);
+	async prepareLinkAgent(passnumber: number[]) {
+		await this.callZome('prepare_link_agent', passnumber);
+	}
+	async getLinkingAgents(): Promise<Array<Link>> {
+		return this.callZome('get_linking_agents', null);
+	}
+	async clearLinkAgent() {
+		await this.callZome('clear_link_agent', null);
 	}
 
-	async createLinkAgentCapGrant() {
-		await this.callZome('create_link_agent_cap_grant', null);
+	async requestLinkAgent(
+		recipient: AgentPubKey,
+		recipient_passnumber: number[],
+		requestor_passnumber: number[],
+	) {
+		await this.callZome('request_link_agent', {
+			recipient,
+			recipient_passnumber,
+			requestor_passnumber,
+		});
 	}
 }

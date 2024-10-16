@@ -12,11 +12,13 @@ use hdi::prelude::*;
 pub use profiles_types::*;
 
 mod agent_to_profile;
+mod linking_agents;
 mod path_to_profile;
 mod prefix_path;
 mod profile;
 mod profile_claim;
 use agent_to_profile::*;
+use linking_agents::*;
 use path_to_profile::*;
 use prefix_path::*;
 use profile::*;
@@ -37,6 +39,7 @@ pub enum LinkTypes {
     PrefixPath,
     PathToProfile,
     AgentToProfile,
+    LinkingAgents,
 }
 
 #[hdk_extern]
@@ -118,6 +121,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             LinkTypes::PrefixPath => {
                 validate_create_link_prefix_path(action, base_address, target_address, tag)
             }
+            LinkTypes::LinkingAgents => {
+                validate_create_link_linking_agents(action, base_address, target_address, tag)
+            }
         },
         FlatOp::RegisterDeleteLink {
             link_type,
@@ -142,6 +148,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 tag,
             ),
             LinkTypes::PrefixPath => validate_delete_link_prefix_path(
+                action,
+                original_action,
+                base_address,
+                target_address,
+                tag,
+            ),
+            LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
                 action,
                 original_action,
                 base_address,
@@ -183,7 +196,59 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     validate_update_profile_claim(action, profile_claim)
                 }
             },
-            OpRecord::DeleteEntry { action, .. } => validate_delete_profile(action),
+            OpRecord::DeleteEntry {
+                original_action_hash,
+                action,
+                ..
+            } => {
+                let original_record = must_get_valid_record(original_action_hash)?;
+                let original_action = original_record.action().clone();
+                let original_action = match original_action {
+                    Action::Create(create) => EntryCreationAction::Create(create),
+                    Action::Update(update) => EntryCreationAction::Update(update),
+                    _ => {
+                        return Ok(ValidateCallbackResult::Invalid(
+                            "Original action for a delete must be a Create or Update action"
+                                .to_string(),
+                        ));
+                    }
+                };
+                let app_entry_type = match original_action.entry_type() {
+                    EntryType::App(app_entry_type) => app_entry_type,
+                    _ => {
+                        return Ok(ValidateCallbackResult::Valid);
+                    }
+                };
+                let entry = match original_record.entry().as_option() {
+                    Some(entry) => entry,
+                    None => {
+                        return Ok(ValidateCallbackResult::Invalid(
+                            "Original record for a delete must contain an entry".to_string(),
+                        ));
+                    }
+                };
+                let original_app_entry = match EntryTypes::deserialize_from_type(
+                    app_entry_type.zome_index,
+                    app_entry_type.entry_index,
+                    entry,
+                )? {
+                    Some(app_entry) => app_entry,
+                    None => {
+                        return Ok(
+                                ValidateCallbackResult::Invalid(
+                                    "Original app entry must be one of the defined entry types for this zome"
+                                        .to_string(),
+                                ),
+                            );
+                    }
+                };
+                match original_app_entry {
+                    EntryTypes::Profile(_original_profile) => validate_delete_profile(action),
+                    EntryTypes::ProfileClaim(_original_profile_claim) => {
+                        validate_delete_profile_claim(action)
+                    }
+                }
+            }
             OpRecord::CreateLink {
                 base_address,
                 target_address,
@@ -203,6 +268,9 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 }
                 LinkTypes::PrefixPath => {
                     validate_create_link_prefix_path(action, base_address, target_address, tag)
+                }
+                LinkTypes::LinkingAgents => {
+                    validate_create_link_linking_agents(action, base_address, target_address, tag)
                 }
             },
             OpRecord::DeleteLink {
@@ -242,6 +310,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         create_link.tag,
                     ),
                     LinkTypes::PrefixPath => validate_delete_link_prefix_path(
+                        action,
+                        create_link.clone(),
+                        base_address,
+                        create_link.target_address,
+                        create_link.tag,
+                    ),
+                    LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
                         action,
                         create_link.clone(),
                         base_address,

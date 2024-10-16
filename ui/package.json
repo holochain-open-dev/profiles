@@ -36,7 +36,6 @@
 		"@mdi/js": "^7.1.96",
 		"@msgpack/msgpack": "^2.7.0",
 		"@shoelace-style/shoelace": "^2.11.0",
-		"@zxing/browser": "^0.1.5",
 		"lit": "^3.0.2"
 	},
 	"devDependencies": {

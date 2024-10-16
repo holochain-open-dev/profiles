@@ -49,6 +49,6 @@ pub fn validate_delete_link_agent_to_profile(
     _tag: LinkTag,
 ) -> ExternResult<ValidateCallbackResult> {
     Ok(ValidateCallbackResult::Invalid(String::from(
-        "AgentToProfile links cannot be updated",
+        "AgentToProfile links cannot be deleted",
     )))
 }

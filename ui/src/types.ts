@@ -1,7 +1,14 @@
 import { ActionCommittedSignal } from '@holochain-open-dev/utils';
-import { ActionHash } from '@holochain/client';
+import { ActionHash, AgentPubKey } from '@holochain/client';
 
-export type ProfilesSignal = ActionCommittedSignal<EntryTypes, any>;
+export interface RequestLinkAgentSignal {
+	from: AgentPubKey;
+	requestor_passnumber: Array<number>;
+}
+
+export type ProfilesSignal =
+	| ActionCommittedSignal<EntryTypes, any>
+	| RequestLinkAgentSignal;
 
 export type EntryTypes =
 	| ({ type: 'Profile' } & Profile)

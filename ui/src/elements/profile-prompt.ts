@@ -11,7 +11,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
 import './create-profile.js';
-import './link-agent-scan-qrcode.js';
+import './link-agent-requestor.js';
 
 /**
  * @element profile-prompt
@@ -36,7 +36,7 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 		if (this.view === 'create-profile')
 			return html`<create-profile></create-profile>`;
 		if (this.view === 'link-device')
-			return html`<link-agent-scan-qrcode></link-agent-scan-qrcode>`;
+			return html`<link-agent-requestor></link-agent-requestor>`;
 
 		return html`
 			<sl-card>
