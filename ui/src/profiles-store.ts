@@ -25,6 +25,9 @@ export class ProfilesStore {
 	) {
 		this.config = { ...defaultConfig, ...config };
 
+		// At startup, clear all the cap grants that might have been left over from an unfinished link agent process
+		this.client.clearAllLinkAgentsCapGrants();
+
 		effect(() => {
 			const claims = this.myProfileClaims.get();
 

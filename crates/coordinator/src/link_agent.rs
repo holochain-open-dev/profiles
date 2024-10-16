@@ -24,3 +24,62 @@ pub fn link_agent_with_my_profile(agent_pub_key: AgentPubKey) -> ExternResult<()
 
     Ok(())
 }
+
+#[derive(Serialize, Deserialize, SerializedBytes, Debug, Clone)]
+#[serde(tag = "type")]
+pub enum SignalPayload {}
+
+#[hdk_extern]
+pub fn recv_remote_signal(signal: ExternIO) -> ExternResult<()> {
+    let signal_payload: SignalPayload = signal
+        .decode()
+        .map_err(|err| wasm_error!(WasmErrorInner::Guest(err.into())))?;
+
+    emit_signal(signal_payload)?;
+    Ok(())
+}
+
+#[hdk_extern]
+pub fn create_link_agent_cap_grant() -> ExternResult<()> {
+    let mut functions = BTreeSet::new();
+    functions.insert((zome_info()?.name, FunctionName("recv_remote_signal".into())));
+    let cap_grant_entry: CapGrantEntry = CapGrantEntry::new(
+        String::from("link-agents"), // A string by which to later query for saved grants.
+        ().into(), // Unrestricted access means any external agent can call the extern
+        GrantedFunctions::Listed(functions),
+    );
+
+    create(CreateInput::new(
+        EntryDefLocation::CapGrant,
+        EntryVisibility::Private,
+        Entry::CapGrant(cap_grant_entry),
+        ChainTopOrdering::default(),
+    ))?;
+    Ok(())
+}
+
+#[hdk_extern]
+pub fn clear_all_link_agents_cap_grants() -> ExternResult<()> {
+    let filter = ChainQueryFilter::new()
+        .entry_type(EntryType::CapGrant)
+        .include_entries(true)
+        .action_type(ActionType::Create);
+    let records = query(filter)?;
+
+    for record in records {
+        let Some(entry) = record.entry().as_option() else {
+            continue;
+        };
+        let Entry::CapGrant(cap_grant) = entry else {
+            continue;
+        };
+        if cap_grant.tag.as_str() == "link-agents" {
+            delete(DeleteInput {
+                deletes_action_hash: record.action_address().clone(),
+                chain_top_ordering: ChainTopOrdering::Relaxed,
+            })?;
+        }
+    }
+
+    Ok(())
+}

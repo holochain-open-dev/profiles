@@ -27,6 +27,7 @@
 			import '../src/elements/agent-avatar.ts';
 			import '../src/elements/agent-mention.ts';
 			import '../src/elements/all-profiles.ts';
+			import '../src/elements/link-agent-qrcode.ts';
 			import '../src/elements/my-profile.ts';
 			import '../src/elements/profile-prompt.ts';
 			import '../src/elements/profiles-context.ts';
@@ -84,9 +85,9 @@
 					return html`
 						<profiles-context .store=${this.store}>
 							<profile-prompt
-								style="align-items: start"
 								@profile-created=${e => console.log(e)}
 							>
+							<div style="flex-direction: row; display:flex; flex-wrap: wrap">
 								<form ${onSubmit(f => this.onSubmit(f))}>
 									<textarea-with-mentions
 										name="hi"
@@ -95,7 +96,7 @@
 									<input type="submit" />
 								</form>
 								<all-profiles></all-profiles>
-								<my-profile style="height: 800px; width: 800px;"></my-profile>
+								<my-profile style="height: 200px; width: 200px;"></my-profile>
 								<agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
 									<div
 										style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
@@ -118,6 +119,8 @@
 									.agentPubKey=${this.store.client.client.myPubKey}
 								>
 								</agent-mention>
+
+								<link-agent-qrcode> </link-agent-qrcode>
 							</profile-prompt>
 						</profiles-context>
 					`;

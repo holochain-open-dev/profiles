@@ -108,7 +108,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 		return new EntryRecord(record);
 	}
 
-	/** Devices linking functions */
+	/** Agent linking functions */
 
 	/**
 	 * Links the given agent under the profile for the caller agent
@@ -143,5 +143,13 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 			profileClaim,
 		);
 		return new EntryRecord(record);
+	}
+
+	async clearAllLinkAgentsCapGrants() {
+		await this.callZome('clear_all_link_agents_cap_grants', null);
+	}
+
+	async createLinkAgentCapGrant() {
+		await this.callZome('create_link_agent_cap_grant', null);
 	}
 }

@@ -6,12 +6,12 @@ import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
 import '@shoelace-style/shoelace/dist/components/spinner/spinner.js';
 import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
-import { Profile } from '../types.js';
 import './create-profile.js';
+import './link-agent-scan-qrcode.js';
 
 /**
  * @element profile-prompt
@@ -29,6 +29,38 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 
 	/** Private properties */
 
+	@state()
+	view: 'question' | 'create-profile' | 'link-device' = 'question';
+
+	renderContent() {
+		if (this.view === 'create-profile')
+			return html`<create-profile></create-profile>`;
+		if (this.view === 'link-device')
+			return html`<link-agent-scan-qrcode></link-agent-scan-qrcode>`;
+
+		return html`
+			<sl-card>
+				<div class="column" style="gap: 12px">
+					<span class="title"> ${msg('Profile Setup')} </span>
+					<span>
+						${msg('Have you already created a profile in this app?')}
+					</span>
+
+					<div class="row" style="gap: 12px">
+						<sl-button @click=${() => (this.view = 'create-profile')}
+							>${msg('No, create a new profile')}
+						</sl-button>
+						<sl-button
+							variant="primary"
+							@click=${() => (this.view = 'link-device')}
+							>${msg('Yes! Link this device')}
+						</sl-button>
+					</div>
+				</div>
+			</sl-card>
+		`;
+	}
+
 	private renderPrompt(myProfileExists: boolean) {
 		if (myProfileExists) return html`<slot></slot>`;
 
@@ -39,7 +71,7 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 			>
 				<div class="column" style="align-items: center;">
 					<slot name="hero"></slot>
-					<create-profile></create-profile>
+					${this.renderContent()}
 				</div>
 			</div>
 		`;
