@@ -5,11 +5,11 @@ import { assert, test } from 'vitest';
 
 import { sampleProfile } from '../../ui/src/mocks.js';
 import { Profile } from '../../ui/src/types.js';
-import { setup } from './common.js';
+import { setup, setup3 } from './common.js';
 
 test('create Profile and link agent', async () => {
 	await runScenario(async scenario => {
-		const { alice, bob } = await setup(scenario);
+		const { alice, bob, carol } = await setup3(scenario);
 
 		let agentsWithProfile = await toPromise(alice.store.allProfiles);
 		assert.equal(agentsWithProfile.size, 0);
@@ -30,34 +30,40 @@ test('create Profile and link agent', async () => {
 		agentsWithProfile = await toPromise(alice.store.allProfiles);
 		assert.equal(agentsWithProfile.size, 1);
 
-		const aliceProfileStatus = alice.store.myProfile.get();
-		assert.equal(aliceProfileStatus.status, 'completed');
-		assert.ok((aliceProfileStatus as any).value);
+		const aliceProfileStatus = await toPromise(alice.store.myProfile);
 
 		await alice.store.client.linkAgentWithMyProfile(bob.player.agentPubKey);
 
 		agentsWithProfile = await toPromise(alice.store.allProfiles);
 		assert.equal(agentsWithProfile.size, 1);
 
-		await pause(1000); // Difference in time between the create the processing of the signal
+		await pause(30_000); // Difference in time between the create the processing of the signal
 
-		const bobProfileStatus = alice.store.myProfile.get();
-		assert.equal(bobProfileStatus.status, 'completed');
-		assert.ok((bobProfileStatus as any).value);
-
-		if (aliceProfileStatus.status !== 'completed' || !aliceProfileStatus.value)
-			return;
-		if (bobProfileStatus.status !== 'completed' || !bobProfileStatus.value)
-			return;
+		const bobProfileStatus = await toPromise(bob.store.myProfile);
 
 		const aliceLatestProfile = await toPromise(
-			aliceProfileStatus.value.latestVersion,
+			aliceProfileStatus.latestVersion,
 		);
 
-		const bobLatestProfile = await toPromise(
-			bobProfileStatus.value.latestVersion,
-		);
+		const bobLatestProfile = await toPromise(bobProfileStatus.latestVersion);
 
 		assert.deepEqual(aliceLatestProfile, bobLatestProfile);
+
+		/** Bob's device now links carol's **/
+
+		await bob.store.client.linkAgentWithMyProfile(carol.player.agentPubKey);
+
+		agentsWithProfile = await toPromise(alice.store.allProfiles);
+		assert.equal(agentsWithProfile.size, 1);
+
+		await pause(30_000); // Difference in time between the create the processing of the signal
+
+		const carolProfileStatus = await toPromise(carol.store.myProfile);
+
+		const carolLatestProfile = await toPromise(
+			carolProfileStatus.latestVersion,
+		);
+
+		assert.deepEqual(carolLatestProfile, bobLatestProfile);
 	});
 });

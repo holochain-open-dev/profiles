@@ -127,7 +127,12 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 	 * @returns the records for all the ProfileClaims in this source chain
 	 */
 	async queryMyProfileClaims(): Promise<EntryRecord<ProfileClaim>[]> {
-		return this.callZome('query_my_profile_claims', null);
+		const records: Record[] = await this.callZome(
+			'query_my_profile_claims',
+			null,
+		);
+
+		return records.map(r => new EntryRecord(r));
 	}
 
 	/**
