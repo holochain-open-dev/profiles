@@ -146,6 +146,7 @@ export class ProfilesStore {
 	 */
 	profiles = new LazyHoloHashMap(
 		(profileHash: ActionHash) => ({
+			profileHash,
 			latestVersion: latestVersionOfEntrySignal(this.client, () =>
 				this.client.getLatestProfile(profileHash),
 			),
