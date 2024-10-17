@@ -30,8 +30,7 @@ test('create Profile', async () => {
 		agentsWithProfile = await toPromise(alice.store.allProfiles);
 		assert.equal(agentsWithProfile.size, 1);
 
-		const profileStatus = alice.store.myProfile.get();
-		assert.equal(profileStatus.status, 'completed');
-		assert.ok((profileStatus as any).value);
+		const aliceProfile = await toPromise(alice.store.myProfile);
+		assert.ok(aliceProfile);
 	});
 });

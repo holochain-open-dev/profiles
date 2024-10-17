@@ -8,6 +8,7 @@ import {
 	mapCompleted,
 	pipe,
 	queryLiveEntriesSignal,
+	toPromise,
 } from '@holochain-open-dev/signals';
 import { EntryRecord, LazyHoloHashMap, slice } from '@holochain-open-dev/utils';
 import { ActionHash, AgentPubKey, encodeHashToBase64 } from '@holochain/client';
@@ -31,26 +32,26 @@ export class ProfilesStore {
 		// At startup, clear all the cap grants that might have been left over from an unfinished link agent process
 		this.client.clearLinkAgent();
 
+		this.createClaimWhenLinked();
+	}
+
+	private async createClaimWhenLinked() {
+		const myProfile = await toPromise(this.myProfile);
+
+		if (myProfile !== undefined) return;
+
 		effect(() => {
 			const claims = this.myProfileClaims.get();
-			const myProfile = this.myProfile.get();
-
-			console.log('hey1');
 
 			if (claims.status !== 'completed' || claims.value.length > 0) return;
-			if (myProfile.status !== 'completed' || myProfile.value !== undefined)
-				return;
 
-			console.log('hey2');
 			// Expensive subscription
 			const agentToProfileLinks = this.myProfileLinks.get();
 			if (agentToProfileLinks.status !== 'completed') return;
-			console.log('hey3', agentToProfileLinks.value);
 
 			if (agentToProfileLinks.value.length > 0) {
 				if (this._creatingClaim) return;
 				this._creatingClaim = true;
-				console.log('creating');
 				const link = agentToProfileLinks.value[0];
 				this.client
 					.createProfileClaim({
