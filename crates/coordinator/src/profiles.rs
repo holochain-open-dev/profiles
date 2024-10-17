@@ -23,9 +23,15 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
         LinkTag::new(profile.nickname.to_lowercase().as_bytes().to_vec()),
     )?;
     create_link(
-        agent_address,
+        agent_address.clone(),
         action_hash.clone(),
         LinkTypes::AgentToProfile,
+        (),
+    )?;
+    create_link(
+        action_hash.clone(),
+        agent_address,
+        LinkTypes::ProfileToAgent,
         (),
     )?;
 

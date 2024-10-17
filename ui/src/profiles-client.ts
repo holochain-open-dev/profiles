@@ -30,6 +30,16 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 	}
 
 	/**
+	 * Get the agents links for the given profile
+	 *
+	 * @param profileHash the profile to get all the agents for
+	 * @returns the links pointing to all the agents for the given profile
+	 */
+	async getAgentsForProfile(profileHash: ActionHash): Promise<Array<Link>> {
+		return this.callZome('get_agents_for_profile', profileHash);
+	}
+
+	/**
 	 * Get the latest version of profile, if they have created it
 	 *
 	 * @param profileHash the profileHash to get the latest version for
@@ -132,7 +142,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 			null,
 		);
 
-		return records.map(r => new EntryRecord(r));
+		return records ? records.map(r => new EntryRecord(r)) : [];
 	}
 
 	/**

@@ -1,5 +1,6 @@
 import { toPromise, watch } from '@holochain-open-dev/signals';
-import { EntryRecord } from '@holochain-open-dev/utils';
+import { EntryRecord, retype } from '@holochain-open-dev/utils';
+import { encodeHashToBase64 } from '@holochain/client';
 import { dhtSync, pause, runScenario } from '@holochain/tryorama';
 import { assert, test } from 'vitest';
 
@@ -32,5 +33,14 @@ test('create Profile', async () => {
 
 		const aliceProfile = await toPromise(alice.store.myProfile);
 		assert.ok(aliceProfile);
+
+		const agentsForProfile = await toPromise(
+			alice.store.agentsForProfile.get(profile.actionHash),
+		);
+		assert.equal(agentsForProfile.length, 1);
+		assert.equal(
+			encodeHashToBase64(agentsForProfile[0]),
+			encodeHashToBase64(alice.player.agentPubKey),
+		);
 	});
 });

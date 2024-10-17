@@ -10,7 +10,13 @@ import {
 	queryLiveEntriesSignal,
 	toPromise,
 } from '@holochain-open-dev/signals';
-import { EntryRecord, LazyHoloHashMap, slice } from '@holochain-open-dev/utils';
+import {
+	EntryRecord,
+	HashType,
+	LazyHoloHashMap,
+	retype,
+	slice,
+} from '@holochain-open-dev/utils';
 import { ActionHash, AgentPubKey, encodeHashToBase64 } from '@holochain/client';
 
 import { ProfilesConfig, defaultConfig } from './config.js';
@@ -95,6 +101,9 @@ export class ProfilesStore {
 		1000,
 	);
 
+	/**
+	 * Fetches the profile for the given agent
+	 */
 	agentProfile = new LazyHoloHashMap(
 		(agent: AgentPubKey) =>
 			new AsyncComputed(() => {
@@ -141,9 +150,18 @@ export class ProfilesStore {
 			}),
 	);
 
-	/**
-	 * Fetches the profile for the given agent
-	 */
+	agentsForProfile = new LazyHoloHashMap((profileHash: ActionHash) =>
+		mapCompleted(
+			liveLinksSignal(
+				this.client,
+				profileHash,
+				() => this.client.getAgentsForProfile(profileHash),
+				'ProfileToAgent',
+			),
+			links => links.map(l => retype(l.target, HashType.AGENT)),
+		),
+	);
+
 	profiles = new LazyHoloHashMap(
 		(profileHash: ActionHash) => ({
 			profileHash,

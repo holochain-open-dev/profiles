@@ -20,7 +20,18 @@ pub fn link_agent_with_my_profile(agent_pub_key: AgentPubKey) -> ExternResult<()
         ))));
     };
 
-    create_link(agent_pub_key, profile_hash, LinkTypes::AgentToProfile, ())?;
+    create_link(
+        agent_pub_key.clone(),
+        profile_hash.clone(),
+        LinkTypes::AgentToProfile,
+        (),
+    )?;
+    create_link(
+        profile_hash.clone(),
+        agent_pub_key,
+        LinkTypes::ProfileToAgent,
+        (),
+    )?;
 
     Ok(())
 }

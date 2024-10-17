@@ -40,6 +40,15 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Vec<Link>> 
     )
 }
 
+/// Returns the links targeting the profiles for the given agent, must be one or 0
+#[hdk_extern]
+pub fn get_agents_for_profile(profile_hash: ActionHash) -> ExternResult<Vec<Link>> {
+    get_links(
+        GetLinksInputBuilder::try_new(profile_hash, LinkTypes::ProfileToAgent.try_into_filter()?)?
+            .build(),
+    )
+}
+
 /// Gets all the agents that have created a profile in this DHT.
 #[hdk_extern]
 pub fn get_all_profiles(_: ()) -> ExternResult<Vec<Link>> {

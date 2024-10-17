@@ -15,7 +15,6 @@ test('create Profile and search', async () => {
 		assert.equal(agentsWithProfile.size, 0);
 		watch(alice.store.allProfiles, () => {}); // store keepalive
 		let myProfile = await toPromise(alice.store.myProfile);
-		watch(alice.store.myProfile, () => {}); // store keepalive
 		assert.notOk(myProfile);
 
 		// Alice creates a Post

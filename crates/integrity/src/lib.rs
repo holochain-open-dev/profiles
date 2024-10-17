@@ -17,12 +17,14 @@ mod path_to_profile;
 mod prefix_path;
 mod profile;
 mod profile_claim;
+mod profile_to_agent;
 use agent_to_profile::*;
 use linking_agents::*;
 use path_to_profile::*;
 use prefix_path::*;
 use profile::*;
 use profile_claim::*;
+use profile_to_agent::*;
 
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -39,6 +41,7 @@ pub enum LinkTypes {
     PrefixPath,
     PathToProfile,
     AgentToProfile,
+    ProfileToAgent,
     LinkingAgents,
 }
 
@@ -163,6 +166,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 target_address,
                 tag,
             ),
+            LinkTypes::ProfileToAgent => validate_create_link_profile_to_agent(
+                action_hash(&op).clone(),
+                action,
+                base_address,
+                target_address,
+                tag,
+            ),
             LinkTypes::PathToProfile => {
                 validate_create_link_path_to_profile(action, base_address, target_address, tag)
             }
@@ -182,6 +192,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             action,
         } => match link_type {
             LinkTypes::AgentToProfile => validate_delete_link_agent_to_profile(
+                action,
+                original_action,
+                base_address,
+                target_address,
+                tag,
+            ),
+            LinkTypes::ProfileToAgent => validate_delete_link_profile_to_agent(
                 action,
                 original_action,
                 base_address,
@@ -311,6 +328,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     target_address,
                     tag,
                 ),
+                LinkTypes::ProfileToAgent => validate_create_link_profile_to_agent(
+                    action_hash(&op).clone(),
+                    action,
+                    base_address,
+                    target_address,
+                    tag,
+                ),
                 LinkTypes::PathToProfile => {
                     validate_create_link_path_to_profile(action, base_address, target_address, tag)
                 }
@@ -344,6 +368,13 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                     };
                 match link_type {
                     LinkTypes::AgentToProfile => validate_delete_link_agent_to_profile(
+                        action,
+                        create_link.clone(),
+                        base_address,
+                        create_link.target_address,
+                        create_link.tag,
+                    ),
+                    LinkTypes::ProfileToAgent => validate_delete_link_profile_to_agent(
                         action,
                         create_link.clone(),
                         base_address,
