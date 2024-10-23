@@ -22,6 +22,7 @@ pub struct ProfileClaim {
 
 pub const PROFILE_ENTRY_TYPE_INDEX: u8 = 0;
 pub const PROFILE_CLAIM_ENTRY_TYPE_INDEX: u8 = 1;
+pub const AGENT_TO_PROFILE_LINK_INDEX: u8 = 1;
 
 pub fn validate_profile_for_agent(
     agent: AgentPubKey,
