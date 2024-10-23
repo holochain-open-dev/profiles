@@ -29,7 +29,6 @@ pub fn validate_create_profile_claim(
             _ => None,
         })
         .filter(|create| create.entry_type.eq(&profile_claim_entry_type))
-        // TODO: filter here for RoleClaim entry type if more entry types are added to this zome
         .collect();
 
     if profile_claim_creates.len() > 1 {
