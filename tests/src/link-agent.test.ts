@@ -76,6 +76,11 @@ test('create Profile and link agent', async () => {
 
 		await bob.store.client.linkAgentWithMyProfile(carol.player.agentPubKey);
 
+		await dhtSync(
+			[alice.player, bob.player, carol.player],
+			alice.player.cells[0].cell_id[0],
+		);
+
 		agentsWithProfile = await toPromise(alice.store.allProfiles);
 		assert.equal(agentsWithProfile.size, 1);
 
