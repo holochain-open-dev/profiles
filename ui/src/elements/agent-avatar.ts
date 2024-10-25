@@ -1,4 +1,9 @@
-import { hashProperty, sharedStyles } from '@holochain-open-dev/elements';
+import {
+	hashProperty,
+	sharedStyles,
+	wrapPathInSvg,
+	wrapPathInSvgWithoutPrefix,
+} from '@holochain-open-dev/elements';
 import '@holochain-open-dev/elements/dist/elements/display-error.js';
 import '@holochain-open-dev/elements/dist/elements/holo-identicon.js';
 import { AsyncResult, SignalWatcher } from '@holochain-open-dev/signals';
@@ -6,7 +11,9 @@ import { EntryRecord } from '@holochain-open-dev/utils';
 import { ActionHash, AgentPubKey } from '@holochain/client';
 import { consume } from '@lit/context';
 import { localized, msg } from '@lit/localize';
+import { mdiAccountCircle } from '@mdi/js';
 import '@shoelace-style/shoelace/dist/components/avatar/avatar.js';
+import '@shoelace-style/shoelace/dist/components/icon/icon.js';
 import '@shoelace-style/shoelace/dist/components/skeleton/skeleton.js';
 import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 import { LitElement, css, html } from 'lit';
@@ -62,6 +69,18 @@ export class AgentAvatar extends SignalWatcher(LitElement) {
 	store!: ProfilesStore;
 
 	renderIdenticon() {
+		if (!this.agentPubKey)
+			return html`
+				<sl-icon
+					style=${styleMap({
+						position: 'relative',
+						height: `${this.size}px`,
+						width: `${this.size}px`,
+					})}
+					.src=${wrapPathInSvg(mdiAccountCircle)}
+				>
+				</sl-icon>
+			`;
 		return html` <div
 			style=${styleMap({
 				position: 'relative',
