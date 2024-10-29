@@ -1,18 +1,18 @@
 {
-	"name": "tests",
-	"private": true,
-	"scripts": {
-		"test": "vitest run"
-	},
-	"dependencies": {
-		"@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#main&path:ui",
-		"@msgpack/msgpack": "^2.8.0",
-		"@holochain/client": "^0.17.1",
-		"@holochain/tryorama": "^0.16.0",
-		"@holochain-open-dev/signals": "^0.300.8",
-		"@holochain-open-dev/utils": "^0.300.2",
-		"typescript": "^4.9.4",
-		"vitest": "^1.4.0"
-	},
-	"type": "module"
+  "name": "tests",
+  "private": true,
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#d104f7e04360a66860a1c57dac88d5724beaf3d0&path:ui",
+    "@msgpack/msgpack": "^2.8.0",
+    "@holochain/client": "^0.17.1",
+    "@holochain/tryorama": "^0.16.0",
+    "@holochain-open-dev/signals": "^0.300.8",
+    "@holochain-open-dev/utils": "^0.300.2",
+    "typescript": "^4.9.4",
+    "vitest": "^1.4.0"
+  },
+  "type": "module"
 }

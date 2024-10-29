@@ -1,23 +1,24 @@
 {
-	"name": "docs",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"type": "module",
-	"scripts": {
-		"start": "npm run dev",
-		"dev": "npm run setup && vitepress dev",
-		"build": "npm run setup && vitepress build",
-		"setup": "npm run analyze -w @holochain-open-dev/profiles && cp ../ui/custom-elements.json elements && npm run cargo:docs",
-		"cargo:docs": "cargo doc --release --no-deps --target-dir public/backend",
-		"preview": "vitepress preview"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"devDependencies": {
-		"api-viewer-element": "^1.0.0-pre.8",
-		"vitepress": "^1.0.1",
-		"vitepress-plugin-mermaid": "^2.0.16"
-	}
+  "name": "docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "pnpm dev",
+    "dev": "pnpm setup:docs && vitepress dev",
+    "build": "pnpm setup:docs && vitepress build",
+    "setup:docs": "pnpm setup:custom-elements && pnpm setup:cargo",
+    "setup:custom-elements": "pnpm -F @holochain-open-dev/profiles analyze && mkdir -p public/elements && cp ../ui/custom-elements.json ./public/elements/custom-elements.json",
+    "setup:cargo": "cargo doc --release --no-deps --target-dir public/backend",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "api-viewer-element": "^1.0.0-pre.8",
+    "vitepress": "^1.0.1",
+    "vitepress-plugin-mermaid": "^2.0.16"
+  }
 }

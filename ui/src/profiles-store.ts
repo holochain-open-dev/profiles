@@ -21,8 +21,6 @@ import { ActionHash, AgentPubKey, encodeHashToBase64 } from '@holochain/client';
 
 import { ProfilesConfig, defaultConfig } from './config.js';
 import { ProfilesClient } from './profiles-client.js';
-import { Profile } from './types.js';
-import { effect } from './utils.js';
 
 export class ProfilesStore {
 	config: ProfilesConfig;

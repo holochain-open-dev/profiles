@@ -30,9 +30,11 @@
       systems = builtins.attrNames inputs.holonix.devShells;
       perSystem = { inputs', config, pkgs, system, lib, ... }: {
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ inputs'.holonix.devShells.default ];
-          packages = with pkgs; [
-            nodejs_20
+          inputsFrom = [
+            inputs'.hc-infra.devShells.synchronized-pnpm
+            inputs'.holonix.devShells.default
+          ];
+          packages = [
             inputs'.p2p-shipyard.packages.hc-pilot
             inputs'.playground.packages.hc-playground
           ];

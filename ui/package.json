@@ -1,55 +1,60 @@
 {
-	"name": "@holochain-open-dev/profiles",
-	"version": "0.300.0",
-	"description": "Frontend module for the Holochain hc_zome_profiles zomes",
-	"author": "guillem.cordoba@gmail.com",
-	"license": "MIT",
-	"main": "dist/index.js",
-	"module": "dist/index.js",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/holochain-open-dev/profiles.git"
-	},
-	"exports": {
-		".": "./dist/index.js",
-		"./locales/*": "./locales/*",
-		"./dist/*": "./dist/*"
-	},
-	"files": ["dist", "README.md", "src", "locales"],
-	"scripts": {
-		"start": "vite --clearScreen false --port $UI_PORT",
-		"build": "tsc && npm run localize:build",
-		"lint": "eslint src",
-		"analyze": "cem analyze --litelement --exclude dist",
-		"format": "eslint src --fix",
-		"localize:extract": "lit-localize extract",
-		"localize:build": "lit-localize build",
-		"prepare": "npm run build"
-	},
-	"dependencies": {
-		"@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#main&path:ui",
-		"@holochain-open-dev/elements": "^0.300.1",
-		"@holochain-open-dev/signals": "^0.300.9",
-		"@holochain-open-dev/utils": "^0.300.2",
-		"@holochain/client": "^0.17.1",
-		"@lit/context": "^1.0.1",
-		"@lit/localize": "^0.12.0",
-		"@mdi/js": "^7.1.96",
-		"@msgpack/msgpack": "^2.7.0",
-		"@shoelace-style/shoelace": "^2.11.0",
-		"lit": "^3.0.2"
-	},
-	"devDependencies": {
-		"@custom-elements-manifest/analyzer": "^0.5.7",
-		"@lit/localize-tools": "^0.6.3",
-		"tslib": "^2.0.0",
-		"typescript": "^5.4.0",
-		"vite": "^4.0.4",
-		"vite-plugin-checker": "^0.5.3"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"customElements": "custom-elements.json",
-	"type": "module"
+  "name": "@holochain-open-dev/profiles",
+  "version": "0.300.0",
+  "description": "Frontend module for the Holochain hc_zome_profiles zomes",
+  "author": "guillem.cordoba@gmail.com",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holochain-open-dev/profiles.git"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./locales/*": "./locales/*",
+    "./dist/*": "./dist/*"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "src",
+    "locales"
+  ],
+  "scripts": {
+    "start": "vite --clearScreen false --port $UI_PORT",
+    "build": "tsc && pnpm localize:build",
+    "lint": "eslint src",
+    "analyze": "cem analyze --litelement --exclude dist",
+    "format": "eslint src --fix",
+    "localize:extract": "lit-localize extract",
+    "localize:build": "lit-localize build",
+    "prepare": "pnpm build"
+  },
+  "dependencies": {
+    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#d104f7e04360a66860a1c57dac88d5724beaf3d0&path:ui",
+    "@holochain-open-dev/elements": "^0.300.1",
+    "@holochain-open-dev/signals": "^0.300.9",
+    "@holochain-open-dev/utils": "^0.300.2",
+    "@holochain/client": "^0.17.1",
+    "@lit/context": "^1.0.1",
+    "@lit/localize": "^0.12.0",
+    "@mdi/js": "^7.1.96",
+    "@msgpack/msgpack": "^2.7.0",
+    "@shoelace-style/shoelace": "^2.11.0",
+    "lit": "^3.0.2"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.5.7",
+    "@lit/localize-tools": "^0.6.3",
+    "tslib": "^2.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^4.0.4",
+    "vite-plugin-checker": "^0.5.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "customElements": "custom-elements.json",
+  "type": "module"
 }
