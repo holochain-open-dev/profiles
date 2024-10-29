@@ -7,6 +7,7 @@
     hc-infra.url = "github:holochain-open-dev/infrastructure";
     p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/develop";
     playground.url = "github:darksoil-studio/holochain-playground";
+    linked-devices.url = "github:darksoil-studio/linked-devices";
   };
 
   nixConfig = {
@@ -18,7 +19,13 @@
 
   outputs = inputs@{ ... }:
     inputs.holonix.inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ ./crates/coordinator/zome.nix ./crates/integrity/zome.nix ];
+      imports = [
+        ./crates/coordinator/zome.nix
+        ./crates/integrity/zome.nix
+        ./workdir/dna.nix
+        ./workdir/happ.nix
+        inputs.hc-infra.outputs.flakeModules.builders
+      ];
 
       systems = builtins.attrNames inputs.holonix.devShells;
       perSystem = { inputs', config, pkgs, system, lib, ... }: {

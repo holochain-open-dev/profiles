@@ -16,7 +16,7 @@ pub fn validate_create_link_path_to_profile(
                 "No action hash associated with link".to_string()
             )))?;
     let record = must_get_valid_record(action_hash)?;
-    let _notification: crate::Profile = record
+    let _profile: crate::Profile = record
         .entry()
         .to_app_option()
         .map_err(|e| wasm_error!(e))?

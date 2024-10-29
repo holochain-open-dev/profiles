@@ -9,6 +9,8 @@ integrity:
   zomes:
     - name: profiles_integrity
       bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
+    - name: linked_devices_integrity
+      bundled: NIXBUNDLED
 
 coordinator:
   zomes:
@@ -16,3 +18,7 @@ coordinator:
       bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
       dependencies:
         - name: profiles_integrity
+    - name: linked_devices
+      bundled: NIXBUNDLED
+      dependencies:
+        - name: linked_devices_integrity

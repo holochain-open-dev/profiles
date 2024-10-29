@@ -5,7 +5,7 @@ import { assert, test } from 'vitest';
 
 import { sampleProfile } from '../../ui/src/mocks.js';
 import { Profile } from '../../ui/src/types.js';
-import { setup } from './common.js';
+import { setup } from './setup.js';
 
 test('create Profile and search', async () => {
 	await runScenario(async scenario => {

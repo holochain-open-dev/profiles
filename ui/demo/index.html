@@ -19,6 +19,7 @@
 		<profiles-test style="height: 100%; display: flex"></profiles-test>
 
 		<script type="module">
+			import '@darksoil-studio/linked-devices/dist/elements/link-devices-recipient';
 			import { onSubmit } from '@holochain-open-dev/elements';
 			import { AppWebsocket } from '@holochain/client';
 			import '@shoelace-style/shoelace/dist/themes/dark.css';
@@ -27,7 +28,6 @@
 			import '../src/elements/agent-avatar.ts';
 			import '../src/elements/agent-mention.ts';
 			import '../src/elements/all-profiles.ts';
-			import '../src/elements/link-agent-recipient.ts';
 			import '../src/elements/my-profile.ts';
 			import '../src/elements/profile-prompt.ts';
 			import '../src/elements/profiles-context.ts';
@@ -84,16 +84,18 @@
 					if (!this.loaded) return html`<span>Loading...</span>`;
 					if (this.linkAgent)
 						return html`
-							<profiles-context .store=${this.store}>
-								<link-agent-recipient
-									style="flex: 1"
-									@agent-linked=${() => {
-										this.linkAgent = false;
-										this.requestUpdate();
-									}}
-								>
-								</link-agent-recipient>
-							</profiles-context>
+							<linked-devices-context .store=${this.store}>
+								<profiles-context .store=${this.store}>
+									<link-devices-recipient
+										style="flex: 1"
+										@device-linked=${() => {
+											this.linkAgent = false;
+											this.requestUpdate();
+										}}
+									>
+									</link-devices-recipient>
+								</profiles-context>
+							</linked-devices-context>
 						`;
 					return html`
 						<profiles-context .store=${this.store}>

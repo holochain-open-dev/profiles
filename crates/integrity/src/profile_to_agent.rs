@@ -1,5 +1,7 @@
 use hdi::prelude::*;
-use profiles_types::validate_profile_for_agent_with_zome_index;
+use linked_devices_types::validate_agents_have_linked_devices;
+
+use crate::linked_devices::linked_devices_integrity_zome_name;
 
 pub fn validate_create_link_profile_to_agent(
     action_hash: ActionHash,
@@ -29,17 +31,23 @@ pub fn validate_create_link_profile_to_agent(
             "Linked action must reference an entry".to_string()
         )))?;
 
-    let result = validate_profile_for_agent_with_zome_index(
-        action.author.clone(),
-        action_hash,
-        profile_hash,
-        zome_info()?.id,
-    )?;
-    let ValidateCallbackResult::Valid = result else {
-        return Ok(result);
-    };
+    if action.author.eq(record.action().author()) {
+        return Ok(ValidateCallbackResult::Valid);
+    }
 
-    Ok(ValidateCallbackResult::Valid)
+    if let Some(linked_devices_integrity_zome_name) = linked_devices_integrity_zome_name() {
+        validate_agents_have_linked_devices(
+            &action.author,
+            &action_hash,
+            record.action().author(),
+            record.action_address(),
+            linked_devices_integrity_zome_name,
+        )
+    } else {
+        Ok(ValidateCallbackResult::Invalid(String::from(
+            "ProfileToAgent links can only be created by the agent that created the profile",
+        )))
+    }
 }
 pub fn validate_delete_link_profile_to_agent(
     _action: DeleteLink,

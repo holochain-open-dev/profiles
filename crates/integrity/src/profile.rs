@@ -1,5 +1,21 @@
+use std::collections::BTreeMap;
+
 use hdi::prelude::*;
-use profiles_types::{validate_profile_for_agent_with_zome_index, Profile};
+
+use linked_devices_types::*;
+
+use crate::linked_devices::linked_devices_integrity_zome_name;
+
+/// Profile entry definition.
+///
+/// The profile must include at a minimum the nickname of the agent
+/// in order to be able to search for agents by nickname.
+#[hdk_entry_helper]
+#[derive(Clone)]
+pub struct Profile {
+    pub nickname: String,
+    pub fields: BTreeMap<String, String>,
+}
 
 pub fn validate_create_profile(
     _action: EntryCreationAction,
@@ -8,36 +24,30 @@ pub fn validate_create_profile(
     Ok(ValidateCallbackResult::Valid)
 }
 
-fn get_original_create_hash(update: &Update) -> ExternResult<ActionHash> {
-    let previous_new_entry_action_hash = update.original_action_address.clone();
-
-    let record = must_get_valid_record(previous_new_entry_action_hash.clone())?;
-
-    match record.action() {
-        Action::Create(_) => Ok(previous_new_entry_action_hash.clone()),
-        Action::Update(update) => get_original_create_hash(update),
-        _ => Err(wasm_error!(WasmErrorInner::Guest(format!("UNREACHABLE: an update action does not have a new entry action as its original_action_address"))))
-    }
-}
-
 pub fn validate_update_profile(
     action_hash: ActionHash,
     action: Update,
     _profile: Profile,
 ) -> ExternResult<ValidateCallbackResult> {
-    let original_create_hash = get_original_create_hash(&action)?;
+    let create_record = must_get_valid_record(action.original_action_address.clone())?;
 
-    let result = validate_profile_for_agent_with_zome_index(
-        action.author.clone(),
-        action_hash,
-        original_create_hash,
-        zome_info()?.id,
-    )?;
-    let ValidateCallbackResult::Valid = result else {
-        return Ok(result);
-    };
+    if action.author.eq(create_record.action().author()) {
+        return Ok(ValidateCallbackResult::Valid);
+    }
 
-    Ok(ValidateCallbackResult::Valid)
+    if let Some(linked_devices_integrity_zome_name) = linked_devices_integrity_zome_name() {
+        validate_agents_have_linked_devices(
+            &action.author,
+            &action_hash,
+            create_record.action().author(),
+            &action.original_action_address,
+            linked_devices_integrity_zome_name,
+        )
+    } else {
+        Ok(ValidateCallbackResult::Invalid(String::from(
+            "Profiles can only be updated by the agent that created them",
+        )))
+    }
 }
 pub fn validate_delete_profile(_action: Delete) -> ExternResult<ValidateCallbackResult> {
     Ok(ValidateCallbackResult::Invalid(String::from(

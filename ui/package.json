@@ -27,6 +27,7 @@
 		"prepare": "npm run build"
 	},
 	"dependencies": {
+		"@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#main&path:ui",
 		"@holochain-open-dev/elements": "^0.300.1",
 		"@holochain-open-dev/signals": "^0.300.9",
 		"@holochain-open-dev/utils": "^0.300.2",

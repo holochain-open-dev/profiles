@@ -9,21 +9,16 @@
 
 use hdi::prelude::*;
 
-pub use profiles_types::*;
-
 mod agent_to_profile;
-mod linking_agents;
+mod linked_devices;
 mod path_to_profile;
 mod prefix_path;
 mod profile;
-mod profile_claim;
 mod profile_to_agent;
 use agent_to_profile::*;
-use linking_agents::*;
 use path_to_profile::*;
 use prefix_path::*;
 use profile::*;
-use profile_claim::*;
 use profile_to_agent::*;
 
 #[derive(Serialize, Deserialize)]
@@ -32,7 +27,6 @@ use profile_to_agent::*;
 #[unit_enum(UnitEntryTypes)]
 pub enum EntryTypes {
     Profile(Profile),
-    ProfileClaim(ProfileClaim),
 }
 
 #[derive(Serialize, Deserialize)]
@@ -42,7 +36,6 @@ pub enum LinkTypes {
     PathToProfile,
     AgentToProfile,
     ProfileToAgent,
-    LinkingAgents,
 }
 
 #[hdk_extern]
@@ -74,10 +67,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 EntryTypes::Profile(profile) => {
                     validate_create_profile(EntryCreationAction::Create(action), profile)
                 }
-                EntryTypes::ProfileClaim(profile_claim) => validate_create_profile_claim(
-                    EntryCreationAction::Create(action),
-                    profile_claim,
-                ),
             },
             OpEntry::UpdateEntry {
                 app_entry, action, ..
@@ -85,10 +74,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 EntryTypes::Profile(profile) => {
                     validate_create_profile(EntryCreationAction::Update(action), profile)
                 }
-                EntryTypes::ProfileClaim(profile_claim) => validate_create_profile_claim(
-                    EntryCreationAction::Update(action),
-                    profile_claim,
-                ),
             },
             _ => Ok(ValidateCallbackResult::Valid),
         },
@@ -96,9 +81,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             OpUpdate::Entry { app_entry, action } => match app_entry {
                 EntryTypes::Profile(profile) => {
                     validate_update_profile(action_hash(&op).clone(), action, profile)
-                }
-                EntryTypes::ProfileClaim(profile_claim) => {
-                    validate_update_profile_claim(action, profile_claim)
                 }
             },
             _ => Ok(ValidateCallbackResult::Valid),
@@ -147,9 +129,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             };
             match original_app_entry {
                 EntryTypes::Profile(_original_profile) => validate_delete_profile(action),
-                EntryTypes::ProfileClaim(_original_profile_claim) => {
-                    validate_delete_profile_claim(action)
-                }
             }
         }
         FlatOp::RegisterCreateLink {
@@ -178,9 +157,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             }
             LinkTypes::PrefixPath => {
                 validate_create_link_prefix_path(action, base_address, target_address, tag)
-            }
-            LinkTypes::LinkingAgents => {
-                validate_create_link_linking_agents(action, base_address, target_address, tag)
             }
         },
         FlatOp::RegisterDeleteLink {
@@ -219,23 +195,12 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 target_address,
                 tag,
             ),
-            LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
-                action,
-                original_action,
-                base_address,
-                target_address,
-                tag,
-            ),
         },
         FlatOp::StoreRecord(store_record) => match store_record {
             OpRecord::CreateEntry { app_entry, action } => match app_entry {
                 EntryTypes::Profile(profile) => {
                     validate_create_profile(EntryCreationAction::Create(action), profile)
                 }
-                EntryTypes::ProfileClaim(profile_claim) => validate_create_profile_claim(
-                    EntryCreationAction::Create(action),
-                    profile_claim,
-                ),
             },
             OpRecord::UpdateEntry {
                 app_entry, action, ..
@@ -249,16 +214,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         return Ok(result);
                     };
                     validate_update_profile(action_hash(&op).clone(), action, profile)
-                }
-                EntryTypes::ProfileClaim(profile_claim) => {
-                    let result = validate_create_profile_claim(
-                        EntryCreationAction::Update(action.clone()),
-                        profile_claim.clone(),
-                    )?;
-                    let ValidateCallbackResult::Valid = result else {
-                        return Ok(result);
-                    };
-                    validate_update_profile_claim(action, profile_claim)
                 }
             },
             OpRecord::DeleteEntry {
@@ -309,9 +264,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 };
                 match original_app_entry {
                     EntryTypes::Profile(_original_profile) => validate_delete_profile(action),
-                    EntryTypes::ProfileClaim(_original_profile_claim) => {
-                        validate_delete_profile_claim(action)
-                    }
                 }
             }
             OpRecord::CreateLink {
@@ -340,9 +292,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                 }
                 LinkTypes::PrefixPath => {
                     validate_create_link_prefix_path(action, base_address, target_address, tag)
-                }
-                LinkTypes::LinkingAgents => {
-                    validate_create_link_linking_agents(action, base_address, target_address, tag)
                 }
             },
             OpRecord::DeleteLink {
@@ -389,13 +338,6 @@ pub fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
                         create_link.tag,
                     ),
                     LinkTypes::PrefixPath => validate_delete_link_prefix_path(
-                        action,
-                        create_link.clone(),
-                        base_address,
-                        create_link.target_address,
-                        create_link.tag,
-                    ),
-                    LinkTypes::LinkingAgents => validate_delete_link_linking_agents(
                         action,
                         create_link.clone(),
                         base_address,

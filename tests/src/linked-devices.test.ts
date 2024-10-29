@@ -6,7 +6,7 @@ import { assert, test } from 'vitest';
 
 import { sampleProfile } from '../../ui/src/mocks.js';
 import { Profile } from '../../ui/src/types.js';
-import { setup, setup3 } from './common.js';
+import { setup, setup3 } from './setup.js';
 
 test('create Profile and link agent', async () => {
 	await runScenario(async scenario => {
@@ -19,7 +19,7 @@ test('create Profile and link agent', async () => {
 		watch(alice.store.myProfile, () => {}); // store keepalive
 		assert.notOk(myProfile);
 
-		// Alice creates a Post
+		// Alice creates their profile
 		const profile: EntryRecord<Profile> =
 			await alice.store.client.createProfile(
 				await sampleProfile(alice.store.client),

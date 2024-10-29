@@ -11,8 +11,6 @@ use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
-mod link_agent;
-mod profile_claims;
 mod profiles;
 mod search;
 
