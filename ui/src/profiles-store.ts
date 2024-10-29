@@ -29,42 +29,9 @@ export class ProfilesStore {
 
 	constructor(
 		public client: ProfilesClient,
-		public linkedDevicesStore?: LinkedDevicesStore,
 		config: Partial<ProfilesConfig> = {},
 	) {
 		this.config = { ...defaultConfig, ...config };
-
-		if (linkedDevicesStore) {
-			linkedDevicesStore.client.onSignal(async signal => {
-				// console.log(
-				// 	'signal',
-				// 	encodeHashToBase64(client.client.myPubKey),
-				// 	signal,
-				// );
-				if (
-					signal.type !== 'LinkCreated' ||
-					signal.link_type !== 'AgentToLinkedDevices'
-				)
-					return;
-
-				const linkedDevice = retype(
-					signal.action.hashed.content.target_address,
-					HashType.AGENT,
-				);
-
-				const myProfile = await toPromise(this.myProfile);
-
-				if (myProfile !== undefined) return;
-
-				const profileForLinkedDeviceLinks =
-					await this.client.getAgentProfile(linkedDevice);
-
-				if (profileForLinkedDeviceLinks.length > 0) {
-					const profileForLinkedDevice = profileForLinkedDeviceLinks[0].target;
-					await this.client.linkMyAgentToProfile(profileForLinkedDevice);
-				}
-			});
-		}
 	}
 
 	/**

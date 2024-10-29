@@ -1,3 +1,4 @@
+import '@darksoil-studio/linked-devices/dist/elements/link-devices-requestor.js';
 import { sharedStyles, wrapPathInSvg } from '@holochain-open-dev/elements';
 import '@holochain-open-dev/elements/dist/elements/display-error.js';
 import { SignalWatcher } from '@holochain-open-dev/signals';
@@ -12,7 +13,6 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { profilesStoreContext } from '../context.js';
 import { ProfilesStore } from '../profiles-store.js';
 import './create-profile.js';
-import './link-agent-requestor.js';
 
 /**
  * @element profile-prompt
@@ -65,7 +65,22 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 					<sl-icon slot="prefix" .src=${wrapPathInSvg(mdiArrowLeft)}></sl-icon>
 					${msg('Back')}</sl-button
 				>
-				<link-agent-requestor></link-agent-requestor>
+				<link-devices-requestor
+					@device-linked=${async (e: CustomEvent) => {
+						const linkedDevice = e.detail.agentPubKey;
+
+						const profileForLinkedDeviceLinks =
+							await this.store.client.getAgentProfile(linkedDevice);
+
+						if (profileForLinkedDeviceLinks.length > 0) {
+							const profileForLinkedDevice =
+								profileForLinkedDeviceLinks[0].target;
+							await this.store.client.linkMyAgentToProfile(
+								profileForLinkedDevice,
+							);
+						}
+					}}
+				></link-devices-requestor>
 			</div>`;
 
 		return html`

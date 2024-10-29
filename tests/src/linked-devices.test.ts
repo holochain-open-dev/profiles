@@ -3,7 +3,7 @@ import { toPromise, watch } from '@holochain-open-dev/signals';
 import { EntryRecord } from '@holochain-open-dev/utils';
 import { encodeHashToBase64 } from '@holochain/client';
 import { dhtSync, pause, runScenario } from '@holochain/tryorama';
-import { assert, test } from 'vitest';
+import { assert, expect, test } from 'vitest';
 
 import { sampleProfile } from '../../ui/src/mocks.js';
 import { Profile } from '../../ui/src/types.js';
@@ -40,10 +40,19 @@ test('create Profile and link devices', async () => {
 			encodeHashToBase64(alice.player.agentPubKey),
 		);
 
-		await linkDevices(
-			alice.store.linkedDevicesStore,
-			bob.store.linkedDevicesStore,
-		);
+		// Bob can't link to Alice's profile yet because they haven't linked their devices
+		await expect(() =>
+			bob.store.client.linkMyAgentToProfile(profile.actionHash),
+		).rejects.toThrowError();
+
+		await linkDevices(alice.linkedDevicesStore, bob.linkedDevicesStore);
+
+		await dhtSync(
+			[alice.player, bob.player, carol.player],
+			alice.player.cells[0].cell_id[0],
+		); // Difference in time between the create the processing of the signal
+
+		await bob.store.client.linkMyAgentToProfile(profile.actionHash);
 
 		await dhtSync(
 			[alice.player, bob.player, carol.player],
@@ -87,10 +96,14 @@ test('create Profile and link devices', async () => {
 
 		/** Bob's device now links carol's **/
 
-		await linkDevices(
-			bob.store.linkedDevicesStore,
-			carol.store.linkedDevicesStore,
+		await linkDevices(bob.linkedDevicesStore, carol.linkedDevicesStore);
+
+		await dhtSync(
+			[alice.player, bob.player, carol.player],
+			alice.player.cells[0].cell_id[0],
 		);
+
+		await carol.store.client.linkMyAgentToProfile(profile.actionHash);
 
 		await dhtSync(
 			[alice.player, bob.player, carol.player],

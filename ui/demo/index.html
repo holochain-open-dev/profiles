@@ -23,8 +23,8 @@
 				LinkedDevicesClient,
 				LinkedDevicesStore,
 			} from '@darksoil-studio/linked-devices';
-			import '@darksoil-studio/linked-devices/dist/elements/link-devices-recipient';
-			import '@darksoil-studio/linked-devices/dist/elements/linked-devices-context';
+			import '@darksoil-studio/linked-devices/dist/elements/link-devices-recipient.js';
+			import '@darksoil-studio/linked-devices/dist/elements/linked-devices-context.js';
 			import { onSubmit } from '@holochain-open-dev/elements';
 			import { AppWebsocket } from '@holochain/client';
 			import '@shoelace-style/shoelace/dist/themes/dark.css';
@@ -56,12 +56,11 @@
 
 						const service = new ProfilesClient(client, 'profiles-test');
 
-						const linkedDevicesStore = new LinkedDevicesStore(
-							new LinkedDevicesClient(client),
-							'profiles-test',
+						this.linkedDevicesStore = new LinkedDevicesStore(
+							new LinkedDevicesClient(client, 'profiles-test'),
 						);
 
-						this.store = new ProfilesStore(service, linkedDevicesStore, {
+						this.store = new ProfilesStore(service, {
 							avatarMode: 'avatar-required',
 							additionalFields: [
 								{
@@ -94,7 +93,7 @@
 					if (!this.loaded) return html`<span>Loading...</span>`;
 					if (this.linkAgent)
 						return html`
-							<linked-devices-context .store=${this.store.linkedDevicesStore}>
+							<linked-devices-context .store=${this.linkedDevicesStore}>
 								<profiles-context .store=${this.store}>
 									<link-devices-recipient
 										style="flex: 1"
@@ -108,50 +107,54 @@
 							</linked-devices-context>
 						`;
 					return html`
-						<profiles-context .store=${this.store}>
-							<profile-prompt
-								@profile-created=${e => console.log(e)}
-							>
-							<div style="flex-direction: row; display:flex; flex-wrap: wrap">
-								<form ${onSubmit(f => this.onSubmit(f))}>
-									<textarea-with-mentions
-										name="hi"
-										label="hey"
-									></textarea-with-mentions>
-									<input type="submit" />
-								</form>
-								<all-profiles></all-profiles>
-								<my-profile style="height: 200px; width: 200px;"></my-profile>
-								<agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
-									<div
-										style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
-										slot="badge"
-									></div>
-								</agent-avatar>
-								<search-profile
-									name="author"
-									required
-									@profile-selected=${e => console.log(e)}
-								></search-profile>
-								<search-profiles name="hosts" required></search-profiles>
-								<agent-avatar
-									.agentPubKey=${this.store.client.client.myPubKey}
-									.showOnHover=${false}
-									.copyOnClick=${false}
+						<linked-devices-context .store=${this.linkedDevicesStore}>
+							<profiles-context .store=${this.store}>
+								<profile-prompt
+									@profile-created=${e => console.log(e)}
 								>
-								</agent-avatar>
-								<agent-mention
-									.agentPubKey=${this.store.client.client.myPubKey}
-								>
-								</agent-mention>
-								<sl-button @click=${() => {
-									this.linkAgent = true;
-									this.requestUpdate();
-								}}>Link Device
-								</sl-button>
+								<div style="flex-direction: row; display:flex; flex-wrap: wrap">
+									<form ${onSubmit(f => this.onSubmit(f))}>
+										<textarea-with-mentions
+											name="hi"
+											label="hey"
+										></textarea-with-mentions>
+										<input type="submit" />
+									</form>
+									<all-profiles></all-profiles>
+									<my-profile style="height: 200px; width: 200px;"></my-profile>
+									<agent-avatar .agentPubKey=${this.store.client.client.myPubKey}>
+										<div
+											style="background-color: lightgreen; width: 12px; height: 12px; border-radius: 50%"
+											slot="badge"
+										></div>
+									</agent-avatar>
+									<search-profile
+										name="author"
+										required
+										@profile-selected=${e => console.log(e)}
+									></search-profile>
+									<search-profiles name="hosts" required></search-profiles>
+									<agent-avatar
+										.agentPubKey=${this.store.client.client.myPubKey}
+										.showOnHover=${false}
+										.copyOnClick=${false}
+									>
+									</agent-avatar>
+									<agent-mention
+										.agentPubKey=${this.store.client.client.myPubKey}
+									>
+									</agent-mention>
+									<div>
+										<sl-button @click=${() => {
+											this.linkAgent = true;
+											this.requestUpdate();
+										}}>Link Device
+										</sl-button>
+									</div>
 
-							</profile-prompt>
-						</profiles-context>
+								</profile-prompt>
+							</profiles-context>
+						</linked-devices-context>
 					`;
 				}
 			}

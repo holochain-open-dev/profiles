@@ -201,6 +201,9 @@ export class AgentAvatar extends SignalWatcher(LitElement) {
 				right: 0;
 				bottom: 0;
 			}
+			:host {
+				height: 32px;
+			}
 		`,
 	];
 }

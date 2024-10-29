@@ -59,13 +59,15 @@ export class AgentMention extends SignalWatcher(LitElement) {
 					width: `${this.size}px`,
 				})}
 			>
-				<holo-identicon
+				<agent-avatar
 					.disableCopy=${true}
 					.disableTooltip=${true}
-					.hash=${this.agentPubKey}
+					.agentPubKey=${this.agentPubKey}
+					.profileHash=${this.profileHash}
 					.size=${this.size}
+					style="height: ${this.size}px"
 				>
-				</holo-identicon>
+				</agent-avatar>
 			</div>`;
 		}
 		return html`
@@ -79,7 +81,7 @@ export class AgentMention extends SignalWatcher(LitElement) {
 
 	renderProfile(profile: EntryRecord<Profile> | undefined) {
 		return html`
-			<div class="row">
+			<div class="row" style="align-items: center">
 				${this.renderAvatar(profile)}
 				<span style="margin-left: 8px">${profile?.entry.nickname}</span>
 			</div>

@@ -85,25 +85,16 @@ export async function setup3(scenario: Scenario) {
 
 	const aliceStore = new ProfilesStore(
 		new ProfilesClient(alice.appWs as AppClient, 'profiles-test', 'profiles'),
-		new LinkedDevicesStore(
-			new LinkedDevicesClient(alice.appWs as any, 'profiles-test'),
-		),
 	);
 	patchCallZome(alice.appWs as AppWebsocket);
 
 	const bobStore = new ProfilesStore(
 		new ProfilesClient(bob.appWs as AppClient, 'profiles-test', 'profiles'),
-		new LinkedDevicesStore(
-			new LinkedDevicesClient(bob.appWs as any, 'profiles-test'),
-		),
 	);
 	patchCallZome(bob.appWs as AppWebsocket);
 
 	const carolStore = new ProfilesStore(
 		new ProfilesClient(carol.appWs as AppClient, 'profiles-test', 'profiles'),
-		new LinkedDevicesStore(
-			new LinkedDevicesClient(carol.appWs as any, 'profiles-test'),
-		),
 	);
 	patchCallZome(carol.appWs as AppWebsocket);
 
@@ -120,14 +111,23 @@ export async function setup3(scenario: Scenario) {
 		alice: {
 			player: alice,
 			store: aliceStore,
+			linkedDevicesStore: new LinkedDevicesStore(
+				new LinkedDevicesClient(alice.appWs as any, 'profiles-test'),
+			),
 		},
 		bob: {
 			player: bob,
 			store: bobStore,
+			linkedDevicesStore: new LinkedDevicesStore(
+				new LinkedDevicesClient(bob.appWs as any, 'profiles-test'),
+			),
 		},
 		carol: {
 			player: carol,
 			store: carolStore,
+			linkedDevicesStore: new LinkedDevicesStore(
+				new LinkedDevicesClient(carol.appWs as any, 'profiles-test'),
+			),
 		},
 	};
 }
