@@ -1,3 +1,7 @@
+import {
+	LinkedDevicesClient,
+	LinkedDevicesStore,
+} from '@darksoil-studio/linked-devices';
 import { AppClient, AppWebsocket } from '@holochain/client';
 import { Scenario, pause } from '@holochain/tryorama';
 import { dirname } from 'path';
@@ -81,16 +85,25 @@ export async function setup3(scenario: Scenario) {
 
 	const aliceStore = new ProfilesStore(
 		new ProfilesClient(alice.appWs as AppClient, 'profiles-test', 'profiles'),
+		new LinkedDevicesStore(
+			new LinkedDevicesClient(alice.appWs as any, 'profiles-test'),
+		),
 	);
 	patchCallZome(alice.appWs as AppWebsocket);
 
 	const bobStore = new ProfilesStore(
 		new ProfilesClient(bob.appWs as AppClient, 'profiles-test', 'profiles'),
+		new LinkedDevicesStore(
+			new LinkedDevicesClient(bob.appWs as any, 'profiles-test'),
+		),
 	);
 	patchCallZome(bob.appWs as AppWebsocket);
 
 	const carolStore = new ProfilesStore(
 		new ProfilesClient(carol.appWs as AppClient, 'profiles-test', 'profiles'),
+		new LinkedDevicesStore(
+			new LinkedDevicesClient(carol.appWs as any, 'profiles-test'),
+		),
 	);
 	patchCallZome(carol.appWs as AppWebsocket);
 

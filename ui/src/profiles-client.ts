@@ -102,6 +102,10 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
 		return new EntryRecord(record);
 	}
 
+	async linkMyAgentToProfile(profileHash: ActionHash) {
+		await this.callZome('link_my_agent_to_profile', profileHash);
+	}
+
 	/**
 	 * Update my profile
 	 *

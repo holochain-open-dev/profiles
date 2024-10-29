@@ -18,7 +18,7 @@ mod profile_to_agent;
 use agent_to_profile::*;
 use path_to_profile::*;
 use prefix_path::*;
-use profile::*;
+pub use profile::*;
 use profile_to_agent::*;
 
 #[derive(Serialize, Deserialize)]

@@ -11,6 +11,7 @@ use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
+mod linked_devices;
 mod profiles;
 mod search;
 

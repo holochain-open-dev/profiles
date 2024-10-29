@@ -3,22 +3,22 @@
   "private": true,
   "scripts": {
     "start": "AGENTS=2 pnpm network",
-    "network": "pnpm build:happ && UI_PORT=8888 concurrently \"npm start -w ui\" \"pnpm run launch\" \"hc playground\"",
+    "network": "pnpm build:happ && UI_PORT=8888 concurrently \"pnpm -F @holochain-open-dev/profiles start\" \"pnpm launch\" \"hc playground\"",
     "test": "pnpm build:happ && pnpm -F tests test",
     "launch": "concurrently-repeat  \"RUST_LOG=warn hc pilot workdir/profiles-test.happ --ui-port $UI_PORT\" $AGENTS",
     "build:happ": "nix build -L .#profiles_test_happ -o workdir/profiles-test.happ"
   },
   "devDependencies": {
-    "@eslint/js": "^8.0.0",
+    "@eslint/js": "^9.0.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "concurrently": "^6.2.1",
     "concurrently-repeat": "^0.0.1",
-    "eslint": "^8.0.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "new-port-cli": "^1.0.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.7.0"
+    "typescript-eslint": "^8.0.0"
   },
   "type": "module"
 }

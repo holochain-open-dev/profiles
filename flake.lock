@@ -2971,11 +2971,11 @@
         "scaffolding": "scaffolding"
       },
       "locked": {
-        "lastModified": 1730213267,
-        "narHash": "sha256-/cayuRS6LuD8qQq9WBErYYbYXbEibDb445VX6jVOEi4=",
+        "lastModified": 1730217259,
+        "narHash": "sha256-N058/2SyADDCDzfxyEQlfBwqOBNe08tacZifp6IyK5M=",
         "owner": "darksoil-studio",
         "repo": "linked-devices",
-        "rev": "d104f7e04360a66860a1c57dac88d5724beaf3d0",
+        "rev": "ab51b8a7c3a2dae77506e44711e42c4024c473f0",
         "type": "github"
       },
       "original": {
