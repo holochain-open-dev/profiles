@@ -54,8 +54,8 @@ importers:
   tests:
     dependencies:
       '@darksoil-studio/linked-devices':
-        specifier: github:darksoil-studio/linked-devices#ab51b8a7c3a2dae77506e44711e42c4024c473f0&path:ui
-        version: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/ab51b8a7c3a2dae77506e44711e42c4024c473f0#path:ui(@types/react@18.3.12)
+        specifier: github:darksoil-studio/linked-devices#7ba584d160e76afc69169a87460d434888d83182&path:ui
+        version: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/7ba584d160e76afc69169a87460d434888d83182#path:ui(@types/react@18.3.12)
       '@holochain-open-dev/signals':
         specifier: ^0.300.8
         version: 0.300.9(@types/react@18.3.12)
@@ -81,8 +81,8 @@ importers:
   ui:
     dependencies:
       '@darksoil-studio/linked-devices':
-        specifier: github:darksoil-studio/linked-devices#ab51b8a7c3a2dae77506e44711e42c4024c473f0&path:ui
-        version: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/ab51b8a7c3a2dae77506e44711e42c4024c473f0#path:ui(@types/react@18.3.12)
+        specifier: github:darksoil-studio/linked-devices#7ba584d160e76afc69169a87460d434888d83182&path:ui
+        version: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/7ba584d160e76afc69169a87460d434888d83182#path:ui(@types/react@18.3.12)
       '@holochain-open-dev/elements':
         specifier: ^0.300.1
         version: 0.300.1(@types/react@18.3.12)
@@ -321,8 +321,8 @@ packages:
   '@dabh/diagnostics@2.0.3':
     resolution: {integrity: sha512-hrlQOIi7hAfzsMqlGSFyVucrx38O+j6wiGOf//H2ecvIEqYN4ADBSS2iLMh5UFyDunCNniUIPk/q3riFv45xRA==}
 
-  '@darksoil-studio/linked-devices@https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/ab51b8a7c3a2dae77506e44711e42c4024c473f0#path:ui':
-    resolution: {path: ui, tarball: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/ab51b8a7c3a2dae77506e44711e42c4024c473f0}
+  '@darksoil-studio/linked-devices@https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/7ba584d160e76afc69169a87460d434888d83182#path:ui':
+    resolution: {path: ui, tarball: https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/7ba584d160e76afc69169a87460d434888d83182}
     version: 0.1.0
 
   '@docsearch/css@3.6.2':
@@ -3120,7 +3120,7 @@ snapshots:
       enabled: 2.0.0
       kuler: 2.0.0
 
-  '@darksoil-studio/linked-devices@https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/ab51b8a7c3a2dae77506e44711e42c4024c473f0#path:ui(@types/react@18.3.12)':
+  '@darksoil-studio/linked-devices@https://codeload.github.com/darksoil-studio/linked-devices/tar.gz/7ba584d160e76afc69169a87460d434888d83182#path:ui(@types/react@18.3.12)':
     dependencies:
       '@holochain-open-dev/elements': 0.300.1(@types/react@18.3.12)
       '@holochain-open-dev/signals': 0.300.9(@types/react@18.3.12)
