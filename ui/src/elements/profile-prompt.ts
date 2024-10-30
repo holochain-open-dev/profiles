@@ -73,8 +73,10 @@ export class ProfilePrompt extends SignalWatcher(LitElement) {
 							await this.store.client.getAgentProfile(linkedDevice);
 
 						if (profileForLinkedDeviceLinks.length > 0) {
-							const profileForLinkedDevice =
-								profileForLinkedDeviceLinks[0].target;
+							const latestLink = profileForLinkedDeviceLinks.sort(
+								(l1, l2) => l2.timestamp - l1.timestamp,
+							)[0];
+							const profileForLinkedDevice = latestLink.target;
 							await this.store.client.linkMyAgentToProfile(
 								profileForLinkedDevice,
 							);

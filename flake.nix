@@ -5,7 +5,7 @@
     nixpkgs.follows = "holonix/nixpkgs";
     holonix.url = "github:holochain/holonix/main-0.3";
     hc-infra.url = "github:holochain-open-dev/infrastructure";
-    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard/develop";
+    p2p-shipyard.url = "github:darksoil-studio/p2p-shipyard";
     playground.url = "github:darksoil-studio/holochain-playground";
     linked-devices.url = "github:darksoil-studio/linked-devices";
   };

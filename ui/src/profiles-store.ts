@@ -75,7 +75,10 @@ export class ProfilesStore {
 
 				// TODO: handle multiple links gracefully
 
-				const profileHash = links.value[0].target;
+				const latestLink = links.value.sort(
+					(l1, l2) => l2.timestamp - l1.timestamp,
+				)[0];
+				const profileHash = latestLink.target;
 				return {
 					status: 'completed',
 					value: this.profiles.get(profileHash),
