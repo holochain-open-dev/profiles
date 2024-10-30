@@ -3670,16 +3670,15 @@
         "webkitgtknixpkgs": "webkitgtknixpkgs_3"
       },
       "locked": {
-        "lastModified": 1729783774,
+        "lastModified": 1729844167,
         "narHash": "sha256-bsU42V409p2tcutre8um9Ze088IRLFceKcKdDAFEKbw=",
         "owner": "darksoil-studio",
         "repo": "p2p-shipyard",
-        "rev": "818d08fc589140352e82373eb57cf608adf39d18",
+        "rev": "f3f05df4a592be0d937e9862e9b19141c14ac1c9",
         "type": "github"
       },
       "original": {
         "owner": "darksoil-studio",
-        "ref": "develop",
         "repo": "p2p-shipyard",
         "type": "github"
       }
