@@ -32,7 +32,7 @@
     "prepare": "pnpm build"
   },
   "dependencies": {
-    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#ab51b8a7c3a2dae77506e44711e42c4024c473f0&path:ui",
+    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#7ba584d160e76afc69169a87460d434888d83182&path:ui",
     "@holochain-open-dev/elements": "^0.300.1",
     "@holochain-open-dev/signals": "^0.300.9",
     "@holochain-open-dev/utils": "^0.300.2",

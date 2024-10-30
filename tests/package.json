@@ -5,7 +5,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#ab51b8a7c3a2dae77506e44711e42c4024c473f0&path:ui",
+    "@darksoil-studio/linked-devices": "github:darksoil-studio/linked-devices#7ba584d160e76afc69169a87460d434888d83182&path:ui",
     "@msgpack/msgpack": "^2.8.0",
     "@holochain/client": "^0.17.1",
     "@holochain/tryorama": "^0.16.0",
