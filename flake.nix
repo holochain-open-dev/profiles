@@ -1,40 +1,33 @@
 {
-  description = "Template for Holochain app development";
+  description = "Flake for Holochain app development";
 
   inputs = {
-    nixpkgs.follows = "holochain/nixpkgs";
+    holonix.url = "github:holochain/holonix?ref=main-0.4";
 
-    versions.url = "github:holochain/holochain?dir=versions/weekly";
+    nixpkgs.follows = "holonix/nixpkgs";
+    flake-parts.follows = "holonix/flake-parts";
 
-    holochain = {
-      url = "github:holochain/holochain";
-      inputs.versions.follows = "versions";
-    };
   };
 
-  outputs = inputs @ { ... }:
-    inputs.holochain.inputs.flake-parts.lib.mkFlake
-      {
-        inherit inputs;
-      }
-      {
-        systems = builtins.attrNames inputs.holochain.devShells;
-        perSystem =
-          { inputs'
-          , config
-          , pkgs
-          , system
-          , lib
-          , ...
-          }: {
-            devShells.default = pkgs.mkShell {
-              inputsFrom = [ inputs'.holochain.devShells.holonix ];
-              packages = with pkgs; [
-                nodejs-18_x
-                # more packages go here
-                cargo-nextest
-              ];
-            };
-          };
+  outputs = inputs@{ flake-parts, ... }: flake-parts.lib.mkFlake { inherit inputs; } {
+    systems = builtins.attrNames inputs.holonix.devShells;
+    perSystem = { inputs', pkgs, ... }: {
+      formatter = pkgs.nixpkgs-fmt;
+
+      devShells.default = pkgs.mkShell {
+        inputsFrom = [ inputs'.holonix.devShells.default ];
+
+        packages = (with pkgs; [
+          nodejs_20
+          binaryen
+          # more packages go here
+          cargo-nextest
+        ]);
+
+        shellHook = ''
+          export PS1='\[\033[1;34m\][holonix:\w]\$\[\033[0m\] '
+        '';
       };
+    };
+  };
 }
