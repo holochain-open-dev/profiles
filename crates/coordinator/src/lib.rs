@@ -46,13 +46,13 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn update_profile(profile: Profile) -> ExternResult<Record> {
-    let previous_profile_record = crate::get_agent_profile(agent_info()?.agent_latest_pubkey)?
+    let previous_profile_record = crate::get_agent_profile(agent_info()?.agent_initial_pubkey)?
         .ok_or(wasm_error!(WasmErrorInner::Guest(
             "I haven't created a profile yet".into(),
         )))?;
 
     let action_hash = update_entry(previous_profile_record.action_address().clone(), &profile)?;
-    let my_pub_key = agent_info()?.agent_latest_pubkey;
+    let my_pub_key = agent_info()?.agent_initial_pubkey;
 
     // If we have changed the nickname, remove the previous nickname link and add a new one
     let previous_profile: Profile = previous_profile_record

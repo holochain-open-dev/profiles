@@ -10,7 +10,7 @@
     "network": "hc s clean && npm run build:happ && BOOTSTRAP_PORT=$(port) SIGNAL_PORT=$(port) UI_PORT=8888 concurrently \"npm start -w ui\" \"npm run local-services\" \"npm run launch\" \"holochain-playground\"",
     "test": "npm run build:happ && cargo nextest run -j 1 && npm test -w tests",
     "launch": "echo pass | RUST_LOG=warn hc launch --piped -n $AGENTS workdir/profiles-test.happ --ui-port $UI_PORT network --bootstrap http://127.0.0.1:$BOOTSTRAP_PORT webrtc ws://127.0.0.1:$SIGNAL_PORT",
-    "local-services": "hc run-local-services --bootstrap-port $BOOTSTRAP_PORT --signal-port $SIGNAL_PORT",
+    "local-services": "hc kitsune2-bootstrap-srv --listen  127.0.0.1:$BOOTSTRAP_PORT",
     "build:happ": "npm run build:zome && hc app pack workdir --recursive",
     "build:zome": "CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
     "docs:start": "npm run docs:setup && storybook dev -p 6006",
@@ -34,5 +34,5 @@
     "storybook": "^7.0.0-beta.33"
   },
   "type": "module",
-  "version": "0.400.0"
+  "version": "0.500.0-rc.0"
 }
