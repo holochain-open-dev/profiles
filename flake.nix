@@ -32,11 +32,17 @@
           cargo-nextest
           pkg-config       # for build.rs to find libs
           cmake
-          libclang
+          clang
+          perl
+          upx
+          minisign
+          openssl
         ]);
 
         shellHook = ''
           export PS1='\[\033[1;34m\][holonix:\w]\$\[\033[0m\] '
+          export LIBCLANG_PATH="${pkgs.llvmPackages_18.libclang.lib}/lib"
+          export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib/"
         '';
       };
     };

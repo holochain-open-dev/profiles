@@ -13,6 +13,7 @@ test("create & update Profile", async () => {
     const { alice, bob } = await setup(scenario);
 
     let agentsWithProfile = await toPromise(alice.store.agentsWithProfile);
+
     assert.equal(agentsWithProfile.length, 0);
     alice.store.agentsWithProfile.subscribe(() => {}); // store keepalive
     let myProfile = await toPromise(alice.store.myProfile);
@@ -25,13 +26,15 @@ test("create & update Profile", async () => {
         await sampleProfile(alice.store.client)
       );
     assert.ok(profile);
-    await pause(1000); // Difference in time between the create the processing of the signal
+    await pause(10000); // Difference in time between the create the processing of the signal
 
     agentsWithProfile = await toPromise(alice.store.agentsWithProfile);
     assert.equal(agentsWithProfile.length, 1);
+    console.log("agentsWithProfile", agentsWithProfile[0])
 
     const profileStatus = get(alice.store.myProfile);
     assert.equal(profileStatus.status, "complete");
+    console.log("profileStatus", profileStatus)
     assert.equal((profileStatus as any).value.actionHash.toString(), profile.actionHash.toString());
 
 
