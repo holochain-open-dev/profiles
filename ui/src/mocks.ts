@@ -64,7 +64,7 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
     installedAppId?: InstalledAppId,
   ) {
     const appId  = installedAppId ? installedAppId : 'dummy-app-id';
-    super("lobby", "profiles", myPubKey);
+    super("lobby", "profiles", appId, myPubKey);
     this.installedAppId = appId;
   }
 
