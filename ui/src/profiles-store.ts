@@ -99,6 +99,10 @@ export class ProfilesStore {
     asyncReadable<EntryRecord<Profile> | undefined>(async set => {
       let profile = await this.client.getAgentProfile(agent, true);
       // If we don't find it locally, try over the newtork
+      // Note that this means we only discover the latest profiles of
+      // others via gossip, i.e. if someone changes their profile
+      // and it hasn't gossiped to us, we will find one via
+      // GetStrategy::Local and will skip going to the network.
       if (!profile) {
         profile = await this.client.getAgentProfile(agent, false);
       }
