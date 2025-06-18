@@ -7,9 +7,13 @@
 //!
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
+pub mod helper;
+
 use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
+
+use helper::ZomeFnInput;
 
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
@@ -46,10 +50,14 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
 pub fn update_profile(profile: Profile) -> ExternResult<Record> {
-    let previous_profile_record = crate::get_agent_profile(agent_info()?.agent_initial_pubkey)?
-        .ok_or(wasm_error!(WasmErrorInner::Guest(
-            "I haven't created a profile yet".into(),
-        )))?;
+    // We should have our own profile locally, so we can use GetOptions::local()
+    let previous_profile_record = get_agent_profile(ZomeFnInput {
+        input: agent_info()?.agent_initial_pubkey,
+        local: Some(true),
+    })?
+    .ok_or(wasm_error!(WasmErrorInner::Guest(
+        "I haven't created a profile yet".into(),
+    )))?;
 
     let action_hash = update_entry(previous_profile_record.action_address().clone(), &profile)?;
     let my_pub_key = agent_info()?.agent_initial_pubkey;
@@ -103,21 +111,21 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
 /// From a nickname filter of at least 3 characters, returns all the agents whose nickname starts with that prefix
 /// Ignores the nickname case, will return upper or lower case nicknames that match
 #[hdk_extern]
-pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> {
-    if nickname_filter.len() < 3 {
+pub fn search_agents(nickname_filter: ZomeFnInput<String>) -> ExternResult<Vec<AgentPubKey>> {
+    if nickname_filter.input.len() < 3 {
         return Err(wasm_error!(WasmErrorInner::Guest(
             "Cannot search with a prefix less than 3 characters".into(),
         )));
     }
 
-    let prefix_path = prefix_path(nickname_filter.clone())?;
+    let prefix_path = prefix_path(nickname_filter.input.clone())?;
     let links = get_links(GetLinksInput {
         base_address: prefix_path.path_entry_hash()?.into(),
         link_type: LinkTypes::PathToAgent.try_into_filter()?,
         tag_prefix: Some(LinkTag::new(
-            nickname_filter.to_lowercase().as_bytes().to_vec(),
+            nickname_filter.input.to_lowercase().as_bytes().to_vec(),
         )),
-        get_options: GetOptions::default(),
+        get_options: nickname_filter.get_options(),
         after: None,
         before: None,
         author: None,
@@ -134,14 +142,13 @@ pub fn search_agents(nickname_filter: String) -> ExternResult<Vec<AgentPubKey>> 
     Ok(agents)
 }
 
-/// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
-pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Record>> {
+pub fn get_my_profile() -> ExternResult<Option<Record>> {
     let links = get_links(GetLinksInput {
-        base_address: agent_pub_key.into(),
+        base_address: agent_info()?.agent_initial_pubkey.into(),
         link_type: LinkTypes::AgentToProfile.try_into_filter()?,
         tag_prefix: None,
-        get_options: GetOptions::default(),
+        get_options: GetOptions::local(),
         after: None,
         before: None,
         author: None,
@@ -153,15 +160,53 @@ pub fn get_agent_profile(agent_pub_key: AgentPubKey) -> ExternResult<Option<Reco
 
     let link = links[0].clone();
 
-    let profile = get_latest(link.target.into_action_hash().ok_or(wasm_error!(
-        WasmErrorInner::Guest("Profile link target is not of ActionHash".into())
-    ))?)?;
+    let profile = get_latest(ZomeFnInput {
+        input: link
+            .target
+            .into_action_hash()
+            .ok_or(wasm_error!(WasmErrorInner::Guest(
+                "Profile link target is not of ActionHash".into()
+            )))?,
+        local: Some(true),
+    })?;
 
     Ok(Some(profile))
 }
 
-fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
-    let details = get_details(action_hash, GetOptions::default())?.ok_or(wasm_error!(
+/// Returns the profile for the given agent, if they have created it.
+#[hdk_extern]
+pub fn get_agent_profile(input: ZomeFnInput<AgentPubKey>) -> ExternResult<Option<Record>> {
+    let links = get_links(GetLinksInput {
+        base_address: input.input.clone().into(),
+        link_type: LinkTypes::AgentToProfile.try_into_filter()?,
+        tag_prefix: None,
+        get_options: input.get_options(),
+        after: None,
+        before: None,
+        author: None,
+    })?;
+
+    if links.is_empty() {
+        return Ok(None);
+    }
+
+    let link = links[0].clone();
+
+    let profile = get_latest(ZomeFnInput {
+        input: link
+            .target
+            .into_action_hash()
+            .ok_or(wasm_error!(WasmErrorInner::Guest(
+                "Profile link target is not of ActionHash".into()
+            )))?,
+        local: input.local,
+    })?;
+
+    Ok(Some(profile))
+}
+
+fn get_latest(input: ZomeFnInput<ActionHash>) -> ExternResult<Record> {
+    let details = get_details(input.input.clone(), input.get_options())?.ok_or(wasm_error!(
         WasmErrorInner::Guest("Profile not found".into())
     ))?;
 
@@ -170,7 +215,10 @@ fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
             "Malformed details".into()
         ))),
         Details::Record(element_details) => match element_details.updates.last() {
-            Some(update) => match get_latest(update.action_address().clone()) {
+            Some(update) => match get_latest(ZomeFnInput {
+                input: update.action_address().clone(),
+                local: input.local,
+            }) {
                 Ok(record) => Ok(record),
                 Err(_) => {
                     println!("Failed to find latest record for Profile. Returning previous one.");
@@ -184,7 +232,7 @@ fn get_latest(action_hash: ActionHash) -> ExternResult<Record> {
 
 /// Gets all the agents that have created a profile in this DHT.
 #[hdk_extern]
-pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
+pub fn get_agents_with_profile(input: ZomeFnInput<()>) -> ExternResult<Vec<AgentPubKey>> {
     let path = Path::from("all_profiles").typed(LinkTypes::PrefixPath)?;
 
     let children = path.children_paths()?;
@@ -196,7 +244,7 @@ pub fn get_agents_with_profile(_: ()) -> ExternResult<Vec<AgentPubKey>> {
                 base_address: path.path_entry_hash()?.into(),
                 link_type: LinkTypes::PathToAgent.try_into_filter()?,
                 tag_prefix: None,
-                get_options: GetOptions::default(),
+                get_options: input.get_options(),
                 after: None,
                 before: None,
                 author: None,

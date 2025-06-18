@@ -23,14 +23,16 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * Get the profile for the given agent, if they have created it
    *
    * @param agentPubKey the agent to get the profile for
+   * @param local Whether to use `GetStrategy::Local`. Default is `GetStrategy::Network`.
    * @returns the profile of the agent, if they have created one
    */
   async getAgentProfile(
-    agentPubKey: AgentPubKey
+    agentPubKey: AgentPubKey,
+    local?: boolean,
   ): Promise<EntryRecord<Profile> | undefined> {
     const record: Record | undefined = await this.callZome(
       "get_agent_profile",
-      agentPubKey
+      { input: agentPubKey, local }
     );
 
     return record ? new EntryRecord(record) : undefined;
@@ -40,19 +42,21 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * Search profiles that start with nicknameFilter
    *
    * @param nicknameFilter must be of at least 3 characters
+   * @param local Whether to use `GetStrategy::Local`. Default is `GetStrategy::Network`.
    * @returns the agents with the nickname starting with nicknameFilter
    */
-  async searchAgents(nicknameFilter: string): Promise<AgentPubKey[]> {
-    return this.callZome("search_agents", nicknameFilter);
+  async searchAgents(nicknameFilter: string, local?: boolean): Promise<AgentPubKey[]> {
+    return this.callZome("search_agents", { input: nicknameFilter, local });
   }
 
   /**
    * Get all the agents in the DHT that have created a profile
    *
+   * @param local Whether to use `GetStrategy::Local`. Default is `GetStrategy::Network`.
    * @returns the agent public keys of all agents that have created a profile
    */
-  async getAgentsWithProfile(): Promise<AgentPubKey[]> {
-    return this.callZome("get_agents_with_profile", null);
+  async getAgentsWithProfile(local?: boolean): Promise<AgentPubKey[]> {
+    return this.callZome("get_agents_with_profile", { input: null, local });
   }
 
   /**

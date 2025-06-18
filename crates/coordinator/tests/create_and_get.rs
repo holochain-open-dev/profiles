@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use hc_zome_profiles_coordinator::helper::ZomeFnInput;
 use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
@@ -26,7 +27,14 @@ async fn create_and_get() {
 
     // Try to get my profile before creating one. Should return None.
     let record_1: Option<Record> = conductors[0]
-        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .call(
+            &alice_zome,
+            "get_agent_profile",
+            ZomeFnInput {
+                input: alice_pub_key,
+                local: None,
+            },
+        )
         .await;
     assert_eq!(record_1, None);
 
@@ -40,16 +48,30 @@ async fn create_and_get() {
         .call(&alice_zome, "create_profile", profile)
         .await;
 
-    let _result = await_consistency(10000,[&alice, &bobbo]).await;
+    let _result = await_consistency(10000, [&alice, &bobbo]).await;
 
     let record_2: Option<Record> = conductors[0]
-        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .call(
+            &alice_zome,
+            "get_agent_profile",
+            ZomeFnInput {
+                input: alice_pub_key,
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(record_1, record_2.unwrap());
 
     let record_2: Option<Record> = conductors[1]
-        .call(&bob_zome, "get_agent_profile", alice.agent_pubkey())
+        .call(
+            &bob_zome,
+            "get_agent_profile",
+            ZomeFnInput {
+                input: alice.agent_pubkey(),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(record_1, record_2.unwrap());
@@ -64,11 +86,18 @@ async fn create_and_get() {
         .call(&alice_zome, "update_profile", profile.clone())
         .await;
 
-    let _result = await_consistency(10000,[&alice, &bobbo]).await;
+    let _result = await_consistency(10000, [&alice, &bobbo]).await;
 
     // ---> get it over the DHT though get_agent_profile()
     let alices_profile: Option<Record> = conductors[1]
-        .call(&bob_zome, "get_agent_profile", alice.agent_pubkey())
+        .call(
+            &bob_zome,
+            "get_agent_profile",
+            ZomeFnInput {
+                input: alice.agent_pubkey(),
+                local: None,
+            },
+        )
         .await;
 
     if let Some(Record {
@@ -84,7 +113,14 @@ async fn create_and_get() {
 
     // ---> get it from alice's source chain through get_my_profile()
     let alices_profile_from_source_chain: Option<Record> = conductors[0]
-        .call(&alice_zome, "get_agent_profile", alice_pub_key)
+        .call(
+            &alice_zome,
+            "get_agent_profile",
+            ZomeFnInput {
+                input: alice_pub_key,
+                local: None,
+            },
+        )
         .await;
 
     if let Some(Record {
@@ -111,7 +147,14 @@ async fn create_and_get() {
         .await;
 
     let all_agents: Vec<AgentPubKey> = conductors[1]
-        .call(&bob_zome, "get_agents_with_profile", ())
+        .call(
+            &bob_zome,
+            "get_agents_with_profile",
+            ZomeFnInput {
+                input: (),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(all_agents.len(), 2);

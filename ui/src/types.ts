@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ActionCommittedSignal } from "@holochain-open-dev/utils";
 
 export type ProfilesSignal = ActionCommittedSignal<EntryTypes, any>;
