@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use hc_zome_profiles_coordinator::helper::ZomeFnInput;
 use hc_zome_profiles_integrity::*;
 use holochain::prelude::{AgentPubKey, Record};
 use holochain::{conductor::config::ConductorConfig, sweettest::*};
@@ -41,36 +42,71 @@ async fn create_and_get() {
         )
         .await;
 
-    let _result = await_consistency(10000,[&alice, &bobbo]).await;
+    let _result = await_consistency(10000, [&alice, &bobbo]).await;
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(&bob_zome, "search_agents", String::from("ali"))
+        .call(
+            &bob_zome,
+            "search_agents",
+            ZomeFnInput {
+                input: String::from("ali"),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(agents_searched.len(), 1);
     assert_eq!(agents_searched[0], alice.agent_pubkey().clone());
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(&bob_zome, "search_agents", String::from("alii"))
+        .call(
+            &bob_zome,
+            "search_agents",
+            ZomeFnInput {
+                input: String::from("alii"),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(agents_searched.len(), 0);
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(&bob_zome, "search_agents", String::from("BoB"))
+        .call(
+            &bob_zome,
+            "search_agents",
+            ZomeFnInput {
+                input: String::from("BoB"),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(agents_searched.len(), 1);
     assert_eq!(agents_searched[0], bobbo.agent_pubkey().clone());
 
     let agents_searched: Vec<AgentPubKey> = conductors[1]
-        .call(&bob_zome, "search_agents", String::from("asde"))
+        .call(
+            &bob_zome,
+            "search_agents",
+            ZomeFnInput {
+                input: String::from("asde"),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(agents_searched.len(), 0);
 
     let profiles_searched: Vec<Record> = conductors[1]
-        .call(&bob_zome, "search_agents", String::from("سعيدة"))
+        .call(
+            &bob_zome,
+            "search_agents",
+            ZomeFnInput {
+                input: String::from("سعيدة"),
+                local: None,
+            },
+        )
         .await;
 
     assert_eq!(profiles_searched.len(), 0);

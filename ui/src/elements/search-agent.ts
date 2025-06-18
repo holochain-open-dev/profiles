@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 import { customElement, property, state, query } from "lit/decorators.js";
 import { css, html, LitElement } from "lit";
 import { consume } from "@lit/context";
@@ -16,7 +17,6 @@ import "@shoelace-style/shoelace/dist/components/menu/menu.js";
 import "@shoelace-style/shoelace/dist/components/menu-item/menu-item.js";
 import "@shoelace-style/shoelace/dist/components/dropdown/dropdown.js";
 import "@shoelace-style/shoelace/dist/components/input/input.js";
-import SlInput from "@shoelace-style/shoelace/dist/components/input/input";
 
 import "./agent-avatar.js";
 import "./profile-list-item-skeleton.js";
@@ -26,6 +26,7 @@ import { Profile } from "../types.js";
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
 import { EntryRecord } from "@holochain-open-dev/utils";
+import SlInput from "@shoelace-style/shoelace/dist/components/input/input.js";
 
 /**
  * @element search-agent

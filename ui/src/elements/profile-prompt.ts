@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TemplateResult, css, html, LitElement } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { localized, msg } from "@lit/localize";

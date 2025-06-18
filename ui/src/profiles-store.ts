@@ -1,5 +1,5 @@
-import { EntryRecord, LazyHoloHashMap } from "@holochain-open-dev/utils";
-import { encode } from "@msgpack/msgpack";
+import { EntryRecord, LazyHoloHashMap } from '@holochain-open-dev/utils';
+import { encode } from '@msgpack/msgpack';
 import {
   AsyncReadable,
   asyncReadable,
@@ -9,25 +9,25 @@ import {
   derived,
   NotFoundError,
   AsyncStatus,
-} from "@holochain-open-dev/stores";
-import { AgentPubKey } from "@holochain/client";
+} from '@holochain-open-dev/stores';
+import { AgentPubKey } from '@holochain/client';
 
-import { ProfilesClient } from "./profiles-client.js";
-import { Profile } from "./types.js";
-import { defaultConfig, ProfilesConfig } from "./config.js";
-import { uniquify } from "./stores.js";
+import { ProfilesClient } from './profiles-client.js';
+import { Profile } from './types.js';
+import { defaultConfig, ProfilesConfig } from './config.js';
+import { uniquify } from './stores.js';
 // @ts-ignore
-import isEqual from "lodash-es/isEqual.js";
+import isEqual from 'lodash-es/isEqual.js';
 
 export function catchNotFoundError<T>(
   store: AsyncReadable<T>
 ): AsyncReadable<T | undefined> {
-  return derived(store, (asyncStatus) => {
-    if (asyncStatus.status !== "error") return asyncStatus;
+  return derived(store, asyncStatus => {
+    if (asyncStatus.status !== 'error') return asyncStatus;
 
     if (asyncStatus.error instanceof NotFoundError)
       return {
-        status: "complete",
+        status: 'complete',
         value: undefined,
       } as AsyncStatus<undefined>;
     return asyncStatus;
@@ -47,32 +47,37 @@ export class ProfilesStore {
   /**
    * Fetches all the agents that have created a profile in the DHT
    */
-  agentsWithProfile: AsyncReadable<AgentPubKey[]> = asyncReadable(
-    async (set) => {
-      let hashes: AgentPubKey[];
-      const fetch = async () => {
-        const nhashes = await this.client.getAgentsWithProfile();
-        if (!isEqual(nhashes, hashes)) {
-          hashes = uniquify(nhashes);
+  agentsWithProfile: AsyncReadable<AgentPubKey[]> = asyncReadable(async set => {
+    let hashes: AgentPubKey[];
+    const fetch = async (local: boolean) => {
+      const nhashes = await this.client.getAgentsWithProfile(local);
+      if (!isEqual(nhashes, hashes)) {
+        hashes = uniquify(nhashes);
+        set(hashes);
+      }
+    };
+    // Fetch with `GetStrategy::Local` first
+    await fetch(true);
+    const interval = setInterval(
+      () =>
+        fetch(false).catch(e => {
+          console.warn('Failed to fetch agents with profile:', e);
+        }),
+      4000
+    );
+    const unsubs = this.client.onSignal(signal => {
+      if (signal.type === 'LinkCreated') {
+        if ('AgentToProfile' === signal.link_type) {
+          hashes = uniquify([...hashes, this.client.client.myPubKey]);
           set(hashes);
         }
-      };
-      await fetch();
-      const interval = setInterval(() => fetch(), 4000);
-      const unsubs = this.client.onSignal((signal) => {
-        if (signal.type === "LinkCreated") {
-          if ("AgentToProfile" === signal.link_type) {
-            hashes = uniquify([...hashes, this.client.client.myPubKey]);
-            set(hashes);
-          }
-        }
-      });
-      return () => {
-        clearInterval(interval);
-        unsubs();
-      };
-    }
-  );
+      }
+    });
+    return () => {
+      clearInterval(interval);
+      unsubs();
+    };
+  });
 
   /**
    * Fetches the profiles for all agents in the DHT
@@ -81,7 +86,7 @@ export class ProfilesStore {
    */
   allProfiles = pipe(
     this.agentsWithProfile,
-    (agents) =>
+    agents =>
       this.agentsProfiles(agents) as AsyncReadable<
         ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
       >
@@ -91,18 +96,22 @@ export class ProfilesStore {
    * Fetches the profile for the given agent
    */
   profiles = new LazyHoloHashMap((agent: AgentPubKey) =>
-    asyncReadable<EntryRecord<Profile> | undefined>(async (set) => {
-      const profile = await this.client.getAgentProfile(agent);
+    asyncReadable<EntryRecord<Profile> | undefined>(async set => {
+      let profile = await this.client.getAgentProfile(agent, true);
+      // If we don't find it locally, try over the newtork
+      if (!profile) {
+        profile = await this.client.getAgentProfile(agent, false);
+      }
       set(profile);
 
-      return this.client.onSignal((signal) => {
+      return this.client.onSignal(signal => {
         if (this.client.client.myPubKey.toString() !== agent.toString()) return;
-        if (!(signal.type === "EntryCreated" || signal.type === "EntryUpdated"))
+        if (!(signal.type === 'EntryCreated' || signal.type === 'EntryUpdated'))
           return;
         const record = new EntryRecord<Profile>({
           entry: {
             Present: {
-              entry_type: "App",
+              entry_type: 'App',
               entry: encode(signal.app_entry),
             },
           },
@@ -124,11 +133,12 @@ export class ProfilesStore {
   }
 
   searchProfiles(
-    searchFilter: string
+    searchFilter: string,
+    local?: boolean
   ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile>>> {
     return pipe(
-      lazyLoad(async () => this.client.searchAgents(searchFilter)),
-      (agents) =>
+      lazyLoad(async () => this.client.searchAgents(searchFilter, local)),
+      agents =>
         this.agentsProfiles(agents) as AsyncReadable<
           ReadonlyMap<AgentPubKey, EntryRecord<Profile>>
         >
