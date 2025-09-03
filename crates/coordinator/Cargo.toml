@@ -11,7 +11,7 @@ homepage = "https://docs.rs/hc_zome_profiles"
 license = "MIT"
 name = "hc_zome_profiles_coordinator"
 repository = "https://github.com/holochain-open-dev/profiles"
-version = "0.3.1"
+version = "0.3.2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -19,14 +19,14 @@ name = "hc_zome_profiles_coordinator"
 
 [dependencies]
 derive_more = "0"
-hc_zome_profiles_integrity = { path = "../integrity", version = "0.3.1" }
+hc_zome_profiles_integrity = { path = "../integrity", version = "0.3.2" }
 holochain_serialized_bytes = { workspace = true}
 serde = { workspace = true}
 
 hdk = { workspace = true }
 
 [dev-dependencies]
-fixt = "0.5.4"
+fixt = "0.5.6"
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
 holochain = { workspace = true, features = ["test_utils"] }
