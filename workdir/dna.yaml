@@ -1,5 +1,5 @@
 ---
-manifest_version: "1"
+manifest_version: "0"
 name: profiles-test
 
 integrity:
@@ -7,11 +7,11 @@ integrity:
   properties: ~
   zomes:
     - name: profiles_integrity
-      bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
+      path: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_integrity.wasm
 
 coordinator:
   zomes:
     - name: profiles
-      bundled: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
+      path: ../target/wasm32-unknown-unknown/release/hc_zome_profiles_coordinator.wasm
       dependencies:
         - name: profiles_integrity

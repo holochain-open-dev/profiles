@@ -72,20 +72,19 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )))?;
     if previous_profile.nickname.ne(&profile.nickname) {
         let previous_prefix_path = prefix_path(previous_profile.nickname)?;
-        let links = get_links(GetLinksInput {
-            base_address: previous_prefix_path.path_entry_hash()?.into(),
+        let links = get_links(LinkQuery {
+            base: previous_prefix_path.path_entry_hash()?.into(),
             link_type: LinkTypes::PathToAgent.try_into_filter()?,
             tag_prefix: None,
-            get_options: GetOptions::default(),
             after: None,
             before: None,
             author: None,
-        })?;
+        }, GetStrategy::Network)?;
 
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
                 if my_pub_key.eq(&pub_key) {
-                    delete_link(l.create_link_hash)?;
+                    delete_link(l.create_link_hash,GetOptions { strategy: GetStrategy::Network })?;
                 }
             }
         }
@@ -119,17 +118,16 @@ pub fn search_agents(nickname_filter: ZomeFnInput<String>) -> ExternResult<Vec<A
     }
 
     let prefix_path = prefix_path(nickname_filter.input.clone())?;
-    let links = get_links(GetLinksInput {
-        base_address: prefix_path.path_entry_hash()?.into(),
+    let links = get_links(LinkQuery {
+        base: prefix_path.path_entry_hash()?.into(),
         link_type: LinkTypes::PathToAgent.try_into_filter()?,
         tag_prefix: Some(LinkTag::new(
             nickname_filter.input.to_lowercase().as_bytes().to_vec(),
         )),
-        get_options: nickname_filter.get_options(),
         after: None,
         before: None,
         author: None,
-    })?;
+    }, GetStrategy::Network)?;
 
     let mut agents: Vec<AgentPubKey> = vec![];
 
@@ -144,15 +142,14 @@ pub fn search_agents(nickname_filter: ZomeFnInput<String>) -> ExternResult<Vec<A
 
 #[hdk_extern]
 pub fn get_my_profile() -> ExternResult<Option<Record>> {
-    let links = get_links(GetLinksInput {
-        base_address: agent_info()?.agent_initial_pubkey.into(),
+    let links = get_links(LinkQuery {
+        base: agent_info()?.agent_initial_pubkey.into(),
         link_type: LinkTypes::AgentToProfile.try_into_filter()?,
         tag_prefix: None,
-        get_options: GetOptions::local(),
         after: None,
         before: None,
         author: None,
-    })?;
+    }, GetStrategy::Network)?;
 
     if links.is_empty() {
         return Ok(None);
@@ -176,15 +173,14 @@ pub fn get_my_profile() -> ExternResult<Option<Record>> {
 /// Returns the profile for the given agent, if they have created it.
 #[hdk_extern]
 pub fn get_agent_profile(input: ZomeFnInput<AgentPubKey>) -> ExternResult<Option<Record>> {
-    let links = get_links(GetLinksInput {
-        base_address: input.input.clone().into(),
+    let links = get_links(LinkQuery {
+        base: input.input.clone().into(),
         link_type: LinkTypes::AgentToProfile.try_into_filter()?,
         tag_prefix: None,
-        get_options: input.get_options(),
         after: None,
         before: None,
         author: None,
-    })?;
+    }, GetStrategy::Network)?;
 
     if links.is_empty() {
         return Ok(None);
