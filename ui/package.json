@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles",
-  "version": "0.600.0-dev.0",
+  "version": "0.600.0-dev.2",
   "description": "Frontend module for the Holochain hc_zome_profiles zomes",
   "author": "guillem.cordoba@gmail.com",
   "license": "MIT",
@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "start": "vite --clearScreen false --port $UI_PORT",
-    "build": "npm run lint && tsc",
+    "build": "npm run lint && tsc --project tsconfig.json",
     "test": "npm run build && web-test-runner --coverage",
     "package": "vite build && cd dist && bestzip ../dist.zip *",
     "lint": "eslint --ext .ts,.html src --ignore-path .gitignore",
