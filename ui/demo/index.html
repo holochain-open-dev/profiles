@@ -21,7 +21,7 @@
     <script type="module">
       import "@shoelace-style/shoelace/dist/themes/dark.css";
 
-      import { AppAgentWebsocket } from "@holochain/client";
+      import { AppWebsocket } from "@holochain/client";
       import { LitElement, html } from "lit";
       import { ProfilesStore, ProfilesClient } from "../src/index.ts";
 
@@ -36,17 +36,25 @@
       import "../src/elements/search-agents.ts";
       import "../src/elements/textarea-with-mentions.ts";
 
+      const appId = "test-app";
+      const appPort = 8888;
+      const adminPort = import.meta.env.VITE_ADMIN_PORT;
+      const url = `ws://localhost:${appPort}`;
+
       class ProfilesTest extends LitElement {
         static get properties() {
           return {
             loaded: {
-              type: Boolean,
+              type: Boolean,  
             },
           };
         }
 
         async firstUpdated() {
-          const client = await AppAgentWebsocket.connect("test-app");
+        console.log("appPort and Id is", appPort, appId);
+        const params = { url: new URL(url), defaultTimeout: 240000 };
+        let client = await AppWebsocket.connect(params);
+
 
           const service = new ProfilesClient(client, "profiles-test");
 
