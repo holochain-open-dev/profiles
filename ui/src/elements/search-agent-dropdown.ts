@@ -72,7 +72,7 @@ export class SearchAgentDropdown extends LitElement {
     this,
     () =>
       this.searchFilter && this.searchFilter.length >= 3
-        ? this.store.searchProfiles(this.searchFilter)
+        ? this.store.searchProfiles(this.searchFilter, true)
         : completed(undefined),
     () => [this.searchFilter]
   );

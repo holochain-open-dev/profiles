@@ -104,7 +104,7 @@ export class ProfilesStore {
       // and it hasn't gossiped to us, we will find one via
       // GetStrategy::Local and will skip going to the network.
       if (!profile) {
-        profile = await this.client.getAgentProfile(agent, false);
+        profile = await this.client.getAgentProfile(agent, true);
       }
       set(profile);
 

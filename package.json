@@ -20,7 +20,7 @@
     "package": "npm run build:happ && npm run package -w ui && hc web-app pack workdir --recursive"
   },
   "devDependencies": {
-    "@holochain/hc-spin": "^0.600.0-dev.0",
+    "@holochain/hc-spin": "^0.600.0-rc.0",
     "@holochain-playground/cli": "^0.300.1",
     "@storybook/addon-essentials": "^7.5.3",
     "@storybook/addon-links": "^7.5.3",

@@ -118,7 +118,7 @@ export class SearchAgent extends LitElement implements FormField {
     this.value = this.defaultValue;
     if (this.defaultValue) {
       const profile = await this.store.client.getAgentProfile(
-        this.defaultValue
+        this.defaultValue,true
       );
       this._textField.value = profile?.entry.nickname || "";
     } else {

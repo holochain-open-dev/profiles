@@ -30,6 +30,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
     agentPubKey: AgentPubKey,
     local?: boolean,
   ): Promise<EntryRecord<Profile> | undefined> {
+    if (local === undefined) local = true
     const record: Record | undefined = await this.callZome(
       "get_agent_profile",
       { input: agentPubKey, local }
@@ -46,6 +47,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @returns the agents with the nickname starting with nicknameFilter
    */
   async searchAgents(nicknameFilter: string, local?: boolean): Promise<AgentPubKey[]> {
+    if (local === undefined) local = true
     return this.callZome("search_agents", { input: nicknameFilter, local });
   }
 
@@ -56,6 +58,7 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * @returns the agent public keys of all agents that have created a profile
    */
   async getAgentsWithProfile(local?: boolean): Promise<AgentPubKey[]> {
+    if (local === undefined) local = true
     return this.callZome("get_agents_with_profile", { input: null, local });
   }
 
