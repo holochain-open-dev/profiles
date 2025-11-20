@@ -79,12 +79,12 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             after: None,
             before: None,
             author: None,
-        }, GetStrategy::Network)?;
+        }, GetStrategy::Local)?;
 
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
                 if my_pub_key.eq(&pub_key) {
-                    delete_link(l.create_link_hash,GetOptions { strategy: GetStrategy::Network })?;
+                    delete_link(l.create_link_hash,GetOptions { strategy: GetStrategy::Local })?;
                 }
             }
         }
@@ -127,7 +127,7 @@ pub fn search_agents(nickname_filter: ZomeFnInput<String>) -> ExternResult<Vec<A
         after: None,
         before: None,
         author: None,
-    }, GetStrategy::Network)?;
+    }, nickname_filter.get_strategy())?;
 
     let mut agents: Vec<AgentPubKey> = vec![];
 
@@ -149,7 +149,7 @@ pub fn get_my_profile() -> ExternResult<Option<Record>> {
         after: None,
         before: None,
         author: None,
-    }, GetStrategy::Network)?;
+    }, GetStrategy::Local)?;
 
     if links.is_empty() {
         return Ok(None);
@@ -180,7 +180,7 @@ pub fn get_agent_profile(input: ZomeFnInput<AgentPubKey>) -> ExternResult<Option
         after: None,
         before: None,
         author: None,
-    }, GetStrategy::Network)?;
+    }, input.get_strategy())?;
 
     if links.is_empty() {
         return Ok(None);

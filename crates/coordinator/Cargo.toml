@@ -26,7 +26,7 @@ serde = { workspace = true}
 hdk = { workspace = true }
 
 [dev-dependencies]
-fixt = "0.6.0-rc.0"  
+fixt = "0.6.0"  
 futures = { version = "0.3.1", default-features = false }
 hdk = { workspace = true, features = ["encoding", "test_utils"] }
 holochain = { workspace = true, features = ["test_utils"] }
