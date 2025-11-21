@@ -8,11 +8,13 @@
 //! Read about how to include both this zome and its frontend module in your application [here](https://holochain-open-dev.github.io/profiles).
 
 pub mod helper;
+mod typed_path_ext;
 
 use hdk::prelude::*;
 
 use hc_zome_profiles_integrity::*;
 
+use crate::typed_path_ext::tp_children_paths;
 use helper::ZomeFnInput;
 
 /// Creates the profile for the agent executing this call.
@@ -231,7 +233,7 @@ fn get_latest(input: ZomeFnInput<ActionHash>) -> ExternResult<Record> {
 pub fn get_agents_with_profile(input: ZomeFnInput<()>) -> ExternResult<Vec<AgentPubKey>> {
     let path = Path::from("all_profiles").typed(LinkTypes::PrefixPath)?;
 
-    let children = path.children_paths()?;
+    let children = tp_children_paths(&path, GetStrategy::Local)?;
 
     let get_links_input: Vec<GetLinksInput> = children
         .into_iter()
