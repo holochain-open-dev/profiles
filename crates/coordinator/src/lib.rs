@@ -43,7 +43,7 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
         (),
     )?;
 
-    let record = get(action_hash, GetOptions::default())?
+    let record = get(action_hash, GetOptions::local())?
         .ok_or(wasm_error!(WasmErrorInner::Guest("Unreachable".into())))?;
 
     Ok(record)
@@ -103,7 +103,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         )?;
     }
 
-    let record = get(action_hash, GetOptions::default())?
+    let record = get(action_hash, GetOptions::local())?
         .ok_or(wasm_error!(WasmErrorInner::Guest("Unreachable".into())))?;
 
     Ok(record)
@@ -323,7 +323,7 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
         }
         Action::DeleteLink(delete_link) => {
             let record =
-                get(delete_link.link_add_address, GetOptions::default())?.ok_or(wasm_error!(
+                get(delete_link.link_add_address, GetOptions::local())?.ok_or(wasm_error!(
                     WasmErrorInner::Guest("Failed to fetch CreateLink action".to_string())
                 ))?;
             match record.action() {
@@ -377,7 +377,7 @@ fn signal_action(action: SignedActionHashed) -> ExternResult<()> {
     }
 }
 fn get_entry_for_action(action_hash: &ActionHash) -> ExternResult<Option<EntryTypes>> {
-    let record = match get_details(action_hash.clone(), GetOptions::default())? {
+    let record = match get_details(action_hash.clone(), GetOptions::local())? {
         Some(Details::Record(record_details)) => record_details.record,
         _ => {
             return Ok(None);
