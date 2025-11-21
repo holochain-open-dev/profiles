@@ -32,7 +32,6 @@ pub fn tp_children(
 /// `Component` is encoded into the link tag. To build a full child path
 /// the parent path + child link must be combined, which this function does
 /// to produce each child, by using `&self` as that parent.
-#[allow(dead_code)]
 pub fn tp_children_paths(tp: &TypedPath, strategy: GetStrategy) -> ExternResult<Vec<TypedPath>> {
     let children = tp_children(tp, strategy)?;
     //debug!("tp_children_paths() children = {:?}", children);
@@ -75,6 +74,7 @@ pub fn links_to_paths(tp: &TypedPath, children: Vec<Link>) -> ExternResult<Vec<T
 /// Return all LeafPaths from this Path
 /// A LeafPath is a Path with no sub Paths of same type.
 /// USE WITH CARE as this can easily timeout as it's a recursive loop of get_links()
+#[allow(dead_code)]
 pub fn tp_leaf_children(tp: &TypedPath, strategy: GetStrategy) -> ExternResult<Vec<TypedPath>> {
     let children = tp_children_paths(tp, strategy)?;
     //debug!("tp_leaf_children() children = {:?}", children);
