@@ -1,0 +1,7 @@
+---
+manifest_version: "0"
+name: ProfilesTestOfficial
+ui:
+  path: "../ui/dist.zip"
+happ:
+  path: "./profiles-test.happ"
