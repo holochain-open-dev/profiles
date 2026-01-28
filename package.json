@@ -1,5 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles-dev",
+  "version": "0.601.0",
   "private": true,
   "workspaces": [
     "ui",
@@ -35,6 +36,5 @@
     "react-dom": "^18.2.0",
     "storybook": "^7.0.0-beta.33"
   },
-  "type": "module",
-  "version": "0.600.0"
+  "type": "module"
 }

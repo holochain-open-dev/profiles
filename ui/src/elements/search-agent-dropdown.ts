@@ -84,7 +84,7 @@ export class SearchAgentDropdown extends LitElement {
   public dropdown!: SlDropdown;
 
   async onUsernameSelected(agentPubKey: AgentPubKey) {
-    const profile = await toPromise(this.store.profiles.get(agentPubKey));
+    const profile = await toPromise(this.store.profiles.get(agentPubKey)!);
     this.dispatchEvent(
       new CustomEvent("agent-selected", {
         detail: {

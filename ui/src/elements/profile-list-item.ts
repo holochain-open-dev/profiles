@@ -35,7 +35,7 @@ export class ProfileListItem extends LitElement {
    */
   private _profile = new StoreSubscriber(
     this,
-    () => this.store.profiles.get(this.agentPubKey),
+    () => this.store.profiles.get(this.agentPubKey)!,
     () => [this.store, this.agentPubKey]
   );
 

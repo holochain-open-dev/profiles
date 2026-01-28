@@ -1,4 +1,4 @@
-import { EntryRecord, LazyHoloHashMap } from '@holochain-open-dev/utils';
+import {EntryRecord, GetonlyMap} from '@holochain-open-dev/utils';
 import { encode } from '@msgpack/msgpack';
 import {
   AsyncReadable,
@@ -10,7 +10,7 @@ import {
   NotFoundError,
   AsyncStatus,
 } from '@holochain-open-dev/stores';
-import { AgentPubKey } from '@holochain/client';
+import { AgentPubKey, LazyHoloHashMap } from '@holochain/client';
 
 import { ProfilesClient } from './profiles-client.js';
 import { Profile } from './types.js';
@@ -127,13 +127,13 @@ export class ProfilesStore {
   );
 
   // Fetches your profile
-  myProfile = this.profiles.get(this.client.client.myPubKey);
+  myProfile = this.profiles.get(this.client.client.myPubKey)!;
 
   // Fetches the profiles for the given agents
   agentsProfiles(
     agents: Array<AgentPubKey>
   ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>> {
-    return sliceAndJoin(this.profiles, agents);
+    return sliceAndJoin(this.profiles as GetonlyMap<any, any>, agents);
   }
 
   searchProfiles(

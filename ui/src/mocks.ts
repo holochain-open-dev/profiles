@@ -1,5 +1,4 @@
 import {
-  AgentPubKeyMap,
   decodeEntry,
   fakeCreateAction,
   fakeEntry,
@@ -10,6 +9,7 @@ import {
 import {
   decodeHashFromBase64,
   AgentPubKey,
+  AgentPubKeyMap,
   AppClient,
   Record,
   InstalledAppId,
