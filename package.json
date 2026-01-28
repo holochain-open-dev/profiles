@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles-dev",
-  "version": "0.601.0",
+  "version": "0.601.1",
   "private": true,
   "workspaces": [
     "ui",
