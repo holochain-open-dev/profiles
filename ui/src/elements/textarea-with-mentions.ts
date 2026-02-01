@@ -16,9 +16,8 @@ import { keymap } from "prosemirror-keymap";
 
 import { ProfilesStore } from "../profiles-store.js";
 import { profilesStoreContext } from "../context.js";
-import "./search-agent-dropdown.js";
-import "./agent-mention.js";
 import { SearchAgentDropdown } from "./search-agent-dropdown.js";
+import "./agent-mention.js";
 
 export const agentMentionSpec: NodeSpec = {
   attrs: { agentPubKey: {} },
@@ -47,6 +46,7 @@ const schema = new Schema({
     doc: { content: "paragraph+" },
     paragraph: {
       content: "(text|agentMention)*",
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       toDOM(node) {
         return ["p", 0];
       },
@@ -112,8 +112,8 @@ export const searchAgentPlugin = new Plugin<SearchAgentPluginState>({
           })
         );
 
-        dropdownEl.addEventListener("agent-selected", (e: any) => {
-          const agentPubKey = e.detail.agentPubKey;
+        dropdownEl.addEventListener("agent-selected", (e: Event) => {
+          const agentPubKey = (e as CustomEvent).detail.agentPubKey;
           const state = this.getState(view.state);
 
           if (!state || state === "hidden") return;
@@ -260,7 +260,7 @@ export class TextareaWithMentions extends SlTextareaProsemirror {
     if (!this.input?.quill) return "";
     const contents = this.input.quill.getContents();
 
-    const array = contents.ops.map((delta: any) => {
+    const array = contents.ops.map((delta: { insert: string | Record<string, unknown> }) => {
       if (typeof delta.insert === "string") {
         return delta.insert;
       } else {

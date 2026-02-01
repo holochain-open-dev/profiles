@@ -18,6 +18,7 @@ import { defaultConfig, ProfilesConfig } from './config.js';
 import { uniquify } from './stores.js';
 // @ts-ignore
 import isEqual from 'lodash-es/isEqual.js';
+import { safeSetInterval } from './utils.js';
 
 export function catchNotFoundError<T>(
   store: AsyncReadable<T>
@@ -49,22 +50,19 @@ export class ProfilesStore {
    */
   agentsWithProfile: AsyncReadable<AgentPubKey[]> = asyncReadable(async set => {
     let hashes: AgentPubKey[];
-    const fetch = async (local: boolean) => {
-      const nhashes = await this.client.getAgentsWithProfile(local);
+    const fetch = async () => {
+      const nhashes = await this.client.getAgentsWithProfile(this.config.getLocal);
       if (!isEqual(nhashes, hashes)) {
         hashes = uniquify(nhashes);
         set(hashes);
       }
     };
-    // Fetch with `GetStrategy::Local` first
-    await fetch(true);
-    const interval = setInterval(
-      () =>
-        fetch(false).catch(e => {
-          console.warn('Failed to fetch agents with profile:', e);
-        }),
-      4000
-    );
+    await fetch();
+    const intervalHandle = safeSetInterval({
+      name: 'agentsWithProfile',
+      fn: fetch,
+      intervalMs: this.config.pollIntervalMs,
+    });
     const unsubs = this.client.onSignal(signal => {
       if (signal.type === 'LinkCreated') {
         if ('AgentToProfile' === signal.link_type) {
@@ -74,7 +72,7 @@ export class ProfilesStore {
       }
     });
     return () => {
-      clearInterval(interval);
+      intervalHandle.cancel();
       unsubs();
     };
   });
@@ -133,7 +131,7 @@ export class ProfilesStore {
   agentsProfiles(
     agents: Array<AgentPubKey>
   ): AsyncReadable<ReadonlyMap<AgentPubKey, EntryRecord<Profile> | undefined>> {
-    return sliceAndJoin(this.profiles as GetonlyMap<any, any>, agents);
+    return sliceAndJoin(this.profiles as GetonlyMap<AgentPubKey, AsyncReadable<EntryRecord<Profile> | undefined>>, agents);
   }
 
   searchProfiles(
