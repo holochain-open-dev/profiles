@@ -111,6 +111,23 @@ export class ProfileDetail extends LitElement {
   }
 
   render() {
+    if (!this._agentProfile.value)
+      return html`
+        <div class="column">
+          <div class="row" style="align-items: center">
+            <sl-skeleton
+              effect="pulse"
+              style="height: 32px; width: 32px; border-radius: 50%;"
+            ></sl-skeleton>
+            <div>
+              <sl-skeleton
+                effect="pulse"
+                style="width: 122px; margin-left: 8px;"
+              ></sl-skeleton>
+            </div>
+          </div>
+        </div>
+      `;
     switch (this._agentProfile.value.status) {
       case "pending":
         return html`

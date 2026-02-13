@@ -138,8 +138,13 @@ export class AgentAvatar extends LitElement {
   }
 
   render() {
-    if (this.store.config.avatarMode === "identicon")
+    if (this.store?.config.avatarMode === "identicon")
       return this.renderIdenticon();
+    if (!this._agentProfile.value)
+      return html`<sl-skeleton
+        effect="pulse"
+        style="height: ${this.size}px; width: ${this.size}px"
+      ></sl-skeleton>`;
     switch (this._agentProfile.value.status) {
       case "pending":
         return html`<sl-skeleton

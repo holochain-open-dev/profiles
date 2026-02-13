@@ -40,6 +40,8 @@ export class ProfileListItem extends LitElement {
   );
 
   render() {
+    if (!this._profile.value)
+      return html`<profile-list-item-skeleton></profile-list-item-skeleton>`;
     switch (this._profile.value.status) {
       case "pending":
         return html`<profile-list-item-skeleton></profile-list-item-skeleton>`;

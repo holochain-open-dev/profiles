@@ -91,6 +91,8 @@ export class AgentMention extends LitElement {
   }
 
   renderContent() {
+    if (!this._agentProfile.value)
+      return html`<sl-skeleton effect="pulse"></sl-skeleton>`;
     switch (this._agentProfile.value.status) {
       case "pending":
         return html`<sl-skeleton effect="pulse"></sl-skeleton>`;

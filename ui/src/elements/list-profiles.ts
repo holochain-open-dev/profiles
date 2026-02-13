@@ -85,6 +85,12 @@ export class ListProfiles extends LitElement {
   }
 
   render() {
+    if (!this._allProfiles.value)
+      return html`<div class="column center-content">
+        <profile-list-item-skeleton> </profile-list-item-skeleton>
+        <profile-list-item-skeleton> </profile-list-item-skeleton>
+        <profile-list-item-skeleton> </profile-list-item-skeleton>
+      </div>`;
     switch (this._allProfiles.value.status) {
       case "pending":
         return html`<div class="column center-content">
