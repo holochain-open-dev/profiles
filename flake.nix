@@ -2,7 +2,7 @@
   description = "Flake for Holochain app development";
 
   inputs = {
-    holonix.url = "github:holochain/holonix?ref=main-0.6";
+    holonix.url = "github:holochain/holonix?ref=main";
 
     nixpkgs.follows = "holonix/nixpkgs";
     flake-parts.follows = "holonix/flake-parts";
@@ -19,6 +19,8 @@
         packages = (with pkgs; [
           nodejs_20
           binaryen
+          pkg-config
+          xz
         ]);
 
         shellHook = ''

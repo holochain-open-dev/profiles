@@ -3,6 +3,7 @@ node_modules/
 .direnv/
 dist/
 .cargo
+.claude/
 .hc*
 *.dna
 *.happ

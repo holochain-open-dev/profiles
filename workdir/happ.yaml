@@ -9,7 +9,8 @@ roles:
       deferred: false
     dna:
       path: "./profiles-test.dna"
-      properties: ~
-      network_seed: ~
-      version: ~
+      modifiers:
+        network_seed: ~
+        properties: ~
+      installed_hash: ~
       clone_limit: 0

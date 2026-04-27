@@ -3,11 +3,10 @@ members = ["crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
-hdi = "0.7.0"
-hdk = "0.6.0"
+hdi = "0.8.0-dev"
+hdk = "0.7.0-dev"
 serde = "1"
-#holochain = "0.6.0-rc.2"
-holochain = {version = "0.6.0", default-features = false, features = ["sqlite-encrypted", "wasmer_sys", "backend-go-pion"] }
+holochain = { version = "0.7.0-dev", default-features = false, features = ["sqlite-encrypted", "wasmer_sys", "transport-iroh"] }
 
 holochain_serialized_bytes = "0.0.56"
 

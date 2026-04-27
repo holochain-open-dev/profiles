@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use hc_zome_profiles_coordinator::helper::ZomeFnInput;
 use hc_zome_profiles_integrity::*;
 use hdk::prelude::*;
-use holochain::{conductor::config::ConductorConfig, sweettest::*};
+use holochain::sweettest::*;
 
 #[tokio::test(flavor = "multi_thread")]
 async fn create_and_get() {
@@ -14,7 +14,8 @@ async fn create_and_get() {
     let dna = SweetDnaFile::from_bundle(&dna_path).await.unwrap();
 
     // Set up conductors
-    let mut conductors = SweetConductorBatch::from_config(2, ConductorConfig::default()).await;
+    let mut conductors =
+        SweetConductorBatch::from_config_rendezvous(2, SweetConductorConfig::rendezvous(true)).await;
     let apps = conductors.setup_app("profiles", &[dna]).await.unwrap();
     conductors.exchange_peer_info().await;
 
@@ -48,7 +49,7 @@ async fn create_and_get() {
         .call(&alice_zome, "create_profile", profile)
         .await;
 
-    let _result = await_consistency(10000, [&alice, &bobbo]).await;
+    let _result = await_consistency([&alice, &bobbo]).await;
 
     let record_2: Option<Record> = conductors[0]
         .call(
@@ -86,7 +87,7 @@ async fn create_and_get() {
         .call(&alice_zome, "update_profile", profile.clone())
         .await;
 
-    let _result = await_consistency(10000, [&alice, &bobbo]).await;
+    let _result = await_consistency([&alice, &bobbo]).await;
 
     // ---> get it over the DHT though get_agent_profile()
     let alices_profile: Option<Record> = conductors[1]

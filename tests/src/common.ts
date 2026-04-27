@@ -1,4 +1,4 @@
-import { Scenario } from "@holochain/tryorama";
+import { Scenario } from "@holochain-open-dev/tryorama";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { ProfilesClient } from "../../ui/src/profiles-client.js";
