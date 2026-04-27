@@ -21,6 +21,7 @@
           binaryen
           pkg-config
           xz
+          cargo-nextest
         ]);
 
         shellHook = ''
