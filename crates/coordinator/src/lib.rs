@@ -86,7 +86,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
                 if my_pub_key.eq(&pub_key) {
-                    delete_link(l.create_link_hash,GetOptions { strategy: GetStrategy::Local })?;
+                    delete_link(l.create_link_hash, GetOptions::local())?;
                 }
             }
         }
