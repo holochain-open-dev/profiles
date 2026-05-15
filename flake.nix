@@ -19,6 +19,7 @@
         packages = (with pkgs; [
           nodejs_20
           binaryen
+          cargo-nextest
         ]);
 
         shellHook = ''
