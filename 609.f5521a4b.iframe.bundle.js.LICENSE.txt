@@ -1,9 +1,0 @@
-/*! Bundled license information:
-
-lit-html/static.js:
-  (**
-   * @license
-   * Copyright 2020 Google LLC
-   * SPDX-License-Identifier: BSD-3-Clause
-   *)
-*/
