@@ -21,7 +21,7 @@ holochain --version
 Should give something like:
 
 ```bash
-holochain 0.1.3
+holochain 0.6.1
 ```
 
 ## Install

@@ -26,10 +26,10 @@ npm install @holochain-open-dev/profiles -w ui
 
 ```js
 import { ProfilesStore, ProfilesClient } from "@holochain-open-dev/profiles";
-import { AppWebsocket, AppAgentWebsocket } from "@holochain/client";
+import { AppWebsocket } from "@holochain/client";
 
 async function setupProfilesStore() {
-  const client = await AppAgentWebsocket.connect('', '')
+  const client = await AppWebsocket.connect()
 
 // TODO: change "MY_CELL_ROLE" for the roleId that you can find in your "happ.yaml"
   const profilesStore = new ProfilesStore(new ProfilesClient(client, '<MY_CELL_ROLE>'), {
