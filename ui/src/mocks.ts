@@ -13,7 +13,7 @@ import {
   AppClient,
   Record,
   InstalledAppId,
-  TransportStats,
+  ApiTransportStats,
   DumpNetworkMetricsResponse,
 } from "@holochain/client";
 import { ProfilesClient } from "./profiles-client";
@@ -69,13 +69,15 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
   }
 
   async dumpNetworkStats() {
-    const stats:TransportStats = {
-      backend: "",
-      peer_urls: [],
-      connections: []
-
-    }
-    return stats
+    const stats: ApiTransportStats = {
+      transport_stats: {
+        backend: "",
+        peer_urls: [],
+        connections: [],
+      },
+      blocked_message_counts: {},
+    };
+    return stats;
   }
 
   async dumpNetworkMetrics() {
