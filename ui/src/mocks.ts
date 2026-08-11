@@ -87,7 +87,8 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
     return metrics
   }
 
-  async create_profile(profile: Profile): Promise<Record> {
+  async create_profile(input: { input: Profile; local?: boolean }): Promise<Record> {
+    const profile = input.input;
     const record = await fakeRecord(
       await fakeCreateAction(),
       fakeEntry(profile)
@@ -104,22 +105,22 @@ export class ProfilesZomeMock extends ZomeMock implements AppClient {
     return record;
   }
 
-  async update_profile(profile: Profile): Promise<Record> {
-    return this.create_profile(profile);
+  async update_profile(input: { input: Profile; local?: boolean }): Promise<Record> {
+    return this.create_profile(input);
   }
 
-  search_agents(nickname_filter: string) {
+  search_agents(input: { input: string; local?: boolean }) {
     return Array.from(
       pickBy(this.agentsProfiles, (profile) =>
         (decodeEntry(profile) as Profile).nickname
           .toLowerCase()
-          .startsWith(nickname_filter.toLowerCase().slice(0, 3))
+          .startsWith(input.input.toLowerCase().slice(0, 3))
       ).keys()
     );
   }
 
-  get_agent_profile(agent_address: AgentPubKey) {
-    return this.agentsProfiles.get(agent_address);
+  get_agent_profile(input: { input: AgentPubKey; local?: boolean }) {
+    return this.agentsProfiles.get(input.input);
   }
 
   get_agents_with_profile() {

@@ -30,15 +30,25 @@ async fn create_and_get() {
     };
 
     let _alice_profile: Record = conductors[0]
-        .call(&alice_zome, "create_profile", profile)
+        .call(
+            &alice_zome,
+            "create_profile",
+            ZomeFnInput {
+                input: profile,
+                local: None,
+            },
+        )
         .await;
     let _bobs_profile: Record = conductors[1]
         .call(
             &bob_zome,
             "create_profile",
-            Profile {
-                nickname: "bobbo".into(),
-                fields: BTreeMap::new(),
+            ZomeFnInput {
+                input: Profile {
+                    nickname: "bobbo".into(),
+                    fields: BTreeMap::new(),
+                },
+                local: None,
             },
         )
         .await;

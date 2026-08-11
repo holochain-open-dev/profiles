@@ -17,12 +17,14 @@ use helper::ZomeFnInput;
 
 /// Creates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn create_profile(profile: Profile) -> ExternResult<Record> {
+pub fn create_profile(input: ZomeFnInput<Profile>) -> ExternResult<Record> {
+    let strategy = input.get_strategy();
+    let profile = input.input;
     let agent_info = agent_info()?;
 
     let action_hash = create_entry(EntryTypes::Profile(profile.clone()))?;
 
-    let path = prefix_path(profile.nickname.clone())?;
+    let path = prefix_path(profile.nickname.clone(), strategy)?;
 
     path.ensure()?;
 
@@ -49,7 +51,9 @@ pub fn create_profile(profile: Profile) -> ExternResult<Record> {
 
 /// Updates the profile for the agent executing this call.
 #[hdk_extern]
-pub fn update_profile(profile: Profile) -> ExternResult<Record> {
+pub fn update_profile(input: ZomeFnInput<Profile>) -> ExternResult<Record> {
+    let strategy = input.get_strategy();
+    let profile = input.input;
     // We should have our own profile locally, so we can use GetOptions::local()
     let previous_profile_record = get_agent_profile(ZomeFnInput {
         input: agent_info()?.agent_initial_pubkey,
@@ -71,7 +75,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             "Previous profile is malformed".to_string()
         )))?;
     if previous_profile.nickname.ne(&profile.nickname) {
-        let previous_prefix_path = prefix_path(previous_profile.nickname)?;
+        let previous_prefix_path = prefix_path(previous_profile.nickname, strategy)?;
         let links = get_links(LinkQuery {
             base: previous_prefix_path.path_entry_hash()?.into(),
             link_type: LinkTypes::PathToAgent.try_into_filter()?,
@@ -79,7 +83,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             after: None,
             before: None,
             author: None,
-        }, GetStrategy::Local)?;
+        }, strategy)?;
 
         for l in links {
             if let Ok(pub_key) = AgentPubKey::try_from(l.target) {
@@ -89,7 +93,7 @@ pub fn update_profile(profile: Profile) -> ExternResult<Record> {
             }
         }
 
-        let path = prefix_path(profile.nickname.clone())?;
+        let path = prefix_path(profile.nickname.clone(), strategy)?;
 
         path.ensure()?;
 
@@ -117,7 +121,7 @@ pub fn search_agents(nickname_filter: ZomeFnInput<String>) -> ExternResult<Vec<A
         )));
     }
 
-    let prefix_path = prefix_path(nickname_filter.input.clone())?;
+    let prefix_path = prefix_path(nickname_filter.input.clone(), nickname_filter.get_strategy())?;
     let links = get_links(LinkQuery {
         base: prefix_path.path_entry_hash()?.into(),
         link_type: LinkTypes::PathToAgent.try_into_filter()?,
@@ -269,12 +273,14 @@ pub fn get_agents_with_profile(input: ZomeFnInput<()>) -> ExternResult<Vec<Agent
 
 /** Helpers*/
 
-fn prefix_path(nickname: String) -> ExternResult<TypedPath> {
+fn prefix_path(nickname: String, strategy: GetStrategy) -> ExternResult<TypedPath> {
     // conver to lowercase for path for ease of search
     let lower_nickname = nickname.to_lowercase();
     let prefix: String = lower_nickname.chars().take(3).collect();
 
-    Path::from(format!("all_profiles.{}", prefix)).typed(LinkTypes::PrefixPath)
+    Ok(Path::from(format!("all_profiles.{}", prefix))
+        .typed(LinkTypes::PrefixPath)?
+        .with_strategy(strategy))
 }
 
 #[derive(Serialize, Deserialize, Debug)]

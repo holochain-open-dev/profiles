@@ -46,7 +46,14 @@ async fn create_and_get() {
     };
 
     let record_1: Record = conductors[0]
-        .call(&alice_zome, "create_profile", profile)
+        .call(
+            &alice_zome,
+            "create_profile",
+            ZomeFnInput {
+                input: profile,
+                local: None,
+            },
+        )
         .await;
 
     let _result = await_consistency([&alice, &bobbo]).await;
@@ -84,7 +91,14 @@ async fn create_and_get() {
     };
 
     let _record_1: Record = conductors[0]
-        .call(&alice_zome, "update_profile", profile.clone())
+        .call(
+            &alice_zome,
+            "update_profile",
+            ZomeFnInput {
+                input: profile.clone(),
+                local: None,
+            },
+        )
         .await;
 
     let _result = await_consistency([&alice, &bobbo]).await;
@@ -140,9 +154,12 @@ async fn create_and_get() {
         .call(
             &bob_zome,
             "create_profile",
-            Profile {
-                nickname: "bob".into(),
-                fields: BTreeMap::new(),
+            ZomeFnInput {
+                input: Profile {
+                    nickname: "bob".into(),
+                    fields: BTreeMap::new(),
+                },
+                local: None,
             },
         )
         .await;

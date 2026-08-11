@@ -66,9 +66,11 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * Create my profile
    *
    * @param profile the profile to create
+   * @param local Whether to use `GetStrategy::Local`. Default is `GetStrategy::Local`.
    */
-  async createProfile(profile: Profile): Promise<EntryRecord<Profile>> {
-    const record: Record = await this.callZome("create_profile", profile);
+  async createProfile(profile: Profile, local?: boolean): Promise<EntryRecord<Profile>> {
+    if (local === undefined) local = true
+    const record: Record = await this.callZome("create_profile", { input: profile, local });
     return new EntryRecord(record);
   }
 
@@ -76,9 +78,11 @@ export class ProfilesClient extends ZomeClient<ProfilesSignal> {
    * Update my profile
    *
    * @param profile the profile to create
+   * @param local Whether to use `GetStrategy::Local`. Default is `GetStrategy::Local`.
    */
-  async updateProfile(profile: Profile): Promise<EntryRecord<Profile>> {
-    const record: Record = await this.callZome("update_profile", profile);
+  async updateProfile(profile: Profile, local?: boolean): Promise<EntryRecord<Profile>> {
+    if (local === undefined) local = true
+    const record: Record = await this.callZome("update_profile", { input: profile, local });
     return new EntryRecord(record);
   }
 }
