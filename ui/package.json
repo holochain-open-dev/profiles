@@ -8,7 +8,8 @@
   "module": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/holochain-open-dev/profiles.git"
+    "url": "git+https://github.com/holochain-open-dev/profiles.git",
+    "directory": "ui"
   },
   "exports": {
     ".": "./dist/index.js",
