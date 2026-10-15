@@ -1,6 +1,6 @@
 {
   "name": "@holochain-open-dev/profiles-dev",
-  "version": "0.701.0",
+  "version": "0.702.0",
   "private": true,
   "workspaces": [
     "ui",
@@ -21,7 +21,7 @@
     "package": "npm run build:happ && npm run package -w ui && hc web-app pack workdir --recursive"
   },
   "devDependencies": {
-    "@holochain/hc-spin": "^0.700.0",
+    "@holochain/hc-spin": "^0.700.1-rc.0",
     "@holochain-playground/cli": "^0.300.1",
     "@storybook/addon-essentials": "^7.5.3",
     "@storybook/addon-links": "^7.5.3",
@@ -36,5 +36,8 @@
     "react-dom": "^18.2.0",
     "storybook": "^7.0.0-beta.33"
   },
-  "type": "module"
+  "type": "module",
+  "overrides": {
+    "@holochain/client": "^0.21.1"
+  }
 }
